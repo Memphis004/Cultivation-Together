@@ -1,0 +1,69 @@
+using MessagePipe;
+using UnityEngine;
+using VContainer;
+using VContainer.Unity;
+using Xianxia.Sect.Messages;
+
+namespace Xianxia.Sect
+{
+    // Composition root for the whole game framework (see the architecture
+    // diagram: this is the "Game manager · VContainer composition root" box).
+    // Registers the internal MessagePipe bus, the MessagePipe.Interprocess
+    // TCP transport to the external MCP bridge process, and the four
+    // gameplay subsystems as VContainer entry points.
+    public class GameLifetimeScope : LifetimeScope
+    {
+        [SerializeField] private string interprocessHost = "127.0.0.1";
+        [SerializeField] private int interprocessPort = 3215;
+
+        protected override void Configure(IContainerBuilder builder)
+        {
+            // --- in-memory pub/sub + request-response (internal subsystem bus) ---
+            var options = builder.RegisterMessagePipe(pipeOptions =>
+            {
+                pipeOptions.InstanceLifetime = InstanceLifetime.Singleton;
+            });
+
+            // --- interprocess transport: Unity <-> MCP bridge process, over TCP ---
+            // Unity hosts the TCP endpoint; the bridge process connects as a client.
+            var messagePipeBuilder = builder.ToMessagePipeBuilder();
+            var interprocess = messagePipeBuilder.AddTcpInterprocess(
+                interprocessHost,
+                interprocessPort,
+                tcpOptions =>
+                {
+                    tcpOptions.HostAsServer = true;
+                    tcpOptions.InstanceLifetime = InstanceLifetime.Singleton;
+                });
+
+            // Only register the message types the bridge actually needs on the
+            // wire. TimeSpeedChangedMessage stays internal-only on purpose -
+            // the bridge doesn't need per-frame speed changes.
+            messagePipeBuilder.RegisterTcpInterprocessMessageBroker<string, DiscipleRecruitedMessage>(interprocess);
+            messagePipeBuilder.RegisterTcpInterprocessMessageBroker<string, DiscipleRankChangedMessage>(interprocess);
+            messagePipeBuilder.RegisterTcpInterprocessMessageBroker<string, SectResourceChangedMessage>(interprocess);
+            messagePipeBuilder.RegisterTcpInterprocessMessageBroker<string, ContributionEarnedMessage>(interprocess);
+            messagePipeBuilder.RegisterTcpInterprocessMessageBroker<string, WorldEventTriggeredMessage>(interprocess);
+
+            // Request/response: bridge asks "what's the sect state right now".
+            // Correction from an earlier pass: RegisterTcpRemoteRequestHandler
+            // is needed here too, even though Unity is HostAsServer=true and
+            // holds the real handler. It's what wires the TCP worker to the
+            // registered IAsyncRequestHandler, not just a caller-side proxy -
+            // confirmed against Wanxiang.Guanxiangtai's FrontendIpcServer.cs,
+            // which registers both on its (HostAsServer=true) side.
+            messagePipeBuilder.RegisterTcpRemoteRequestHandler<SectStateQuery, SectStateSnapshot>(interprocess);
+            builder.RegisterAsyncRequestHandler<SectStateQuery, SectStateSnapshot, SectStateQueryHandler>(options);
+
+            // --- gameplay subsystems, started/ticked by VContainer ---
+            builder.RegisterEntryPoint<TimeSystem>(Lifetime.Singleton).AsSelf();
+            builder.RegisterEntryPoint<DiscipleSystem>(Lifetime.Singleton).AsSelf();
+            builder.RegisterEntryPoint<ResourceCraftingSystem>(Lifetime.Singleton).AsSelf();
+            builder.RegisterEntryPoint<BuildingSystem>(Lifetime.Singleton).AsSelf();
+
+            // Aggregates the subsystems above into one SectEconomyState for
+            // SectStateQueryHandler to serve. See ISectStateProvider.
+            builder.Register<ISectStateProvider, SectStateProvider>(Lifetime.Singleton);
+        }
+    }
+}

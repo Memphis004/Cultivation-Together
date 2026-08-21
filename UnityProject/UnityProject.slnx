@@ -1,0 +1,4 @@
+﻿<Solution>
+  <Project Path="MessagePipe.Interprocess.csproj" />
+  <Project Path="Xianxia.Sect.Runtime.csproj" />
+</Solution>

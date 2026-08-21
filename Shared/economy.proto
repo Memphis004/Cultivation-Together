@@ -1,0 +1,52 @@
+syntax = "proto3";
+package xianxia.sect;
+
+// Who "owns" an item instance. Drives whether it sits in personal
+// inventory or the shared sect warehouse (see design discussion:
+// outer/inner disciples craft into stockpile, elders+ keep personal).
+enum OwnerScope {
+  OWNER_SCOPE_UNSPECIFIED = 0;
+  PERSONAL = 1;
+  SECT_STOCKPILE = 2;
+}
+
+enum DiscipleRank {
+  RANK_UNSPECIFIED = 0;
+  OUTER_DISCIPLE = 1;
+  INNER_DISCIPLE = 2;
+  ELDER = 3;
+  SECT_MASTER = 4;
+}
+
+// Two currencies: spirit stones (global, tradeable, robbable) and
+// contribution (sect-bound, spent at the sect store, non-transferable).
+message CurrencyWallet {
+  int64 spirit_stones = 1;
+  int64 contribution = 2;
+}
+
+message InventoryItem {
+  string item_def_id = 1;   // references an ItemDef ScriptableObject by id
+  int32 quantity = 2;
+  int32 grade = 3;          // 1-5, affects value / potency
+  OwnerScope owner_scope = 4;
+}
+
+message DiscipleState {
+  string disciple_id = 1;
+  string display_name = 2;
+  DiscipleRank rank = 3;
+  CurrencyWallet wallet = 4;
+  repeated InventoryItem personal_inventory = 5;
+  string current_task = 6;  // e.g. "gathering_herb", "refining_elixir"
+}
+
+message SectStockpile {
+  map<string, int32> raw_resources = 1;      // "herb": 120, "wood": 340, "ore": 88
+  repeated InventoryItem crafted_goods = 2;  // warehouse goods, buyable w/ contribution
+}
+
+message SectEconomyState {
+  repeated DiscipleState disciples = 1;
+  SectStockpile stockpile = 2;
+}

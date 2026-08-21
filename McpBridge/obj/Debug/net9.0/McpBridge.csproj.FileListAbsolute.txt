@@ -1,0 +1,5 @@
+C:\Users\memph\OneDrive\Desktop\Cultivation Together\McpBridge\obj\Debug\net9.0\McpBridge.csproj.AssemblyReference.cache
+C:\Users\memph\OneDrive\Desktop\Cultivation Together\McpBridge\obj\Debug\net9.0\McpBridge.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\memph\OneDrive\Desktop\Cultivation Together\McpBridge\obj\Debug\net9.0\McpBridge.AssemblyInfoInputs.cache
+C:\Users\memph\OneDrive\Desktop\Cultivation Together\McpBridge\obj\Debug\net9.0\McpBridge.AssemblyInfo.cs
+C:\Users\memph\OneDrive\Desktop\Cultivation Together\McpBridge\obj\Debug\net9.0\McpBridge.csproj.CoreCompileInputs.cache

@@ -1,0 +1,20 @@
+{
+    "name": "Xianxia.Sect.Runtime",
+    "rootNamespace": "Xianxia.Sect",
+    "references": [
+        "VContainer",
+        "VContainer.Unity",
+        "MessagePipe",
+        "MessagePipe.VContainer",
+        "MessagePipe.Interprocess",
+        "UniTask"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

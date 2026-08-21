@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>Xianxia.Sect.Bridge</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Pinned via `dotnet add package` - resolved to real published versions. -->
+    <PackageReference Include="MessagePipe" Version="1.8.2" />
+    <PackageReference Include="MessagePipe.Interprocess" Version="1.8.2" />
+    <PackageReference Include="ModelContextProtocol" Version="2.2.0" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.11" />
+  </ItemGroup>
+
+  <!-- No explicit <Compile Include> block - the SDK already auto-includes
+       every .cs file under this directory (including Shared/), adding one
+       here double-counts them and fails the build with NETSDK1022. -->
+
+</Project>
