@@ -73,21 +73,18 @@ public static class SectQueryTools
 
     [McpServerTool, Description("Block until the next world event that requires a GM decision.")]
     public static async Task<string> AwaitNextWorldEvent(
-        IDistributedSubscriber<string, WorldEventTriggeredMessage> subscriber,
-        CancellationToken cancellationToken)
+        IRemoteRequestHandler<AwaitWorldEventRequest, AwaitWorldEventResponse> requestHandler)
     {
-        var tcs = new TaskCompletionSource<WorldEventTriggeredMessage>();
+        // Request-response, not subscribe - IDistributedSubscriber over this
+        // TCP transport always opens its own listen socket regardless of
+        // HostAsServer, which collides with Unity's already-bound port when
+        // called from a non-hub process like this bridge. Request-response
+        // only ever connects out (no listen), same mechanism get_sect_state
+        // already uses successfully.
+        var response = await requestHandler.InvokeAsync(
+            new AwaitWorldEventRequest { RequestId = Guid.NewGuid().ToString() });
 
-        await using var subscription = await subscriber.SubscribeAsync(
-            InterprocessTopics.WorldEvent,
-            msg =>
-            {
-                if (msg.RequiresDecision) tcs.TrySetResult(msg);
-            },
-            cancellationToken: cancellationToken);
-
-        var evt = await tcs.Task;
-        return evt.EventId;
+        return response.EventId;
     }
 }
 
@@ -98,13 +95,15 @@ public static class SectQueryTools
 public static class SectActionTools
 {
     [McpServerTool, Description("Execute a decision for the current world event.")]
-    public static Task ExecuteDecision(
+    public static async Task<string> ExecuteDecision(
+        IDistributedPublisher<string, ExecuteDecisionMessage> publisher,
         [Description("Event id from await_next_world_event")] string eventId,
         [Description("Chosen option id")] string choiceId)
     {
-        // TODO: publish an ExecuteDecisionMessage back to Unity over the
-        // interprocess bus once that message type + handler exist on the
-        // Unity side (mirrors the read path above).
-        throw new NotImplementedException();
+        await publisher.PublishAsync(
+            InterprocessTopics.ExecuteDecision,
+            new ExecuteDecisionMessage { EventId = eventId, ChoiceId = choiceId });
+
+        return $"Decision sent to Unity: event={eventId} choice={choiceId}";
     }
 }

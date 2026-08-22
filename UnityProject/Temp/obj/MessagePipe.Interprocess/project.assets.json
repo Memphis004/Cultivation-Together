@@ -13,11 +13,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "c:\\Users\\memph\\OneDrive\\Desktop\\Cultivation Together\\New folder\\UnityProject\\New folder\\MessagePipe.Interprocess.csproj",
+      "projectUniqueName": "c:\\Users\\memph\\OneDrive\\Desktop\\Cultivation Together\\svn\\Cultivation-Together\\UnityProject\\MessagePipe.Interprocess.csproj",
       "projectName": "MessagePipe.Interprocess",
-      "projectPath": "c:\\Users\\memph\\OneDrive\\Desktop\\Cultivation Together\\New folder\\UnityProject\\New folder\\MessagePipe.Interprocess.csproj",
+      "projectPath": "c:\\Users\\memph\\OneDrive\\Desktop\\Cultivation Together\\svn\\Cultivation-Together\\UnityProject\\MessagePipe.Interprocess.csproj",
       "packagesPath": "C:\\Users\\memph\\.nuget\\packages\\",
-      "outputPath": "c:\\Users\\memph\\OneDrive\\Desktop\\Cultivation Together\\New folder\\UnityProject\\New folder\\Temp\\obj\\MessagePipe.Interprocess\\",
+      "outputPath": "c:\\Users\\memph\\OneDrive\\Desktop\\Cultivation Together\\svn\\Cultivation-Together\\UnityProject\\Temp\\obj\\MessagePipe.Interprocess\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\memph\\AppData\\Roaming\\NuGet\\NuGet.Config",

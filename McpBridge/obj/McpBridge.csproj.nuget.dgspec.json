@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\memph\\OneDrive\\Desktop\\Cultivation Together\\McpBridge\\McpBridge.csproj": {}
+    "C:\\Users\\memph\\OneDrive\\Desktop\\Cultivation Together\\svn\\Cultivation-Together\\McpBridge\\McpBridge.csproj": {}
   },
   "projects": {
-    "C:\\Users\\memph\\OneDrive\\Desktop\\Cultivation Together\\McpBridge\\McpBridge.csproj": {
+    "C:\\Users\\memph\\OneDrive\\Desktop\\Cultivation Together\\svn\\Cultivation-Together\\McpBridge\\McpBridge.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\memph\\OneDrive\\Desktop\\Cultivation Together\\McpBridge\\McpBridge.csproj",
+        "projectUniqueName": "C:\\Users\\memph\\OneDrive\\Desktop\\Cultivation Together\\svn\\Cultivation-Together\\McpBridge\\McpBridge.csproj",
         "projectName": "McpBridge",
-        "projectPath": "C:\\Users\\memph\\OneDrive\\Desktop\\Cultivation Together\\McpBridge\\McpBridge.csproj",
+        "projectPath": "C:\\Users\\memph\\OneDrive\\Desktop\\Cultivation Together\\svn\\Cultivation-Together\\McpBridge\\McpBridge.csproj",
         "packagesPath": "C:\\Users\\memph\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\memph\\OneDrive\\Desktop\\Cultivation Together\\McpBridge\\obj\\",
+        "outputPath": "C:\\Users\\memph\\OneDrive\\Desktop\\Cultivation Together\\svn\\Cultivation-Together\\McpBridge\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\memph\\AppData\\Roaming\\NuGet\\NuGet.Config",

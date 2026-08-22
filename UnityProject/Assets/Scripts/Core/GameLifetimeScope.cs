@@ -39,11 +39,15 @@ namespace Xianxia.Sect
             // Only register the message types the bridge actually needs on the
             // wire. TimeSpeedChangedMessage stays internal-only on purpose -
             // the bridge doesn't need per-frame speed changes.
+            // WorldEventTriggeredMessage is deliberately NOT registered here
+            // (see AwaitWorldEventRequest in GameMessages.cs) - the bridge
+            // can't safely IDistributedSubscriber over this TCP transport,
+            // it's request-response only for that one.
             messagePipeBuilder.RegisterTcpInterprocessMessageBroker<string, DiscipleRecruitedMessage>(interprocess);
             messagePipeBuilder.RegisterTcpInterprocessMessageBroker<string, DiscipleRankChangedMessage>(interprocess);
             messagePipeBuilder.RegisterTcpInterprocessMessageBroker<string, SectResourceChangedMessage>(interprocess);
             messagePipeBuilder.RegisterTcpInterprocessMessageBroker<string, ContributionEarnedMessage>(interprocess);
-            messagePipeBuilder.RegisterTcpInterprocessMessageBroker<string, WorldEventTriggeredMessage>(interprocess);
+            messagePipeBuilder.RegisterTcpInterprocessMessageBroker<string, ExecuteDecisionMessage>(interprocess);
 
             // Request/response: bridge asks "what's the sect state right now".
             // Correction from an earlier pass: RegisterTcpRemoteRequestHandler
@@ -55,11 +59,19 @@ namespace Xianxia.Sect
             messagePipeBuilder.RegisterTcpRemoteRequestHandler<SectStateQuery, SectStateSnapshot>(interprocess);
             builder.RegisterAsyncRequestHandler<SectStateQuery, SectStateSnapshot, SectStateQueryHandler>(options);
 
+            // Request/response: bridge asks "wait for the next world event"
+            // and blocks until Unity's TimeSystem completes it - see the
+            // comment on AwaitWorldEventRequest for why this isn't pub/sub.
+            messagePipeBuilder.RegisterTcpRemoteRequestHandler<AwaitWorldEventRequest, AwaitWorldEventResponse>(interprocess);
+            builder.RegisterAsyncRequestHandler<AwaitWorldEventRequest, AwaitWorldEventResponse, AwaitWorldEventHandler>(options);
+
             // --- gameplay subsystems, started/ticked by VContainer ---
             builder.RegisterEntryPoint<TimeSystem>(Lifetime.Singleton).AsSelf();
             builder.RegisterEntryPoint<DiscipleSystem>(Lifetime.Singleton).AsSelf();
             builder.RegisterEntryPoint<ResourceCraftingSystem>(Lifetime.Singleton).AsSelf();
             builder.RegisterEntryPoint<BuildingSystem>(Lifetime.Singleton).AsSelf();
+            builder.RegisterEntryPoint<DecisionLogger>(Lifetime.Singleton).AsSelf();
+            builder.RegisterEntryPoint<WorldEventSystem>(Lifetime.Singleton).AsSelf();
 
             // Aggregates the subsystems above into one SectEconomyState for
             // SectStateQueryHandler to serve. See ISectStateProvider.

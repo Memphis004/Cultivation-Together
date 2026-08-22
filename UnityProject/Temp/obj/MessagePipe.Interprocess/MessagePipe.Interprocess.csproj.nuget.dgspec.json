@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "c:\\Users\\memph\\OneDrive\\Desktop\\Cultivation Together\\New folder\\UnityProject\\New folder\\MessagePipe.Interprocess.csproj": {}
+    "C:\\Users\\memph\\OneDrive\\Desktop\\Cultivation Together\\svn\\Cultivation-Together\\UnityProject\\MessagePipe.Interprocess.csproj": {}
   },
   "projects": {
-    "c:\\Users\\memph\\OneDrive\\Desktop\\Cultivation Together\\New folder\\UnityProject\\New folder\\MessagePipe.Interprocess.csproj": {
+    "C:\\Users\\memph\\OneDrive\\Desktop\\Cultivation Together\\svn\\Cultivation-Together\\UnityProject\\MessagePipe.Interprocess.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "c:\\Users\\memph\\OneDrive\\Desktop\\Cultivation Together\\New folder\\UnityProject\\New folder\\MessagePipe.Interprocess.csproj",
+        "projectUniqueName": "C:\\Users\\memph\\OneDrive\\Desktop\\Cultivation Together\\svn\\Cultivation-Together\\UnityProject\\MessagePipe.Interprocess.csproj",
         "projectName": "MessagePipe.Interprocess",
-        "projectPath": "c:\\Users\\memph\\OneDrive\\Desktop\\Cultivation Together\\New folder\\UnityProject\\New folder\\MessagePipe.Interprocess.csproj",
+        "projectPath": "C:\\Users\\memph\\OneDrive\\Desktop\\Cultivation Together\\svn\\Cultivation-Together\\UnityProject\\MessagePipe.Interprocess.csproj",
         "packagesPath": "C:\\Users\\memph\\.nuget\\packages\\",
-        "outputPath": "c:\\Users\\memph\\OneDrive\\Desktop\\Cultivation Together\\New folder\\UnityProject\\New folder\\Temp\\obj\\MessagePipe.Interprocess\\",
+        "outputPath": "C:\\Users\\memph\\OneDrive\\Desktop\\Cultivation Together\\svn\\Cultivation-Together\\UnityProject\\Temp\\obj\\MessagePipe.Interprocess\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\memph\\AppData\\Roaming\\NuGet\\NuGet.Config",

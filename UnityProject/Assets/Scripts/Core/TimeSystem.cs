@@ -1,8 +1,8 @@
 using System;
 using System.Threading;
-using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
 using MessagePipe;
+using UnityEngine;
 using VContainer.Unity;
 using Xianxia.Sect.Messages;
 
@@ -15,14 +15,19 @@ namespace Xianxia.Sect
     public class TimeSystem : IStartable, ITickable
     {
         private readonly IPublisher<TimeSpeedChangedMessage> _speedPublisher;
-        private readonly IDistributedPublisher<string, WorldEventTriggeredMessage> _worldEventPublisher;
+        private readonly IPublisher<WorldEventTriggeredMessage> _worldEventPublisher;
 
         private int _speed = 1;
         private bool _paused;
 
+        // Completed (and replaced with a fresh one) every time a world
+        // event fires - see WaitForNextWorldEventAsync()/RaiseWorldEvent().
+        private UniTaskCompletionSource<AwaitWorldEventResponse> _pendingEventSource =
+            new UniTaskCompletionSource<AwaitWorldEventResponse>();
+
         public TimeSystem(
             IPublisher<TimeSpeedChangedMessage> speedPublisher,
-            IDistributedPublisher<string, WorldEventTriggeredMessage> worldEventPublisher)
+            IPublisher<WorldEventTriggeredMessage> worldEventPublisher)
         {
             _speedPublisher = speedPublisher;
             _worldEventPublisher = worldEventPublisher;
@@ -51,17 +56,54 @@ namespace Xianxia.Sect
             // TODO: advance world clock by _speed * UnityEngine.Time.deltaTime
         }
 
+        public bool IsPaused => _paused;
+
+        // Resolved by AwaitWorldEventHandler - the bridge's await_next_world_event
+        // tool call blocks on this until the next RaiseWorldEvent().
+        public UniTask<AwaitWorldEventResponse> WaitForNextWorldEventAsync()
+        {
+            return _pendingEventSource.Task;
+        }
+
         // Called by whatever system decides a world event fired (new
         // applicant, monster incursion, ...). requiresDecision auto-pauses -
         // this is the "checkpoint" the AI GM / vote window waits on.
-        public async Task RaiseWorldEvent(string eventId, bool requiresDecision, CancellationToken ct = default)
+        //
+        // Not sent over the interprocess bus as pub/sub (see the comment on
+        // AwaitWorldEventRequest in GameMessages.cs for why) - completing
+        // _pendingEventSource is what actually delivers this to the bridge,
+        // via the request-response AwaitWorldEventHandler below. The
+        // in-memory Publish() call is just for any other in-Unity listener.
+        public void RaiseWorldEvent(string eventId, bool requiresDecision)
         {
+            Debug.Log($"[TimeSystem] World event raised: {eventId} (requiresDecision={requiresDecision})");
+
             if (requiresDecision) SetPaused(true);
 
-            await _worldEventPublisher.PublishAsync(
-                InterprocessTopics.WorldEvent,
-                new WorldEventTriggeredMessage { EventId = eventId, RequiresDecision = requiresDecision },
-                ct);
+            _worldEventPublisher.Publish(new WorldEventTriggeredMessage { EventId = eventId, RequiresDecision = requiresDecision });
+
+            var response = new AwaitWorldEventResponse { EventId = eventId, RequiresDecision = requiresDecision };
+            var previous = _pendingEventSource;
+            _pendingEventSource = new UniTaskCompletionSource<AwaitWorldEventResponse>();
+            previous.TrySetResult(response);
+        }
+    }
+
+    // Answers AwaitWorldEventRequest coming in over the interprocess bus.
+    // Request-response, not pub/sub - see the comment on AwaitWorldEventRequest
+    // in GameMessages.cs for why.
+    public class AwaitWorldEventHandler : IAsyncRequestHandler<AwaitWorldEventRequest, AwaitWorldEventResponse>
+    {
+        private readonly TimeSystem _timeSystem;
+
+        public AwaitWorldEventHandler(TimeSystem timeSystem)
+        {
+            _timeSystem = timeSystem;
+        }
+
+        public UniTask<AwaitWorldEventResponse> InvokeAsync(AwaitWorldEventRequest request, CancellationToken cancellationToken = default)
+        {
+            return _timeSystem.WaitForNextWorldEventAsync();
         }
     }
 
