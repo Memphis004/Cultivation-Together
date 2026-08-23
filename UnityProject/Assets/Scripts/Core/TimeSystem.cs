@@ -167,5 +167,8 @@ namespace Xianxia.Sect
     {
         SectEconomyState BuildSectEconomyState();
         void ApplyDecisionConsequence(string eventId, string choiceId);
+        void TickGathering(float deltaTimeSeconds);
+        void TickCrafting(float deltaTimeSeconds);
+        void RecruitOuterDisciple();
     }
 }

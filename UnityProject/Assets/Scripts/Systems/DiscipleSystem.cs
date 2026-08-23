@@ -1,25 +1,29 @@
-using MessagePipe;
+using UnityEngine;
 using VContainer.Unity;
-using Xianxia.Sect.Messages;
 
 namespace Xianxia.Sect
 {
-    // Stub - not implemented yet. Registered so GameLifetimeScope compiles
-    // and the DI graph resolves end to end. Fill in gather/assign logic here.
-    public class DiscipleSystem : IStartable, ITickable
+    // Passive resource gathering loop. Disciples assigned a "gathering_*"
+    // CurrentTask passively produce raw resources every tick - see
+    // SectStateProvider.TickGathering() for the actual rates.
+    //
+    // Recruiting (adding new disciples) is NOT here - it happens via
+    // SectStateProvider.RecruitOuterDisciple(), triggered through the
+    // new_disciple_applicant world event's execute_decision consequence.
+    // Keeping it there (rather than here) avoids DiscipleSystem needing to
+    // know anything about world events / decisions at all.
+    public class DiscipleSystem : ITickable
     {
-        private readonly IPublisher<DiscipleRecruitedMessage> _recruitedPublisher;
-        private readonly IDistributedPublisher<string, DiscipleRankChangedMessage> _rankChangedPublisher;
+        private readonly ISectStateProvider _stateProvider;
 
-        public DiscipleSystem(
-            IPublisher<DiscipleRecruitedMessage> recruitedPublisher,
-            IDistributedPublisher<string, DiscipleRankChangedMessage> rankChangedPublisher)
+        public DiscipleSystem(ISectStateProvider stateProvider)
         {
-            _recruitedPublisher = recruitedPublisher;
-            _rankChangedPublisher = rankChangedPublisher;
+            _stateProvider = stateProvider;
         }
 
-        public void Start() { }
-        public void Tick() { }
+        public void Tick()
+        {
+            _stateProvider.TickGathering(Time.deltaTime);
+        }
     }
 }
