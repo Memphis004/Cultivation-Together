@@ -53,6 +53,7 @@ C:\Users\memph\OneDrive\Desktop\Cultivation Together\McpBridge\obj\Debug\net8.0\
 C:\Users\memph\OneDrive\Desktop\Cultivation Together\McpBridge\obj\Debug\net8.0\McpBridge.AssemblyInfoInputs.cache
 C:\Users\memph\OneDrive\Desktop\Cultivation Together\McpBridge\obj\Debug\net8.0\McpBridge.AssemblyInfo.cs
 C:\Users\memph\OneDrive\Desktop\Cultivation Together\McpBridge\obj\Debug\net8.0\McpBridge.csproj.CoreCompileInputs.cache
+C:\Users\memph\OneDrive\Desktop\Cultivation Together\McpBridge\obj\Debug\net8.0\McpBridge.sourcelink.json
 C:\Users\memph\OneDrive\Desktop\Cultivation Together\McpBridge\obj\Debug\net8.0\McpBridge.csproj.Up2Date
 C:\Users\memph\OneDrive\Desktop\Cultivation Together\McpBridge\obj\Debug\net8.0\McpBridge.dll
 C:\Users\memph\OneDrive\Desktop\Cultivation Together\McpBridge\obj\Debug\net8.0\refint\McpBridge.dll

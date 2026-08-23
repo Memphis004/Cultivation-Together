@@ -1,4 +1,3 @@
-using System;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using MessagePipe;
@@ -24,6 +23,13 @@ namespace Xianxia.Sect
         // event fires - see WaitForNextWorldEventAsync()/RaiseWorldEvent().
         private UniTaskCompletionSource<AwaitWorldEventResponse> _pendingEventSource =
             new UniTaskCompletionSource<AwaitWorldEventResponse>();
+
+        // If a decision-requiring event fired before anyone called
+        // await_next_world_event, hand it back immediately on the next call
+        // instead of making a late caller wait for a completely new event.
+        // Cleared once handed out - a second call with nothing new pending
+        // goes back to waiting normally.
+        private AwaitWorldEventResponse _cachedPendingEvent;
 
         public TimeSystem(
             IPublisher<TimeSpeedChangedMessage> speedPublisher,
@@ -59,15 +65,30 @@ namespace Xianxia.Sect
         public bool IsPaused => _paused;
 
         // Resolved by AwaitWorldEventHandler - the bridge's await_next_world_event
-        // tool call blocks on this until the next RaiseWorldEvent().
+        // tool call blocks on this until the next RaiseWorldEvent(), unless
+        // there's already a cached one waiting (see _cachedPendingEvent).
+        //
+        // Remember: while _paused is true (a decision-requiring event is
+        // outstanding), RaiseWorldEvent never fires again - WorldEventSystem
+        // checks IsPaused and skips. Call execute_decision first to unpause,
+        // or this will time out waiting for an event that can't happen yet.
         public UniTask<AwaitWorldEventResponse> WaitForNextWorldEventAsync()
         {
+            if (_cachedPendingEvent != null)
+            {
+                Debug.Log("[TimeSystem] Returning cached world event immediately.");
+                var cached = _cachedPendingEvent;
+                _cachedPendingEvent = null;
+                return UniTask.FromResult(cached);
+            }
+
             return _pendingEventSource.Task;
         }
 
         // Called by whatever system decides a world event fired (new
         // applicant, monster incursion, ...). requiresDecision auto-pauses -
-        // this is the "checkpoint" the AI GM / vote window waits on.
+        // this is the "checkpoint" the AI GM / vote window waits on, and
+        // stays paused until execute_decision is called.
         //
         // Not sent over the interprocess bus as pub/sub (see the comment on
         // AwaitWorldEventRequest in GameMessages.cs for why) - completing
@@ -83,6 +104,12 @@ namespace Xianxia.Sect
             _worldEventPublisher.Publish(new WorldEventTriggeredMessage { EventId = eventId, RequiresDecision = requiresDecision });
 
             var response = new AwaitWorldEventResponse { EventId = eventId, RequiresDecision = requiresDecision };
+
+            if (requiresDecision)
+            {
+                _cachedPendingEvent = response;
+            }
+
             var previous = _pendingEventSource;
             _pendingEventSource = new UniTaskCompletionSource<AwaitWorldEventResponse>();
             previous.TrySetResult(response);
@@ -125,9 +152,9 @@ namespace Xianxia.Sect
             var snapshot = new SectStateSnapshot
             {
                 RequestId = request.RequestId,
-                // MessagePack stub for now - see SectEconomyState.ToByteArray().
-                // Swap for real protobuf bytes once economy.proto is compiled.
-                EconomyStateProtobuf = state.ToByteArray()
+                // MessagePack, committed choice (not a protobuf stub
+                // anymore - see project_summary.md for why).
+                EconomyStateBytes = state.ToByteArray()
             };
             return UniTask.FromResult(snapshot);
         }
@@ -139,5 +166,6 @@ namespace Xianxia.Sect
     public interface ISectStateProvider
     {
         SectEconomyState BuildSectEconomyState();
+        void ApplyDecisionConsequence(string eventId, string choiceId);
     }
 }

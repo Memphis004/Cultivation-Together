@@ -67,7 +67,7 @@ public static class SectQueryTools
 
         // MessagePack stub decode - swap for the generated protobuf parser
         // once economy.proto is compiled for real.
-        var state = SectEconomyState.FromByteArray(snapshot.EconomyStateProtobuf);
+        var state = SectEconomyState.FromByteArray(snapshot.EconomyStateBytes);
         return JsonSerializer.Serialize(state);
     }
 

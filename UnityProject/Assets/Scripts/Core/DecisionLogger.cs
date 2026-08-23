@@ -20,13 +20,16 @@ namespace Xianxia.Sect
     {
         private readonly IDistributedSubscriber<string, ExecuteDecisionMessage> _subscriber;
         private readonly TimeSystem _timeSystem;
+        private readonly ISectStateProvider _stateProvider;
 
         public DecisionLogger(
             IDistributedSubscriber<string, ExecuteDecisionMessage> subscriber,
-            TimeSystem timeSystem)
+            TimeSystem timeSystem,
+            ISectStateProvider stateProvider)
         {
             _subscriber = subscriber;
             _timeSystem = timeSystem;
+            _stateProvider = stateProvider;
         }
 
         public void Start()
@@ -51,6 +54,7 @@ namespace Xianxia.Sect
                 $"[DecisionLogger] Received decision from bridge - " +
                 $"eventId={message.EventId} choiceId={message.ChoiceId}");
 
+            _stateProvider.ApplyDecisionConsequence(message.EventId, message.ChoiceId);
             _timeSystem.SetPaused(false);
         }
     }

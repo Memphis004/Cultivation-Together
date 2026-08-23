@@ -80,7 +80,7 @@ namespace Xianxia.Sect.Messages
     public class SectStateSnapshot
     {
         [Key(0)] public string RequestId { get; set; }
-        [Key(1)] public byte[] EconomyStateProtobuf { get; set; } // SectEconomyState, serialized
+        [Key(1)] public byte[] EconomyStateBytes { get; set; } // SectEconomyState, MessagePack-serialized
     }
 
     // Request/response pair for await_next_world_event.

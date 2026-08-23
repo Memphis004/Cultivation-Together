@@ -11,7 +11,7 @@ namespace Xianxia.Sect
     // ever return and execute_decision has nothing to respond to.
     public class WorldEventSystem : ITickable
     {
-        private const float IntervalSeconds = 30f;
+        private const float IntervalSeconds = 15f;
 
         private static readonly string[] PendingEvents =
         {
@@ -27,12 +27,25 @@ namespace Xianxia.Sect
         public WorldEventSystem(TimeSystem timeSystem)
         {
             _timeSystem = timeSystem;
+
+            // Fire one event immediately on startup instead of making the
+            // first test always wait a full IntervalSeconds.
+            RaiseInitialEvent();
+        }
+
+        private void RaiseInitialEvent()
+        {
+            if (_timeSystem.IsPaused) return;
+
+            var eventId = PendingEvents[Random.Range(0, PendingEvents.Length)];
+            _timeSystem.RaiseWorldEvent(eventId, requiresDecision: true);
         }
 
         public void Tick()
         {
             // Already waiting on a decision (TimeSystem paused itself when
-            // it last raised an event) - don't pile up more events.
+            // it last raised an event) - don't pile up more events. Nothing
+            // fires again until execute_decision unpauses.
             if (_timeSystem.IsPaused) return;
 
             _timer += Time.deltaTime;
