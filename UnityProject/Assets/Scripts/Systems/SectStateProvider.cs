@@ -37,12 +37,12 @@ namespace Xianxia.Sect
         private static readonly Dictionary<string, CraftingRecipe> CraftingRecipes = new()
         {
             ["refining_elixir"] = new CraftingRecipe(
-                ItemDefId: "elixir_qi_gathering", Grade: 3, CraftSeconds: 20f,
-                Costs: new Dictionary<string, int> { ["herb"] = 10 }),
+                "elixir_qi_gathering", 3, 20f,
+                new Dictionary<string, int> { ["herb"] = 10 }),
 
             ["forging_artifact"] = new CraftingRecipe(
-                ItemDefId: "sword_azure_flame", Grade: 5, CraftSeconds: 30f,
-                Costs: new Dictionary<string, int> { ["ore"] = 15, ["wood"] = 10 }),
+                "sword_azure_flame", 5, 30f,
+                new Dictionary<string, int> { ["ore"] = 15, ["wood"] = 10 }),
         };
 
         // Placeholder name pool - swap for a real generator once there's a
@@ -269,6 +269,21 @@ namespace Xianxia.Sect
             return true;
         }
 
-        private record CraftingRecipe(string ItemDefId, int Grade, float CraftSeconds, Dictionary<string, int> Costs);
+        // แก้ไขจาก record เป็น class เพื่อความเข้ากันได้กับ Unity
+        private class CraftingRecipe
+        {
+            public string ItemDefId { get; }
+            public int Grade { get; }
+            public float CraftSeconds { get; }
+            public Dictionary<string, int> Costs { get; }
+
+            public CraftingRecipe(string itemDefId, int grade, float craftSeconds, Dictionary<string, int> costs)
+            {
+                ItemDefId = itemDefId;
+                Grade = grade;
+                CraftSeconds = craftSeconds;
+                Costs = costs;
+            }
+        }
     }
 }

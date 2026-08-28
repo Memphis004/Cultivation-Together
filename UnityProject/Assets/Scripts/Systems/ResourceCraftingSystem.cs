@@ -1,24 +1,23 @@
-using MessagePipe;
+using UnityEngine;
 using VContainer.Unity;
-using Xianxia.Sect.Messages;
 
 namespace Xianxia.Sect
 {
-    // Stub - not implemented yet. Gather/craft-by-grade logic goes here.
-    public class ResourceCraftingSystem : IStartable, ITickable
+    // Disciple crafting loop. Whoever's CurrentTask matches a known recipe
+    // (see SectStateProvider.CraftingRecipes) accumulates progress each
+    // tick and produces an item on completion, consuming raw resources.
+    public class ResourceCraftingSystem : ITickable
     {
-        private readonly IDistributedPublisher<string, SectResourceChangedMessage> _resourcePublisher;
-        private readonly IDistributedPublisher<string, ContributionEarnedMessage> _contributionPublisher;
+        private readonly ISectStateProvider _stateProvider;
 
-        public ResourceCraftingSystem(
-            IDistributedPublisher<string, SectResourceChangedMessage> resourcePublisher,
-            IDistributedPublisher<string, ContributionEarnedMessage> contributionPublisher)
+        public ResourceCraftingSystem(ISectStateProvider stateProvider)
         {
-            _resourcePublisher = resourcePublisher;
-            _contributionPublisher = contributionPublisher;
+            _stateProvider = stateProvider;
         }
 
-        public void Start() { }
-        public void Tick() { }
+        public void Tick()
+        {
+            _stateProvider.TickCrafting(Time.deltaTime);
+        }
     }
 }
