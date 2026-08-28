@@ -84,7 +84,10 @@ public static class SectQueryTools
         var response = await requestHandler.InvokeAsync(
             new AwaitWorldEventRequest { RequestId = Guid.NewGuid().ToString() });
 
-        return response.EventId;
+        // Full response now (description + choices), not just the bare
+        // event id - EventData ScriptableObjects actually author this
+        // content now instead of it being hardcoded/absent.
+        return JsonSerializer.Serialize(response);
     }
 }
 

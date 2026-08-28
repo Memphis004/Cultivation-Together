@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using MessagePack;
 
 namespace Xianxia.Sect.Messages
@@ -108,6 +109,18 @@ namespace Xianxia.Sect.Messages
     {
         [Key(0)] public string EventId { get; set; }
         [Key(1)] public bool RequiresDecision { get; set; }
+        [Key(2)] public string Description { get; set; }
+        [Key(3)] public List<EventChoiceInfo> Choices { get; set; } = new List<EventChoiceInfo>();
+    }
+
+    // One selectable option for a world event - authored per-event in the
+    // EventData ScriptableObject, carried over the wire so the AI GM sees
+    // real choices instead of just a bare event id.
+    [MessagePackObject]
+    public class EventChoiceInfo
+    {
+        [Key(0)] public string ChoiceId { get; set; }
+        [Key(1)] public string Label { get; set; }
     }
 
     // Sent from the MCP bridge back into Unity when the AI GM (or a vote

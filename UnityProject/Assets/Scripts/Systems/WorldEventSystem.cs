@@ -1,32 +1,26 @@
+using System.Linq;
 using UnityEngine;
 using VContainer.Unity;
+using Xianxia.Sect.Messages;
 
 namespace Xianxia.Sect
 {
-    // Minimal placeholder event source - fixed interval + hardcoded id list.
-    // Swap for a real event pool (EventData ScriptableObjects, weighted by
-    // sect state) once that system exists. Purpose right now is just to
-    // close the loop end to end: without something calling
-    // TimeSystem.RaiseWorldEvent, await_next_world_event has nothing to
-    // ever return and execute_decision has nothing to respond to.
+    // Picks events from an author-able EventPool (ScriptableObject) instead
+    // of a hardcoded string array. See Assets/Scripts/Data/EventData.cs and
+    // EventPool.cs. EventPool is assigned via GameLifetimeScope's Inspector
+    // field, not hunted down at runtime.
     public class WorldEventSystem : ITickable
     {
         private const float IntervalSeconds = 15f;
 
-        private static readonly string[] PendingEvents =
-        {
-            "bandit_raid_001",
-            "new_disciple_applicant",
-            "herb_garden_bloom",
-            "wandering_merchant",
-        };
-
         private readonly TimeSystem _timeSystem;
+        private readonly EventPool _eventPool;
         private float _timer;
 
-        public WorldEventSystem(TimeSystem timeSystem)
+        public WorldEventSystem(TimeSystem timeSystem, EventPool eventPool)
         {
             _timeSystem = timeSystem;
+            _eventPool = eventPool;
 
             // Fire one event immediately on startup instead of making the
             // first test always wait a full IntervalSeconds.
@@ -36,9 +30,7 @@ namespace Xianxia.Sect
         private void RaiseInitialEvent()
         {
             if (_timeSystem.IsPaused) return;
-
-            var eventId = PendingEvents[Random.Range(0, PendingEvents.Length)];
-            _timeSystem.RaiseWorldEvent(eventId, requiresDecision: true);
+            RaiseFromPool();
         }
 
         public void Tick()
@@ -52,8 +44,19 @@ namespace Xianxia.Sect
             if (_timer < IntervalSeconds) return;
 
             _timer = 0f;
-            var eventId = PendingEvents[Random.Range(0, PendingEvents.Length)];
-            _timeSystem.RaiseWorldEvent(eventId, requiresDecision: true);
+            RaiseFromPool();
+        }
+
+        private void RaiseFromPool()
+        {
+            var eventData = _eventPool.GetRandomEvent();
+            if (eventData == null) return; // EventPool already logged why
+
+            var choices = eventData.choices
+                .Select(c => new EventChoiceInfo { ChoiceId = c.choiceId, Label = c.label })
+                .ToList();
+
+            _timeSystem.RaiseWorldEvent(eventData.eventId, eventData.description, eventData.requiresDecision, choices);
         }
     }
 }

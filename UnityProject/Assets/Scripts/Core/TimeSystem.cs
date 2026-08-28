@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using MessagePipe;
@@ -95,7 +96,7 @@ namespace Xianxia.Sect
         // _pendingEventSource is what actually delivers this to the bridge,
         // via the request-response AwaitWorldEventHandler below. The
         // in-memory Publish() call is just for any other in-Unity listener.
-        public void RaiseWorldEvent(string eventId, bool requiresDecision)
+        public void RaiseWorldEvent(string eventId, string description, bool requiresDecision, List<EventChoiceInfo> choices)
         {
             Debug.Log($"[TimeSystem] World event raised: {eventId} (requiresDecision={requiresDecision})");
 
@@ -103,7 +104,13 @@ namespace Xianxia.Sect
 
             _worldEventPublisher.Publish(new WorldEventTriggeredMessage { EventId = eventId, RequiresDecision = requiresDecision });
 
-            var response = new AwaitWorldEventResponse { EventId = eventId, RequiresDecision = requiresDecision };
+            var response = new AwaitWorldEventResponse
+            {
+                EventId = eventId,
+                RequiresDecision = requiresDecision,
+                Description = description,
+                Choices = choices ?? new List<EventChoiceInfo>(),
+            };
 
             if (requiresDecision)
             {

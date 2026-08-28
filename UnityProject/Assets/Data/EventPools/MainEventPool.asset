@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b1436787b170b53428f48809a1419b8c, type: 3}
+  m_Name: MainEventPool
+  m_EditorClassIdentifier: Xianxia.Sect.Runtime::Xianxia.Sect.EventPool
+  events:
+  - {fileID: 11400000, guid: 9c47dfe1003a9024192eb369c5d27432, type: 2}
+  - {fileID: 11400000, guid: b093340c99044424ea4dc44aaba3bc52, type: 2}
+  - {fileID: 11400000, guid: a5ddffdaa13bf5b4d951f44cdcc29b0b, type: 2}
+  - {fileID: 11400000, guid: 83e70c64d56a3d343b305cb433e9897c, type: 2}
