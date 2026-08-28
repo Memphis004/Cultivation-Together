@@ -65,6 +65,11 @@ namespace Xianxia.Sect
             messagePipeBuilder.RegisterTcpRemoteRequestHandler<AwaitWorldEventRequest, AwaitWorldEventResponse>(interprocess);
             builder.RegisterAsyncRequestHandler<AwaitWorldEventRequest, AwaitWorldEventResponse, AwaitWorldEventHandler>(options);
 
+            // Request/response: a disciple buying an item from the sect
+            // stockpile with contribution.
+            messagePipeBuilder.RegisterTcpRemoteRequestHandler<PurchaseItemRequest, PurchaseItemResponse>(interprocess);
+            builder.RegisterAsyncRequestHandler<PurchaseItemRequest, PurchaseItemResponse, PurchaseItemHandler>(options);
+
             // --- gameplay subsystems, started/ticked by VContainer ---
             builder.RegisterEntryPoint<TimeSystem>(Lifetime.Singleton).AsSelf();
             builder.RegisterEntryPoint<DiscipleSystem>(Lifetime.Singleton).AsSelf();

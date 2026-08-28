@@ -120,6 +120,28 @@ namespace Xianxia.Sect.Messages
         [Key(1)] public string ChoiceId { get; set; }
     }
 
+    // Request/response pair: a disciple buying an item from the sect
+    // stockpile (CraftedGoods) with their own contribution. Request-response
+    // rather than a fire-and-forget message because the bridge needs to
+    // know immediately whether the purchase actually succeeded (enough
+    // contribution, enough stock) - same reasoning as SectStateQuery.
+    [MessagePackObject]
+    public class PurchaseItemRequest
+    {
+        [Key(0)] public string DiscipleId { get; set; }
+        [Key(1)] public string ItemDefId { get; set; }
+        [Key(2)] public int Grade { get; set; }
+        [Key(3)] public int Quantity { get; set; }
+    }
+
+    [MessagePackObject]
+    public class PurchaseItemResponse
+    {
+        [Key(0)] public bool Success { get; set; }
+        [Key(1)] public string Message { get; set; }
+        [Key(2)] public long RemainingContribution { get; set; }
+    }
+
     // Topic keys for the keyed (IDistributedPublisher<TKey,TMessage>) channels.
     public static class InterprocessTopics
     {

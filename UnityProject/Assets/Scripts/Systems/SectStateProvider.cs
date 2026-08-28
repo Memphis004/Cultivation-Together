@@ -269,6 +269,80 @@ namespace Xianxia.Sect
             return true;
         }
 
+        // Placeholder pricing - grade * flat rate per unit. Not balanced,
+        // just enough to prove the store loop end to end. Revisit once
+        // there's a real pricing model (rarity, sect reputation, etc.).
+        private const int ContributionPricePerGrade = 50;
+
+        // A disciple buying an item from the sect stockpile (CraftedGoods)
+        // with their own contribution. Deducts contribution from the
+        // disciple's wallet, moves the item out of the shared stockpile
+        // into that disciple's personal inventory. Called from
+        // PurchaseItemHandler (interprocess request-response).
+        public PurchaseItemResponse TryPurchaseItem(string discipleId, string itemDefId, int grade, int quantity)
+        {
+            if (quantity <= 0)
+            {
+                return new PurchaseItemResponse { Success = false, Message = "Quantity must be positive." };
+            }
+
+            var disciple = _state.Disciples.FirstOrDefault(d => d.DiscipleId == discipleId);
+            if (disciple == null)
+            {
+                return new PurchaseItemResponse { Success = false, Message = $"No disciple with id '{discipleId}'." };
+            }
+
+            var stockEntry = _state.Stockpile.CraftedGoods.FirstOrDefault(g =>
+                g.ItemDefId == itemDefId && g.Grade == grade && g.OwnerScope == OwnerScope.SectStockpile);
+
+            var haveQuantity = stockEntry?.Quantity ?? 0;
+            if (stockEntry == null || haveQuantity < quantity)
+            {
+                return new PurchaseItemResponse
+                {
+                    Success = false,
+                    Message = $"Not enough '{itemDefId}' (grade {grade}) in the sect stockpile - have {haveQuantity}, need {quantity}.",
+                    RemainingContribution = disciple.Wallet.Contribution,
+                };
+            }
+
+            var cost = (long)grade * ContributionPricePerGrade * quantity;
+            if (disciple.Wallet.Contribution < cost)
+            {
+                return new PurchaseItemResponse
+                {
+                    Success = false,
+                    Message = $"{disciple.DisplayName} needs {cost} contribution but only has {disciple.Wallet.Contribution}.",
+                    RemainingContribution = disciple.Wallet.Contribution,
+                };
+            }
+
+            disciple.Wallet.Contribution -= cost;
+            stockEntry.Quantity -= quantity;
+            if (stockEntry.Quantity <= 0)
+            {
+                _state.Stockpile.CraftedGoods.Remove(stockEntry);
+            }
+
+            disciple.PersonalInventory.Add(new InventoryItem
+            {
+                ItemDefId = itemDefId,
+                Quantity = quantity,
+                Grade = grade,
+                OwnerScope = OwnerScope.Personal,
+            });
+
+            Debug.Log($"[SectStateProvider] {disciple.DisplayName} bought {quantity}x {itemDefId} (grade {grade}) " +
+                      $"for {cost} contribution. Remaining: {disciple.Wallet.Contribution}");
+
+            return new PurchaseItemResponse
+            {
+                Success = true,
+                Message = $"Purchased {quantity}x {itemDefId} (grade {grade}) for {cost} contribution.",
+                RemainingContribution = disciple.Wallet.Contribution,
+            };
+        }
+
         // แก้ไขจาก record เป็น class เพื่อความเข้ากันได้กับ Unity
         private class CraftingRecipe
         {

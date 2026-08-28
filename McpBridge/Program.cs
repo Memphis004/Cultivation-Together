@@ -106,4 +106,23 @@ public static class SectActionTools
 
         return $"Decision sent to Unity: event={eventId} choice={choiceId}";
     }
+
+    [McpServerTool, Description("Have a disciple buy an item from the sect stockpile using their contribution.")]
+    public static async Task<string> PurchaseItem(
+        IRemoteRequestHandler<PurchaseItemRequest, PurchaseItemResponse> requestHandler,
+        [Description("Disciple id, e.g. from get_sect_state")] string discipleId,
+        [Description("Item id, e.g. elixir_qi_gathering")] string itemDefId,
+        [Description("Item grade, from the stockpile entry in get_sect_state")] int grade,
+        [Description("How many to buy")] int quantity)
+    {
+        var response = await requestHandler.InvokeAsync(new PurchaseItemRequest
+        {
+            DiscipleId = discipleId,
+            ItemDefId = itemDefId,
+            Grade = grade,
+            Quantity = quantity,
+        });
+
+        return response.Message;
+    }
 }

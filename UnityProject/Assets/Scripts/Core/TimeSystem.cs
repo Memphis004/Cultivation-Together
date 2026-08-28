@@ -170,5 +170,6 @@ namespace Xianxia.Sect
         void TickGathering(float deltaTimeSeconds);
         void TickCrafting(float deltaTimeSeconds);
         void RecruitOuterDisciple();
+        PurchaseItemResponse TryPurchaseItem(string discipleId, string itemDefId, int grade, int quantity);
     }
 }
