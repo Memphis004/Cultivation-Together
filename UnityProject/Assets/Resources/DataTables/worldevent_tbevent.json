@@ -1,0 +1,26 @@
+[
+  {
+    "id": "bandit_raid_001",
+    "description": "A band of rogue cultivators is raiding the outer herb fields.",
+    "requiresDecision": true,
+    "weight": 1
+  },
+  {
+    "id": "new_disciple_applicant",
+    "description": "A traveling cultivator asks to join the sect.",
+    "requiresDecision": true,
+    "weight": 1
+  },
+  {
+    "id": "herb_garden_bloom",
+    "description": "The herb garden has bloomed early - a chance for extra harvest.",
+    "requiresDecision": true,
+    "weight": 1
+  },
+  {
+    "id": "wandering_merchant",
+    "description": "A wandering merchant offers to trade rare goods.",
+    "requiresDecision": true,
+    "weight": 1
+  }
+]

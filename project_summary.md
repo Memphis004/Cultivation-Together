@@ -374,10 +374,87 @@ gathering หรือ event) คราฟท์เสร็จทันที�
 ## แผนงานถัดไปที่ตกลงลำดับไว้แล้ว
 
 1. ~~ResourceCraftingSystem~~ (เสร็จแล้ว — lab รอบเก้า)
-2. ร้านค้าค่าคุณูปการ — เอา `CraftedGoods` ในคลังมาให้ศิษย์แลกซื้อด้วย
-   ค่าคุณูปการจริง (ต่อยอดจาก `Stockpile.CraftedGoods` ที่มีอยู่แล้ว)
-3. EventData ScriptableObject — เลิก hardcode event list ใน
-   `WorldEventSystem`, ให้ author event ผ่าน Editor ได้จริง
+2. ~~ร้านค้าค่าคุณูปการ~~ (เสร็จแล้ว — lab รอบสิบ, `purchase_item` MCP tool)
+3. ~~EventData → Luban pipeline~~ (เสร็จแล้ว — lab รอบสิบเอ็ด/สิบสอง)
+
+### lab รอบสิบ — ร้านค้าค่าคุณูปการ
+
+เพิ่ม MCP tool ใหม่ `purchase_item` (`discipleId`, `itemDefId`, `grade`,
+`quantity`) — ศิษย์ซื้อของจาก `Stockpile.CraftedGoods` ด้วยค่าคุณูปการ
+ตัวเอง ใช้ pattern request-response (`PurchaseItemRequest`/`Response`)
+เหมือน `get_sect_state` เพราะต้องเช็ค-หัก atomic (เงินพอไหม/ของเหลือไหม)
+
+ราคา placeholder: `grade × 50` ค่าคุณูปการต่อชิ้น เช็คของในคลังก่อน →
+เงินพอไหม → หักเงินจาก `Wallet.Contribution`, ลด quantity ใน
+`CraftedGoods` (ลบ entry ถ้าเหลือ 0), ย้ายของเข้า `PersonalInventory`
+ของศิษย์คนนั้น — ทดสอบผ่านแล้ว
+
+ไฟล์ที่แก้/ใหม่: `GameMessages.cs`, `SectStateProvider.cs` (เพิ่ม
+`TryPurchaseItem`), `PurchaseItemHandler.cs` (ใหม่), `TimeSystem.cs`
+(เพิ่ม method เข้า interface), `GameLifetimeScope.cs` (register RPC ใหม่),
+`McpBridgeProgram.cs` (tool ใหม่ใน `SectActionTools`)
+
+### lab รอบสิบเอ็ด — UI พื้นฐานในเกม (UGUI)
+
+เพิ่ม `SectHudView.cs` (MonoBehaviour, top bar HUD) แสดง stockpile
+(herb/wood/ore/provisions พร้อม delta indicator สีเขียว/แดงแบบ reference
+screenshot) และ personal wallet ของ "เจ้าสำนัก" (spirit stones/contribution)
+
+**เพิ่ม disciple ใหม่**: `MockSectData.cs` ไม่มี entry สำหรับผู้เล่น
+(rank `SectMaster`) มาก่อน — เพิ่มเข้าไปเป็นตัวแรกในลิสต์ (`d000`,
+"You (Sect Master)") เพราะ original design ระบุว่าผู้เล่น = เจ้าสำนัก
+
+Register ผ่าน `RegisterComponentInHierarchy` (คนละแบบกับ
+`RegisterEntryPoint` — ใช้กับ component ที่มีอยู่ใน scene แล้ว) ต้องสร้าง
+Canvas/TMP Text/ผูก reference เองใน Editor (สร้าง .unity scene object จาก
+นอก Editor ไม่ได้)
+
+### lab รอบสิบสอง — ย้าย EventData จาก ScriptableObject ไป Luban pipeline
+
+เปลี่ยนจากคลิกสร้าง `.asset` ทีละไฟล์ เป็น **Excel → generate → runtime
+data** ด้วย [Luban](https://github.com/focus-creative-games/luban)
+(`focus-creative-games/luban_unity` สำหรับฝั่ง Unity)
+
+**แก้ความเข้าใจผิดสำคัญ**: Luban **ไม่ได้** generate ScriptableObject
+`.asset` จาก Excel — มันสร้าง C# class + runtime loader ที่อ่านข้อมูลจาก
+json/binary ตอนเกมรัน (ยืนยันจากการดาวน์โหลด
+`focus-creative-games/luban_examples` มาแกะโค้ดจริง ไม่ใช่เดาจาก docs)
+นี่แก้ pain point "ขี้เกียจคลิกสร้าง Asset หลายที" ได้ดีกว่า ScriptableObject
+เดิมด้วยซ้ำ เพราะไม่มีการคลิกสร้าง asset เลยแม้แต่ครั้งเดียว
+
+**ตัดสินใจ**: ใช้ `cs-simple-json` (ไม่ใช่ protobuf แม้ Luban จะรองรับ)
+สอดคล้องกับทิศทางเลิกใช้ protobuf ที่ตัดสินใจไว้ตั้งแต่ lab รอบเจ็ด — ข้อมูล
+ยังน้อย (4-8 แถว) ประโยชน์ของ binary/protobuf ยังไม่เห็นผล แต่ json
+debug ง่ายกว่า (เปิดดูตรงๆ ได้)
+
+**สถาปัตยกรรม**: แยก 2 ตารางเรียบๆ (`TbEvent`, `TbEventChoice` join ด้วย
+`eventId`) แทนที่จะ nest choices เป็น list-in-one-row ในแถวเดียว — ปลอดภัย
+กว่าเพราะ syntax แบบ multi-row nested list ของ Luban ซับซ้อนและ verify
+ยาก (ไม่มี .NET SDK ในเครื่องมือที่ใช้พัฒนาให้ลองรันจริง)
+
+Bug จริงที่เจอ (เก็บไว้กันลืม):
+1. **`<module name="event">` ชน C# reserved keyword** — `event` เป็น
+   keyword สงวนของ .NET (ใช้ประกาศ event) พอ generate เป็น `cfg.event.X`
+   compiler แตกยกไฟล์ (error กระจายเป็นลูกโซ่เพราะ parser หลุด track)
+   แก้โดยเปลี่ยนชื่อ module เป็น `worldevent` แทน — **บทเรียน: ตั้งชื่อ
+   module ใน Luban schema เลี่ยงคำสงวนของ C# เสมอ**
+2. **namespace ของ SimpleJSON ที่แถมมากับ `luban_unity` คือ
+   `Luban.SimpleJSON`** ไม่ใช่ `SimpleJSON` เฉยๆ ตามที่เดาไว้ตอนแรก (ไม่มี
+   dotnet ให้รันดูโค้ด generate จริงในเครื่องมือพัฒนา ต้องให้ผู้ใช้เทสต์แก้เอง)
+3. gen script รันแล้วดู "ค้าง" ตอนแรก (เห็นแค่ banner โผล่มาแล้วนิ่ง) — ที่
+   จริงยังทำงานอยู่ แค่ cold start ของ C# scripting engine ข้างในช้า
+   (รอนานขึ้นแล้วผ่าน ไม่ใช่บั๊ก)
+
+Toolchain: `Tools/Luban/` (binary จริงจาก
+`focus-creative-games/luban_examples`), `DataTables/luban.conf` +
+`Defines/worldevent.xml` (schema) + `Data/event.xlsx`,
+`event_choice.xlsx`, `gen.bat`/`gen.sh` — ต้องติดตั้ง `luban_unity`
+package ผ่าน git URL ใน `manifest.json` เพิ่มด้วย (ให้ `SimpleJSON`/
+runtime class ของ Luban)
+
+ลบ `EventData.cs`/`EventPool.cs` (ScriptableObject เดิม) ออกแล้ว —
+`WorldEventSystem.cs`/`GameLifetimeScope.cs` ผูกกับ `LubanEventPool.cs`
+(plain C# class, ไม่ใช่ ScriptableObject) แทน
 
 ## ยังไม่ได้ตัดสินใจ / รอคุยต่อ
 
@@ -388,8 +465,9 @@ gathering หรือ event) คราฟท์เสร็จทันที�
 - กติกาการปล้นหินวิญญาณระหว่างศิษย์ ยังไม่ลง schema
 - `BuildingSystem` ยังเป็น stub ว่างเปล่า — deferred ต่อจนกว่าจะถึงคิว
   (ตำแหน่ง/สิทธิ์ที่ปลดล็อกจากอาคารยังไม่มีผลอะไรตอนนี้)
-- `WorldEventSystem` เป็น placeholder (สุ่ม 4 event id คงที่ทุก 15 วิ) —
-  ยังไม่เช็คเงื่อนไข sect state ก่อน trigger (เช่นทรัพยากรน้อยเกินไปควร
-  เกิด event ต่างจากทรัพยากรเยอะ) รอทำพร้อม EventData ScriptableObject
-- `economy.proto`/protobuf เลิกใช้แล้วถาวร — ตัดสินใจใช้ MessagePack เป็น
-  wire format จริง ไม่ใช่ stub อีกต่อไป (lab รอบเจ็ด)
+- `WorldEventSystem` ยังสุ่มแบบ weighted เฉยๆ ไม่เช็คเงื่อนไข sect state
+  ก่อน trigger (เช่นทรัพยากรน้อยเกินไปควรเกิด event ต่างจากทรัพยากรเยอะ)
+- ราคาร้านค้า (`grade × 50`) และ consequence ของแต่ละ event ยังเป็น
+  placeholder รอ balance จริง
+- `economy.proto`/protobuf เลิกใช้แล้วถาวรทั้งโปรเจกต์ (ทั้ง runtime state
+  และตอนนี้รวม Luban ด้วย) ใช้ MessagePack/JSON แทนทุกจุด

@@ -7,12 +7,14 @@
         "MessagePipe",
         "MessagePipe.VContainer",
         "MessagePipe.Interprocess",
-        "UniTask"
+        "UniTask",
+        "Luban.Runtime"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,
+    "precompiledReferences": [],
     "autoReferenced": true,
     "defineConstraints": [],
     "versionDefines": [],

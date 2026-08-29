@@ -1,0 +1,42 @@
+[
+  {
+    "eventId": "bandit_raid_001",
+    "choiceId": "send_inner_disciples",
+    "label": "Send inner disciples to repel the raid"
+  },
+  {
+    "eventId": "bandit_raid_001",
+    "choiceId": "pay_tribute",
+    "label": "Pay tribute to avoid conflict"
+  },
+  {
+    "eventId": "new_disciple_applicant",
+    "choiceId": "accept",
+    "label": "Accept the applicant"
+  },
+  {
+    "eventId": "new_disciple_applicant",
+    "choiceId": "reject",
+    "label": "Turn them away"
+  },
+  {
+    "eventId": "herb_garden_bloom",
+    "choiceId": "harvest_now",
+    "label": "Harvest immediately"
+  },
+  {
+    "eventId": "herb_garden_bloom",
+    "choiceId": "let_mature",
+    "label": "Let it mature for a bigger yield later"
+  },
+  {
+    "eventId": "wandering_merchant",
+    "choiceId": "trade",
+    "label": "Trade with the merchant"
+  },
+  {
+    "eventId": "wandering_merchant",
+    "choiceId": "decline",
+    "label": "Decline to trade NaJa"
+  }
+]

@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\memph\\OneDrive\\Desktop\\Cultivation Together\\svn\\Cultivation-Together\\UnityProject\\Xianxia.Sect.Runtime.csproj": {}
+    "C:\\Users\\memph\\OneDrive\\Desktop\\Cultivation Together\\UnityProject\\Xianxia.Sect.Runtime.csproj": {}
   },
   "projects": {
-    "C:\\Users\\memph\\OneDrive\\Desktop\\Cultivation Together\\svn\\Cultivation-Together\\UnityProject\\MessagePipe.Interprocess.csproj": {
+    "C:\\Users\\memph\\OneDrive\\Desktop\\Cultivation Together\\UnityProject\\MessagePipe.Interprocess.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\memph\\OneDrive\\Desktop\\Cultivation Together\\svn\\Cultivation-Together\\UnityProject\\MessagePipe.Interprocess.csproj",
+        "projectUniqueName": "C:\\Users\\memph\\OneDrive\\Desktop\\Cultivation Together\\UnityProject\\MessagePipe.Interprocess.csproj",
         "projectName": "MessagePipe.Interprocess",
-        "projectPath": "C:\\Users\\memph\\OneDrive\\Desktop\\Cultivation Together\\svn\\Cultivation-Together\\UnityProject\\MessagePipe.Interprocess.csproj",
+        "projectPath": "C:\\Users\\memph\\OneDrive\\Desktop\\Cultivation Together\\UnityProject\\MessagePipe.Interprocess.csproj",
         "packagesPath": "C:\\Users\\memph\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\memph\\OneDrive\\Desktop\\Cultivation Together\\svn\\Cultivation-Together\\UnityProject\\Temp\\obj\\MessagePipe.Interprocess\\",
+        "outputPath": "C:\\Users\\memph\\OneDrive\\Desktop\\Cultivation Together\\UnityProject\\Temp\\obj\\MessagePipe.Interprocess\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\memph\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -60,14 +60,14 @@
         }
       }
     },
-    "C:\\Users\\memph\\OneDrive\\Desktop\\Cultivation Together\\svn\\Cultivation-Together\\UnityProject\\Xianxia.Sect.Runtime.csproj": {
+    "C:\\Users\\memph\\OneDrive\\Desktop\\Cultivation Together\\UnityProject\\Xianxia.Sect.Runtime.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\memph\\OneDrive\\Desktop\\Cultivation Together\\svn\\Cultivation-Together\\UnityProject\\Xianxia.Sect.Runtime.csproj",
+        "projectUniqueName": "C:\\Users\\memph\\OneDrive\\Desktop\\Cultivation Together\\UnityProject\\Xianxia.Sect.Runtime.csproj",
         "projectName": "Xianxia.Sect.Runtime",
-        "projectPath": "C:\\Users\\memph\\OneDrive\\Desktop\\Cultivation Together\\svn\\Cultivation-Together\\UnityProject\\Xianxia.Sect.Runtime.csproj",
+        "projectPath": "C:\\Users\\memph\\OneDrive\\Desktop\\Cultivation Together\\UnityProject\\Xianxia.Sect.Runtime.csproj",
         "packagesPath": "C:\\Users\\memph\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\memph\\OneDrive\\Desktop\\Cultivation Together\\svn\\Cultivation-Together\\UnityProject\\Temp\\obj\\Xianxia.Sect.Runtime\\",
+        "outputPath": "C:\\Users\\memph\\OneDrive\\Desktop\\Cultivation Together\\UnityProject\\Temp\\obj\\Xianxia.Sect.Runtime\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\memph\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -84,8 +84,8 @@
           "netstandard2.1": {
             "targetAlias": "netstandard2.1",
             "projectReferences": {
-              "C:\\Users\\memph\\OneDrive\\Desktop\\Cultivation Together\\svn\\Cultivation-Together\\UnityProject\\MessagePipe.Interprocess.csproj": {
-                "projectPath": "C:\\Users\\memph\\OneDrive\\Desktop\\Cultivation Together\\svn\\Cultivation-Together\\UnityProject\\MessagePipe.Interprocess.csproj"
+              "C:\\Users\\memph\\OneDrive\\Desktop\\Cultivation Together\\UnityProject\\MessagePipe.Interprocess.csproj": {
+                "projectPath": "C:\\Users\\memph\\OneDrive\\Desktop\\Cultivation Together\\UnityProject\\MessagePipe.Interprocess.csproj"
               }
             }
           }

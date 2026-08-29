@@ -15,14 +15,19 @@ namespace Xianxia.Sect
     {
         [SerializeField] private string interprocessHost = "127.0.0.1";
         [SerializeField] private int interprocessPort = 3215;
-        [SerializeField] private EventPool eventPool;
 
         protected override void Configure(IContainerBuilder builder)
         {
-            // Design-time data, not part of the DI-resolved subsystem graph
-            // in the usual sense - just made injectable so WorldEventSystem
-            // doesn't have to reach for it via Resources.Load or similar.
-            builder.RegisterInstance(eventPool);
+            // Design-time data now sourced from Luban (see DataTables/ at
+            // the workspace root and Assets/Scripts/Data/LubanEventPool.cs),
+            // not a ScriptableObject dragged into the Inspector - so this is
+            // constructed directly rather than serialized.
+            builder.RegisterInstance(new LubanEventPool());
+
+            // UI: SectHudView already exists in the scene (as a Canvas
+            // child), so it's registered by finding it in the hierarchy
+            // rather than by type like the plain C# subsystems below.
+            // builder.RegisterComponentInHierarchy<Xianxia.Sect.UI.SectHudView>();
 
             // --- in-memory pub/sub + request-response (internal subsystem bus) ---
             var options = builder.RegisterMessagePipe(pipeOptions =>
