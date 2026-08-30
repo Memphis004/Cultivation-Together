@@ -456,6 +456,69 @@ runtime class ของ Luban)
 `WorldEventSystem.cs`/`GameLifetimeScope.cs` ผูกกับ `LubanEventPool.cs`
 (plain C# class, ไม่ใช่ ScriptableObject) แทน
 
+### lab รอบสิบสาม — Xianxia.UI.MVP Lite (EventPopup + ResourceHud)
+
+Implement ตาม spec ที่ผู้ใช้ร่างมาเอง (`XIANXIA_UI_MVP_LITE_SPEC.md`,
+อ้างอิงแนวคิดจาก CycloneGames.UIFramework) — MVP pattern แยก View
+(MonoBehaviour) / Presenter (plain C#) / Service (orchestrator), panel
+resolve ผ่าน VContainer ด้วย explicit enum→Type mapping ไม่ scan assembly,
+Presenter เป็น Transient (instance ใหม่ทุกครั้งเปิด panel)
+
+**บั๊กที่เจอใน spec ก่อนลงมือ (แก้ก่อน implement)**:
+1. `EventPopupPresenter` ตาม spec เดิมจะ publish ผ่าน `IPublisher<ExecuteDecisionMessage>`
+   (in-memory channel) แต่ `DecisionLogger` ฟังผ่าน
+   `IDistributedSubscriber<string, ExecuteDecisionMessage>` (interprocess
+   channel) — **คนละ graph กัน ไม่เชื่อมกัน** กดปุ่มใน popup จะไม่มีอะไร
+   เกิดขึ้นเลยแบบเงียบๆ ไม่ error ด้วย — แก้โดยดึง logic ออกมาเป็น
+   `DecisionExecutor.cs` (ใหม่) ให้ทั้ง `DecisionLogger` (ทาง bridge) และ
+   `EventPopupPresenter` (ทาง UI) เรียกตรงๆ แทนการอ้อมผ่าน pub/sub
+   (pub/sub ควรใช้แค่ข้าม process เท่านั้น ไม่ใช่ในโปรเซสเดียวกัน)
+2. Spec แนะนำ `IRemoteRequestHandler` สำหรับ purchase item จาก UI —
+   type นี้คือ proxy ฝั่ง client ที่ bridge เรียกเข้า Unity เท่านั้น ถ้า UI
+   จะซื้อของต้องเรียก `ISectStateProvider.TryPurchaseItem(...)` ตรงๆ
+   (ยังไม่ได้ implement purchase panel ใน pass นี้ แค่บันทึกไว้กันพลาด
+   ตอนทำจริง)
+
+**สิ่งที่ต้องแก้นอก `UI/` folder** (spec เขียนว่าไม่ให้แก้ แต่จำเป็นจริง):
+- `GameMessages.cs` — เพิ่ม `Description`/`Choices` ใน
+  `WorldEventTriggeredMessage` (spec เองก็ระบุไว้ว่าจำเป็น)
+- `TimeSystem.cs` — 1 บรรทัดที่ publish message ต้องส่ง field ใหม่ด้วย
+- `SectStateProvider.cs` — เพิ่ม publish `SectResourceChangedMessage`
+  จริง (นิยามไว้นานแล้วแต่ไม่เคยถูก publish เลยสักครั้ง) ผ่าน
+  `AdjustAndNotify()` (wrapper รอบ `Adjust()` เดิม, single choke point)
+  — publish delta ที่เกิดขึ้นจริงหลัง clamp ไม่ใช่ delta ที่ขอ (กันกรณี
+  ขอ -50 แต่ของเหลือแค่ 20)
+
+**ตัดสินใจ**: `ResourceHud` panel ใหม่ **แทนที่ `SectHudView` เดิมไปเลย**
+(ลบไฟล์ทิ้ง) — ย้าย delta indicator logic (สีเขียว/แดง) เข้า
+`ResourceHudView`/`ResourceHudPresenter` ตาม MVP pattern แทน polling
+`ISectStateProvider` ทุก 0.5 วิแบบเดิม เปลี่ยนเป็น subscribe
+`SectResourceChangedMessage` ที่มี delta คำนวณมาให้พร้อมในตัว message
+เลย (ไม่ต้องเก็บ previous value ฝั่ง client อีกต่อไป) — wallet
+(spirit stones/contribution) ยังไม่มี dedicated message เลย piggyback
+refresh ไปกับทุกครั้งที่ resource เปลี่ยน (ยอมรับ trade-off เพราะยังไม่
+คุ้มจะเพิ่ม polling timer แยกสำหรับ presenter ที่ตั้งใจให้เป็น plain C#
+ไม่มี tick ของตัวเอง)
+
+**ผลทดสอบ (ยืนยันแล้ว 30 ส.ค. 2026)**: `ResourceHud` โผล่ทำงานถูกต้อง
+ตั้งแต่รอบแรก ส่วน `EventPopup` รอบแรกไม่โผล่ (แก้ไม่ยาก — ใส่ try-catch
+ใน `WorldEventUISystem` แล้วเจอว่าเป็นแค่ปัญหา prefab/catalog setup ไม่ใช่
+บั๊กโค้ด) หลังแก้แล้วทดสอบเต็ม loop ผ่าน: `WorldEventSystem` ยิง event
+อัตโนมัติ → `EventPopup` เปิดเอง → กด choice → `DecisionExecutor` →
+`SectStateProvider` (เห็น log "Recruited outer disciple: Jiang Yu")
+**พิสูจน์ว่าบั๊กจุดที่ 1 (channel ผิด) แก้ถูกจริง ไม่ใช่แค่ทฤษฎี**
+
+**gotcha ที่เจอเพิ่ม (ผู้ใช้ diagnose เอง)**: UI ทั้งหมดไปโผล่กลางจอแทนที่
+จะอยู่ตำแหน่งจริง (top bar / center popup) สาเหตุคือ 2 อย่างรวมกัน:
+(1) `UIRoot` GameObject เองไม่ได้ stretch เต็ม Canvas ตั้งแต่แรก
+(2) `ContentSizeFitter` ตั้งเป็น `PreferredSize` ซึ่งคำนวณขนาดใหม่ทุกเฟรม
+ทับค่าที่ anchor stretch ตั้งไว้ — **นี่คือ root cause ตัวจริง** แก้โดย
+เปลี่ยนเป็น `Unconstrained` แทน, เพิ่ม `UIRoot.Awake()` บังคับ stretch
+ตัวเองเต็ม Canvas + แก้ layout ของทุก child ที่มีอยู่แล้ว, และเพิ่ม
+`UIRoot.ApplyLayout()` (static) ให้ `UIService.Open()` เรียกทุกครั้งหลัง
+`Instantiate` panel ใหม่ ครอบคลุมทั้ง panel ที่ bake ไว้ใน scene ตั้งแต่ต้น
+และ panel ที่เปิดตอน runtime
+
 ## ยังไม่ได้ตัดสินใจ / รอคุยต่อ
 
 - Core loop แบบ final (รอ finalize gameplay systems ก่อน)
@@ -471,3 +534,13 @@ runtime class ของ Luban)
   placeholder รอ balance จริง
 - `economy.proto`/protobuf เลิกใช้แล้วถาวรทั้งโปรเจกต์ (ทั้ง runtime state
   และตอนนี้รวม Luban ด้วย) ใช้ MessagePack/JSON แทนทุกจุด
+- `DiscipleListPresenter`/panel ยังไม่ implement (enum
+  `UIPresenterKind.DiscipleList` มีไว้เผื่ออนาคต, `ResolvePresenterType`
+  throw `NotImplementedException` ถ้าเรียกตอนนี้)
+- ยังไม่มี wallet-changed message โดยเฉพาะ — `ResourceHudPresenter`
+  refresh wallet แบบ piggyback บน resource-changed event เป็น workaround
+  ชั่วคราว
+- `UIRoot.ApplyLayout()` ผูก layout กับชื่อ prefab ตรงๆ (string matching)
+  — ใช้ได้กับ 2 panel ตอนนี้ แต่ถ้า panel เยอะขึ้นควรย้ายไปเป็น method
+  บน view เอง (`IUIView.ApplyDefaultLayout()`) แทน ยังไม่จำเป็นต้องแก้
+  ตอนนี้

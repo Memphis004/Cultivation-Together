@@ -1,0 +1,34 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "model": "gpt-4o-mini",
+    "provider": {
+    "ollama": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "Ollama",
+      "options": {
+        "baseURL": "http://127.0.0.1:11434/v1"
+      },
+      "models": {
+        "ornith-1.5:9b": {
+          "name": "ornith-1.5:9b",
+          "reasoning": true,
+          "tools": true
+        }
+      }
+    }
+  },
+  "lsp": {
+    ".cs": {
+      "command": [
+        "dotnet",
+        "exec",
+        "C:\\Users\\memph\\.vscode\\extensions\\ms-dotnettools.csharp-2.140.9-win32-x64\\.roslyn\\Microsoft.CodeAnalysis.LanguageServer.dll",
+        "--languageserver"
+      ],
+      "extensions": [".cs"],
+      "initialization": {
+        "solutionDir": "C:\\Users\\memph\\OneDrive\\Desktop\\Cultivation Together\\LongJu"
+      }
+    }
+  }
+}
