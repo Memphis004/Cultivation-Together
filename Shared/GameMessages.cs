@@ -58,6 +58,8 @@ namespace Xianxia.Sect.Messages
     {
         [Key(0)] public string EventId { get; set; }
         [Key(1)] public bool RequiresDecision { get; set; }
+        [Key(2)] public string Description { get; set; }
+        [Key(3)] public List<EventChoiceInfo> Choices { get; set; } = new List<EventChoiceInfo>();
     }
 
     // Internal-only (not registered on the interprocess bus) - the UI and

@@ -102,7 +102,13 @@ namespace Xianxia.Sect
 
             if (requiresDecision) SetPaused(true);
 
-            _worldEventPublisher.Publish(new WorldEventTriggeredMessage { EventId = eventId, RequiresDecision = requiresDecision });
+            _worldEventPublisher.Publish(new WorldEventTriggeredMessage
+            {
+                EventId = eventId,
+                RequiresDecision = requiresDecision,
+                Description = description,
+                Choices = choices ?? new List<EventChoiceInfo>(),
+            });
 
             var response = new AwaitWorldEventResponse
             {

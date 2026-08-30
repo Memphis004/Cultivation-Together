@@ -6,6 +6,7 @@
 [Bb]uilds/
 Logs/
 UserSettings/
+Assets/TextMesh Pro/
 
 # Visual Studio / Rider cache
 .vs/

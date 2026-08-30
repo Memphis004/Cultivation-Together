@@ -54,6 +54,7 @@ namespace Xianxia.Sect
 
         private readonly SectEconomyState _state = MockSectData.Create();
         private readonly IPublisher<DiscipleRecruitedMessage> _discipleRecruitedPublisher;
+        private readonly IPublisher<SectResourceChangedMessage> _resourceChangedPublisher;
 
         // Fractional resource accumulated per task since the last whole
         // unit was added to the stockpile - avoids losing sub-1 production
@@ -66,9 +67,12 @@ namespace Xianxia.Sect
         // share one pooled timer.
         private readonly Dictionary<string, float> _craftProgress = new();
 
-        public SectStateProvider(IPublisher<DiscipleRecruitedMessage> discipleRecruitedPublisher)
+        public SectStateProvider(
+            IPublisher<DiscipleRecruitedMessage> discipleRecruitedPublisher,
+            IPublisher<SectResourceChangedMessage> resourceChangedPublisher)
         {
             _discipleRecruitedPublisher = discipleRecruitedPublisher;
+            _resourceChangedPublisher = resourceChangedPublisher;
         }
 
         public SectEconomyState BuildSectEconomyState()
@@ -92,7 +96,7 @@ namespace Xianxia.Sect
                 var wholeUnits = Mathf.FloorToInt(acc);
                 if (wholeUnits > 0)
                 {
-                    Adjust(_state.Stockpile.RawResources, rate.Resource, wholeUnits);
+                    AdjustAndNotify(_state.Stockpile.RawResources, rate.Resource, wholeUnits);
                     acc -= wholeUnits;
                     Debug.Log($"[SectStateProvider] Gathered +{wholeUnits} {rate.Resource} (task={accKey})");
                 }
@@ -130,6 +134,17 @@ namespace Xianxia.Sect
                     // losing the accumulated progress or overshooting.
                     _craftProgress[disciple.DiscipleId] = recipe.CraftSeconds;
                     continue;
+                }
+
+                foreach (var (resource, amount) in recipe.Costs)
+                {
+                    var newTotal = _state.Stockpile.RawResources.TryGetValue(resource, out var v) ? v : 0;
+                    _resourceChangedPublisher.Publish(new SectResourceChangedMessage
+                    {
+                        ResourceId = resource,
+                        Delta = -amount,
+                        NewTotal = newTotal,
+                    });
                 }
 
                 var item = new InventoryItem
@@ -197,16 +212,16 @@ namespace Xianxia.Sect
             switch (eventId)
             {
                 case "bandit_raid_001":
-                    Adjust(resources, "provisions", -20);
+                    AdjustAndNotify(resources, "provisions", -20);
                     break;
 
                 case "herb_garden_bloom":
-                    Adjust(resources, "herb", 30);
+                    AdjustAndNotify(resources, "herb", 30);
                     break;
 
                 case "wandering_merchant":
-                    Adjust(resources, "ore", -20);
-                    Adjust(resources, "provisions", 40);
+                    AdjustAndNotify(resources, "ore", -20);
+                    AdjustAndNotify(resources, "provisions", 40);
                     break;
 
                 case "new_disciple_applicant":
@@ -233,6 +248,26 @@ namespace Xianxia.Sect
         {
             var current = resources.TryGetValue(key, out var value) ? value : 0;
             resources[key] = Math.Max(0, current + delta);
+        }
+
+        // Same as Adjust, but also publishes SectResourceChangedMessage so
+        // UI (ResourceHudPresenter) picks up the change - single choke
+        // point instead of scattering publish calls at every mutation site.
+        // Publishes the *actual* applied delta, not the requested one - the
+        // two can differ when Adjust clamps at 0 (e.g. requesting -50 on a
+        // stock of 20 only actually removes 20).
+        private void AdjustAndNotify(Dictionary<string, int> resources, string key, int delta)
+        {
+            var before = resources.TryGetValue(key, out var b) ? b : 0;
+            Adjust(resources, key, delta);
+            var after = resources.TryGetValue(key, out var a) ? a : 0;
+
+            _resourceChangedPublisher.Publish(new SectResourceChangedMessage
+            {
+                ResourceId = key,
+                Delta = after - before,
+                NewTotal = after,
+            });
         }
 
         // Merges into an existing stack (same item + grade) in the sect

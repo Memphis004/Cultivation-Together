@@ -1,27 +1,25 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\memph\\OneDrive\\Desktop\\Cultivation Together\\McpBridge\\McpBridge.csproj": {}
+    "C:\\UnityProjects\\Cultivation Together\\McpBridge\\McpBridge.csproj": {}
   },
   "projects": {
-    "C:\\Users\\memph\\OneDrive\\Desktop\\Cultivation Together\\McpBridge\\McpBridge.csproj": {
+    "C:\\UnityProjects\\Cultivation Together\\McpBridge\\McpBridge.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\memph\\OneDrive\\Desktop\\Cultivation Together\\McpBridge\\McpBridge.csproj",
+        "projectUniqueName": "C:\\UnityProjects\\Cultivation Together\\McpBridge\\McpBridge.csproj",
         "projectName": "McpBridge",
-        "projectPath": "C:\\Users\\memph\\OneDrive\\Desktop\\Cultivation Together\\McpBridge\\McpBridge.csproj",
+        "projectPath": "C:\\UnityProjects\\Cultivation Together\\McpBridge\\McpBridge.csproj",
         "packagesPath": "C:\\Users\\memph\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\memph\\OneDrive\\Desktop\\Cultivation Together\\McpBridge\\obj\\",
+        "outputPath": "C:\\UnityProjects\\Cultivation Together\\McpBridge\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\memph\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "C:\\Users\\memph\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {

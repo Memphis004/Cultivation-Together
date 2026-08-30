@@ -16,6 +16,10 @@ namespace Xianxia.Sect
         [SerializeField] private string interprocessHost = "127.0.0.1";
         [SerializeField] private int interprocessPort = 3215;
 
+        [Header("UI (Xianxia.UI.MVP Lite)")]
+        [SerializeField] private Xianxia.Sect.UI.UIRoot uiRoot;
+        [SerializeField] private Xianxia.Sect.UI.UIPanelCatalog uiPanelCatalog;
+
         protected override void Configure(IContainerBuilder builder)
         {
             // Design-time data now sourced from Luban (see DataTables/ at
@@ -24,10 +28,18 @@ namespace Xianxia.Sect
             // constructed directly rather than serialized.
             builder.RegisterInstance(new LubanEventPool());
 
-            // UI: SectHudView already exists in the scene (as a Canvas
-            // child), so it's registered by finding it in the hierarchy
-            // rather than by type like the plain C# subsystems below.
-            // builder.RegisterComponentInHierarchy<Xianxia.Sect.UI.SectHudView>();
+            // --- UI (Xianxia.UI.MVP Lite) ---
+            // SectHudView is gone - replaced by the ResourceHud panel below,
+            // which gets its data from SectResourceChangedMessage instead of
+            // polling ISectStateProvider on a timer.
+            builder.RegisterInstance(uiRoot);
+            builder.RegisterInstance(uiPanelCatalog);
+            builder.Register<Xianxia.Sect.UI.UIService>(Lifetime.Singleton);
+            builder.Register<DecisionExecutor>(Lifetime.Singleton);
+            builder.Register<Xianxia.Sect.UI.EventPopupPresenter>(Lifetime.Transient);
+            builder.Register<Xianxia.Sect.UI.ResourceHudPresenter>(Lifetime.Transient);
+            builder.RegisterEntryPoint<Xianxia.Sect.UI.WorldEventUISystem>(Lifetime.Singleton);
+            builder.RegisterEntryPoint<Xianxia.Sect.UI.UIBootstrap>(Lifetime.Singleton);
 
             // --- in-memory pub/sub + request-response (internal subsystem bus) ---
             var options = builder.RegisterMessagePipe(pipeOptions =>

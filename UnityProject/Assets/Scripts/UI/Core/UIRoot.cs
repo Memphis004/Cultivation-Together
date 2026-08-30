@@ -1,0 +1,119 @@
+using UnityEngine;
+using UnityEngine.UI;
+
+namespace Xianxia.Sect.UI
+{
+    /// <summary>
+    /// Container that every UI panel is parented under.
+    /// On Awake it also forces its own RectTransform to stretch-fill the
+    /// Canvas and applies the correct layout to every known child panel.
+    /// </summary>
+    public class UIRoot : MonoBehaviour
+    {
+        [SerializeField] private Transform root;
+        public Transform Root => root != null ? root : transform;
+
+        private void Awake()
+        {
+            // Force this RectTransform to fill the entire Canvas.
+            var myRt = GetComponent<RectTransform>();
+            if (myRt != null)
+            {
+                myRt.anchorMin = Vector2.zero;
+                myRt.anchorMax = Vector2.one;
+                myRt.offsetMin = Vector2.zero;
+                myRt.offsetMax = Vector2.zero;
+            }
+
+            // Fix every already-existing child (baked-in prefab clones).
+            foreach (Transform child in transform)
+            {
+                ApplyLayout(child.gameObject);
+            }
+        }
+
+        /// <summary>
+        /// Also called by UIService after instantiating a new panel.
+        /// </summary>
+        public static void ApplyLayout(GameObject go)
+        {
+            var name  = go.name;
+            var rt    = go.GetComponent<RectTransform>();
+            if (rt == null) return;
+
+            if (name.StartsWith("ResourceHud"))
+                ApplyResourceHudLayout(rt);
+            else if (name.StartsWith("EventPopup"))
+                ApplyEventPopupLayout(rt);
+        }
+
+        // ---------- ResourceHud ----------
+        private static void ApplyResourceHudLayout(RectTransform rt)
+        {
+            // Top-stretch bar: full width,100 px tall
+            rt.anchorMin = new Vector2(0f, 1f);
+            rt.anchorMax = new Vector2(1f, 1f);
+            rt.pivot     = new Vector2(0.5f, 1f);
+            rt.sizeDelta = new Vector2(0f, 100f);
+            rt.anchoredPosition = Vector2.zero;
+
+            var hlg = rt.GetComponent<HorizontalLayoutGroup>();
+            if (hlg != null)
+            {
+                hlg.padding           = new RectOffset(20, 20, 10, 10);
+                hlg.spacing           = 20f;
+                hlg.childAlignment    = TextAnchor.MiddleLeft;
+                hlg.childControlWidth  = true;
+                hlg.childControlHeight = true;
+                hlg.childForceExpandWidth  = true;
+                hlg.childForceExpandHeight = true;
+            }
+
+            var csf = rt.GetComponent<ContentSizeFitter>();
+            if (csf != null)
+            {
+                csf.horizontalFit = ContentSizeFitter.FitMode.Unconstrained;
+                csf.verticalFit   = ContentSizeFitter.FitMode.Unconstrained;
+            }
+
+            foreach (Transform child in rt)
+            {
+                var cr = child.GetComponent<RectTransform>();
+                if (cr == null) continue;
+                cr.anchorMin = new Vector2(0.5f, 0.5f);
+                cr.anchorMax = new Vector2(0.5f, 0.5f);
+                cr.sizeDelta = new Vector2(150f, 80f);
+                cr.pivot     = new Vector2(0.5f, 0.5f);
+            }
+        }
+
+        // ---------- EventPopup ----------
+        private static void ApplyEventPopupLayout(RectTransform rt)
+        {
+            rt.anchorMin = new Vector2(0.5f, 0.5f);
+            rt.anchorMax = new Vector2(0.5f, 0.5f);
+            rt.pivot     = new Vector2(0.5f, 0.5f);
+            rt.sizeDelta = new Vector2(600f, 400f);
+            rt.anchoredPosition = Vector2.zero;
+
+            var vlg = rt.GetComponent<VerticalLayoutGroup>();
+            if (vlg != null)
+            {
+                vlg.padding           = new RectOffset(20, 20, 20, 20);
+                vlg.spacing           = 15f;
+                vlg.childAlignment    = TextAnchor.UpperCenter;
+                vlg.childControlWidth  = true;
+                vlg.childControlHeight = false;
+                vlg.childForceExpandWidth  = true;
+                vlg.childForceExpandHeight = false;
+            }
+
+            var csf = rt.GetComponent<ContentSizeFitter>();
+            if (csf != null)
+            {
+                csf.horizontalFit = ContentSizeFitter.FitMode.Unconstrained;
+                csf.verticalFit   = ContentSizeFitter.FitMode.PreferredSize;
+            }
+        }
+    }
+}

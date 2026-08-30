@@ -19,17 +19,14 @@ namespace Xianxia.Sect
     public class DecisionLogger : IStartable
     {
         private readonly IDistributedSubscriber<string, ExecuteDecisionMessage> _subscriber;
-        private readonly TimeSystem _timeSystem;
-        private readonly ISectStateProvider _stateProvider;
+        private readonly DecisionExecutor _decisionExecutor;
 
         public DecisionLogger(
             IDistributedSubscriber<string, ExecuteDecisionMessage> subscriber,
-            TimeSystem timeSystem,
-            ISectStateProvider stateProvider)
+            DecisionExecutor decisionExecutor)
         {
             _subscriber = subscriber;
-            _timeSystem = timeSystem;
-            _stateProvider = stateProvider;
+            _decisionExecutor = decisionExecutor;
         }
 
         public void Start()
@@ -54,8 +51,10 @@ namespace Xianxia.Sect
                 $"[DecisionLogger] Received decision from bridge - " +
                 $"eventId={message.EventId} choiceId={message.ChoiceId}");
 
-            _stateProvider.ApplyDecisionConsequence(message.EventId, message.ChoiceId);
-            _timeSystem.SetPaused(false);
+            // Shared with EventPopupPresenter (in-game UI path) - see
+            // DecisionExecutor.cs for why this is a direct call rather than
+            // published as a message.
+            _decisionExecutor.Execute(message.EventId, message.ChoiceId);
         }
     }
 }

@@ -26,6 +26,16 @@ namespace Xianxia.Sect
 
             state.Disciples.Add(new DiscipleState
             {
+                DiscipleId = "d000",
+                DisplayName = "Liu YiFeng",
+                Rank = DiscipleRank.SectMaster,
+                Wallet = new CurrencyWallet { SpiritStones = 1200, Contribution = 3400 },
+                CurrentTask = "meditation",
+                PersonalInventory = new List<InventoryItem>()
+            });
+
+            state.Disciples.Add(new DiscipleState
+            {
                 DiscipleId = "d001",
                 DisplayName = "Lin Feng",
                 Rank = DiscipleRank.OuterDisciple,
