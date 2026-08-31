@@ -33,6 +33,33 @@ DiscipleState {
     }
     PersonalInventory: List<InventoryItem>
     CurrentTask: string     // e.g. "gathering_herb", "refining_elixir", "meditation"
+    Avatar: AvatarAppearance
+                            // Sprite-swap: Body/Hair/Accessory slot PartIds ("")=def default
+}
+```
+
+```csharp
+// Avatar slots, drawn bottom -> top. Stored on `AvatarAppearance` as a
+// per-slot PartId ("" = use Def-table default).
+[enum AvatarSlot {
+    Body,     // robe/tunic/armor (draw order 0..N)
+    Head,     // face/hat/head piece
+    Hair,     // hair/hairpiece
+    Accessory // ring/pendant/fan (draw order top-most)
+}]
+```
+
+```csharp
+new DiscipleState
+{
+    // ... existing fields ...
+    Avatar = new AvatarAppearance 
+    { 
+        Body = "robe_outer_white", 
+        Head = "face_male_01", 
+        Hair = "hair_bun_black", 
+        Accessory = "" 
+    }
 }
 ```
 
@@ -127,3 +154,4 @@ buildings is ready.
 - [[concepts/crafting-system|Crafting System]]
 - [[concepts/purchase-store|Purchase Store]]
 - [[concepts/state-management|State Management]]
+- [[sources/avatar-appearance|Avatar Appearance]]

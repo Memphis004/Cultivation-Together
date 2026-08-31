@@ -1,0 +1,61 @@
+ช่วยเรียนรู้เกี่ยวกับ LLM Wiki ของ Karpathy
+
+"You are an expert Unity Game Developer and AI Systems Architect assisting Memphis.
+Context: We are building a Cultivation-themed game using Unity, C#, and advanced AI systems (GOAP, Behavior Trees).
+Knowledge Base: Always refer to the files in /dev-wiki for current design decisions, bug fixes, and code snippets.
+Style: Be concise, technical, and opinionated. Prefer open-source tools.
+Goal: Help synthesize information from DevLogs and Design Docs to solve current development challenges."
+
+ช่วยอ่านไฟล์ทั้งหมดในไดเรกทอรี่นี้โค้ด C# Logic เกมอยู่ใน UnityProject/Assets/Scripts และช่วยตั้งค่า LLM Wiki กับโปรเจกต์นี้ ตามโครงสร้างประมาณนี้ โดยอ้างอิงจากโค้ดในโปรเจค ```
+wiki/
+├── sources/
+│   ├── game-design-doc.md        ← GDD (Game Design Document)
+│   ├── mechanics.md              ← อธิบายระบบเกมแต่ละระบบ
+│   ├── bug-log.md                ← บันทึก Bug + วิธีแก้
+│   ├── devlog-2026-08-30.md      ← Dev Log รายวัน
+│   └── code-snippets/            ← เฉพาะ Script สำคัญๆ (ไม่ใช่ทั้งโปรเจค!)
+│       ├── ...
+│       ├── ...
+│       └── ...
+├── concepts/                     ← AI สร้างให้อัตโนมัติ
+│       ├── ...
+│       ├── ...
+│       └── ...
+└── entities/                     ← AI สร้างให้อัตโนมัติ
+    ├── ...
+    └── ...
+``` ไว้ลงใน Valut C:\UnityProjects\Cultivation Together\LLMWiki เพื่อจด Notes/DevLog/Design Doc/Snippets → AI เป็นสมองที่สองของเกม
+
+ฉันเพิ่งเพิ่มUI LogWindow ให้กับ Cultivation Together โดยมันจะ log แสดง event สำคัญในเกมแบบ real-time งั้นช่วยอ่านและวิเคราะห์โค้ดเหล่านี้ แล้วร่าง Wiki Page อธิบาย Architecture, Data Flow และสร้าง Code Snippets สำหรับส่วนที่สำคัญให้หน่อยนะ:
+"C:\UnityProjects\Cultivation Together\Shared\GameMessages.cs"
+"C:\UnityProjects\Cultivation Together\UnityProject\Assets\Scripts\UI\Views\LogWindowView.cs"
+"C:\UnityProjects\Cultivation Together\UnityProject\Assets\Scripts\UI\Views\LogWindowPresenter.cs"
+"C:\UnityProjects\Cultivation Together\UnityProject\Assets\Scripts\UI\Core\UIService.cs"
+"C:\UnityProjects\Cultivation Together\UnityProject\Assets\Scripts\UI\Core\UIPresenterKind.cs"
+"C:\UnityProjects\Cultivation Together\UnityProject\Assets\Scripts\UI\Systems\UIBootstrap.cs"
+"C:\UnityProjects\Cultivation Together\UnityProject\Assets\Scripts\Core\DecisionExecutor.cs"
+"C:\UnityProjects\Cultivation Together\UnityProject\Assets\Scripts\Core\GameLifetimeScope.cs"
+
+commit ก่อนหน้าค้า
+Unity-v0.7-ui-framework-and-luban-data: Add MVP UI system with reactive panels and migrate event data to Luban
+
+- Add UI Core framework (IUIView, IUIViewPresenter, UIPresenter<T>, UIService, UIRoot, UIPanelCatalog, UIPanelDefinition, UIPanelHandle, UIPresenterKind)
+- Add EventPopupPresenter/View for interactive world event decisions with dynamic choice buttons
+- Add ResourceHudPresenter/View with real-time resource delta indicators and wallet display
+- Add WorldEventUISystem to auto-open EventPopup on WorldEventTriggeredMessage (reactive, not polling)
+- Add UIBootstrap to open ResourceHud at game start
+- Add DecisionExecutor as shared entry point for both UI and Bridge decision paths (avoids silent in-process publish failure)
+- Migrate event data from ScriptableObject to Luban-generated tables (EventRow, EventChoiceRow, TbEvent, TbEventChoice)
+- Add LubanEventPool with weighted random selection and choice lookup from cfg.Tables
+- Refactor WorldEventSystem to use LubanEventPool instead of EventPool SO
+- Update GameLifetimeScope to register all UI components and LubanEventPool
+- Add AdjustAndNotify() in SectStateProvider as single choke point for SectResourceChangedMessage publishing
+- Update TimeSystem.RaiseWorldEvent() to carry Description + Choices for both Bridge and UI consumers
+- Update GameMessages.WorldEventTriggeredMessage with Description + Choices fields
+- Remove SectMaster (d000) from MockSectData to reflect runtime reality
+แล้วเราจะเรียกอัพเดทครั้งนี้ว่าอะไร 
+
+ช่วยร่าง Game Design Doc สำหรับระบบ Avatar Character / Customization แบบ Sprite Swap มีส่วนประกอบไปด้วย Heads, Hairs, Bodies, Accessories โดยอ้างอิงจาก architecture ปัจจุบัน แล้ว save ลง wiki ไว้ด้วย
+
+
+

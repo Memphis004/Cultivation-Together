@@ -51,6 +51,7 @@
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\6000.3.9f1\Editor\Data\Tools\BuildPipeline\Unity.SourceGenerators\Unity.UIToolkit.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\UI\Views\LogWindowView.cs" />
     <Compile Include="Assets\Scripts\UI\Core\UIService.cs" />
     <Compile Include="Assets\Scripts\Shared\SectEconomyState.cs" />
     <Compile Include="Assets\Scripts\UI\Core\UIPanelCatalog.cs" />
@@ -59,6 +60,7 @@
     <Compile Include="Assets\Scripts\UI\Core\UIPanelHandle.cs" />
     <Compile Include="Assets\Scripts\UI\Core\UIPresenter.cs" />
     <Compile Include="Assets\Scripts\UI\Core\IUIViewPresenter.cs" />
+    <Compile Include="Assets\Scripts\UI\Views\LogWindowPresenter.cs" />
     <Compile Include="Assets\Scripts\UI\Core\UIPanelDefinition.cs" />
     <Compile Include="Assets\Scripts\Shared\GameMessages.cs" />
     <Compile Include="Assets\Scripts\Core\DecisionLogger.cs" />

@@ -84,12 +84,15 @@ switch (kind) {
 
 ⏳ **TODO**: implement `DiscipleListPresenter` when the panel is added.
 
-## Implemented Panels (2)
+## Implemented Panels (3)
 
 | Panel | Presenter | Subscribes to |
 |---|---|---|
 | `EventPopup` | `EventPopupPresenter` | n/a (called via `OnOpen(args)`) |
 | `ResourceHud` | `ResourceHudPresenter` | `SectResourceChangedMessage` |
+| `LogWindow` | `LogWindowPresenter` | `DiscipleRecruitedMessage`, `WorldEventTriggeredMessage`, `DecisionExecutedMessage` |
+
+See [[concepts/log-window]] for the full LogWindow architecture and data flow.
 
 ## Layout Fix (lab 13 gotcha)
 

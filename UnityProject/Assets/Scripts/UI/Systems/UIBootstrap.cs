@@ -16,6 +16,7 @@ namespace Xianxia.Sect.UI
         public void Start()
         {
             _uiService.Open("ResourceHud");
+            _uiService.Open("LogWindow");
         }
     }
 }

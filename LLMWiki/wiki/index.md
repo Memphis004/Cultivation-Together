@@ -28,6 +28,7 @@ Design documents and historical record:
 - [[sources/game-design-doc|Game Design Document]] — vision, pillars, two-currency economy
 - [[sources/architecture|Architecture]] — how the subsystems fit together
 - [[sources/mechanics|Mechanics]] — per-system design (combat, gathering, crafting, ...)
+- [[sources/avatar-appearance|Avatar Customization (Sprite Swap)]] — Heads / Hairs / Bodies / Accessories, sprite-slot data model
 - [[sources/devlog-history|DevLog History]] — 13 lab rounds, 21-30 Aug 2026
 - [[sources/bug-log|Bug Log]] — real bugs + fixes from all labs
 - [[sources/open-questions|Open Questions]] — what's deliberately not decided
@@ -41,6 +42,8 @@ Design documents and historical record:
 - [[sources/code-snippets/GameMessages.cs.md|GameMessages.cs]] — all message DTOs
 - [[sources/code-snippets/UIPresenter-and-UIViewBase.cs.md|UIPresenter + UIViewBase]] — MVP base
 - [[sources/code-snippets/EventPopupPresenter.cs.md|EventPopupPresenter.cs]] — choice click handler
+- [[sources/code-snippets/LogWindowPresenter.cs.md|LogWindowPresenter.cs]] — event log presenter
+- [[sources/code-snippets/LogWindowView.cs.md|LogWindowView.cs]] — scrolling TMP log view
 
 ## Concepts (AI-maintained)
 
@@ -57,7 +60,9 @@ System-level concepts:
 - [[concepts/crafting-system|Crafting System]]
 - [[concepts/purchase-store|Purchase Store]]
 - [[concepts/mvp-ui|MVP UI Pattern]]
+- [[concepts/log-window|Log Window]]
 - [[concepts/data-pipeline|Data Pipeline (Luban)]]
+- [[concepts/avatar-appearance|Avatar Appearance (Sprite Swap)]]
 
 ## Entities (AI-maintained)
 
@@ -69,6 +74,7 @@ Catalogs of game entities:
 - [[entities/resources|Resources]] — raw materials
 - [[entities/items|Items]] — crafted goods
 - [[entities/sects|Sects]] — faction concept (player + others)
+- [[entities/avatar-appearance|Avatar Appearance]] — Heads/Hairs/Bodies/Accessories (planned)
 
 ## Quick Reference — Common Questions
 
@@ -80,6 +86,7 @@ Catalogs of game entities:
 | How do decisions apply? | [[concepts/decision-pipeline]] |
 | How do I add a new event? | [[concepts/data-pipeline]] → [[entities/world-events]] |
 | How do I add a new UI panel? | [[concepts/mvp-ui]] |
+| How does the event log work? | [[concepts/log-window]] |
 | How do I add a new resource? | [[entities/resources]] |
 | What bugs were hit during build? | [[sources/bug-log]] |
 | What's not decided yet? | [[sources/open-questions]] |
@@ -87,8 +94,8 @@ Catalogs of game entities:
 
 ## Maintenance
 
-- Last index update: 2026-08-31
-- Total source pages: 6 (+ 7 code snippets)
-- Total concept pages: 12
-- Total entity pages: 6
+- Last index update: 2026-09-01
+- Total source pages: 8 (+ 9 code snippets)
+- Total concept pages: 14
+- Total entity pages: 7
 - Total bug log entries: 11 (across 13 labs)

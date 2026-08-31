@@ -77,6 +77,8 @@
 | IPC (Unity ↔ Bridge) | **MessagePipe.Interprocess (TCP)** | Unity เป็น host, Bridge เป็น client |
 | MCP Bridge | **.NET 8 Console App** | ใช้ `ModelContextProtocol` C# SDK (stdio) |
 | Serialization | **MessagePack** | เลิกใช้ protobuf แล้ว (ตัดสินใจ lab รอบ 7) |
+| DataTable | **Luban** | Excel → JSON → C# Plain Class (ไม่ใช้ ScriptableObject เพื่อเลี่ยงการคลิกสร้าง Asset และรองรับ Data-Driven Design) |
+| UI Framework | **UI MVP LITE** | Custom UGUI + TMP framework (View=MonoBehaviour, Presenter=Plain C#) ออกแบบมาเพื่อทำงานร่วมกับ VContainer/MessagePipe โดยตรง ไม่พึ่ง Reflection |
 
 ---
 
@@ -317,8 +319,8 @@ dotnet run
 2. ✅ ร้านค้าค่าคุณูปการ — เอา CraftedGoods มาให้ศิษย์แลกซื้อ
 3. ✅ EventData ScriptableObject — เลิก hardcode event list ใน WorldEventSystem
 4. ⏳ Minimal UI in-game
- 1. 🔮 SectState `herb` (สมุนไพร), `wood` (ไม้), `ore` (แร่), `provisions` (เสบียง) 
- 2. 🔮 Personal Wallet  (Spirit Stones),(Contribution)
+ 1. ✅  SectState `herb` (สมุนไพร), `wood` (ไม้), `ore` (แร่), `provisions` (เสบียง) 
+ 2. ✅  Personal Wallet  (Spirit Stones),(Contribution)
  3. 🔮 Windows Log
 
 ??. 🔮 Recipe/Event Deep-Detail

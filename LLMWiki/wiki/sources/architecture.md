@@ -62,12 +62,13 @@ tags: [architecture, di, ipc, messagepipe]
 │  └──────────────────────────────────────────────┘           │
 │                                                             │
 │  ┌──────────────────────────────────────────────┐           │
-│  │  UI (Xianxia.UI.MVP Lite — UGUI)             │           │
-│  │  - UIRoot (Canvas)                           │           │
-│  │  - UIPanelCatalog (ScriptableObject)         │           │
-│  │  - EventPopup  (View + Presenter)            │           │
-│  │  - ResourceHud (View + Presenter)            │           │
-│  └──────────────────────────────────────────────┘           │
+ │  │  UI (Xianxia.UI.MVP Lite — UGUI)             │           │
+ │  │  - UIRoot (Canvas)                           │           │
+ │  │  - UIPanelCatalog (ScriptableObject)         │           │
+ │  │  - EventPopup  (View + Presenter)            │           │
+ │  │  - ResourceHud (View + Presenter)            │           │
+ │  │  - LogWindow   (View + Presenter)            │           │
+ │  └──────────────────────────────────────────────┘           │
 └─────────────────────────────────────────────────────────────┘
           │ TCP 127.0.0.1:3215 (MessagePipe.Interprocess)
           ▼
@@ -220,6 +221,24 @@ collide with the hub's already-bound port. Solution: use request-response
 (`AwaitWorldEventRequest`) which only ever uses the client connection
 (`Connect`, not `Listen`).
 
+## Implementation Details for AI Agent
+- **Namespace:** `Xianxia.Sect` (สำหรับ Data Model), `Xianxia.Sect.UI` (สำหรับ Renderer/View)
+- **File Location:** 
+  - Data Model: `UnityProject/Assets/Scripts/Shared/SectEconomyState.cs` (แก้ไขไฟล์เดิม)
+  - Renderer: `UnityProject/Assets/Scripts/UI/Views/AvatarRenderer.cs` (สร้างใหม่)
+  - Def Loader: `UnityProject/Assets/Scripts/Data/AvatarPartPool.cs` (สร้างใหม่)
+
+ │  ┌──────────────────────────────────────────────┐           │
+ │  │  Data: AvatarPartPool (JSON → C#)            │           │
+ │  │  Resources/DataTables/avatar_parts.json      │           │
+ │  └──────────────────────────────────────────────┘           │
+ │           │                                                  │
+ │           ▼                                                  │
+ │  ┌──────────────────────────────────────────────┐           │
+ │  │  UI: AvatarRenderer (Per-Disciple GameObject)│           │
+ │  │  - Resolves AvatarAppearance → Sprite Layers │           │
+ │  └──────────────────────────────────────────────┘           │
+
 ## Workspace Layout (multi-project monorepo)
 
 ```
@@ -247,6 +266,7 @@ Cultivation Together/              ← workspace root
 **Rule**: edit files in top-level `Shared/`, then run `./sync-shared.sh` to
 copy into both `UnityProject/Assets/Scripts/Shared/` and `McpBridge/Shared/`.
 Never edit the copies directly.
+
 
 ## Related Pages
 

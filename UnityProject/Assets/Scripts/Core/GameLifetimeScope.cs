@@ -38,6 +38,7 @@ namespace Xianxia.Sect
             builder.Register<DecisionExecutor>(Lifetime.Singleton);
             builder.Register<Xianxia.Sect.UI.EventPopupPresenter>(Lifetime.Transient);
             builder.Register<Xianxia.Sect.UI.ResourceHudPresenter>(Lifetime.Transient);
+            builder.Register<Xianxia.Sect.UI.LogWindowPresenter>(Lifetime.Transient);
             builder.RegisterEntryPoint<Xianxia.Sect.UI.WorldEventUISystem>(Lifetime.Singleton);
             builder.RegisterEntryPoint<Xianxia.Sect.UI.UIBootstrap>(Lifetime.Singleton);
 

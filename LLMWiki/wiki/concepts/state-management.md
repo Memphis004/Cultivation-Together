@@ -10,9 +10,9 @@ related:
   - "[[concepts/decision-pipeline]]"
   - "[[concepts/purchase-store]]"
 created: 2026-08-31
-updated: 2026-08-31
+- updated: 2026-08-31
 confidence: high
-tags: [state, economy, messagepack, delta-events]
+tags: [state, economy, messagepack, delta-events, avatar]
 ---
 
 # State Management
@@ -47,9 +47,12 @@ SectEconomyState
 │       ├── Wallet: CurrencyWallet
 │       │   ├── SpiritStones: long
 │       │   └── Contribution: long
-│       ├── PersonalInventory: List<InventoryItem>
-│       └── CurrentTask: string      (e.g. "gathering_herb", "refining_elixir")
-└── Stockpile: SectStockpile
+ │       │       │   ├── SpiritStones: long
+ │       │   ├── Contribution: long
+ │       │   ├── PersonalInventory: List<InventoryItem>
+ │       │   └── CurrentTask: string      (e.g. "gathering_herb", "refining_elixir")
+ │       └── Avatar: AvatarAppearance     (planned: per-slot PartId for He/B/C/Accessory, ""=default)
+ └── Stockpile: SectStockpile
     ├── RawResources: Dict<string, int>   (herb, wood, ore, provisions)
     └── CraftedGoods: List<InventoryItem>
         └── InventoryItem
@@ -144,4 +147,5 @@ resources. If you add a code path that mutates wallet without going through
 - [[concepts/decision-pipeline|Decision Pipeline]]
 - [[concepts/purchase-store|Purchase Store]]
 - [[concepts/message-pipe-bus|MessagePipe Bus]]
+- [[concepts/avatar-appearance|Avatar Appearance]]
 - [[sources/bug-log|Bug Log]] (BUG-L7-01)

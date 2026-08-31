@@ -135,6 +135,20 @@ namespace Xianxia.Sect.Messages
         [Key(1)] public string ChoiceId { get; set; }
     }
 
+    // Published in-memory by DecisionExecutor (not sent over interprocess -
+    // this is the "it already happened" notification for local listeners
+    // like the in-game log window, distinct from ExecuteDecisionMessage
+    // which is the incoming command from the bridge). Whether the decision
+    // originated from the bridge or from clicking a choice in the UI,
+    // DecisionExecutor is the single place both paths funnel through, so
+    // this fires exactly once per decision regardless of source.
+    [MessagePackObject]
+    public class DecisionExecutedMessage
+    {
+        [Key(0)] public string EventId { get; set; }
+        [Key(1)] public string ChoiceId { get; set; }
+    }
+
     // Request/response pair: a disciple buying an item from the sect
     // stockpile (CraftedGoods) with their own contribution. Request-response
     // rather than a fire-and-forget message because the bridge needs to

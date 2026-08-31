@@ -19,3 +19,6 @@ MonoBehaviour:
   - PanelId: ResourceHud
     Prefab: {fileID: 2144103126168093755, guid: b65514388194efa4899e1b87d81cd5d5, type: 3}
     PresenterKind: 1
+  - PanelId: LogWindow
+    Prefab: {fileID: 2144103126168093755, guid: b65514388194efa4899e1b87d81cd5d5, type: 3}
+    PresenterKind: 1

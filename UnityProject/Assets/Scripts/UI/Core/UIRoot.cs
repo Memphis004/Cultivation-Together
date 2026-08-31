@@ -45,6 +45,8 @@ namespace Xianxia.Sect.UI
                 ApplyResourceHudLayout(rt);
             else if (name.StartsWith("EventPopup"))
                 ApplyEventPopupLayout(rt);
+            else if (name.StartsWith("LogWindow"))
+                ApplyLogWindowLayout(rt);
         }
 
         // ---------- ResourceHud ----------
@@ -114,6 +116,17 @@ namespace Xianxia.Sect.UI
                 csf.horizontalFit = ContentSizeFitter.FitMode.Unconstrained;
                 csf.verticalFit   = ContentSizeFitter.FitMode.PreferredSize;
             }
+        }
+
+        // ---------- LogWindow ----------
+        private static void ApplyLogWindowLayout(RectTransform rt)
+        {
+            // Bottom-left anchored log window: 400x300
+            rt.anchorMin = new Vector2(0f, 0f);
+            rt.anchorMax = new Vector2(0f, 0f);
+            rt.pivot     = new Vector2(0f, 0f);
+            rt.sizeDelta = new Vector2(400f, 300f);
+            rt.anchoredPosition = new Vector2(10f, 10f);
         }
     }
 }

@@ -10,6 +10,10 @@ Every ingest, lint run, and maintenance operation is recorded here automatically
 > Format: `## [YYYY-MM-DD] <operation> | <source/page> | <one-line summary>`
 > Parseable with: `grep "^## \[" log.md`
 
+## [2026-08-31] new-page | wiki/sources/avatar-appearance.md | GDD for Avatar Customization (Heads/Hairs/Bodies/Accessories) as Sprite Swap layers
+## [2026-08-31] wire | wiki/index.md | Linked Avatar Appearance (sources + entities) into the master catalog
+## [2026-08-31] wire | wiki/entities/avatar-appearance.md | New entity page documenting AvatarAppearance slot PartId model
+## [2026-08-31] lint | wiki | Added avatar slot field to `entities/disciples.md` data model
 ## [2026-08-31] init | LLMWiki | Created LLM Wiki for Cultivation Together (Karpathy pattern)
 ## [2026-08-31] scan | UnityProject/ | Read full project structure, 13 lab rounds, all C# scripts
 ## [2026-08-31] scaffold | AGENTS.md | Wrote schema customized to this project (tech stack, conventions, code citation)
@@ -25,3 +29,9 @@ Every ingest, lint run, and maintenance operation is recorded here automatically
 ## [2026-08-31] scaffold | wiki/concepts/ | 12 concept pages (composition, messagepipe, mcp, decision, state, time, world-events, gathering, crafting, purchase, mvp-ui, data-pipeline)
 ## [2026-08-31] scaffold | wiki/entities/ | 6 entity pages (disciples, world-events, events, resources, items, sects)
 ## [2026-08-31] scaffold | wiki/index.md | Master catalog with quick-reference table
+## [2026-09-01] new-page | wiki/concepts/log-window.md | LogWindow architecture, data flow, and code snippets
+## [2026-09-01] new-page | wiki/sources/code-snippets/LogWindowPresenter.cs.md | Presenter snippet for event log
+## [2026-09-01] new-page | wiki/sources/code-snippets/LogWindowView.cs.md | View snippet for scrolling TMP log
+## [2026-09-01] wire | wiki/concepts/mvp-ui.md | Added LogWindow to Implemented Panels (2→3)
+## [2026-09-01] wire | wiki/sources/architecture.md | Added LogWindow to UI box in architecture diagram
+## [2026-09-01] wire | wiki/index.md | Linked LogWindow concept + code snippets into master catalog
