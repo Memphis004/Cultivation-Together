@@ -30,6 +30,7 @@ namespace Xianxia.Sect.UI
             _decisionExecutedSubscriber = decisionExecutedSubscriber;
         }
 
+
         protected override void OnViewBound()
         {
             _discipleSub = _discipleRecruitedSubscriber.Subscribe(OnDiscipleRecruited);

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using MessagePack;
+using Xianxia.Sect;
 
 namespace Xianxia.Sect.Messages
 {
@@ -171,6 +172,37 @@ namespace Xianxia.Sect.Messages
         [Key(2)] public long RemainingContribution { get; set; }
     }
 
+    // ---------- Avatar equipment change ----------
+    // Broadcast after a successful avatar part change (pub/sub, goes to UI + MCP client)
+    [MessagePackObject]
+    public class AvatarEquipmentChangedMessage
+    {
+        [Key(0)] public string DiscipleId { get; set; } = string.Empty;
+        [Key(1)] public string Slot { get; set; } = string.Empty;   // AvatarSlots.*
+        [Key(2)] public string OldPartId { get; set; } = string.Empty;
+        [Key(3)] public string NewPartId { get; set; } = string.Empty;
+    }
+
+    // Request/response pair for changing an avatar part.
+    // Request-response (not fire-and-forget) because the bridge needs
+    // to know immediately whether the PartId is valid or the disciple
+    // id is wrong - same reasoning as PurchaseItemRequest.
+    [MessagePackObject]
+    public class ChangeAvatarPartRequest
+    {
+        [Key(0)] public string DiscipleId { get; set; } = string.Empty;
+        [Key(1)] public string Slot { get; set; } = string.Empty;
+        [Key(2)] public string PartId { get; set; } = string.Empty;   // "" = back to default
+    }
+
+    [MessagePackObject]
+    public class ChangeAvatarPartResponse
+    {
+        [Key(0)] public bool Success { get; set; }
+        [Key(1)] public string FailReason { get; set; } = string.Empty;
+        [Key(2)] public AvatarAppearance ResultAvatar { get; set; }
+    }
+
     // Topic keys for the keyed (IDistributedPublisher<TKey,TMessage>) channels.
     public static class InterprocessTopics
     {
@@ -180,5 +212,6 @@ namespace Xianxia.Sect.Messages
         public const string ContributionEarned = "sect.contribution_earned";
         public const string WorldEvent = "sect.world_event";
         public const string ExecuteDecision = "sect.execute_decision";
+        public const string AvatarEquipmentChanged = "sect.avatar_equipment_changed";
     }
 }

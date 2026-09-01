@@ -52,9 +52,13 @@ namespace Xianxia.Sect
             "Chen Wei", "Bai Ling", "Zhou Tao", "Xiao Mei", "Jiang Yu", "Wen Hao",
         };
 
+        private static readonly string[] StarterHair = { "hair_short", "hair_topknot", "hair_twin_tail" };
+
         private readonly SectEconomyState _state = MockSectData.Create();
         private readonly IPublisher<DiscipleRecruitedMessage> _discipleRecruitedPublisher;
         private readonly IPublisher<SectResourceChangedMessage> _resourceChangedPublisher;
+        private readonly IPublisher<AvatarEquipmentChangedMessage> _avatarChangedPublisher;
+        private readonly AvatarPartPool _avatarPartPool;
 
         // Fractional resource accumulated per task since the last whole
         // unit was added to the stockpile - avoids losing sub-1 production
@@ -69,10 +73,14 @@ namespace Xianxia.Sect
 
         public SectStateProvider(
             IPublisher<DiscipleRecruitedMessage> discipleRecruitedPublisher,
-            IPublisher<SectResourceChangedMessage> resourceChangedPublisher)
+            IPublisher<SectResourceChangedMessage> resourceChangedPublisher,
+            IPublisher<AvatarEquipmentChangedMessage> avatarChangedPublisher,
+            AvatarPartPool avatarPartPool)
         {
             _discipleRecruitedPublisher = discipleRecruitedPublisher;
             _resourceChangedPublisher = resourceChangedPublisher;
+            _avatarChangedPublisher = avatarChangedPublisher;
+            _avatarPartPool = avatarPartPool;
         }
 
         public SectEconomyState BuildSectEconomyState()
@@ -188,6 +196,7 @@ namespace Xianxia.Sect
                 Wallet = new CurrencyWallet(),
                 PersonalInventory = new List<InventoryItem>(),
                 CurrentTask = task,
+                Avatar = CreateStarterAvatar(index),
             };
 
             _state.Disciples.Add(disciple);
@@ -198,6 +207,47 @@ namespace Xianxia.Sect
             });
 
             Debug.Log($"[SectStateProvider] Recruited outer disciple: {disciple.DisplayName} ({disciple.DiscipleId}), assigned to {task}");
+        }
+
+        private AvatarAppearance CreateStarterAvatar(int rosterIndex)
+        {
+            var a = new AvatarAppearance();
+            a.SetSlot(AvatarSlots.Body, "body_robe_grey");
+            a.SetSlot(AvatarSlots.Head, (rosterIndex % 2 == 0) ? "head_male_01" : "head_female_01");
+            a.SetSlot(AvatarSlots.Hair, StarterHair[rosterIndex % StarterHair.Length]);
+            return a;
+        }
+
+        public bool TryChangeAvatarPart(string discipleId, string slot, string partId,
+                                        out string failReason, out AvatarAppearance result)
+        {
+            failReason = string.Empty;
+            result = null;
+
+            var disciple = _state.Disciples.FirstOrDefault(d => d.DiscipleId == discipleId);
+            if (disciple == null) { failReason = $"No disciple with id: {discipleId}"; return false; }
+
+            if (System.Array.IndexOf(AvatarSlots.Equippable, slot) < 0)
+            { failReason = $"Invalid slot: {slot}"; return false; }
+
+            if (!_avatarPartPool.IsValidForSlot(slot, partId))
+            { failReason = $"PartId '{partId}' is not valid for slot '{slot}'"; return false; }
+
+            if (disciple.Avatar == null) disciple.Avatar = new AvatarAppearance();
+
+            var oldPart = disciple.Avatar.GetSlot(slot);
+            disciple.Avatar.SetSlot(slot, partId);
+
+            _avatarChangedPublisher.Publish(new AvatarEquipmentChangedMessage
+            {
+                DiscipleId = discipleId,
+                Slot       = slot,
+                OldPartId  = oldPart,
+                NewPartId  = partId
+            });
+
+            result = disciple.Avatar.Clone();   // return copy, not reference to live state
+            return true;
         }
 
         // Placeholder consequence rules keyed by event id - not real game
@@ -378,7 +428,7 @@ namespace Xianxia.Sect
             };
         }
 
-        // แก้ไขจาก record เป็น class เพื่อความเข้ากันได้กับ Unity
+        // Changed from record to class for Unity compatibility
         private class CraftingRecipe
         {
             public string ItemDefId { get; }

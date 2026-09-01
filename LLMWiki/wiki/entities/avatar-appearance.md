@@ -15,39 +15,38 @@ tags: [avatar, parts, sprite-swap, head, hair, body, accessory]
 
 # Avatar Appearance
 
-> Per-disciple sprite customization via four **swappable layers** — Body, Head,
-> Hair, Accessory. Which part each disciple wears is stored on `DiscipleState.
-> Avatar` as an **AvatarAppearance** object keyed by slot.
+> Per-disciple sprite customization via a **dictionary-based** structure. Which part each disciple wears is stored on `DiscipleState.Avatar` as an **AvatarAppearance** object containing Parts and Colors dictionaries.
 
-## Slots (draw bottom → top)
+## Slots & Draw Order
 
-| Slot | Draw Order | What it covers |
-|---|---|---|
-| `Body` | 0 | robe / tunic / armor |
-| `Head` | 1 | face / hat / full head piece |
-| `Hair` | 2 | hair / hairpiece (painted above head by default) |
-| `Accessory` | 3 | ring / amulet / fan (always top) |
+Defined in `AvatarSlots.cs`. Equippable slots include:
+`Body`, `Head`, `Eyes`, `Brows`, `Mouth`, `Nose`, `Hair`, `FaceMarking`, `Eyeshadow`, `Accessory`.
 
-An empty slot (`""`) means "use the Def-table default" — keeps default
-rosters tiny and makes "un-customized" a first-class state.
+They are grouped into categories for UI ("ใบหน้า", "ลักษณะ", "ร่างกาย").
+An empty string or missing key means "use the default for this slot".
 
 ## Schema
 
 ```csharp
-[MessagePackObject([Key(6)])]   // append after existing Key(0..5) fields
-public class AvatarAppearance {
-    [Key(0)] public string Body     { get; set; }   // PartId or ""
-    [Key(1)] public string Head     { get; set; }   // PartId or ""
-    [Key(2)] public string Hair     { get; set; }   // PartId or ""
-    [Key(3)] public string Accessory { get; set; }   // PartId or ""
+[MessagePackObject]
+public sealed class AvatarAppearance
+{
+    [Key(0)] public Dictionary<string, string> Parts { get; set; } = new Dictionary<string, string>();
+    [Key(1)] public Dictionary<string, string> Colors { get; set; } = new Dictionary<string, string>();
+    
+    // ... helper methods like GetSlot, SetSlot, Clone, and FromSlots ...
+}
+
+public struct SlotPart
+{
+    public string Slot;
+    public string PartId;
 }
 ```
+> 📎 Source: Assets/Scripts/Shared/SectEconomyState.cs
 
 Lives on `DiscipleState` as `Avatar` — **inside** the `SectEconomyState`
 snapshot, so it is already returned by `get_sect_state` via the MCP bridge.
-
-See [[sources/avatar-appearance|the design doc]]; this is the runtime view of
-it (still planned). Confidence `low` — not implemented yet.
 
 ## Related Pages
 

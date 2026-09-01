@@ -20,5 +20,8 @@ MonoBehaviour:
     Prefab: {fileID: 2144103126168093755, guid: b65514388194efa4899e1b87d81cd5d5, type: 3}
     PresenterKind: 1
   - PanelId: LogWindow
-    Prefab: {fileID: 2144103126168093755, guid: b65514388194efa4899e1b87d81cd5d5, type: 3}
-    PresenterKind: 1
+    Prefab: {fileID: 1751331259475953239, guid: c0ddadf62c479dd4a95e362433d6a947, type: 3}
+    PresenterKind: 2
+  - PanelId: AvatarCustomization
+    Prefab: {fileID: 3672726505200475846, guid: 5e7e2a35015cec84d9de1bacc98bb4b5, type: 3}
+    PresenterKind: 3

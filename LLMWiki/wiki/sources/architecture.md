@@ -94,46 +94,46 @@ tags: [architecture, di, ipc, messagepipe]
 Wires everything in `Configure(IContainerBuilder builder)`:
 
 ```csharp
-// Data
+// Data (Luban migration replacing ScriptableObject)
 builder.RegisterInstance(new LubanEventPool());
 
-// UI
+// UI (Xianxia.UI.MVP Lite)
 builder.RegisterInstance(uiRoot);
 builder.RegisterInstance(uiPanelCatalog);
-builder.Register<UIService>(Lifetime.Singleton);
+builder.Register<Xianxia.Sect.UI.UIService>(Lifetime.Singleton);
 builder.Register<DecisionExecutor>(Lifetime.Singleton);
-builder.Register<EventPopupPresenter>(Lifetime.Transient);
-builder.Register<ResourceHudPresenter>(Lifetime.Transient);
-builder.RegisterEntryPoint<WorldEventUISystem>(Lifetime.Singleton);
-builder.RegisterEntryPoint<UIBootstrap>(Lifetime.Singleton);
+builder.Register<Xianxia.Sect.UI.EventPopupPresenter>(Lifetime.Transient);
+builder.Register<Xianxia.Sect.UI.ResourceHudPresenter>(Lifetime.Transient);
+builder.Register<Xianxia.Sect.UI.LogWindowPresenter>(Lifetime.Transient);
+builder.Register<Xianxia.Sect.UI.AvatarCustomizationPresenter>(Lifetime.Transient);
+builder.RegisterEntryPoint<Xianxia.Sect.UI.WorldEventUISystem>(Lifetime.Singleton);
+builder.RegisterEntryPoint<Xianxia.Sect.UI.UIBootstrap>(Lifetime.Singleton);
 
 // MessagePipe bus + TCP interprocess
-var options = builder.RegisterMessagePipe(/* singleton */);
-var interprocess = builder.ToMessagePipeBuilder().AddTcpInterprocess(
-    "127.0.0.1", 3215,
-    tcp => { tcp.HostAsServer = true; ... });
+var options = builder.RegisterMessagePipe(pipeOptions => { ... });
+var messagePipeBuilder = builder.ToMessagePipeBuilder();
+var interprocess = messagePipeBuilder.AddTcpInterprocess("127.0.0.1", 3215, ...);
 
 // Interprocess-registered message brokers (pub/sub across process)
-RegisterTcpInterprocessMessageBroker<string, DiscipleRecruitedMessage>(...);
-RegisterTcpInterprocessMessageBroker<string, SectResourceChangedMessage>(...);
-// ... 4 more
+messagePipeBuilder.RegisterTcpInterprocessMessageBroker<string, DiscipleRecruitedMessage>(interprocess);
+messagePipeBuilder.RegisterTcpInterprocessMessageBroker<string, SectResourceChangedMessage>(interprocess);
+// ...
 
 // Interprocess-registered request/response pairs
-RegisterTcpRemoteRequestHandler<SectStateQuery, SectStateSnapshot>(...);
-RegisterTcpRemoteRequestHandler<AwaitWorldEventRequest, AwaitWorldEventResponse>(...);
-RegisterTcpRemoteRequestHandler<PurchaseItemRequest, PurchaseItemResponse>(...);
+messagePipeBuilder.RegisterTcpRemoteRequestHandler<SectStateQuery, SectStateSnapshot>(interprocess);
+messagePipeBuilder.RegisterTcpRemoteRequestHandler<AwaitWorldEventRequest, AwaitWorldEventResponse>(interprocess);
 
 // Subsystems (entry points)
 builder.RegisterEntryPoint<TimeSystem>(Lifetime.Singleton).AsSelf();
 builder.RegisterEntryPoint<DiscipleSystem>(Lifetime.Singleton).AsSelf();
 builder.RegisterEntryPoint<ResourceCraftingSystem>(Lifetime.Singleton).AsSelf();
-builder.RegisterEntryPoint<BuildingSystem>(Lifetime.Singleton).AsSelf();
-builder.RegisterEntryPoint<DecisionLogger>(Lifetime.Singleton).AsSelf();
 builder.RegisterEntryPoint<WorldEventSystem>(Lifetime.Singleton).AsSelf();
+builder.RegisterEntryPoint<DecisionLogger>(Lifetime.Singleton).AsSelf();
 
 // State aggregator
 builder.Register<ISectStateProvider, SectStateProvider>(Lifetime.Singleton);
 ```
+> 📎 Source: Assets/Scripts/Core/GameLifetimeScope.cs
 
 ## Key Architectural Decisions (with rationale)
 
@@ -188,6 +188,22 @@ published via in-memory `IPublisher<ExecuteDecisionMessage>`, but
 ExecuteDecisionMessage>` (the interprocess channel). Different graphs = silent
 no-op when clicking choice buttons. **Fixed** by extracting `DecisionExecutor`
 and having both paths call it directly.
+
+```csharp
+public class DecisionExecutor
+{
+    public void Execute(string eventId, string choiceId)
+    {
+        _stateProvider.ApplyDecisionConsequence(eventId, choiceId);
+        _timeSystem.SetPaused(false);
+
+        // Both DecisionLogger (bridge) and EventPopupPresenter (UI)
+        // funnel through here
+        _decisionExecutedPublisher.Publish(new DecisionExecutedMessage { EventId = eventId, ChoiceId = choiceId });
+    }
+}
+```
+> 📎 Source: Assets/Scripts/Core/DecisionExecutor.cs
 
 > **Rule**: in-process pub/sub in Unity is for events that have no Unity-side
 > listener beyond the publisher itself. Anything that needs to actually

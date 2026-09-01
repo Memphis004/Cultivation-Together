@@ -28,6 +28,9 @@ namespace Xianxia.Sect
             // constructed directly rather than serialized.
             builder.RegisterInstance(new LubanEventPool());
 
+            // Avatar part definitions loaded from Resources/Data/avatar_parts.json
+            builder.Register<AvatarPartPool>(Lifetime.Singleton);
+
             // --- UI (Xianxia.UI.MVP Lite) ---
             // SectHudView is gone - replaced by the ResourceHud panel below,
             // which gets its data from SectResourceChangedMessage instead of
@@ -39,6 +42,7 @@ namespace Xianxia.Sect
             builder.Register<Xianxia.Sect.UI.EventPopupPresenter>(Lifetime.Transient);
             builder.Register<Xianxia.Sect.UI.ResourceHudPresenter>(Lifetime.Transient);
             builder.Register<Xianxia.Sect.UI.LogWindowPresenter>(Lifetime.Transient);
+            builder.Register<Xianxia.Sect.UI.AvatarCustomizationPresenter>(Lifetime.Transient);
             builder.RegisterEntryPoint<Xianxia.Sect.UI.WorldEventUISystem>(Lifetime.Singleton);
             builder.RegisterEntryPoint<Xianxia.Sect.UI.UIBootstrap>(Lifetime.Singleton);
 
@@ -93,6 +97,13 @@ namespace Xianxia.Sect
             // stockpile with contribution.
             messagePipeBuilder.RegisterTcpRemoteRequestHandler<PurchaseItemRequest, PurchaseItemResponse>(interprocess);
             builder.RegisterAsyncRequestHandler<PurchaseItemRequest, PurchaseItemResponse, PurchaseItemHandler>(options);
+
+            // Request/response: changing a disciple's avatar part
+            messagePipeBuilder.RegisterTcpRemoteRequestHandler<ChangeAvatarPartRequest, ChangeAvatarPartResponse>(interprocess);
+            builder.RegisterAsyncRequestHandler<ChangeAvatarPartRequest, ChangeAvatarPartResponse, ChangeAvatarPartHandler>(options);
+
+            // Interprocess pub/sub: broadcast avatar equipment changes to UI + MCP client
+            messagePipeBuilder.RegisterTcpInterprocessMessageBroker<string, AvatarEquipmentChangedMessage>(interprocess);
 
             // --- gameplay subsystems, started/ticked by VContainer ---
             builder.RegisterEntryPoint<TimeSystem>(Lifetime.Singleton).AsSelf();

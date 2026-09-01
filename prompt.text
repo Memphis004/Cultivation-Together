@@ -1,3 +1,65 @@
+วนการทำงานการใช้ AI
+```text
+[ขั้นตอน 1: ร่าง/วางแผน] ➡️ [ขั้นตอน 2: ขัดเกลา] ➡️ [ขั้นตอน 3: เจนโค้ด] ➡️ [ขั้นตอน 4: รัน/เทส] ➡️ [ขั้นตอน 5: สรุป Wiki]
+   Ornith (9B)             Qwen (Local)         Opus (API)        MiMo + MCP (Local)      Gemini Pro (API)
+   (ระดมสมอง)              (จัดโครงสร้าง)        (เขียน Logic)       (สร้างไฟล์/แก้ Error)     (อัปเดต architecture.md)
+        ⬆️                        │                    │                     │                       │
+        └─────────────────────────┴───────── ตรวจสอบ ──┴────── สรุปผล ───────┴──── อัปเดตความรู้ ─────┘
+```
+**ตัวอย่าง Prompt สำหรับสั่ง Gemini Pro ในขั้นตอนนี้:**
+```text
+You are a Technical Writer for a Unity Game Project. 
+Your task is to update the `architecture.md` file based on the newly implemented feature and the test results.
+
+Context:
+- New Feature Spec: {Spec จาก Qwen}
+- Generated Code Summary: {Code ที่ Opus เขียน}
+- Build/Test Result: {Log จาก MiMo/MCP}
+
+Instructions:
+1. Read the current `architecture.md` via MCP.
+2. Append or update the relevant section with the new feature's logic, variables used, and any known bugs from the test log.
+3. Keep it concise, structured in Markdown, and strictly technical. No fluff.
+4. Save the updated `architecture.md` back to the project root via MCP.
+```
+
+### 🛠️ ข้อควรระวัง (เพื่อให้ Wiki ไม่งอก)
+
+1.  **ห้ามให้ Gemini Pro "คิดเอง":** ต้องกำชับใน Prompt ว่า *"บันทึกเฉพาะสิ่งที่ปรากฏในโค้ดเท่านั้น ห้ามคาดเดาหรือเติมฟีเจอร์ที่ยังไม่มี"* ไม่งั้น Wiki จะเต็มไปด้วยเรื่องแต่ง! 😱
+2.  **Version Control:** เก็บ `architecture.md` ไว้ใน Git เสมอ ถ้า Gemini Pro เขียนพัง จะได้ Rollback ได้
+3.  **โครงสร้างตายตัว:** กำหนด Template ของ Wiki ให้ชัดเจน (เช่น แบ่งเป็น ## Systems, ## Dependencies, ## Coding Standards) เพื่อไม่ให้ Gemini Pro เขียนสะเปะสะปะจนโมเดลอื่นอ่านไม่ออก
+
+### ✨ สรุปสถาปัตยกรรมฉบับ Final (Budget-Friendly + Smart)
+
+1.  **[Drafting] Ornith (9B) [Local]:** ระดมสมองไอเดียดิบ (Free, Fast)
+2.  **[Refining] Qwen (Local):** เช็ค Syntax/โครงสร้างกับ Wiki ปัจจุบัน (Free, Good enough)
+3.  **[Coding] Opus (API):** เขียนโค้ด C# ขั้นเทพจาก Spec ที่สะอาดแล้ว (Pay for Quality)
+4.  **[Action] MiMo + MCP [Local]:** ลงมือทำไฟล์ + รัน Unity BatchMode เทส (Free)
+5.  **[Wiki Update] Gemini Pro (API/Free Tier):** สรุปโค้ดจริงลง `architecture.md` (Pay peanuts for Knowledge) ← **ตำแหน่งใหม่!**
+
+📋 Recommended System Prompt for Antigravity
+# Project Context & Knowledge Base Integration
+
+## Root Workspace
+- Primary Project: `C:\UnityProjects\Cultivation Together`
+- Tech Stack: Unity (C#), VContainer, MessagePipe, MCP Bridge (.NET 8), Luban
+- Current Focus: UI Framework (MVP), Luban Data Migration, World Event System
+
+## Integrated Knowledge Base (Karpathy's LLM Wiki)
+- Vault Location: `C:\UnityProjects\Cultivation Together\LLMWiki`
+- This folder contains my personal Obsidian vault with design docs, architecture notes, and research.
+- **ALWAYS** treat `./LLMWiki/**/*.md` as authoritative reference material when answering questions about this project.
+- When I ask about design decisions, lore, or architecture, search the LLMWiki folder FIRST before relying on general training data.
+- Cross-reference code in the main project with notes in LLMWiki to ensure consistency.
+
+## Behavioral Guidelines
+1. If a question relates to project design/architecture, check `LLMWiki/` for relevant notes.
+2. Cite specific wiki files when providing answers (e.g., "According to LLMWiki/architecture/mcp-bridge.md...").
+3. The wiki is part of the workspace - you can read, search, and reference it directly without needing external Obsidian access.
+4. Code lives in root; knowledge/design lives in `LLMWiki/`. Keep this separation clear.
+5. Default language: Thai (unless asked otherwise). Mix English technical terms naturally.
+
+
 ช่วยเรียนรู้เกี่ยวกับ LLM Wiki ของ Karpathy
 
 "You are an expert Unity Game Developer and AI Systems Architect assisting Memphis.
@@ -57,5 +119,81 @@ Unity-v0.7-ui-framework-and-luban-data: Add MVP UI system with reactive panels a
 
 ช่วยร่าง Game Design Doc สำหรับระบบ Avatar Character / Customization แบบ Sprite Swap มีส่วนประกอบไปด้วย Heads, Hairs, Bodies, Accessories โดยอ้างอิงจาก architecture ปัจจุบัน แล้ว save ลง wiki ไว้ด้วย
 
+3. ทั้งสอง — เพิ่มเพศตอนสร้าง + แก้ได้ใน avatar editor 
+แต่ช่วยร่างแผนต่อแบบละเอียดเป็น Game Design Doc โดยอ้างอิงจาก architecture ปัจจุบัน แล้ว save ลง wiki มาก่อนสิ
 
 
+# Task: Sync LLMWiki with Latest Code Changes (2-Day Catch-Up) + Code Snippets
+
+## Context
+My project code has evolved significantly over the past 2 days, but the Obsidian vault at `C:\UnityProjects\Cultivation Together\LLMWiki` is out of date. The most critical file that needs updating is `architecture.md`, but please also check other relevant docs.
+
+## Code Locations to Scan
+- MCP Bridge: `C:\UnityProjects\Cultivation Together\McpBridge\`
+- Unity Scripts: `C:\UnityProjects\Cultivation Together\UnityProject\Assets\Scripts\`
+- Current Wiki: `C:\UnityProjects\Cultivation Together\LLMWiki\`
+
+## Key Changes Made in Last 2 Days (Use as Verification Checklist)
+When scanning the code, specifically look for and document these changes. If any are missing from the wiki, add them:
+
+### 1. UI Framework (MVP Pattern) — NEW
+- `Assets/Scripts/UI/Core/`: IUIView, IUIViewPresenter, UIPresenter<T>, UIService, UIRoot, UIPanelCatalog, UIPanelDefinition, UIPanelHandle, UIPresenterKind
+- `Assets/Scripts/UI/Presenters/`: EventPopupPresenter, ResourceHudPresenter
+- `Assets/Scripts/UI/Views/`: UIViewBase, EventPopupView, ResourceHudView
+- `Assets/Scripts/UI/Systems/`: WorldEventUISystem, UIBootstrap
+- DecisionExecutor as shared entry point for both UI and Bridge decision paths
+
+### 2. Luban Data Migration — CHANGED
+- Replaced ScriptableObject-based EventData/EventPool with Luban-generated tables
+- New files: LubanEventPool.cs, EventRow.cs, EventChoiceRow.cs, TbEvent.cs, TbEventChoice.cs, Tables.cs
+- WorldEventSystem now injects LubanEventPool instead of EventPool SO
+- GameLifetimeScope constructs LubanEventPool directly (no more SerializeField)
+
+### 3. Message & State Updates — CHANGED
+- WorldEventTriggeredMessage now carries Description + Choices (in-memory bus)
+- AwaitWorldEventResponse now carries Description + Choices (interprocess)
+- TimeSystem.RaiseWorldEvent() accepts 4 params (id, description, requiresDecision, choices)
+- SectStateProvider.AdjustAndNotify() as single choke point for SectResourceChangedMessage
+- MockSectData removed SectMaster (d000), starts at d001
+
+### 4. DI Wiring Updates — CHANGED
+- GameLifetimeScope registers all UI components (UIService, Presenters, Systems, UIRoot, UIPanelCatalog)
+- DecisionExecutor registered as Singleton
+- LubanEventPool registered as Instance
+
+### 4. Avatar Appearance — CHANGED
+
+## Code Snippet Requirements (MANDATORY)
+For EVERY architectural component, data flow, or pattern documented in the wiki, you MUST include a relevant code snippet from the actual source file. Follow these rules:
+
+1. **Snippet Format:** Use fenced code blocks with language tag (e.g., ```csharp) and cite the source file path + line range if possible.
+2. **What to Snippet:**
+   - Interface definitions (IUIView, IUIViewPresenter, ISectStateProvider)
+   - Key method signatures (RaiseWorldEvent, AdjustAndNotify, Execute, Open, Bind)
+   - DI registration blocks (GameLifetimeScope.Configure)
+   - Message DTOs (WorldEventTriggeredMessage, AwaitWorldEventResponse, EventChoiceInfo)
+   - Presenter binding/lifecycle patterns (OnViewBound, OnOpen, Dispose)
+   - Luban table loading (LubanEventPool constructor, GetRandomEvent)
+   - MCP tool definitions ([McpServerTool] methods)
+3. **Snippet Size:** Keep each snippet focused (5-30 lines). Show the essential logic, not entire files. Trim boilerplate but preserve comments that explain WHY.
+4. **Placement:** Embed snippets inline within the relevant documentation section, not dumped at the end. Each snippet should immediately follow the text it illustrates.
+5. **Accuracy:** Copy EXACTLY from source files. Do not paraphrase or reconstruct code. If a file has been updated, use the latest version.
+6. **Cross-reference:** After each snippet, add a one-line note like `> 📎 Source: Assets/Scripts/UI/Core/UIService.cs` so readers can jump to the full file.
+
+## Instructions
+1. Read ALL current wiki files in `LLMWiki/` first to understand existing structure
+2. Scan the actual code files in both McpBridge and UnityProject paths above
+3. For each wiki file, compare against actual code and identify gaps
+4. Prioritize `architecture.md` — update diagrams, component lists, data flow descriptions, AND embed code snippets for each section
+5. Use the verification checklist above to ensure nothing is missed
+6. When updating, cite specific file paths (e.g., "See Assets/Scripts/UI/Core/UIService.cs")
+7. Preserve existing wiki formatting style and conventions
+8. Do NOT invent features that don't exist in code — only document what's actually implemented
+9. Output language: Thai (matching existing wiki style), English for technical terms and code
+
+## Output Format
+For each updated file, show:
+- File path
+- Summary of what changed
+- The updated content WITH embedded code snippets
+- List of all source files referenced by snippets

@@ -23,45 +23,37 @@ tags: [disciple, character, rank, mock-data]
 ## Data Model
 
 ```csharp
-DiscipleState {
-    DiscipleId: string      // e.g. "d000", "d001"
-    DisplayName: string
-    Rank: DiscipleRank      // OuterDisciple | InnerDisciple | Elder | SectMaster
-    Wallet: CurrencyWallet {
-        SpiritStones: long
-        Contribution: long
-    }
-    PersonalInventory: List<InventoryItem>
-    CurrentTask: string     // e.g. "gathering_herb", "refining_elixir", "meditation"
-    Avatar: AvatarAppearance
-                            // Sprite-swap: Body/Hair/Accessory slot PartIds ("")=def default
-}
-```
-
-```csharp
-// Avatar slots, drawn bottom -> top. Stored on `AvatarAppearance` as a
-// per-slot PartId ("" = use Def-table default).
-[enum AvatarSlot {
-    Body,     // robe/tunic/armor (draw order 0..N)
-    Head,     // face/hat/head piece
-    Hair,     // hair/hairpiece
-    Accessory // ring/pendant/fan (draw order top-most)
-}]
-```
-
-```csharp
-new DiscipleState
+[MessagePackObject]
+public class DiscipleState
 {
-    // ... existing fields ...
-    Avatar = new AvatarAppearance 
-    { 
-        Body = "robe_outer_white", 
-        Head = "face_male_01", 
-        Hair = "hair_bun_black", 
-        Accessory = "" 
-    }
+    [Key(0)] public string DiscipleId { get; set; }
+    [Key(1)] public string DisplayName { get; set; }
+    [Key(2)] public DiscipleRank Rank { get; set; }
+    [Key(3)] public CurrencyWallet Wallet { get; set; } = new CurrencyWallet();
+    [Key(4)] public List<InventoryItem> PersonalInventory { get; set; } = new List<InventoryItem>();
+    [Key(5)] public string CurrentTask { get; set; }
+    [Key(6)] public AvatarAppearance Avatar { get; set; } = new AvatarAppearance();
 }
 ```
+> 📎 Source: Assets/Scripts/Shared/SectEconomyState.cs
+
+```csharp
+// Example instantiation with the new Avatar system using SlotPart
+var disciple = new DiscipleState
+{
+    DiscipleId = "d000",
+    DisplayName = "Liu YiFeng",
+    Rank = DiscipleRank.SectMaster,
+    // ... existing fields ...
+    Avatar = AvatarAppearance.FromSlots(
+        new SlotPart(AvatarSlots.Body, "body_robe_azure"),
+        new SlotPart(AvatarSlots.Head, "head_male_01"),
+        new SlotPart(AvatarSlots.Hair, "hair_topknot_long"),
+        new SlotPart(AvatarSlots.Accessory, "acc_jade_crown")
+    )
+};
+```
+> 📎 Source: Assets/Scripts/Shared/MockSectData.cs
 
 ## Ranks
 

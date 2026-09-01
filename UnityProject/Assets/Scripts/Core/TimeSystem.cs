@@ -184,5 +184,7 @@ namespace Xianxia.Sect
         void TickCrafting(float deltaTimeSeconds);
         void RecruitOuterDisciple();
         PurchaseItemResponse TryPurchaseItem(string discipleId, string itemDefId, int grade, int quantity);
+        bool TryChangeAvatarPart(string discipleId, string slot, string partId,
+                                out string failReason, out AvatarAppearance result);
     }
 }

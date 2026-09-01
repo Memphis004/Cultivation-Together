@@ -35,6 +35,41 @@ WorldEventSystem.Tick() (every frame)
       → if requiresDecision: cache for late bridge callers
 ```
 
+```csharp
+public void RaiseWorldEvent(string eventId, string description, bool requiresDecision, List<EventChoiceInfo> choices)
+{
+    if (requiresDecision) SetPaused(true);
+
+    _worldEventPublisher.Publish(new WorldEventTriggeredMessage
+    {
+        EventId = eventId, RequiresDecision = requiresDecision, Description = description, Choices = choices
+    });
+    // ... handles AwaitWorldEventResponse resolution ...
+}
+```
+> 📎 Source: Assets/Scripts/Core/TimeSystem.cs
+
+```csharp
+[MessagePackObject]
+public class WorldEventTriggeredMessage
+{
+    [Key(0)] public string EventId { get; set; }
+    [Key(1)] public bool RequiresDecision { get; set; }
+    [Key(2)] public string Description { get; set; }
+    [Key(3)] public List<EventChoiceInfo> Choices { get; set; } = new List<EventChoiceInfo>();
+}
+
+[MessagePackObject]
+public class AwaitWorldEventResponse
+{
+    [Key(0)] public string EventId { get; set; }
+    [Key(1)] public bool RequiresDecision { get; set; }
+    [Key(2)] public string Description { get; set; }
+    [Key(3)] public List<EventChoiceInfo> Choices { get; set; } = new List<EventChoiceInfo>();
+}
+```
+> 📎 Source: Assets/Scripts/Shared/GameMessages.cs
+
 ## Current Events (4)
 
 | Event | Decision? | Consequence |

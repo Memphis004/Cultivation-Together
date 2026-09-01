@@ -47,6 +47,9 @@ namespace Xianxia.Sect.UI
                 ApplyEventPopupLayout(rt);
             else if (name.StartsWith("LogWindow"))
                 ApplyLogWindowLayout(rt);
+            else if (name.StartsWith("AvatarCustomization"))
+                ApplyAvatarCustomizationLayout(rt);
+                            
         }
 
         // ---------- ResourceHud ----------
@@ -115,6 +118,26 @@ namespace Xianxia.Sect.UI
             {
                 csf.horizontalFit = ContentSizeFitter.FitMode.Unconstrained;
                 csf.verticalFit   = ContentSizeFitter.FitMode.PreferredSize;
+            }
+        }
+
+        // ---------- AvatarCustomization ----------
+        private static void ApplyAvatarCustomizationLayout(RectTransform rt)
+        {
+            // Full-screen modal: centered, 900x620
+            rt.anchorMin = new Vector2(0.5f, 0.5f);
+            rt.anchorMax = new Vector2(0.5f, 0.5f);
+            rt.pivot     = new Vector2(0.5f, 0.5f);
+            rt.sizeDelta = new Vector2(900f, 620f);
+            rt.anchoredPosition = Vector2.zero;
+
+            // ContentSizeFitter must be Unconstrained on the panel root
+            // (the real layout is driven by anchors + sizeDelta above)
+            var csf = rt.GetComponent<ContentSizeFitter>();
+            if (csf != null)
+            {
+                csf.horizontalFit = ContentSizeFitter.FitMode.Unconstrained;
+                csf.verticalFit   = ContentSizeFitter.FitMode.Unconstrained;
             }
         }
 

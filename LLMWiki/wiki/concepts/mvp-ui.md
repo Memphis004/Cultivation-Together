@@ -127,6 +127,49 @@ on the view itself.
 9. (Optional) Add layout method to `UIRoot.ApplyLayout()` if your prefab
    needs special handling
 
+## Core Interfaces
+
+```csharp
+public interface IUIView
+{
+    GameObject GameObject { get; }
+    void Show();
+    void Hide();
+}
+
+public interface IUIViewPresenter
+{
+    void Bind(IUIView view);
+    void Unbind();
+    void OnOpen(object args);
+    void OnClose();
+}
+```
+> 📎 Source: Assets/Scripts/UI/Core/IUIView.cs and IUIViewPresenter.cs
+
+## Bootstrapping and Global Systems
+
+```csharp
+public class UIBootstrap : IStartable
+{
+    public void Start()
+    {
+        _uiService.Open(UIPresenterKind.ResourceHud, null);
+        _uiService.Open(UIPresenterKind.LogWindow, null);
+    }
+}
+```
+> 📎 Source: Assets/Scripts/UI/Systems/UIBootstrap.cs
+
+```csharp
+public class WorldEventUISystem : IStartable, IDisposable
+{
+    // Listens to WorldEventTriggeredMessage and opens EventPopup
+    public void Start() { ... }
+}
+```
+> 📎 Source: Assets/Scripts/UI/Systems/WorldEventUISystem.cs
+
 ## Anti-Patterns to Avoid
 
 - ❌ Don't put game logic in the View — only display + input events

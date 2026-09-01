@@ -60,21 +60,24 @@
     <Compile Include="Assets\Scripts\UI\Core\UIPanelHandle.cs" />
     <Compile Include="Assets\Scripts\UI\Core\UIPresenter.cs" />
     <Compile Include="Assets\Scripts\UI\Core\IUIViewPresenter.cs" />
-    <Compile Include="Assets\Scripts\UI\Views\LogWindowPresenter.cs" />
     <Compile Include="Assets\Scripts\UI\Core\UIPanelDefinition.cs" />
     <Compile Include="Assets\Scripts\Shared\GameMessages.cs" />
     <Compile Include="Assets\Scripts\Core\DecisionLogger.cs" />
     <Compile Include="Assets\Scripts\Systems\DiscipleSystem.cs" />
+    <Compile Include="Assets\Scripts\UI\Views\AvatarRenderer.cs" />
     <Compile Include="Assets\Scripts\Data\Gen\worldevent\TbEvent.cs" />
     <Compile Include="Assets\Scripts\UI\Views\ResourceHudView.cs" />
     <Compile Include="Assets\Scripts\UI\Presenters\ResourceHudPresenter.cs" />
     <Compile Include="Assets\Scripts\Core\PurchaseItemHandler.cs" />
     <Compile Include="Assets\Scripts\UI\Views\UIViewBase.cs" />
     <Compile Include="Assets\Scripts\Systems\BuildingSystem.cs" />
+    <Compile Include="Assets\Scripts\Core\ChangeAvatarPartHandler.cs" />
     <Compile Include="Assets\Scripts\Core\TimeSystem.cs" />
+    <Compile Include="Assets\Scripts\UI\Views\AvatarOptionButton.cs" />
     <Compile Include="Assets\Scripts\Data\Gen\worldevent\TbEventChoice.cs" />
     <Compile Include="Assets\Scripts\UI\Systems\UIBootstrap.cs" />
     <Compile Include="Assets\Scripts\Core\DecisionExecutor.cs" />
+    <Compile Include="Assets\Scripts\UI\Views\AvatarCustomizationViewData.cs" />
     <Compile Include="Assets\Scripts\UI\Views\EventPopupView.cs" />
     <Compile Include="Assets\Scripts\UI\Core\UIPresenterKind.cs" />
     <Compile Include="Assets\Scripts\UI\Presenters\EventPopupPresenter.cs" />
@@ -85,9 +88,13 @@
     <Compile Include="Assets\Scripts\UI\Systems\WorldEventUISystem.cs" />
     <Compile Include="Assets\Scripts\Systems\SectStateProvider.cs" />
     <Compile Include="Assets\Scripts\Data\Gen\worldevent\EventChoiceRow.cs" />
+    <Compile Include="Assets\Scripts\UI\Presenters\LogWindowPresenter.cs" />
+    <Compile Include="Assets\Scripts\UI\Views\AvatarCustomizationView.cs" />
+    <Compile Include="Assets\Scripts\Data\AvatarPartPool.cs" />
     <Compile Include="Assets\Scripts\Data\Gen\worldevent\EventRow.cs" />
     <Compile Include="Assets\Scripts\Systems\ResourceCraftingSystem.cs" />
     <Compile Include="Assets\Scripts\Data\LubanEventPool.cs" />
+    <Compile Include="Assets\Scripts\UI\Presenters\AvatarCustomizationPresenter.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Scripts\Xianxia.Sect.Runtime.asmdef" />
@@ -1377,12 +1384,12 @@
       <HintPath>Library\ScriptAssemblies\Luban.Runtime.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="UnityEditor.UI">
-      <HintPath>Library\ScriptAssemblies\UnityEditor.UI.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="UnityEngine.UI">
       <HintPath>Library\ScriptAssemblies\UnityEngine.UI.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEditor.UI">
+      <HintPath>Library\ScriptAssemblies\UnityEditor.UI.dll</HintPath>
       <Private>False</Private>
     </Reference>
   </ItemGroup>

@@ -5,6 +5,7 @@ namespace Xianxia.Sect.UI
         EventPopup,
         ResourceHud,
         LogWindow,
+        AvatarCustomization,
         DiscipleList, // not implemented yet - resolving this kind throws
     }
 }

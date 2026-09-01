@@ -17,6 +17,8 @@ namespace Xianxia.Sect.UI
         {
             _uiService.Open("ResourceHud");
             _uiService.Open("LogWindow");
+            // ทดสอบเปิดหน้าจอแต่งตัวศิษย์ d001
+            _uiService.Open("AvatarCustomization", new AvatarCustomizationPayload("d001"));
         }
     }
 }
