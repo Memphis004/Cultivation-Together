@@ -9,9 +9,9 @@ related:
   - "[[concepts/mcp-bridge]]"
   - "[[concepts/state-management]]"
 created: 2026-08-31
-updated: 2026-08-31
+updated: 2026-09-02
 confidence: high
-tags: [messagepipe, pubsub, request-response, ipc]
+tags: [messagepipe, pubsub, request-response, ipc, avatar]
 ---
 
 # MessagePipe Bus
@@ -68,7 +68,7 @@ From `GameLifetimeScope.cs:78-82` (comment):
 
 ## Topic Keys for Keyed Pub/Sub
 
-From `GameMessages.cs:160-169`:
+From `GameMessages.cs`:
 
 ```csharp
 public static class InterprocessTopics
@@ -79,10 +79,13 @@ public static class InterprocessTopics
     public const string ContributionEarned = "sect.contribution_earned";
     public const string WorldEvent = "sect.world_event";
     public const string ExecuteDecision = "sect.execute_decision";
+    public const string AvatarEquipmentChanged = "sect.avatar_equipment_changed";
 }
 ```
+> 📎 Source: Assets/Scripts/Shared/GameMessages.cs
 
 The McpBridge side uses these strings to subscribe/publish on the right channel.
+`AvatarEquipmentChanged` is broadcast by `SectStateProvider.TryChangeAvatarPart()` (Unity → bridge/UI); see [[entities/avatar-appearance]] for the avatar request/response pair `ChangeAvatarPartRequest/Response`.
 
 ## What's NOT on the Interprocess Bus
 

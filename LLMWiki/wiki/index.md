@@ -29,6 +29,7 @@ Design documents and historical record:
 - [[sources/architecture|Architecture]] — how the subsystems fit together
 - [[sources/mechanics|Mechanics]] — per-system design (combat, gathering, crafting, ...)
 - [[sources/avatar-appearance|Avatar Customization (Sprite Swap)]] — Heads / Hairs / Bodies / Accessories, sprite-slot data model
+- [[sources/sex-gender-system|Sex / Gender for Disciples]] — proposed explicit Sex field + recruit sex selector
 - [[sources/devlog-history|DevLog History]] — 13 lab rounds, 21-30 Aug 2026
 - [[sources/bug-log|Bug Log]] — real bugs + fixes from all labs
 - [[sources/open-questions|Open Questions]] — what's deliberately not decided
@@ -62,7 +63,6 @@ System-level concepts:
 - [[concepts/mvp-ui|MVP UI Pattern]]
 - [[concepts/log-window|Log Window]]
 - [[concepts/data-pipeline|Data Pipeline (Luban)]]
-- [[concepts/avatar-appearance|Avatar Appearance (Sprite Swap)]]
 
 ## Entities (AI-maintained)
 
@@ -74,7 +74,7 @@ Catalogs of game entities:
 - [[entities/resources|Resources]] — raw materials
 - [[entities/items|Items]] — crafted goods
 - [[entities/sects|Sects]] — faction concept (player + others)
-- [[entities/avatar-appearance|Avatar Appearance]] — Heads/Hairs/Bodies/Accessories (planned)
+- [[entities/avatar-appearance|Avatar Appearance]] — dictionary Parts/Colors schema, layered rendering, customization UI (implemented)
 
 ## Quick Reference — Common Questions
 
@@ -94,8 +94,8 @@ Catalogs of game entities:
 
 ## Maintenance
 
-- Last index update: 2026-09-01
-- Total source pages: 8 (+ 9 code snippets)
+- Last index update: 2026-09-02
+- Total source pages: 9 (+ 9 code snippets)
 - Total concept pages: 14
 - Total entity pages: 7
 - Total bug log entries: 11 (across 13 labs)

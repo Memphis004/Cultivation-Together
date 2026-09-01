@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "wiki/entities/avatar-appearance.md",
+                "file": "wiki/sources/sex-gender-system.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "avatar-appearance"
+              "title": "sex-gender-system"
             }
           },
           {
@@ -30,8 +30,23 @@
               "icon": "lucide-git-fork",
               "title": "Graph view"
             }
+          },
+          {
+            "id": "e8caa27cb91e9537",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "wiki/sources/sex-gender-system.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "sex-gender-system"
+            }
           }
-        ]
+        ],
+        "currentTab": 2
       }
     ],
     "direction": "vertical"
@@ -223,8 +238,13 @@
       "smart-connections:Toggle Footer Connections": false
     }
   },
-  "active": "c0f57b7c0d5482fa",
+  "active": "e8caa27cb91e9537",
   "lastOpenFiles": [
+    "wiki/entities/disciples.md",
+    "wiki/sources/sex-gender-system.md",
+    "wiki/concepts/state-management.md",
+    "wiki/sources/architecture.md",
+    "wiki/entities/avatar-appearance.md",
     "wiki/sources/game-design-doc.md",
     "wiki/sources/Game Design Doc (Draft) — Sect Managemen.md",
     "wiki/concepts/log-window.md",
@@ -234,12 +254,9 @@
     "wiki/sources/code-snippets/LogWindowPresenter.cs.md",
     "wiki/overview.md",
     "wiki/entities/events.md",
-    "wiki/entities/avatar-appearance.md",
     "Untitled.canvas",
     "AGENTS.md",
-    "wiki/entities/disciples.md",
     "wiki/sources/avatar-appearance.md",
-    "wiki/concepts/state-management.md",
     "wiki/sources/bug-log.md",
     "wiki/sources/Untitled.md",
     "wiki/concepts/mcp-bridge.md",
@@ -250,8 +267,6 @@
     "wiki/schema",
     "wiki/sources/devlog-history.md",
     "wiki/sources/open-questions.md",
-    "wiki/sources/code-snippets/WorldEventSystem.cs.md",
-    "wiki/sources/architecture.md",
-    "wiki/sources/code-snippets/UIPresenter-and-UIViewBase.cs.md"
+    "wiki/sources/code-snippets/WorldEventSystem.cs.md"
   ]
 }

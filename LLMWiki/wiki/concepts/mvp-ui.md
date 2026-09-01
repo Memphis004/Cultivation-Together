@@ -12,9 +12,9 @@ related:
   - "[[concepts/decision-pipeline]]"
   - "[[sources/architecture]]"
 created: 2026-08-31
-updated: 2026-08-31
+updated: 2026-09-02
 confidence: high
-tags: [ui, mvp, ugui, vcontainer, panel]
+tags: [ui, mvp, ugui, vcontainer, panel, avatar]
 ---
 
 # MVP UI Pattern (Xianxia.UI.MVP Lite)
@@ -74,23 +74,33 @@ cleaned up deterministically.
 presenter types. Currently:
 
 ```csharp
-switch (kind) {
-    case UIPresenterKind.EventPopup:  return typeof(EventPopupPresenter);
-    case UIPresenterKind.ResourceHud: return typeof(ResourceHudPresenter);
-    case UIPresenterKind.DiscipleList: throw new NotImplementedException();
-    // ...
+private static Type ResolvePresenterType(UIPresenterKind kind)
+{
+    switch (kind)
+    {
+        case UIPresenterKind.EventPopup: return typeof(EventPopupPresenter);
+        case UIPresenterKind.ResourceHud: return typeof(ResourceHudPresenter);
+        case UIPresenterKind.LogWindow: return typeof(LogWindowPresenter);
+        case UIPresenterKind.AvatarCustomization: return typeof(AvatarCustomizationPresenter);
+        case UIPresenterKind.DiscipleList:
+            throw new NotImplementedException("DiscipleListPresenter is not implemented yet.");
+        default:
+            throw new ArgumentOutOfRangeException(nameof(kind), kind, null);
+    }
 }
 ```
+> 📎 Source: Assets/Scripts/UI/Core/UIService.cs
 
 ⏳ **TODO**: implement `DiscipleListPresenter` when the panel is added.
 
-## Implemented Panels (3)
+## Implemented Panels (4)
 
 | Panel | Presenter | Subscribes to |
 |---|---|---|
 | `EventPopup` | `EventPopupPresenter` | n/a (called via `OnOpen(args)`) |
 | `ResourceHud` | `ResourceHudPresenter` | `SectResourceChangedMessage` |
 | `LogWindow` | `LogWindowPresenter` | `DiscipleRecruitedMessage`, `WorldEventTriggeredMessage`, `DecisionExecutedMessage` |
+| `AvatarCustomization` | `AvatarCustomizationPresenter` | `AvatarEquipmentChangedMessage` (external sync) — ดู [[entities/avatar-appearance]] |
 
 See [[concepts/log-window]] for the full LogWindow architecture and data flow.
 
@@ -137,10 +147,9 @@ public interface IUIView
     void Hide();
 }
 
-public interface IUIViewPresenter
+public interface IUIViewPresenter : IDisposable
 {
     void Bind(IUIView view);
-    void Unbind();
     void OnOpen(object args);
     void OnClose();
 }
@@ -154,8 +163,10 @@ public class UIBootstrap : IStartable
 {
     public void Start()
     {
-        _uiService.Open(UIPresenterKind.ResourceHud, null);
-        _uiService.Open(UIPresenterKind.LogWindow, null);
+        _uiService.Open("ResourceHud");
+        _uiService.Open("LogWindow");
+        // ทดสอบเปิดหน้าจอแต่งตัวศิษย์ d001
+        _uiService.Open("AvatarCustomization", new AvatarCustomizationPayload("d001"));
     }
 }
 ```

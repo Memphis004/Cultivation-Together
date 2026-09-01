@@ -10,7 +10,7 @@ related:
   - "[[concepts/decision-pipeline]]"
   - "[[concepts/purchase-store]]"
 created: 2026-08-31
-- updated: 2026-08-31
+updated: 2026-09-02
 confidence: high
 tags: [state, economy, messagepack, delta-events, avatar]
 ---
@@ -47,12 +47,12 @@ SectEconomyState
 │       ├── Wallet: CurrencyWallet
 │       │   ├── SpiritStones: long
 │       │   └── Contribution: long
- │       │       │   ├── SpiritStones: long
- │       │   ├── Contribution: long
- │       │   ├── PersonalInventory: List<InventoryItem>
- │       │   └── CurrentTask: string      (e.g. "gathering_herb", "refining_elixir")
- │       └── Avatar: AvatarAppearance     (planned: per-slot PartId for He/B/C/Accessory, ""=default)
- └── Stockpile: SectStockpile
+│       ├── PersonalInventory: List<InventoryItem>
+│       ├── CurrentTask: string      (e.g. "gathering_herb", "refining_elixir")
+│       └── Avatar: AvatarAppearance (implemented — dictionary schema:
+│             Parts: Dict<slot, partId>  (""/absent = slot default)
+│             Colors: Dict<slot, colorId> (tintable slots only))
+└── Stockpile: SectStockpile
     ├── RawResources: Dict<string, int>   (herb, wood, ore, provisions)
     └── CraftedGoods: List<InventoryItem>
         └── InventoryItem

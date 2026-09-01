@@ -10,9 +10,9 @@ related:
   - "[[concepts/crafting-system]]"
   - "[[concepts/purchase-store]]"
 created: 2026-08-31
-updated: 2026-08-31
+updated: 2026-09-02
 confidence: high
-tags: [disciple, character, rank, mock-data]
+tags: [disciple, character, rank, mock-data, avatar]
 ---
 
 # Disciples
@@ -36,6 +36,9 @@ public class DiscipleState
 }
 ```
 > 📎 Source: Assets/Scripts/Shared/SectEconomyState.cs
+
+**Avatar field — implemented** (v2 dictionary schema, not a placeholder):
+`Avatar` เก็บหน้าตาทั้งตัวของศิษย์เป็น `AvatarAppearance` — `Parts` (slot → partId, ค่าว่าง = ใช้ default ของ slot) และ `Colors` (slot → colorId เฉพาะ slot ที่ tintable) ทั้งคู่เป็น `Dictionary<string, string>` รองรับ slot ใหม่โดยไม่แก้ schema รายละเอียดครบที่ [[entities/avatar-appearance|Avatar Appearance]]
 
 ```csharp
 // Example instantiation with the new Avatar system using SlotPart
@@ -120,6 +123,7 @@ public void RecruitOuterDisciple()
         Wallet = new CurrencyWallet(),
         PersonalInventory = new List<InventoryItem>(),
         CurrentTask = task,
+        Avatar = CreateStarterAvatar(index),
     };
 
     _state.Disciples.Add(disciple);
@@ -129,11 +133,14 @@ public void RecruitOuterDisciple()
     });
 }
 ```
+> 📎 Source: Assets/Scripts/Systems/SectStateProvider.cs
 
 **Placeholder name pool**: Chen Wei, Bai Ling, Zhou Tao, Xiao Mei, Jiang Yu, Wen Hao
 (replaces when pool exhausted — same name appears again).
 
 **Always Outer Disciple** for now. Inner/Elder promotion not implemented.
+
+ศิษย์ใหม่ได้ starter avatar ทันทีจาก `CreateStarterAvatar(index)` — `body_robe_grey` + หัวสลับชาย/หญิงตาม index + ทรงผมสุ่ม round-robin จาก `StarterHair = { "hair_short", "hair_topknot", "hair_twin_tail" }`
 
 ## Promotion (Not Implemented)
 
@@ -142,8 +149,9 @@ buildings is ready.
 
 ## Related Pages
 
+- [[entities/avatar-appearance|Avatar Appearance]] — dictionary schema + rendering + customization
 - [[concepts/gathering-system|Gathering System]]
 - [[concepts/crafting-system|Crafting System]]
 - [[concepts/purchase-store|Purchase Store]]
 - [[concepts/state-management|State Management]]
-- [[sources/avatar-appearance|Avatar Appearance]]
+- [[sources/avatar-appearance|Avatar Appearance (design source)]]

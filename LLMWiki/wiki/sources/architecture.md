@@ -10,7 +10,7 @@ related:
   - "[[concepts/vcontainer-composition]]"
   - "[[concepts/message-pipe-bus]]"
 created: 2026-08-31
-updated: 2026-08-31
+updated: 2026-09-02
 confidence: high
 tags: [architecture, di, ipc, messagepipe]
 ---
@@ -59,6 +59,8 @@ tags: [architecture, di, ipc, messagepipe]
 │  ┌──────────────────────────────────────────────┐           │
 │  │  Data: LubanEventPool (Excel → JSON → C#)    │           │
 │  │  Resources/DataTables/worldevent_*.json      │           │
+│  │  Data: AvatarPartPool (JSON → C#)            │           │
+│  │  Resources/Data/avatar_parts.json            │           │
 │  └──────────────────────────────────────────────┘           │
 │                                                             │
 │  ┌──────────────────────────────────────────────┐           │
@@ -68,6 +70,8 @@ tags: [architecture, di, ipc, messagepipe]
  │  │  - EventPopup  (View + Presenter)            │           │
  │  │  - ResourceHud (View + Presenter)            │           │
  │  │  - LogWindow   (View + Presenter)            │           │
+ │  │  - AvatarCustomization (View + Presenter,    │           │
+ │  │    + AvatarRenderer layered sprites)         │           │
  │  └──────────────────────────────────────────────┘           │
 └─────────────────────────────────────────────────────────────┘
           │ TCP 127.0.0.1:3215 (MessagePipe.Interprocess)
@@ -97,6 +101,9 @@ Wires everything in `Configure(IContainerBuilder builder)`:
 // Data (Luban migration replacing ScriptableObject)
 builder.RegisterInstance(new LubanEventPool());
 
+// Avatar part definitions loaded from Resources/Data/avatar_parts.json
+builder.Register<AvatarPartPool>(Lifetime.Singleton);
+
 // UI (Xianxia.UI.MVP Lite)
 builder.RegisterInstance(uiRoot);
 builder.RegisterInstance(uiPanelCatalog);
@@ -122,6 +129,12 @@ messagePipeBuilder.RegisterTcpInterprocessMessageBroker<string, SectResourceChan
 // Interprocess-registered request/response pairs
 messagePipeBuilder.RegisterTcpRemoteRequestHandler<SectStateQuery, SectStateSnapshot>(interprocess);
 messagePipeBuilder.RegisterTcpRemoteRequestHandler<AwaitWorldEventRequest, AwaitWorldEventResponse>(interprocess);
+messagePipeBuilder.RegisterTcpRemoteRequestHandler<PurchaseItemRequest, PurchaseItemResponse>(interprocess);
+messagePipeBuilder.RegisterTcpRemoteRequestHandler<ChangeAvatarPartRequest, ChangeAvatarPartResponse>(interprocess);
+builder.RegisterAsyncRequestHandler<ChangeAvatarPartRequest, ChangeAvatarPartResponse, ChangeAvatarPartHandler>(options);
+
+// Interprocess pub/sub: broadcast avatar equipment changes to UI + MCP client
+messagePipeBuilder.RegisterTcpInterprocessMessageBroker<string, AvatarEquipmentChangedMessage>(interprocess);
 
 // Subsystems (entry points)
 builder.RegisterEntryPoint<TimeSystem>(Lifetime.Singleton).AsSelf();
@@ -217,11 +230,13 @@ public class DecisionExecutor
 - `SectResourceChangedMessage`
 - `ContributionEarnedMessage`
 - `ExecuteDecisionMessage` (bridge → Unity only)
+- `AvatarEquipmentChangedMessage` (Unity → bridge/UI, topic `sect.avatar_equipment_changed`)
 
 **Request/Response (bridge asks, Unity answers):**
 - `SectStateQuery` → `SectStateSnapshot` (full state snapshot)
 - `AwaitWorldEventRequest` → `AwaitWorldEventResponse` (block until next event)
 - `PurchaseItemRequest` → `PurchaseItemResponse` (atomic buy)
+- `ChangeAvatarPartRequest` → `ChangeAvatarPartResponse` (validate + mutate avatar part; wired Unity-side, bridge tool not yet exposed)
 
 **Not registered on interprocess (in-memory only):**
 - `TimeSpeedChangedMessage` (UI internal)
@@ -243,17 +258,7 @@ collide with the hub's already-bound port. Solution: use request-response
   - Data Model: `UnityProject/Assets/Scripts/Shared/SectEconomyState.cs` (แก้ไขไฟล์เดิม)
   - Renderer: `UnityProject/Assets/Scripts/UI/Views/AvatarRenderer.cs` (สร้างใหม่)
   - Def Loader: `UnityProject/Assets/Scripts/Data/AvatarPartPool.cs` (สร้างใหม่)
-
- │  ┌──────────────────────────────────────────────┐           │
- │  │  Data: AvatarPartPool (JSON → C#)            │           │
- │  │  Resources/DataTables/avatar_parts.json      │           │
- │  └──────────────────────────────────────────────┘           │
- │           │                                                  │
- │           ▼                                                  │
- │  ┌──────────────────────────────────────────────┐           │
- │  │  UI: AvatarRenderer (Per-Disciple GameObject)│           │
- │  │  - Resolves AvatarAppearance → Sprite Layers │           │
- │  └──────────────────────────────────────────────┘           │
+- **Avatar data flow:** `AvatarPartPool` (JSON def-table) → `AvatarRenderer` (resolve `AvatarAppearance` → sprite layers) → `AvatarCustomizationPresenter/View` (แต่งตัวผ่าน `TryChangeAvatarPart`) — รายละเอียดครบที่ [[entities/avatar-appearance]]
 
 ## Workspace Layout (multi-project monorepo)
 

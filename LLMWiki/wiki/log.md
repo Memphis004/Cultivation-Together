@@ -35,3 +35,4 @@ Every ingest, lint run, and maintenance operation is recorded here automatically
 ## [2026-09-01] wire | wiki/concepts/mvp-ui.md | Added LogWindow to Implemented Panels (2→3)
 ## [2026-09-01] wire | wiki/sources/architecture.md | Added LogWindow to UI box in architecture diagram
 ## [2026-09-01] wire | wiki/index.md | Linked LogWindow concept + code snippets into master catalog
+## [2026-09-01] new-page | wiki/sources/sex-gender-system.md | Drafted GDD for adding explicit Disciple Sex (Male/Female + RecruitSexPicker) to DiscipleState
