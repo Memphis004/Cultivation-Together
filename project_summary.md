@@ -1,546 +1,248 @@
 # Xianxia Sect Simulator — MCP-Enabled Game Framework
-
-สรุปการออกแบบเท่าที่คุยกันมา
+สรุปการออกแบบ + บันทึกความคืบหน้า (อัปเดตล่าสุด: Avatar Portrait Swap + Sex/Gender)
 
 ## แนวคิดโปรเจกต์
-
 เกม simulator บริหารสำนักเซียน (xianxia cultivation sect) บน Unity ที่ออกแบบให้ AI Agent
-(เช่น Open-LLM-VTuber) เข้ามาเล่นเป็น **Game Master / เจ้าสำนัก** แทนคนได้ผ่าน MCP
+(เช่น Open-LLM-VTuber) เข้ามาเล่นเป็น Game Master / เจ้าสำนัก แทนคนได้ผ่าน MCP
 โดยมีเป้าหมายรองรับสตรีมแบบโหวตร่วมกับผู้ชม (คล้าย King of the Castle บน Twitch)
 ให้ผู้ชมร่วมเป็น "ศิษย์สำนัก" โหวตตัดสินใจเหตุการณ์ต่างๆ ผ่าน Twitch extension
-
-**แรงจูงใจหลัก**: ลดความเหนื่อยของสตรีมเมอร์ที่ต้องอ่านออกเสียง/คุมกลไกเกมเองตลอด
+แรงจูงใจหลัก: ลดความเหนื่อยของสตรีมเมอร์ที่ต้องอ่านออกเสียง/คุมกลไกเกมเองตลอด
 โดยให้ AI VTuber รับบทนี้แทน
 
 ## Tech stack ที่ตกลงไว้
+| ส่วน | เทคโนโลยี | หมายเหตุ |
+| --- | --- | --- |
+| Game engine | Unity (C#) | ใช้ C# ทั้งสองฝั่ง (Unity + Bridge) |
+| DI / Composition Root | **VContainer** | เบากว่า Zenject, register ทุก subsystem |
+| Internal messaging | **MessagePipe** | pub/sub + request-response, zero-alloc |
+| IPC (Unity ↔ Bridge) | **MessagePipe.Interprocess (TCP)** | Unity เป็น host, Bridge เป็น client |
+| MCP Bridge | **.NET 8 Console App** | ใช้ `ModelContextProtocol` C# SDK (stdio) |
+| Serialization | **MessagePack** | เลิกใช้ protobuf แล้วถาวร (lab รอบ 7) |
+| DataTable | **Luban** | Excel → JSON → C# Plain Class (ไม่ใช้ ScriptableObject เพื่อเลี่ยงการคลิกสร้าง Asset) |
+| UI Framework | **Xianxia.UI.MVP Lite** | Custom UGUI + TMP (View=MonoBehaviour, Presenter=Plain C#) ทำงานร่วมกับ VContainer/MessagePipe โดยตรง ไม่พึ่ง Reflection |
 
-| ส่วน | เทคโนโลยี |
-|---|---|
-| Game engine | Unity (C#) |
-| DI / composition root | **VContainer** — wires ทุก subsystem, เบากว่า Zenject |
-| Internal messaging (subsystem-to-subsystem) | **MessagePipe** — pub/sub + request-response, zero-alloc, inject ผ่าน VContainer |
-| Unity ↔ MCP bridge IPC | **MessagePipe.Interprocess (TCP, localhost)** — Unity host TCP endpoint, bridge process ต่อเป็น client |
-| MCP bridge process | **.NET console app แยก process** (ไม่ใช่ Node/Python) — ใช้ `MessagePipe.Interprocess` client ตรงๆ ได้ และ expose tools ผ่าน official `ModelContextProtocol` C# SDK (stdio transport) ให้ AI GM client (Open-LLM-VTuber) ต่อเข้ามา แนวเดียวกับ Wanxiang.Prelude ที่แยก Frontend/Backend เป็น C# ทั้งคู่ |
-| Twitch extension | Next.js (เลือกเพราะ API routes ทำหน้าที่ EBS ในตัว, ตัวอย่าง/library เยอะกว่า Vue สำหรับ Extensions) |
-| Vote aggregation backend | Node.js + WebSocket (Socket.io/ws) หรือ Supabase Realtime/PlayFab |
-| Session state (คนเล่นเองไม่มี AI) | authoritative server แบบ JSON state ธรรมดา ไม่ต้องใช้ Mirror/Netcode เพราะเป็นเกม turn-based ไม่ใช่ real-time physics |
-| Persistent data | Node.js + Fastify/Express + Redis (session ชั่วคราว) + Postgres (progression) |
+## หลักคิดกลางที่ใช้คุมทุกระบบ
+> ทุกกลไกต้องเป็นสิ่งที่ AI ตัดสินใจได้จากข้อมูลที่ query ผ่าน MCP ได้จริง
+> ไม่พึ่ง "สัญชาตญาณมนุษย์" ที่ AI เข้าไม่ถึง
 
-**MCP tools ที่วางแนวไว้**: แยก read (`get_sect_state`, `await_next_world_event`)
-กับ write (`execute_decision`) เป็นคนละ tool type ชัดเจนในโค้ดฝั่ง bridge
+---
 
-**Message type แยกจาก state**: pub/sub message ที่ส่งผ่าน MessagePipe (เช่น
-`DiscipleRecruitedMessage`, `WorldEventTriggeredMessage`) เป็นคนละชุดกับ
-`SectEconomyState` ใน `economy.proto` — message คือ delta/event แจ้งว่า
-"เกิดอะไรขึ้น", ส่วน state คือ full snapshot ที่ query ตามต้องการ ไม่ปนกัน
+## 🆕 ความคืบหน้าล่าสุด (รอบนี้)
 
-## Core loop (สถานะ: ยัง WIP — จงใจไม่ fix ตอนนี้)
+### 1. Avatar System — จาก Paper Doll สู่ Portrait Swap (Dictionary Schema)
+**ปัญหาเดิม:** Schema แบบ fixed property (`Body/Head/Hair/Accessory`) ขยาย slot ไม่ได้โดยไม่ break save file + ผมยาวซ้อน layer ผิด (วิกมุดหัว)
 
-วางไว้คร่าวๆ ว่า `[Sect State] → [Event Trigger] → [Choices] → [Decision] →
-[Consequences] → [Check End] → loop` แต่ระหว่าง brainstorm ตัดสินใจ **ยังไม่ fix
-core loop** เพราะยังคิดระบบเกมไม่ครบ รอ finalize gameplay systems ก่อน
+**สิ่งที่แก้:**
+-   **`AvatarAppearance` เปลี่ยนเป็น Dictionary-based:**
+    ```csharp
+    [Key(0)] Dictionary<string, string> Parts;  // slot → partId
+    [Key(1)] Dictionary<string, string> Colors; // slot → colorId (เตรียมไว้สำหรับ tint)
+    ```
+    -   เพิ่ม slot ใหม่ = แก้แค่ JSON ไม่ต้องแก้ schema
+    -   AI GM ค้นพบ slot ที่มีอยู่ได้เองจาก `get_sect_state`
+    -   `GetSlot/SetSlot/Clone` API เหมือนเดิม → Presenter ไม่ต้องแก้
+-   **ขยาย Slot เป็น 10 ช่อง + Category:**
+    -   Slots: `body, head, eyes, brows, mouth, nose, hair, face_marking, eyeshadow, accessory`
+    -   Categories (UI Tabs): `ใบหน้า` (Head/Eyes/Brows/Mouth/Nose), `ลักษณะ` (Hair/FaceMarking/Eyeshadow), `ร่างกาย` (Body/Accessory)
+-   **Hair 2-Layer (ผมหน้า/ผมหลัง):**
+    -   `AvatarPartDef` เพิ่ม `spritePathBack` + `drawOrderBack`
+    -   `AvatarRenderer` แยก layer: ผมหลัง (order 10, ใต้ตัว) + ผมหน้า (order 40, บนหน้า)
+    -   Stack ที่ถูกต้อง: `base(0) → hair_back(10) → body(20) → head(30) → face_marking(34) → hair_front(40) → accessory(50)`
+-   **AvatarFraming Presets:**
+    -   Enum `FullBody / Bust / HeadIcon` ควบคุม scale + offset ของ `layerRoot`
+    -   Art ชุดเดียว (canvas 1024×1536) ใช้ได้ทั้ง Character Creation, Dialogue Portrait, HUD Icon
+-   **JSON Schema (`avatar_parts.json`):**
+    -   เพิ่ม field: `category`, `spritePathBack`, `drawOrderBack`, `thumbPath`, `tintable`
+    -   Backward compatible (field เก่ายังโหลดได้)
 
-## แนวทางเกม (อ้างอิง 龙胤立志传 / The Scroll of Taiwu / Rimworld / Amazing Cultivation Simulator)
+**สถานะ:** ✅ Data Model + Renderer + UI Category Tabs เสร็จแล้ว (รอ Art ส่ง Sprite จริง + แก้ drawOrderBack ใน Renderer ให้สมบูรณ์)
 
-- **แผนที่**: มีเมือง/หมู่บ้าน/สำนัก แต่ละที่มีแหล่งเก็บเกี่ยวทรัพยากร
-- **ระบบทรัพยากร-คราฟท์**: ศิษย์เก็บเกี่ยว (เสบียง/สมุนไพร/ไม้/เหล็ก) → คราฟท์เป็นของสำเร็จ
-  (อาหาร/ยา) โดยเกรดวัตถุดิบมีผลต่อเกรดผลลัพธ์ (แนวเดียวกับ Taiwu: Beyond The Dome)
-- **ระบบเวลา**: real-time ไหลต่อเนื่อง + กด pause ได้ + ปรับความเร็ว (แนว Rimworld/ACS)
-  ไม่ใช้ turn-based รายเดือนแบบ Taiwu — เสนอเพิ่ม auto-pause เมื่อมี event สำคัญ
-  เพื่อให้เป็น checkpoint ตัดสินใจของ AI GM ได้พอดี
-- **ระบบศิษย์**: สมัครเข้ามาเรื่อยๆ (รวมถึงผู้ชมที่กด join) → เริ่มเป็นศิษย์นอก →
-  ผู้เล่น/AI แต่งตั้งตำแหน่งได้ จำนวนตำแหน่งปลดล็อกจากสิ่งปลูกสร้าง
-- **สิ่งปลูกสร้าง**: คลิกสร้างอย่างเดียว ไม่มีระบบวางตำแหน่งบนแมพ (เพื่อไม่ให้ Agent loop
-  ซับซ้อนเกินไปสำหรับ AI)
-- **ยังไม่ตัดสินใจ**: ระบบ combat (เสนอแนวทาง ACS มากกว่า Rimworld เพราะ resolve
-  เร็วกว่า เหมาะกับ AI ตัดสินใจ), stat system, วิชา/ตำรา, ไอเทม/อาวุธ/ยา
+### 2. Sex / Gender System (Explicit State)
+**ปัญหาเดิม:** เพศศิษย์ถูก imply จาก `rosterIndex % 2` ใน `CreateStarterAvatar` → Query ไม่ได้, บังคับเพศตอนรับสมัครไม่ได้
 
-**หลักคิดกลางที่ใช้คุมทุกระบบ**: ทุกกลไกต้องเป็นสิ่งที่ AI ตัดสินใจได้จากข้อมูลที่ query
-ผ่าน MCP ได้จริง ไม่พึ่ง "สัญชาตญาณมนุษย์" ที่ AI เข้าไม่ถึง
+**สิ่งที่แก้:**
+-   **เพิ่ม `DiscipleSex` Enum + Field:**
+    ```csharp
+    public enum DiscipleSex { Unspecified, Male, Female }
+    [Key(7)] public DiscipleSex Sex { get; set; } = DiscipleSex.Unspecified;
+    ```
+    -   Append `[Key(7)]` หลัง `Avatar` → Backward compatible กับ save เก่า
+-   **Recruitment Logic:**
+    -   `RecruitOuterDisciple(DiscipleSex sex = Unspecified)` รับ optional param
+    -   `CreateStarterAvatar(index, sex)` เลือก Head ตาม Sex จริง ไม่ใช่ index
+-   **Mock Data:** ระบุ Sex ชัดเจน (d000=Male, d001=Female, d002=Female, d003=Male)
+-   **MCP:** `get_sect_state` คืนค่า `Sex` เป็น integer (0/1/2) อัตโนมัติ
 
-## ระบบเศรษฐกิจสำนัก
+**สถานะ:** ✅ Data Model + Recruitment Logic เสร็จแล้ว (รอ UI Selector ใน Phase ถัดไป)
 
-**สองสกุลเงิน**:
-- **หินวิญญาณ (Spirit Stones)** — currency กลาง ใช้แลกเปลี่ยนไอเทม ได้จากภารกิจ/ผจญภัย/
-  ปราบปีศาจ แจกเป็นเบี้ยเลี้ยงรายเดือนตามตำแหน่ง และ **ปล้น/แย่งชิงกันเองได้**
-- **ค่าคุณูปการ (Contribution)** — ผูกกับสำนัก ใช้แลกของจากสำนัก (ตำรา/ยา/ไอเทม)
-  ได้จากผลงาน: สายเก็บเกี่ยว (ปลูกผัก/เก็บสมุนไพร/ตัดไม้/ขุดแร่), สายฝีมือ
-  (ครัว/หลอมยา/สร้างยุทโธปกรณ์/เขียนยันต์/สร้าง artifact — เกรดยิ่งสูงยิ่งได้เยอะ),
-  สายต่อสู้ (ประลอง/สงครามสำนัก [WIP]/ภารกิจ)
+### 3. Xianxia.UI.MVP Lite (EventPopup + ResourceHud + AvatarCustomization)
+**สิ่งที่ทำ:**
+-   **Pattern:** View (MonoBehaviour) / Presenter (Plain C#, Transient) / Service (Singleton)
+-   **Panel Resolution:** Explicit `UIPanelType` enum → Type mapping (ไม่ scan assembly)
+-   **Bug Fix สำคัญ (Lab 13):**
+    -   `EventPopupPresenter` เคย publish ผ่าน in-memory `IPublisher` แต่ `DecisionLogger` ฟังผ่าน interprocess `IDistributedSubscriber` → คนละ graph กัน กดปุ่มแล้วเงียบ
+    -   **แก้:** ดึง logic ออกมาเป็น `DecisionExecutor.cs` ให้ทั้ง UI และ Bridge เรียกตรงๆ (Direct Method Call) แทน pub/sub สำหรับ in-process logic
+-   **ResourceHud:** แทนที่ `SectHudView` เดิม, subscribe `SectResourceChangedMessage` (มี delta มาให้ในตัว) แทน polling
+-   **AvatarCustomization:**
+    -   Draft Pattern (Clone → Edit → Confirm/Rollback) → ไม่ยิง message ข้าม TCP ทุกคลิก
+    -   Category Tabs (ใบหน้า/ลักษณะ/ร่างกาย) + Slot Tabs
+    -   Object Pooling สำหรับปุ่มในกริด (กัน GC กระตุกตอนสลับแท็บ)
+-   **UIRoot Layout Fix:**
+    -   Root cause เดิม: `ContentSizeFitter=PreferredSize` ทับ anchor stretch → UI กองกลางจอ
+    -   แก้: `UIRoot.Awake()` บังคับ stretch เต็ม Canvas + `ApplyLayout()` ตั้ง `Unconstrained` ที่ root panel
 
-**ทรัพยากรดิบ** (เสบียง/สมุนไพร/ไม้/เหล็ก) เป็นของส่วนรวม ศิษย์เบิกมาคราฟท์
+**สถานะ:** ✅ EventPopup, ResourceHud, AvatarCustomization ทำงานจริง (ยืนยันแล้ว 30 ส.ค. 2026)
 
-**กติกาความเป็นเจ้าของผลผลิต**:
-- ศิษย์ทั่วไป: ของที่คราฟท์ได้เข้าคลังสำนัก → ศิษย์อื่นแลกซื้อด้วยค่าคุณูปการ
-- ผู้อาวุโสขึ้นไป: เก็บของที่คราฟท์เป็นของส่วนตัวได้
+---
 
-## การตัดสินใจด้าน data architecture
+## 📋 งานที่ทำไปแล้ว (Lab Rounds Summary)
 
-**ScriptableObject vs Protobuf** — ใช้ทั้งคู่ คนละหน้าที่ ไม่แทนกัน:
-- **ScriptableObject**: ข้อมูลนิยามที่ author ใน Editor และไม่เปลี่ยนตอนรัน
-  (RecipeDef, BuildingDef, ItemDef, EventDef)
-- **Protobuf**: runtime state ที่เปลี่ยนตลอดและต้องส่งข้ามขอบเขต process
-  (DiscipleState, SectEconomyState, InventoryEntry) — จำเป็นเพราะ (1) state ศิษย์
-  เป็นร้อยคน+inventory ไม่เหมาะกับ SO ที่เป็น asset ไม่ใช่ instance data (2) MCP bridge
-  ต้องส่ง state ข้าม process ไปหา Node/Python agent แบบ type-safe (3) save file
-  ใหญ่ขึ้นเรื่อยๆ ตามจำนวนศิษย์
+### Lab 1-3: Foundation + Round Trip
+-   `economy.proto` → `SectEconomyState.cs` (MessagePack stub)
+-   `GameLifetimeScope.cs` (VContainer + MessagePipe TCP)
+-   `TimeSystem.cs`, `McpBridgeProgram.cs`
+-   **Result:** `get_sect_state` round trip ผ่านจริง (21 ส.ค. 2026)
 
-Runtime state จะ reference กลับไปหา Definition ผ่าน ID (string/int) ไม่ใช้ direct
-object reference เพื่อให้ save/load และส่งผ่าน MCP ได้สะอาด
+### Lab 4-6: Write Path + World Events + Transport Bug
+-   `ExecuteDecision` (Bridge → Unity) ผ่าน `IDistributedPublisher`
+-   `WorldEventSystem` (สุ่ม event ทุก 15 วิ, auto-pause)
+-   **Bug:** `IDistributedSubscriber` over TCP เปิด listen socket เสมอ → Bridge ชน port Unity
+-   **Fix:** เปลี่ยน `await_next_world_event` เป็น Request-Response (`AwaitWorldEventRequest/Response`)
+-   **Result:** Loop เต็มรูปแบบทำงานจริง (22 ส.ค. 2026)
 
-## งานที่ทำไปแล้ว (lab รอบแรก)
+### Lab 7: ExecuteDecision มีผลจริง + เลิก Protobuf
+-   `SectStateProvider` ถือ live state instance เดียว (ไม่สร้างใหม่ทุก query)
+-   `ApplyDecisionConsequence` ปรับ Stockpile จริง
+-   **Decision:** เลิก Protobuf ถาวร → ใช้ MessagePack เป็นตัวจริง
+-   **Result:** เห็นตัวเลขเปลี่ยนจริงหลัง `execute_decision`
 
-ไฟล์ที่ส่งมอบแล้ว:
-- `economy.proto` — schema เบื้องต้น: `CurrencyWallet`, `InventoryItem` (มี
-  `OwnerScope` enum), `DiscipleState`, `SectStockpile` (raw resources เป็น
-  `map<string,int32>` เผื่อขยายชนิดทรัพยากรทีหลังโดยไม่ต้องแก้ schema),
-  `SectEconomyState`
-- `SectEconomyState.cs` — plain C# mirror ของ proto ไว้ใช้ก่อนต่อ protoc
-  pipeline จริง (ย้ายไป `Google.Protobuf`/`protobuf-net` ทีหลังได้แบบ mechanical
-  เพราะ field ตรงกัน)
-- `MockSectData.cs` — mock data 3 ศิษย์ (ศิษย์นอก/ศิษย์ใน/ผู้อาวุโส) + คลังสำนัก
-  ไว้ทดสอบ UI ก่อนมีระบบเกมจริง
-- `sect_ui_wireframe.html` — wireframe คลังสำนัก + ตารางศิษย์ ใช้โทนสี
-  หมึก-กระดาษเก่า-ตราประทับ (จงใจเลี่ยงพาเลตแบบ AI-cliché) แสดงผล
-  `OwnerScope` ต่อยศเห็นชัดในตาราง (ศิษย์นอก/ใน = เข้าคลังสำนัก,
-  ผู้อาวุโส = เก็บส่วนตัวได้)
+### Lab 8-9: DiscipleSystem + Crafting
+-   `RecruitOuterDisciple` (ผูกกับ event `new_disciple_applicant`)
+-   `TickGathering` (passive resource, fractional accumulator)
+-   `TickCrafting` (consume resources, produce items, ownership rule: Elder=Personal, Others=Stockpile)
+-   **Gotcha:** Unity Editor `Run In Background` ต้องเปิด ไม่งั้น Tick หยุดตอนสลับหน้าต่าง
 
-### lab รอบสอง — VContainer + MessagePipe
+### Lab 10: Purchase Store
+-   `purchase_item` MCP tool (Request-Response)
+-   `TryPurchaseItem` (เช็คของ/เงิน → หัก → ย้ายเข้า PersonalInventory)
+-   **Result:** ทดสอบผ่าน
 
-- `GameMessages.cs` — pub/sub message DTOs (`DiscipleRecruitedMessage`,
-  `WorldEventTriggeredMessage` ฯลฯ) แยกจาก `SectEconomyState`, มี
-  `SectStateQuery`/`SectStateSnapshot` สำหรับ request-response
-- `GameLifetimeScope.cs` — VContainer composition root: register MessagePipe
-  in-memory bus + `MessagePipe.Interprocess` TCP transport (Unity เป็น host)
-  + subsystem ทั้ง 4 เป็น entry point
-- `TimeSystem.cs` — ตัวอย่าง subsystem ที่ publish ผ่าน bus แทนการผูก
-  reference ตรง, มี `SectStateQueryHandler` ตอบ state snapshot ให้ bridge
-- `McpBridgeProgram.cs` — external .NET console app: ต่อ Unity ผ่าน
-  `MessagePipe.Interprocess` (TCP client) และ expose MCP tools ผ่าน stdio
-  ด้วย official `ModelContextProtocol` C# SDK, แยก read tools
-  (`SectQueryTools`) กับ write tools (`SectActionTools`) เป็นคนละคลาส
-- แยก workspace จริงเป็น `UnityProject/`, `McpBridge/`, `Shared/` (ต้นทาง
-  เดียว sync เข้าทั้งสองฝั่งด้วย `sync-shared.sh`) พร้อม README อธิบาย
-  วิธีรันแต่ละส่วน
+### Lab 11-12: UI พื้นฐาน + Luban Pipeline
+-   `SectHudView` (top bar HUD) → ต่อมาถูกแทนด้วย `ResourceHud`
+-   **Luban:** ย้าย EventData จาก ScriptableObject → Excel → JSON → C# Plain Class
+    -   Bug: `<module name="event">` ชน C# keyword → แก้เป็น `worldevent`
+    -   Toolchain: `Tools/Luban/`, `DataTables/`, `gen.bat`
 
-### lab รอบสาม — ไล่ debug จนรัน round trip ผ่านจริง
+### Lab 13: Xianxia.UI.MVP Lite
+-   Implement ตาม spec (`XIANXIA_UI_MVP_LITE_SPEC.md`)
+-   Bug Fix: `DecisionExecutor` (แก้ channel ผิด), `UIRoot.ApplyLayout` (แก้ UI กองกลางจอ)
+-   **Result:** EventPopup + ResourceHud ทำงานจริง (30 ส.ค. 2026)
 
-Bug จริงที่เจอระหว่าง build/run (เก็บไว้กันลืม เผื่อเจอซ้ำตอนเพิ่ม message
-type ใหม่):
+### Lab 14 (รอบนี้): Avatar Portrait Swap + Sex/Gender
+-   Dictionary Schema, Hair 2-Layer, Framing Presets, Category Tabs
+-   `DiscipleSex` enum + Recruitment Logic
+-   **Result:** Data Model พร้อม, MCP คืนค่า Sex ถูกต้อง, รอ Art + UI Polish
 
-1. **`Duplicate 'Compile' items'` (NETSDK1022)** — SDK-style csproj
-   auto-include `.cs` ทุกไฟล์ในโฟลเดอร์อยู่แล้ว ไม่ต้องมี
-   `<Compile Include="Shared/*.cs">` ซ้ำ
-2. **`AddMessagePipeTcpInterprocess` ไม่มีจริง** — API จริงคือ
-   `services.AddMessagePipe()` (คืน `IMessagePipeBuilder`) แล้วเรียก
-   `.AddTcpInterprocess(...)` ต่อจาก builder นั้น ไม่ใช่ extension method
-   ลอยบน `IServiceCollection` ตรงๆ
-3. **`RegisterTcpRemoteRequestHandler` ต้องเรียกทั้งสองฝั่ง** แม้ฝั่งที่
-   `HostAsServer = true` (Unity) ก็ต้องเรียกด้วย ไม่ใช่แค่ฝั่ง caller —
-   ยืนยันจากโค้ดจริงของ `Wanxiang.Guanxiangtai/src/Frontend/FrontendIpcServer.cs`
-4. **`ValueTask<T>` vs `UniTask<T>`** — MessagePipe ฝั่ง VContainer/Unity ใช้
-   `UniTask<T>` (จาก `Cysharp.Threading.Tasks`) ไม่ใช่ `ValueTask<T>`
-   มาตรฐาน .NET ที่ฝั่ง `IServiceCollection` ใช้ได้ปกติ
-5. **`economy.proto` ยังไม่ผ่าน protoc** — ใส่ `[MessagePackObject]`/`[Key]`
-   ให้ `SectEconomyState.cs` แล้วเพิ่ม `ToByteArray()`/`FromByteArray()`
-   เป็น serializer ชั่วคราวด้วย MessagePack (แพ็กเกจเดียวกับที่มีอยู่แล้ว)
-   ปลด blocker นี้ไปพลางก่อน ค่อยเปลี่ยนเป็น protobuf จริงทีหลัง
-6. **สั่งคำสั่งผิดหน้าต่าง/ผิดโฟลเดอร์** — พิมพ์คำสั่งใหม่ใส่ terminal ที่
-   `dotnet run` ค้างอยู่ (มันตีความเป็น stdin ของ MCP protocol) และรัน
-   `npx @modelcontextprotocol/inspector dotnet run --project McpBridge/...`
-   จากข้างในโฟลเดอร์ `McpBridge/` เอง (path ซ้ำชั้น) — ไม่ใช่บั๊กโค้ด
-   เป็นเรื่อง terminal ล้วนๆ
+---
 
-**ผลทดสอบ round trip เต็มวง (ยืนยันแล้ว 21 ส.ค. 2026)**: Unity (Play mode) ↔
-MessagePipe.Interprocess TCP ↔ McpBridge ↔ MCP Inspector — เรียก
-`get_sect_state` ซ้ำหลายรอบผ่าน MCP Inspector ได้ JSON ข้อมูล mock กลับมา
-ถูกต้องทุกครั้ง (`IsError = False`, latency ~26-53ms) สถาปัตยกรรมทั้งชุด
-ตั้งแต่ diagram แรกพิสูจน์แล้วว่าทำงานได้จริง
+## 🚧 สิ่งที่ยังค้าง / TODO
 
-### lab รอบสี่ — ทาง write (bridge → Unity) ผ่าน ExecuteDecision
+### High Priority (ต้องทำก่อน Art ส่งงาน)
+1.  **AvatarRenderer DrawOrder Fix:**
+    -   ตอนนี้ `Rebuild()` spawn ผมหลัง/หน้า ติดกันที่ drawOrder ของ def (40) → ผมหลังไม่มุดใต้ตัว
+    -   **แก้:** สร้าง list ของ `(order, path)` ก่อน sort → ผมหลังใช้ `drawOrderBack` (10), ผมหน้าใช้ `drawOrder` (40)
+    -   เพิ่ม `drawOrderBack` field ใน `AvatarPartDef` + JSON
+2.  **Art Handoff:**
+    -   ส่ง `ART_BRIEF_AVATAR.md` ให้ Art (Canvas 1024×1536, Pose เดียว, Overlap rules, 19 files)
+    -   เตรียม Template PSD (guide layers)
 
-ปิด gap ที่ค้างไว้ตั้งแต่ lab รอบสอง (`ExecuteDecision` เคยเป็นแค่
-`NotImplementedException`) และทดสอบทิศทางตรงข้ามกับที่ผ่านไปแล้ว
-(`get_sect_state` คือ Unity → bridge, อันนี้คือ bridge → Unity):
+### Medium Priority (Phase 2)
+3.  **UI Sex Selector:**
+    -   เพิ่ม Toggle ใน `AvatarCustomizationPanel` (เปลี่ยน Male↔Female)
+    -   เพิ่ม Selector ใน `EventPopup` (ตอนรับสมัคร)
+4.  **Tinting System (Color):**
+    -   `AvatarAppearance.Colors` มีอยู่แล้ว แต่ยังไม่มี logic ใน Renderer
+    -   เริ่มที่ `Image.color` multiply (Method A) ก่อน
+5.  **Thumbnail (`thumbPath`):**
+    -   ตอนนี้กริดแสดง sprite ชิ้นส่วนดิบ (ผมลอยๆ)
+    -   ต้องใช้ `thumbPath` (รูปหัวสวมผมทรงนั้น) เมื่อ Art ส่งมา
+6.  **MCP Tool `change_avatar_part`:**
+    -   Request-Response pattern (เหมือน `purchase_item`)
+    -   เรียก `SectStateProvider.TryChangeAvatarPart`
 
-- `GameMessages.cs` — เพิ่ม `ExecuteDecisionMessage` (`EventId`, `ChoiceId`)
-  และ topic คีย์ `InterprocessTopics.ExecuteDecision`
-- `GameLifetimeScope.cs` — register broker เพิ่มสำหรับ message ใหม่นี้
-- `DecisionLogger.cs` (ใหม่) — subscriber ฝั่ง Unity, `Debug.Log` เมื่อ
-  ได้รับ decision จาก bridge และเรียก `TimeSystem.SetPaused(false)` ต่อ
-  (ปิด loop กับ auto-pause ที่ `RaiseWorldEvent` ตั้งไว้ตอนมี event ต้อง
-  ตัดสินใจ)
-- `McpBridgeProgram.cs` — `SectActionTools.ExecuteDecision` publish
-  `ExecuteDecisionMessage` จริงแทน stub เดิม
+### Low Priority (Phase 3+)
+7.  **AvatarIconBaker:**
+    -   Bake RenderTexture cache สำหรับ HUD icon (กัน UGUI rebuild หนักเมื่อมีศิษย์เยอะ)
+8.  **DialoguePanel:**
+    -   Portrait (Bust framing) + Text box
+    -   ใช้ `AvatarRenderer` ตัวเดิม
+9.  **BuildingSystem / Combat / Stats:**
+    -   ยังเป็น stub / ยังไม่ตัดสินใจแนวทาง
 
-ยังไม่ได้ทดสอบรันจริง (รอผลจากผู้ใช้) — คาดว่าเรียก `execute_decision`
-ผ่าน MCP Inspector แล้วควรเห็น log `[DecisionLogger] Received decision
-from bridge - ...` ขึ้นใน Unity Console ทันที
+---
 
-**ผลทดสอบ (ยืนยันแล้ว 22 ส.ค. 2026)**: เรียก `execute_decision` ผ่าน MCP
-Inspector (`eventId=bandit_raid_001`, `choiceId=send_inner_disciples`) →
-Unity Console ขึ้น log ตามที่คาด ครบ stack trace ยืนยัน chain การทำงาน
-`TcpWorker.RunReceiveLoop → AsyncMessageBroker.Publish →
-DecisionLogger.OnDecisionReceived → Debug.Log` ตรงตามที่ออกแบบไว้ทุก
-ขั้นตอน — **ตอนนี้ทั้งทางอ่าน (`get_sect_state`) และทางเขียน
-(`execute_decision`) ทำงานจริงครบทั้งสองทิศทางแล้ว**
-
-### lab รอบห้า — WorldEventSystem ปิด loop เต็มวง
-
-`await_next_world_event` เรียกได้แต่ค้างตลอดไป (ไม่มีอะไรเรียก
-`RaiseWorldEvent`) และ `execute_decision` ส่งได้แต่ยังไม่มี event จริงให้
-ตอบ — เพิ่ม `WorldEventSystem.cs` (ใหม่) เป็น placeholder ง่ายๆ ที่สุ่ม
-trigger event จาก list คงที่ทุก 30 วินาที (ข้ามรอบถ้ายังรอ decision อยู่
-เช็คผ่าน `TimeSystem.IsPaused` ที่เปิด public ใหม่)
-
-การเปลี่ยนแปลงประกอบ:
-- `TimeSystem.cs` — `RaiseWorldEvent` เปลี่ยนจาก `Task` เป็น `UniTask` ให้
-  สอดคล้องกับส่วนอื่นของโปรเจกต์ (เรียก `.Forget()` แบบ fire-and-forget
-  จาก `Tick()` ได้), เปิด `IsPaused` เป็น public, เพิ่ม `Debug.Log` ตอน
-  raise event เพื่อความชัดเจนตอนดู Console
-- `WorldEventSystem.cs` (ใหม่) — `ITickable`, inject `TimeSystem` ตรงๆ,
-  สุ่ม event id จาก `bandit_raid_001` / `new_disciple_applicant` /
-  `herb_garden_bloom` / `wandering_merchant`
-- `GameLifetimeScope.cs` — register `WorldEventSystem` เป็น entry point
-  เพิ่ม
-
-ตอนนี้ loop เต็มรูปแบบควรทำงานได้: Unity สุ่ม event ทุก 30 วิ → auto-pause
-→ `await_next_world_event` คืนค่าจริง (ไม่ค้างแล้ว) → เรียก
-`execute_decision` → `DecisionLogger` unpause กลับ → รอบถัดไปเริ่มนับใหม่
-— ยังไม่ได้ทดสอบรันจริง รอผลจากผู้ใช้
-
-### lab รอบหก — เจอข้อจำกัดจริงของ library: bridge subscribe ผ่าน TCP ไม่ได้
-
-ทดสอบ `await_next_world_event` แล้วเจอ `SocketException 10048 (Only one
-usage of each socket address is normally permitted)` — ไล่อ่าน source
-code จริงของ `MessagePipe.Interprocess` (`TcpWorker.cs`,
-`TcpDistributedPublisherSubscriber.cs`) แล้วเจอ root cause ที่ยืนยันได้
-100% ไม่ใช่การเดา:
-
-```csharp
-// TcpDistributedSubscriber<TKey,TMessage> constructor:
-worker.StartReceiver();   // เรียกเสมอ ไม่เช็ค HostAsServer เลย
-
-// StartReceiver() ข้างใน:
-var s = server.Value;     // = SocketTcpServer.Listen(host, port)
+## 📂 Workspace Layout (Multi-project Monorepo)
+```text
+Cultivation Together/              ← workspace root
+ ├── Shared/                        ← canonical source for shared types
+ │   ├── GameMessages.cs            ← sync to Unity + Bridge
+ │   ├── SectEconomyState.cs        ← Dictionary AvatarAppearance + DiscipleSex
+ │   └── MockSectData.cs            ← FromSlots factory + explicit Sex
+ ├── UnityProject/                  ← open in Unity Hub
+ │   ├── Assets/Scripts/
+ │   │   ├── Core/                  ← TimeSystem, DecisionExecutor, GameLifetimeScope
+ │   │   ├── Data/                  ← AvatarPartPool, LubanEventPool
+ │   │   ├── Systems/               ← SectStateProvider, DiscipleSystem, etc.
+ │   │   └── UI/                    ← Xianxia.UI.MVP Lite (Views/Presenters/Core)
+ │   └── Resources/Data/            ← avatar_parts.json, worldevent_*.json
+ ├── McpBridge/                     ← .NET 8 console app
+ │   └── Program.cs                 ← MCP server (SectQueryTools/SectActionTools)
+ ├── DataTables/                    ← Luban Excel sources
+ ├── Tools/Luban/                   ← Luban binary
+ ├── LLMWiki/                       ← this folder (architecture.md, disciples.md, etc.)
+ └── sync-shared.sh                 ← copy Shared/ → Unity + Bridge
 ```
 
-**สรุปกฎที่ยืนยันแล้ว**: `IDistributedSubscriber<K,V>` ผ่าน TCP
-interprocess ของ library นี้ **เปิด listening socket ของตัวเองเสมอ ไม่
-สนใจค่า `HostAsServer`** — ฝั่งที่เป็น hub อยู่แล้ว (Unity,
-`HostAsServer=true`) ปลอดภัยเพราะ `StartReceiver()` มี guard กันเรียกซ้ำ
-(`Interlocked.Increment == 1`) จึงเป็นแค่ no-op รอบสอง แต่ฝั่งที่ไม่ใช่
-hub (Bridge) เรียกครั้งแรกจะพยายาม bind port เดียวกับที่ Unity ยึดไว้
-แล้ว **ชนกันเสมอ** — ส่วน `IDistributedPublisher` (`Publish()`) และ
-`IRemoteRequestHandler` (request-response) ใช้แค่ `client.Value` →
-`Connect()` เท่านั้น ไม่มีปัญหานี้ (ตรงกับที่ `get_sect_state` และ
-`execute_decision` ทดสอบผ่านมาก่อนหน้า)
+**Rule:** แก้ไฟล์ใน `Shared/` → รัน `./sync-shared.sh` → ห้ามแก้ copy ใน Unity/Bridge โดยตรง
 
-**บทเรียนสำหรับอนาคต**: ฝั่ง Bridge (client) ห้ามใช้
-`IDistributedSubscriber` ผ่าน TCP interprocess ของ library นี้เด็ดขาด —
-ต้องใช้ request-response แทนเสมอสำหรับทิศทาง "Unity → Bridge" ถ้าจะเพิ่ม
-message ใหม่ที่ Bridge ต้องรอรับ (เช่นในอนาคตถ้าจะ subscribe
-`DiscipleRecruitedMessage`/`SectResourceChangedMessage` จริงจัง ต้องแปลง
-เป็น request-response ด้วยเช่นกัน ไม่ใช่ subscribe ตรงๆ)
+---
 
-**การแก้**: เปลี่ยน `await_next_world_event` จาก pub/sub เป็น
-request-response ทั้งหมด (pattern เดียวกับ `get_sect_state` ที่พิสูจน์
-แล้วว่าทำงานจริง):
-- `GameMessages.cs` — เพิ่ม `AwaitWorldEventRequest`/`AwaitWorldEventResponse`,
-  ลบ `WorldEventTriggeredMessage` ออกจาก interprocess broker (เหลือแค่
-  in-memory publish ไว้เผื่อ UI ใน Unity เองในอนาคต)
-- `TimeSystem.cs` — เปลี่ยน `_worldEventPublisher` จาก
-  `IDistributedPublisher` เป็น `IPublisher` ธรรมดา (in-memory), เพิ่ม
-  `UniTaskCompletionSource<AwaitWorldEventResponse>` ที่ reset ทุกครั้ง
-  `RaiseWorldEvent` ถูกเรียก, เพิ่ม `WaitForNextWorldEventAsync()` และ
-  `AwaitWorldEventHandler` (request-response handler ใหม่)
-- `GameLifetimeScope.cs` — เอา broker ของ `WorldEventTriggeredMessage`
-  ออก, เพิ่ม register RPC คู่ `AwaitWorldEventRequest`/`Response`
-- `WorldEventSystem.cs` — `RaiseWorldEvent` ไม่ async แล้ว เรียกตรงๆ
-  ไม่ต้อง `.Forget()`
-- `McpBridgeProgram.cs` — `AwaitNextWorldEvent` ใช้
-  `IRemoteRequestHandler<AwaitWorldEventRequest, AwaitWorldEventResponse>`
-  แทน `IDistributedSubscriber`
+## 🔑 Key Architectural Decisions (Updated)
 
-ยังไม่ได้ทดสอบรันจริงหลังแก้ — รอผลจากผู้ใช้
+### Why Dictionary AvatarAppearance (not Fixed Properties)
+-   Slot โตจาก 4 → 10+ → Fixed `[Key]` จะ break schema ทุกครั้งที่เพิ่มหมวด
+-   Dictionary = เพิ่ม slot แก้แค่ JSON, AI GM ค้นพบ slot ได้เองจาก `get_sect_state`
+-   `GetSlot/SetSlot` API เหมือนเดิม → Presenter ไม่ต้องแก้
 
-**ผลทดสอบ (ยืนยันแล้ว 22 ส.ค. 2026)**: `await_next_world_event` คืนค่า
-จริงแล้ว (เช่น `herb_garden_bloom`) ไม่ค้าง ไม่ error — **ตอนนี้ loop เต็ม
-รูปแบบทำงานจริงครบวงแล้ว**: Unity สุ่ม event → `await_next_world_event`
-คืนค่า (request-response) → `execute_decision` ส่งกลับ → `DecisionLogger`
-unpause → รอบถัดไปเริ่มนับใหม่
+### Why Portrait Swap (not Paper Doll Tiles)
+-   Target visual: VN-style dialogue portrait (ไม่ใช่ chibi tile เล็กๆ)
+-   Art วาดบน canvas/pose เดียวกัน → layer ซ้อนสนิทโดยไม่ต้องแก้โค้ด render
+-   Hair 2-Layer (back/front) จำเป็นสำหรับผมยาว (ไม่งั้นวิกมุดหัว)
 
-**Gotcha ที่เจอระหว่างเทสต์ (ไม่เกี่ยวกับโค้ด)**: ปุ่ม **Pause ของ Unity
-Editor เอง** (คนละตัวกับ `TimeSystem.IsPaused` ในโค้ด) ถ้าติดค้างไว้จะทำ
-ให้ `Update`/`Tick` ทั้งหมดหยุดทำงาน รวมถึง `WorldEventSystem.Tick()` ด้วย
-— เจอตอนรอบแรก `await_next_world_event` timeout ที่ 60 วิ (ค่า default
-ของ MCP Inspector) เพราะ Editor pause ค้างอยู่ ไม่ใช่บั๊กโค้ด
+### Why Explicit DiscipleSex (not Implicit from Slot)
+-   State ต้อง hold ids/flags ชัดเจน ไม่ซ่อน derivation (cryptic bug-wait)
+-   Query ได้ตรงๆ ("is disciple X male?") ไม่ต้อง parse ชื่อไฟล์รูป
+-   Source of truth สำหรับ recruitment flavor / gender-gated content ในอนาคต
 
-**Gotcha ที่สอง (พฤติกรรมตามที่ออกแบบไว้ ไม่ใช่บั๊ก)**: หลัง
-`await_next_world_event` ได้ event ที่ `requiresDecision: true` มา
-`TimeSystem` จะ pause ค้างไว้ และ `WorldEventSystem.Tick()` เช็ค
-`IsPaused` แล้ว skip ทุกเฟรม — **ต้องเรียก `execute_decision` ก่อนเสมอ**
-ถึงจะ unpause ให้รอบถัดไปเริ่มนับเวลาใหม่ ถ้าเรียก
-`await_next_world_event` ซ้ำโดยไม่มี `execute_decision` คั่น จะ timeout
-ทุกครั้ง ยืนยันจาก log จริงหลายรอบ
+### Why Direct Method Call for In-Process Logic (not Pub/Sub)
+-   **Lesson (Lab 13):** `EventPopupPresenter` (in-memory pub) vs `DecisionLogger` (interprocess sub) → คนละ graph → เงียบกริบ
+-   **Rule:** In-process logic ที่ต้อง trigger ระบบอื่นใน Unity → เรียก Direct Method (`DecisionExecutor`)
+-   Pub/Sub ใช้เฉพาะ: (1) Cross-process (Bridge ↔ Unity) หรือ (2) Broadcast ที่ไม่มี Unity-side listener นอกจาก publisher เอง
 
-**ปรับ**: ลด `IntervalSeconds` จาก 30 → 15 วิ ใน `WorldEventSystem.cs`
-(ตามคำขอ ไม่กระทบ logic อื่น), เพิ่ม `RaiseInitialEvent()` ยิง event แรก
-ทันทีตอน startup (ไม่ต้องรอ interval แรก) พร้อม cache ใน `TimeSystem`
-(`_cachedPendingEvent`) ให้ `await_next_world_event` ตอบทันทีถ้ามี event
-รออยู่แล้วตอน bridge เพิ่งต่อเข้ามา
+### Why MessagePack (not Protobuf)
+-   Bridge เป็น C# เหมือนกัน → ไม่ข้าม language boundary
+-   MessagePack เร็วกว่า, ไม่ต้อง codegen pipeline
+-   ตัดสินใจถาวรตั้งแต่ Lab 7
 
-### lab รอบเจ็ด — ExecuteDecision มีผลจริงต่อ state + ตัดสินใจเลิกใช้ protobuf
+### Why Luban (not ScriptableObject)
+-   Events/AvatarParts เป็น tabular data → Excel เหมาะกว่า
+-   ไม่ต้องคลิกสร้าง `.asset` → แก้ด้วย text editor / git diff ได้
+-   Generate C# Plain Class + JSON loader (ไม่ใช่ SO) → สอดคล้องกับแนวทาง "Plain C# everywhere"
 
-**ตัดสินใจ**: เลิกใช้ protobuf ไปเลย ใช้ MessagePack เป็นตัวจริงถาวร ไม่
-กลับไปตั้ง protoc pipeline อีก — เหตุผลเดิมของ protobuf (ต้องส่งข้าม
-process ไปหา bridge ที่อาจเป็นภาษาอื่น) หมดความจำเป็นไปแล้วตั้งแต่ตัดสินใจ
-ให้ bridge เป็น .NET/C# ทั้งคู่ (lab รอบสอง) MessagePack พิสูจน์แล้วว่า
-ทำงานจริงหลายรอบ ไม่ต้องมี toolchain แยก เปลี่ยนชื่อ field
-`EconomyStateProtobuf` → `EconomyStateBytes` ให้ตรงกับความจริง (ใน
-`GameMessages.cs`, `TimeSystem.cs`, `McpBridgeProgram.cs`)
+---
 
-**ปัญหาที่เจอก่อนแก้**: `SectStateProvider.BuildSectEconomyState()` เรียก
-`MockSectData.Create()` ใหม่ทุกครั้งที่ query — แปลว่าต่อให้มี mutation
-logic ที่ไหนก็ตาม จะไม่มีวันเห็นผล เพราะรอบถัดไปสร้าง state ใหม่จาก
-scratch เสมอ
-
-**การแก้**:
-- `SectStateProvider.cs` — เปลี่ยนเป็นถือ **live state instance เดียว**
-  (`private readonly SectEconomyState _state = MockSectData.Create();`
-  สร้างครั้งเดียว) แทนที่จะสร้างใหม่ทุก query, เพิ่ม
-  `ApplyDecisionConsequence(eventId, choiceId)` ปรับ
-  `Stockpile.RawResources` จริงตาม event (ยังไม่แตะ disciple เพราะ
-  DiscipleSystem ถูก defer ไว้ตามที่ตกลง) — กติกาตอนนี้เป็น placeholder
-  ง่ายๆ ยังไม่ใช่ balance จริง รอทำพร้อม EventData ScriptableObject
-- `TimeSystem.cs` — เพิ่ม `ApplyDecisionConsequence` เข้า
-  `ISectStateProvider` interface
-- `DecisionLogger.cs` — inject `ISectStateProvider` เพิ่ม เรียก
-  `ApplyDecisionConsequence` ก่อน unpause
-
-**วิธีทดสอบว่าเห็นผลจริง**: `get_sect_state` (baseline) →
-`await_next_world_event` → `execute_decision` → `get_sect_state` อีกรอบ
-ควรเห็นตัวเลขใน `Stockpile.RawResources` เปลี่ยนไปจริง — ยังไม่ได้ทดสอบ
-รันจริง รอผลจากผู้ใช้
-
-### lab รอบแปด — DiscipleSystem จริง: รับสมัคร + เก็บเกี่ยว passive
-
-ขอบเขต (ยังไม่แตะ BuildingSystem/ตำแหน่งตามที่ตกลง — ศิษย์ใหม่ทั้งหมดเป็น
-ศิษย์นอกก่อน):
-
-- **รับสมัคร**: ผูกกับ event `new_disciple_applicant` ที่มีอยู่แล้ว แทนที่
-  placeholder เดิม (หัก provisions 5) ด้วยของจริง — ถ้า `choiceId` มีคำว่า
-  "accept" จะสร้างศิษย์นอกใหม่เพิ่มเข้า roster จริง (`SectStateProvider.
-  RecruitOuterDisciple()`) มอบหมาย gathering task แบบ round-robin, publish
-  `DiscipleRecruitedMessage`
-- **เก็บเกี่ยว passive**: `SectStateProvider.TickGathering()` ให้ศิษย์ที่
-  `CurrentTask` เป็น `gathering_*` ผลิตทรัพยากรเข้าคลังตาม tick จริง (มี
-  fractional accumulator กันเสียเศษระหว่าง tick), เรียกจาก
-  `DiscipleSystem.Tick()` (เปลี่ยนจาก stub ว่างเป็น tick loop จริง)
-
-**Gotcha ที่เจอระหว่างเทสต์ (ไม่เกี่ยวกับโค้ด)**: ตัวเลขทรัพยากรเพิ่มแบบ
-กระตุก (หยุดนิ่งหลายสิบวิ แล้วพุ่งทีเดียว) แทนที่จะไหลลื่น — สาเหตุคือ
-**Unity Editor ไม่ได้เปิด `Run In Background`** (`Edit > Project Settings
-> Player > Resolution and Presentation`) เวลาสลับไปเบราว์เซอร์ (MCP
-Inspector) `Update()`/`Tick()` เลยหยุดทำงานจริงๆ ไม่ใช่แค่ช้าลง เปิด
-setting นี้แล้วแก้ปัญหาได้ทันที ไม่ใช่บั๊กโค้ด — ยืนยันจากตัวเลขที่ตรงกับ
-สูตร (0.2/วิ) เป๊ะในช่วงที่ tick ทำงานจริง
-
-### lab รอบเก้า — ResourceCraftingSystem จริง: คราฟท์ตาม ownership rule
-
-เบิกทรัพยากรดิบไปคราฟท์เป็นของสำเร็จตาม `CurrentTask` ที่มีอยู่แล้ว
-(`refining_elixir` ของ Su Yan, `forging_artifact` ของ Elder Zhao) —
-`ResourceCraftingSystem` เปลี่ยนจาก stub เป็น tick loop จริง เรียก
-`SectStateProvider.TickCrafting()`
-
-สูตรที่ใส่ไว้ (ตัวเลขสมมติ รอปรับ balance จริงทีหลัง):
-
-| Task | ใช้ | ได้ | เวลา |
-|---|---|---|---|
-| `refining_elixir` | herb ×10 | `elixir_qi_gathering` เกรด 3 | 20 วิ |
-| `forging_artifact` | ore ×15 + wood ×10 | `sword_azure_flame` เกรด 5 | 30 วิ |
-
-**Implement ตาม ownership rule จากตอนออกแบบเศรษฐกิจ**: เช็ค
-`disciple.Rank >= DiscipleRank.Elder` — ศิษย์ทั่วไป (Su Yan) → ของเข้า
-`Stockpile.CraftedGoods` (merge stack ถ้ามี item เดิมเกรดเดียวกันอยู่แล้ว),
-ผู้อาวุโสขึ้นไป (Elder Zhao) → เข้า `PersonalInventory` ของตัวเอง
-
-**พฤติกรรมถ้าทรัพยากรไม่พอ**: progress ค้างที่ 100% รอเฉยๆ ไม่เสีย
-progress ทิ้ง (`TryConsume` แบบ all-or-nothing) พอมีทรัพยากรพอ (จาก
-gathering หรือ event) คราฟท์เสร็จทันทีโดยไม่ต้องเริ่มนับใหม่
-
-ยังไม่ได้ทดสอบรันจริง — รอผลจากผู้ใช้
-
-## แผนงานถัดไปที่ตกลงลำดับไว้แล้ว
-
-1. ~~ResourceCraftingSystem~~ (เสร็จแล้ว — lab รอบเก้า)
-2. ~~ร้านค้าค่าคุณูปการ~~ (เสร็จแล้ว — lab รอบสิบ, `purchase_item` MCP tool)
-3. ~~EventData → Luban pipeline~~ (เสร็จแล้ว — lab รอบสิบเอ็ด/สิบสอง)
-
-### lab รอบสิบ — ร้านค้าค่าคุณูปการ
-
-เพิ่ม MCP tool ใหม่ `purchase_item` (`discipleId`, `itemDefId`, `grade`,
-`quantity`) — ศิษย์ซื้อของจาก `Stockpile.CraftedGoods` ด้วยค่าคุณูปการ
-ตัวเอง ใช้ pattern request-response (`PurchaseItemRequest`/`Response`)
-เหมือน `get_sect_state` เพราะต้องเช็ค-หัก atomic (เงินพอไหม/ของเหลือไหม)
-
-ราคา placeholder: `grade × 50` ค่าคุณูปการต่อชิ้น เช็คของในคลังก่อน →
-เงินพอไหม → หักเงินจาก `Wallet.Contribution`, ลด quantity ใน
-`CraftedGoods` (ลบ entry ถ้าเหลือ 0), ย้ายของเข้า `PersonalInventory`
-ของศิษย์คนนั้น — ทดสอบผ่านแล้ว
-
-ไฟล์ที่แก้/ใหม่: `GameMessages.cs`, `SectStateProvider.cs` (เพิ่ม
-`TryPurchaseItem`), `PurchaseItemHandler.cs` (ใหม่), `TimeSystem.cs`
-(เพิ่ม method เข้า interface), `GameLifetimeScope.cs` (register RPC ใหม่),
-`McpBridgeProgram.cs` (tool ใหม่ใน `SectActionTools`)
-
-### lab รอบสิบเอ็ด — UI พื้นฐานในเกม (UGUI)
-
-เพิ่ม `SectHudView.cs` (MonoBehaviour, top bar HUD) แสดง stockpile
-(herb/wood/ore/provisions พร้อม delta indicator สีเขียว/แดงแบบ reference
-screenshot) และ personal wallet ของ "เจ้าสำนัก" (spirit stones/contribution)
-
-**เพิ่ม disciple ใหม่**: `MockSectData.cs` ไม่มี entry สำหรับผู้เล่น
-(rank `SectMaster`) มาก่อน — เพิ่มเข้าไปเป็นตัวแรกในลิสต์ (`d000`,
-"You (Sect Master)") เพราะ original design ระบุว่าผู้เล่น = เจ้าสำนัก
-
-Register ผ่าน `RegisterComponentInHierarchy` (คนละแบบกับ
-`RegisterEntryPoint` — ใช้กับ component ที่มีอยู่ใน scene แล้ว) ต้องสร้าง
-Canvas/TMP Text/ผูก reference เองใน Editor (สร้าง .unity scene object จาก
-นอก Editor ไม่ได้)
-
-### lab รอบสิบสอง — ย้าย EventData จาก ScriptableObject ไป Luban pipeline
-
-เปลี่ยนจากคลิกสร้าง `.asset` ทีละไฟล์ เป็น **Excel → generate → runtime
-data** ด้วย [Luban](https://github.com/focus-creative-games/luban)
-(`focus-creative-games/luban_unity` สำหรับฝั่ง Unity)
-
-**แก้ความเข้าใจผิดสำคัญ**: Luban **ไม่ได้** generate ScriptableObject
-`.asset` จาก Excel — มันสร้าง C# class + runtime loader ที่อ่านข้อมูลจาก
-json/binary ตอนเกมรัน (ยืนยันจากการดาวน์โหลด
-`focus-creative-games/luban_examples` มาแกะโค้ดจริง ไม่ใช่เดาจาก docs)
-นี่แก้ pain point "ขี้เกียจคลิกสร้าง Asset หลายที" ได้ดีกว่า ScriptableObject
-เดิมด้วยซ้ำ เพราะไม่มีการคลิกสร้าง asset เลยแม้แต่ครั้งเดียว
-
-**ตัดสินใจ**: ใช้ `cs-simple-json` (ไม่ใช่ protobuf แม้ Luban จะรองรับ)
-สอดคล้องกับทิศทางเลิกใช้ protobuf ที่ตัดสินใจไว้ตั้งแต่ lab รอบเจ็ด — ข้อมูล
-ยังน้อย (4-8 แถว) ประโยชน์ของ binary/protobuf ยังไม่เห็นผล แต่ json
-debug ง่ายกว่า (เปิดดูตรงๆ ได้)
-
-**สถาปัตยกรรม**: แยก 2 ตารางเรียบๆ (`TbEvent`, `TbEventChoice` join ด้วย
-`eventId`) แทนที่จะ nest choices เป็น list-in-one-row ในแถวเดียว — ปลอดภัย
-กว่าเพราะ syntax แบบ multi-row nested list ของ Luban ซับซ้อนและ verify
-ยาก (ไม่มี .NET SDK ในเครื่องมือที่ใช้พัฒนาให้ลองรันจริง)
-
-Bug จริงที่เจอ (เก็บไว้กันลืม):
-1. **`<module name="event">` ชน C# reserved keyword** — `event` เป็น
-   keyword สงวนของ .NET (ใช้ประกาศ event) พอ generate เป็น `cfg.event.X`
-   compiler แตกยกไฟล์ (error กระจายเป็นลูกโซ่เพราะ parser หลุด track)
-   แก้โดยเปลี่ยนชื่อ module เป็น `worldevent` แทน — **บทเรียน: ตั้งชื่อ
-   module ใน Luban schema เลี่ยงคำสงวนของ C# เสมอ**
-2. **namespace ของ SimpleJSON ที่แถมมากับ `luban_unity` คือ
-   `Luban.SimpleJSON`** ไม่ใช่ `SimpleJSON` เฉยๆ ตามที่เดาไว้ตอนแรก (ไม่มี
-   dotnet ให้รันดูโค้ด generate จริงในเครื่องมือพัฒนา ต้องให้ผู้ใช้เทสต์แก้เอง)
-3. gen script รันแล้วดู "ค้าง" ตอนแรก (เห็นแค่ banner โผล่มาแล้วนิ่ง) — ที่
-   จริงยังทำงานอยู่ แค่ cold start ของ C# scripting engine ข้างในช้า
-   (รอนานขึ้นแล้วผ่าน ไม่ใช่บั๊ก)
-
-Toolchain: `Tools/Luban/` (binary จริงจาก
-`focus-creative-games/luban_examples`), `DataTables/luban.conf` +
-`Defines/worldevent.xml` (schema) + `Data/event.xlsx`,
-`event_choice.xlsx`, `gen.bat`/`gen.sh` — ต้องติดตั้ง `luban_unity`
-package ผ่าน git URL ใน `manifest.json` เพิ่มด้วย (ให้ `SimpleJSON`/
-runtime class ของ Luban)
-
-ลบ `EventData.cs`/`EventPool.cs` (ScriptableObject เดิม) ออกแล้ว —
-`WorldEventSystem.cs`/`GameLifetimeScope.cs` ผูกกับ `LubanEventPool.cs`
-(plain C# class, ไม่ใช่ ScriptableObject) แทน
-
-### lab รอบสิบสาม — Xianxia.UI.MVP Lite (EventPopup + ResourceHud)
-
-Implement ตาม spec ที่ผู้ใช้ร่างมาเอง (`XIANXIA_UI_MVP_LITE_SPEC.md`,
-อ้างอิงแนวคิดจาก CycloneGames.UIFramework) — MVP pattern แยก View
-(MonoBehaviour) / Presenter (plain C#) / Service (orchestrator), panel
-resolve ผ่าน VContainer ด้วย explicit enum→Type mapping ไม่ scan assembly,
-Presenter เป็น Transient (instance ใหม่ทุกครั้งเปิด panel)
-
-**บั๊กที่เจอใน spec ก่อนลงมือ (แก้ก่อน implement)**:
-1. `EventPopupPresenter` ตาม spec เดิมจะ publish ผ่าน `IPublisher<ExecuteDecisionMessage>`
-   (in-memory channel) แต่ `DecisionLogger` ฟังผ่าน
-   `IDistributedSubscriber<string, ExecuteDecisionMessage>` (interprocess
-   channel) — **คนละ graph กัน ไม่เชื่อมกัน** กดปุ่มใน popup จะไม่มีอะไร
-   เกิดขึ้นเลยแบบเงียบๆ ไม่ error ด้วย — แก้โดยดึง logic ออกมาเป็น
-   `DecisionExecutor.cs` (ใหม่) ให้ทั้ง `DecisionLogger` (ทาง bridge) และ
-   `EventPopupPresenter` (ทาง UI) เรียกตรงๆ แทนการอ้อมผ่าน pub/sub
-   (pub/sub ควรใช้แค่ข้าม process เท่านั้น ไม่ใช่ในโปรเซสเดียวกัน)
-2. Spec แนะนำ `IRemoteRequestHandler` สำหรับ purchase item จาก UI —
-   type นี้คือ proxy ฝั่ง client ที่ bridge เรียกเข้า Unity เท่านั้น ถ้า UI
-   จะซื้อของต้องเรียก `ISectStateProvider.TryPurchaseItem(...)` ตรงๆ
-   (ยังไม่ได้ implement purchase panel ใน pass นี้ แค่บันทึกไว้กันพลาด
-   ตอนทำจริง)
-
-**สิ่งที่ต้องแก้นอก `UI/` folder** (spec เขียนว่าไม่ให้แก้ แต่จำเป็นจริง):
-- `GameMessages.cs` — เพิ่ม `Description`/`Choices` ใน
-  `WorldEventTriggeredMessage` (spec เองก็ระบุไว้ว่าจำเป็น)
-- `TimeSystem.cs` — 1 บรรทัดที่ publish message ต้องส่ง field ใหม่ด้วย
-- `SectStateProvider.cs` — เพิ่ม publish `SectResourceChangedMessage`
-  จริง (นิยามไว้นานแล้วแต่ไม่เคยถูก publish เลยสักครั้ง) ผ่าน
-  `AdjustAndNotify()` (wrapper รอบ `Adjust()` เดิม, single choke point)
-  — publish delta ที่เกิดขึ้นจริงหลัง clamp ไม่ใช่ delta ที่ขอ (กันกรณี
-  ขอ -50 แต่ของเหลือแค่ 20)
-
-**ตัดสินใจ**: `ResourceHud` panel ใหม่ **แทนที่ `SectHudView` เดิมไปเลย**
-(ลบไฟล์ทิ้ง) — ย้าย delta indicator logic (สีเขียว/แดง) เข้า
-`ResourceHudView`/`ResourceHudPresenter` ตาม MVP pattern แทน polling
-`ISectStateProvider` ทุก 0.5 วิแบบเดิม เปลี่ยนเป็น subscribe
-`SectResourceChangedMessage` ที่มี delta คำนวณมาให้พร้อมในตัว message
-เลย (ไม่ต้องเก็บ previous value ฝั่ง client อีกต่อไป) — wallet
-(spirit stones/contribution) ยังไม่มี dedicated message เลย piggyback
-refresh ไปกับทุกครั้งที่ resource เปลี่ยน (ยอมรับ trade-off เพราะยังไม่
-คุ้มจะเพิ่ม polling timer แยกสำหรับ presenter ที่ตั้งใจให้เป็น plain C#
-ไม่มี tick ของตัวเอง)
-
-**ผลทดสอบ (ยืนยันแล้ว 30 ส.ค. 2026)**: `ResourceHud` โผล่ทำงานถูกต้อง
-ตั้งแต่รอบแรก ส่วน `EventPopup` รอบแรกไม่โผล่ (แก้ไม่ยาก — ใส่ try-catch
-ใน `WorldEventUISystem` แล้วเจอว่าเป็นแค่ปัญหา prefab/catalog setup ไม่ใช่
-บั๊กโค้ด) หลังแก้แล้วทดสอบเต็ม loop ผ่าน: `WorldEventSystem` ยิง event
-อัตโนมัติ → `EventPopup` เปิดเอง → กด choice → `DecisionExecutor` →
-`SectStateProvider` (เห็น log "Recruited outer disciple: Jiang Yu")
-**พิสูจน์ว่าบั๊กจุดที่ 1 (channel ผิด) แก้ถูกจริง ไม่ใช่แค่ทฤษฎี**
-
-**gotcha ที่เจอเพิ่ม (ผู้ใช้ diagnose เอง)**: UI ทั้งหมดไปโผล่กลางจอแทนที่
-จะอยู่ตำแหน่งจริง (top bar / center popup) สาเหตุคือ 2 อย่างรวมกัน:
-(1) `UIRoot` GameObject เองไม่ได้ stretch เต็ม Canvas ตั้งแต่แรก
-(2) `ContentSizeFitter` ตั้งเป็น `PreferredSize` ซึ่งคำนวณขนาดใหม่ทุกเฟรม
-ทับค่าที่ anchor stretch ตั้งไว้ — **นี่คือ root cause ตัวจริง** แก้โดย
-เปลี่ยนเป็น `Unconstrained` แทน, เพิ่ม `UIRoot.Awake()` บังคับ stretch
-ตัวเองเต็ม Canvas + แก้ layout ของทุก child ที่มีอยู่แล้ว, และเพิ่ม
-`UIRoot.ApplyLayout()` (static) ให้ `UIService.Open()` เรียกทุกครั้งหลัง
-`Instantiate` panel ใหม่ ครอบคลุมทั้ง panel ที่ bake ไว้ใน scene ตั้งแต่ต้น
-และ panel ที่เปิดตอน runtime
-
-## ยังไม่ได้ตัดสินใจ / รอคุยต่อ
-
-- Core loop แบบ final (รอ finalize gameplay systems ก่อน)
-- ระบบต่อสู้ (ACS-style vs Rimworld-style)
-- Stat system, วิชา/ตำรา, ไอเทม/อาวุธ/เกราะ/ยา แบบละเอียด
-- สงครามสำนัก (WIP)
-- กติกาการปล้นหินวิญญาณระหว่างศิษย์ ยังไม่ลง schema
-- `BuildingSystem` ยังเป็น stub ว่างเปล่า — deferred ต่อจนกว่าจะถึงคิว
-  (ตำแหน่ง/สิทธิ์ที่ปลดล็อกจากอาคารยังไม่มีผลอะไรตอนนี้)
-- `WorldEventSystem` ยังสุ่มแบบ weighted เฉยๆ ไม่เช็คเงื่อนไข sect state
-  ก่อน trigger (เช่นทรัพยากรน้อยเกินไปควรเกิด event ต่างจากทรัพยากรเยอะ)
-- ราคาร้านค้า (`grade × 50`) และ consequence ของแต่ละ event ยังเป็น
-  placeholder รอ balance จริง
-- `economy.proto`/protobuf เลิกใช้แล้วถาวรทั้งโปรเจกต์ (ทั้ง runtime state
-  และตอนนี้รวม Luban ด้วย) ใช้ MessagePack/JSON แทนทุกจุด
-- `DiscipleListPresenter`/panel ยังไม่ implement (enum
-  `UIPresenterKind.DiscipleList` มีไว้เผื่ออนาคต, `ResolvePresenterType`
-  throw `NotImplementedException` ถ้าเรียกตอนนี้)
-- ยังไม่มี wallet-changed message โดยเฉพาะ — `ResourceHudPresenter`
-  refresh wallet แบบ piggyback บน resource-changed event เป็น workaround
-  ชั่วคราว
-- `UIRoot.ApplyLayout()` ผูก layout กับชื่อ prefab ตรงๆ (string matching)
-  — ใช้ได้กับ 2 panel ตอนนี้ แต่ถ้า panel เยอะขึ้นควรย้ายไปเป็น method
-  บน view เอง (`IUIView.ApplyDefaultLayout()`) แทน ยังไม่จำเป็นต้องแก้
-  ตอนนี้
+## 📝 Commit History (Recent)
+-   `Unity-v0.5-avatar-portrait-swap`: Dictionary AvatarAppearance, category tabs, hair 2-layer renderer, framing presets, DiscipleSex enum
+-   `Unity-v0.4-economic-loop-mcp-transactions`: Purchase system, execute decision publisher, world event transport fix
+-   `Unity-v0.3-live-crafting-pipeline`: Crafting system, decision consequences, singleton state mutation
+-   `Unity-v0.2-live-decision-loop`: WorldEventSystem, await_next_world_event, execute_decision round trip

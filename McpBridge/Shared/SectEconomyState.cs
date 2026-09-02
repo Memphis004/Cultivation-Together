@@ -8,6 +8,7 @@ namespace Xianxia.Sect
 {
     public enum OwnerScope { Unspecified, Personal, SectStockpile }
     public enum DiscipleRank { Unspecified, OuterDisciple, InnerDisciple, Elder, SectMaster }
+    public enum DiscipleSex { Unspecified, Male, Female }
 
     [MessagePackObject]
     public class CurrencyWallet
@@ -35,6 +36,7 @@ namespace Xianxia.Sect
         [Key(4)] public List<InventoryItem> PersonalInventory { get; set; } = new List<InventoryItem>();
         [Key(5)] public string CurrentTask { get; set; }
         [Key(6)] public AvatarAppearance Avatar { get; set; } = new AvatarAppearance();
+        [Key(7)] public DiscipleSex Sex { get; set; } = DiscipleSex.Unspecified;
     }
 
     [MessagePackObject]

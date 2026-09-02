@@ -182,7 +182,7 @@ namespace Xianxia.Sect
         void ApplyDecisionConsequence(string eventId, string choiceId);
         void TickGathering(float deltaTimeSeconds);
         void TickCrafting(float deltaTimeSeconds);
-        void RecruitOuterDisciple();
+        void RecruitOuterDisciple(DiscipleSex sex = DiscipleSex.Unspecified);
         PurchaseItemResponse TryPurchaseItem(string discipleId, string itemDefId, int grade, int quantity);
         bool TryChangeAvatarPart(string discipleId, string slot, string partId,
                                 out string failReason, out AvatarAppearance result);

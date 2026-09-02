@@ -30,6 +30,7 @@ namespace Xianxia.Sect
             {
                 DiscipleId = "d000",
                 DisplayName = "Liu YiFeng",
+                Sex = DiscipleSex.Male, 
                 Rank = DiscipleRank.SectMaster,
                 Wallet = new CurrencyWallet { SpiritStones = 1200, Contribution = 3400 },
                 CurrentTask = "meditation",
@@ -47,6 +48,7 @@ namespace Xianxia.Sect
             {
                 DiscipleId = "d001",
                 DisplayName = "Lin Feng",
+                Sex = DiscipleSex.Female,
                 Rank = DiscipleRank.OuterDisciple,
                 Wallet = new CurrencyWallet { SpiritStones = 12, Contribution = 340 },
                 CurrentTask = "gathering_herb",
@@ -63,6 +65,7 @@ namespace Xianxia.Sect
             {
                 DiscipleId = "d002",
                 DisplayName = "Su Yan",
+                Sex = DiscipleSex.Female, 
                 Rank = DiscipleRank.InnerDisciple,
                 Wallet = new CurrencyWallet { SpiritStones = 45, Contribution = 1120 },
                 CurrentTask = "refining_elixir",
@@ -81,6 +84,7 @@ namespace Xianxia.Sect
             {
                 DiscipleId = "d003",
                 DisplayName = "Elder Zhao",
+                Sex = DiscipleSex.Male, 
                 Rank = DiscipleRank.Elder,
                 Wallet = new CurrencyWallet { SpiritStones = 210, Contribution = 4300 },
                 CurrentTask = "forging_artifact",

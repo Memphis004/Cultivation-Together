@@ -13,6 +13,11 @@
           "name": "ornith-1.5:9b",
           "reasoning": true,
           "tools": true
+        },
+        "qwen3:14b-q4_K_M": {
+          "name": "qwen3:14b-q4_K_M",
+          "reasoning": true,
+          "tools": true
         }
       }
     }

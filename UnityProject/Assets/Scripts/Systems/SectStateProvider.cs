@@ -182,11 +182,15 @@ namespace Xianxia.Sect
 
         // Adds a new Outer Disciple assigned to a gathering task, round-robin
         // across GatheringTasks so recruits don't all pile onto one resource.
-        public void RecruitOuterDisciple()
+        public void RecruitOuterDisciple(DiscipleSex sex = DiscipleSex.Unspecified)
         {
             var index = _state.Disciples.Count;
             var task = GatheringTasks[index % GatheringTasks.Length];
             var name = RecruitNamePool[index % RecruitNamePool.Length];
+
+            // Default parity: even index → Male, odd → Female (preserves existing mixed-roster look)
+            var resolvedSex = (sex != DiscipleSex.Unspecified) ? sex
+                : (index % 2 == 0) ? DiscipleSex.Male : DiscipleSex.Female;
 
             var disciple = new DiscipleState
             {
@@ -196,7 +200,8 @@ namespace Xianxia.Sect
                 Wallet = new CurrencyWallet(),
                 PersonalInventory = new List<InventoryItem>(),
                 CurrentTask = task,
-                Avatar = CreateStarterAvatar(index),
+                Sex = resolvedSex,
+                Avatar = CreateStarterAvatar(index, resolvedSex),
             };
 
             _state.Disciples.Add(disciple);
@@ -206,14 +211,14 @@ namespace Xianxia.Sect
                 DisplayName = disciple.DisplayName,
             });
 
-            Debug.Log($"[SectStateProvider] Recruited outer disciple: {disciple.DisplayName} ({disciple.DiscipleId}), assigned to {task}");
+            Debug.Log($"[SectStateProvider] Recruited outer disciple: {disciple.DisplayName} ({disciple.DiscipleId}), sex={resolvedSex}, assigned to {task}");
         }
 
-        private AvatarAppearance CreateStarterAvatar(int rosterIndex)
+        private AvatarAppearance CreateStarterAvatar(int rosterIndex, DiscipleSex sex)
         {
             var a = new AvatarAppearance();
             a.SetSlot(AvatarSlots.Body, "body_robe_grey");
-            a.SetSlot(AvatarSlots.Head, (rosterIndex % 2 == 0) ? "head_male_01" : "head_female_01");
+            a.SetSlot(AvatarSlots.Head, (sex == DiscipleSex.Female) ? "head_female_01" : "head_male_01");
             a.SetSlot(AvatarSlots.Hair, StarterHair[rosterIndex % StarterHair.Length]);
             return a;
         }
