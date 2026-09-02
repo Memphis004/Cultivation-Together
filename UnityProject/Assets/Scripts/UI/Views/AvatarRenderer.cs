@@ -66,6 +66,7 @@ namespace Xianxia.Sect.UI
         private AvatarAppearance _appearance;
         private string _lastSignature = null;   // prevents rebuild when data hasn't changed
         private float _timer;
+        private bool _poseConflictWarned;       // one-time warning per appearance
 
         private void Awake()
         {
@@ -106,6 +107,7 @@ namespace Xianxia.Sect.UI
         {
             _appearance = appearance;
             _timer = RefreshInterval;   // trigger rebuild in the next frame
+            _poseConflictWarned = false; // reset one-time warning for new appearance
         }
 
         private void Update()
@@ -121,6 +123,7 @@ namespace Xianxia.Sect.UI
             if (signature == _lastSignature) return;        // no change = don't touch hierarchy
             _lastSignature = signature;
 
+            WarnPoseConflicts();
             Rebuild();
         }
 
@@ -135,9 +138,11 @@ namespace Xianxia.Sect.UI
             var keys = new List<string>(a.Parts.Keys);
             keys.Sort();
             var sb = new System.Text.StringBuilder();
+            sb.Append("P=");
+            sb.Append(a.PoseId ?? "");
             for (int i = 0; i < keys.Count; i++)
             {
-                if (i > 0) sb.Append("|");
+                sb.Append("|");
                 sb.Append(keys[i]);
                 sb.Append("=");
                 sb.Append(a.Parts[keys[i]]);
@@ -208,6 +213,28 @@ namespace Xianxia.Sect.UI
                 // Sibling index จะเรียงตามลำดับที่ sort แล้ว -> ถูกต้อง!
                 // hair_back (10) จะถูก spawn ก่อน body (20) -> อยู่ข้างหลัง
                 // hair_front (40) จะถูก spawn หลัง head (30) -> อยู่ข้างหน้า
+            }
+        }
+
+        private void WarnPoseConflicts()
+        {
+            if (_poseConflictWarned || _appearance == null || _pool == null) return;
+
+            string commonPose = null;
+            foreach (var kvp in _appearance.Parts)
+            {
+                var def = _pool.GetById(kvp.Value);
+                if (def == null || string.IsNullOrEmpty(def.poseId)) continue;
+                if (commonPose == null)
+                {
+                    commonPose = def.poseId;
+                }
+                else if (commonPose != def.poseId)
+                {
+                    Debug.LogWarning($"[AvatarRenderer] Pose conflict: equipped parts disagree on poseId ('{commonPose}' vs '{def.poseId}'). Appearance may look broken.");
+                    _poseConflictWarned = true;
+                    return;
+                }
             }
         }
 

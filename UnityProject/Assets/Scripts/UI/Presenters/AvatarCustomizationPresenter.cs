@@ -32,6 +32,7 @@ namespace Xianxia.Sect.UI
         private IDisposable _subscription;
 
         private string           _discipleId;
+        private DiscipleSex      _discipleSex = DiscipleSex.Unspecified;
         private AvatarAppearance _original;      // snapshot ตอนเปิด
         private AvatarAppearance _draft;         // ร่างที่ผู้เล่นกำลังแก้
         private string           _activeSlot = AvatarSlots.Body;
@@ -39,9 +40,11 @@ namespace Xianxia.Sect.UI
 
         private readonly Dictionary<string, Sprite> _thumbCache = new Dictionary<string, Sprite>();
 
-        private string _activeCategory = "ร่างกาย";  // category tab ที่เลือกอยู่
+        private string _activeCategory = OutfitCategoryTab;  // starts on outfit tab
 
-        private static readonly string[] CategoryOrder = { "ใบหน้า", "ลักษณะ", "ร่างกาย" };
+        private const string OutfitCategoryTab = "ชุดแต่งกาย";
+
+        private static readonly string[] CategoryOrder = { OutfitCategoryTab, "ใบหน้า", "ลักษณะ", "ร่างกาย" };
 
         // VContainer inject ทาง constructor (Transient)
         public AvatarCustomizationPresenter(
@@ -87,6 +90,8 @@ namespace Xianxia.Sect.UI
                 return;
             }
 
+            _discipleSex = disciple.Sex;
+
             if (disciple.Avatar == null) disciple.Avatar = new AvatarAppearance();
             _original = disciple.Avatar.Clone();
             _draft    = disciple.Avatar.Clone();
@@ -130,10 +135,18 @@ namespace Xianxia.Sect.UI
             if (_activeCategory == category) return;
             _activeCategory = category;
 
-            // default _activeSlot เป็น slot แรกของ category ใหม่
-            string[] slots;
-            if (AvatarSlots.Categories.TryGetValue(category, out slots) && slots.Length > 0)
-                _activeSlot = slots[0];
+            if (IsOutfitCategory())
+            {
+                // Outfit tab: no slot tabs, just show outfit options
+                _activeSlot = null;
+            }
+            else
+            {
+                // default _activeSlot เป็น slot แรกของ category ใหม่
+                string[] slots;
+                if (AvatarSlots.Categories.TryGetValue(category, out slots) && slots.Length > 0)
+                    _activeSlot = slots[0];
+            }
 
             RefreshCategoryTabs();
             RefreshTabs();
@@ -150,6 +163,17 @@ namespace Xianxia.Sect.UI
 
         private void OnPartOptionClicked(string partId)
         {
+            if (IsOutfitCategory())
+            {
+                // Apply outfit preset to draft
+                ApplyOutfitToDraft(partId);
+                View.ShowError(null);
+                View.RenderPreview(_draft);
+                RefreshOptions();
+                View.SetDirty(IsDirty());
+                return;
+            }
+
             if (_draft.GetSlot(_activeSlot) == partId) return;   // กดซ้ำชิ้นเดิม = no-op
 
             _draft.SetSlot(_activeSlot, partId);
@@ -160,13 +184,32 @@ namespace Xianxia.Sect.UI
             View.SetDirty(IsDirty());
         }
 
+        private void ApplyOutfitToDraft(string outfitId)
+        {
+            var outfit = _partPool.GetOutfit(outfitId);
+            if (outfit == null) return;
+
+            _draft.PoseId = outfit.poseId;
+            if (outfit.parts != null)
+            {
+                foreach (var kvp in outfit.parts)
+                {
+                    _draft.SetSlot(kvp.Key, kvp.Value);
+                }
+            }
+        }
+
         private void OnRandomize()
         {
             var rng = new System.Random();
+            string effectivePose = !string.IsNullOrEmpty(_draft.PoseId) ? _draft.PoseId : "pose_idle_01";
+            string sex = _discipleSex.ToString().ToLowerInvariant();
+            if (_discipleSex == DiscipleSex.Unspecified) sex = "";
+
             for (int i = 0; i < AvatarSlots.Equippable.Length; i++)
             {
                 string slot = AvatarSlots.Equippable[i];
-                var list = _partPool.GetPartsForSlot(slot);
+                var list = _partPool.GetPartsForSlot(slot, effectivePose, sex);
                 if (list == null || list.Count == 0) continue;
                 _draft.SetSlot(slot, list[rng.Next(list.Count)].id);
             }
@@ -187,52 +230,104 @@ namespace Xianxia.Sect.UI
             if (!IsDirty()) { RequestClose(); return; }
 
             _isCommitting = true;
-            var applied = new List<string>();   // slot ที่ commit ผ่านแล้ว (ไว้ rollback)
-            string failReason = string.Empty;
-            bool ok = true;
-
             try
             {
-                for (int i = 0; i < AvatarSlots.Equippable.Length; i++)
-                {
-                    string slot   = AvatarSlots.Equippable[i];
-                    string newVal = _draft.GetSlot(slot);
-                    if (newVal == _original.GetSlot(slot)) continue;   // ไม่เปลี่ยน = ข้าม
+                // Check if the draft matches an exact outfit → apply in one call
+                string matchedOutfitId = FindMatchingOutfit();
 
+                if (matchedOutfitId != null)
+                {
                     AvatarAppearance result;
                     string reason;
-                    if (_stateProvider.TryChangeAvatarPart(_discipleId, slot, newVal,
-                                                           out reason, out result))
+                    if (_stateProvider.TryApplyOutfit(_discipleId, matchedOutfitId, out reason, out result))
                     {
-                        applied.Add(slot);
+                        _original = _draft.Clone();
                     }
                     else
                     {
-                        ok = false;
-                        failReason = reason;
-                        break;
+                        // Rollback PoseId if it changed
+                        if (_draft.PoseId != _original.PoseId)
+                            _draft.PoseId = _original.PoseId;
+                        View.RenderPreview(_draft);
+                        RefreshOptions();
+                        View.SetDirty(IsDirty());
+                        View.ShowError("บันทึกไม่สำเร็จ: " + reason);
+                        return;
                     }
                 }
-
-                if (!ok)
+                else
                 {
-                    // rollback slot ที่ผ่านไปแล้ว ไม่งั้นตัวละครจะกลายเป็นลูกผสมครึ่งๆ
-                    for (int i = 0; i < applied.Count; i++)
-                    {
-                        AvatarAppearance dummy; string dummyReason;
-                        _stateProvider.TryChangeAvatarPart(
-                            _discipleId, applied[i], _original.GetSlot(applied[i]),
-                            out dummyReason, out dummy);
-                    }
-                    _draft = _original.Clone();
-                    View.RenderPreview(_draft);
-                    RefreshOptions();
-                    View.SetDirty(false);
-                    View.ShowError("บันทึกไม่สำเร็จ: " + failReason);
-                    return;
-                }
+                    // Per-slot commit (original path)
+                    var applied = new List<string>();
+                    string failReason = string.Empty;
+                    bool ok = true;
+                    bool poseChanged = _draft.PoseId != _original.PoseId;
 
-                _original = _draft.Clone();
+                    try
+                    {
+                        // Commit PoseId first if changed (set directly on live state)
+                        if (poseChanged)
+                        {
+                            var disciple = _stateProvider.BuildSectEconomyState()
+                                .Disciples.Find(d => d.DiscipleId == _discipleId);
+                            if (disciple != null && disciple.Avatar != null)
+                                disciple.Avatar.PoseId = _draft.PoseId;
+                        }
+
+                        for (int i = 0; i < AvatarSlots.Equippable.Length; i++)
+                        {
+                            string slot   = AvatarSlots.Equippable[i];
+                            string newVal = _draft.GetSlot(slot);
+                            if (newVal == _original.GetSlot(slot)) continue;   // ไม่เปลี่ยน = ข้าม
+
+                            AvatarAppearance result;
+                            string reason;
+                            if (_stateProvider.TryChangeAvatarPart(_discipleId, slot, newVal,
+                                                                   out reason, out result))
+                            {
+                                applied.Add(slot);
+                            }
+                            else
+                            {
+                                ok = false;
+                                failReason = reason;
+                                break;
+                            }
+                        }
+
+                        if (!ok)
+                        {
+                            // rollback slot ที่ผ่านไปแล้ว + PoseId
+                            for (int i = 0; i < applied.Count; i++)
+                            {
+                                AvatarAppearance dummy; string dummyReason;
+                                _stateProvider.TryChangeAvatarPart(
+                                    _discipleId, applied[i], _original.GetSlot(applied[i]),
+                                    out dummyReason, out dummy);
+                            }
+                            // rollback PoseId
+                            if (poseChanged)
+                            {
+                                var disciple = _stateProvider.BuildSectEconomyState()
+                                    .Disciples.Find(d => d.DiscipleId == _discipleId);
+                                if (disciple != null && disciple.Avatar != null)
+                                    disciple.Avatar.PoseId = _original.PoseId;
+                            }
+                            _draft = _original.Clone();
+                            View.RenderPreview(_draft);
+                            RefreshOptions();
+                            View.SetDirty(false);
+                            View.ShowError("บันทึกไม่สำเร็จ: " + failReason);
+                            return;
+                        }
+
+                        _original = _draft.Clone();
+                    }
+                    finally
+                    {
+                        // no-op — commit guard handled in outer scope
+                    }
+                }
             }
             finally
             {
@@ -240,6 +335,48 @@ namespace Xianxia.Sect.UI
             }
 
             RequestClose();
+        }
+
+        /// <summary>Check if draft PoseId+Parts exactly matches any outfit definition.</summary>
+        private string FindMatchingOutfit()
+        {
+            string sex = _discipleSex.ToString().ToLowerInvariant();
+            if (_discipleSex == DiscipleSex.Unspecified) sex = "";
+            var outfits = _partPool.GetOutfitsFor(sex);
+            for (int i = 0; i < outfits.Count; i++)
+            {
+                var o = outfits[i];
+                if (o.poseId != _draft.PoseId) continue;
+                if (o.parts == null) continue;
+
+                bool allMatch = true;
+                foreach (var kvp in o.parts)
+                {
+                    if (_draft.GetSlot(kvp.Key) != kvp.Value)
+                    {
+                        allMatch = false;
+                        break;
+                    }
+                }
+                // Also verify no extra slots in draft that aren't in outfit
+                if (allMatch)
+                {
+                    // Check that all draft slots that differ from original are covered by outfit
+                    for (int j = 0; j < AvatarSlots.Equippable.Length; j++)
+                    {
+                        string s = AvatarSlots.Equippable[j];
+                        string draftVal = _draft.GetSlot(s);
+                        if (draftVal == _original.GetSlot(s)) continue; // unchanged
+                        if (!o.parts.ContainsKey(s))
+                        {
+                            allMatch = false;
+                            break;
+                        }
+                    }
+                }
+                if (allMatch) return o.id;
+            }
+            return null;
         }
 
         // ── external sync (MCP agent เปลี่ยนขณะ panel เปิด) ───
@@ -293,6 +430,13 @@ namespace Xianxia.Sect.UI
 
         private void RefreshTabs()
         {
+            if (IsOutfitCategory())
+            {
+                // Outfit tab: no slot sub-tabs
+                View.RenderSlotTabs(new AvatarSlotTabViewData[0]);
+                return;
+            }
+
             // แสดงเฉพาะ slot ที่อยู่ใน category ที่เลือก
             string[] slotsInCategory;
             if (!AvatarSlots.Categories.TryGetValue(_activeCategory, out slotsInCategory))
@@ -316,7 +460,18 @@ namespace Xianxia.Sect.UI
 
         private void RefreshOptions()
         {
-            var defs     = _partPool.GetPartsForSlot(_activeSlot);
+            if (IsOutfitCategory())
+            {
+                RefreshOutfitOptions();
+                return;
+            }
+
+            // Normal slot-based options, filtered by pose + sex
+            string effectivePose = !string.IsNullOrEmpty(_draft.PoseId) ? _draft.PoseId : "pose_idle_01";
+            string sex = _discipleSex.ToString().ToLowerInvariant();
+            if (_discipleSex == DiscipleSex.Unspecified) sex = "";
+
+            var defs     = _partPool.GetPartsForSlot(_activeSlot, effectivePose, sex);
             var selected = _draft.GetSlot(_activeSlot);
             var options  = new List<AvatarPartOptionViewData>(defs.Count);
 
@@ -337,6 +492,28 @@ namespace Xianxia.Sect.UI
             View.RenderOptions(options, ResolveThumbnail);
         }
 
+        private void RefreshOutfitOptions()
+        {
+            string sex = _discipleSex.ToString().ToLowerInvariant();
+            if (_discipleSex == DiscipleSex.Unspecified) sex = "";
+            var outfits = _partPool.GetOutfitsFor(sex);
+            var options = new List<AvatarPartOptionViewData>(outfits.Count);
+
+            for (int i = 0; i < outfits.Count; i++)
+            {
+                var outfit = outfits[i];
+                var o = new AvatarPartOptionViewData();
+                o.PartId      = outfit.id;     // reuse PartId for outfit id
+                o.DisplayName = outfit.displayName;
+                o.SpritePath  = outfit.thumbPath;
+                o.IsSelected  = false;         // outfit selection not tracked per-slot
+                o.IsLocked    = false;
+                options.Add(o);
+            }
+
+            View.RenderOptions(options, ResolveThumbnail);
+        }
+
         private Sprite ResolveThumbnail(string path)
         {
             if (string.IsNullOrEmpty(path)) return null;
@@ -351,8 +528,14 @@ namespace Xianxia.Sect.UI
 
         // ── helpers ───────────────────────────────────────────
 
+        private bool IsOutfitCategory()
+        {
+            return _activeCategory == OutfitCategoryTab;
+        }
+
         private bool IsDirty()
         {
+            if (_draft.PoseId != _original.PoseId) return true;
             for (int i = 0; i < AvatarSlots.Equippable.Length; i++)
             {
                 string s = AvatarSlots.Equippable[i];

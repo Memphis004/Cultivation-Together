@@ -238,6 +238,24 @@ namespace Xianxia.Sect
             if (!_avatarPartPool.IsValidForSlot(slot, partId))
             { failReason = $"PartId '{partId}' is not valid for slot '{slot}'"; return false; }
 
+            // Pose validation: reject a part whose poseId is non-empty and
+            // differs from the disciple's effective pose.
+            if (!string.IsNullOrEmpty(partId))
+            {
+                var partDef = _avatarPartPool.GetById(partId);
+                if (partDef != null && !string.IsNullOrEmpty(partDef.poseId))
+                {
+                    string effectivePose = (disciple.Avatar != null && !string.IsNullOrEmpty(disciple.Avatar.PoseId))
+                        ? disciple.Avatar.PoseId
+                        : "pose_idle_01";
+                    if (partDef.poseId != effectivePose)
+                    {
+                        failReason = $"Part '{partId}' requires pose '{partDef.poseId}' but disciple is in pose '{effectivePose}'.";
+                        return false;
+                    }
+                }
+            }
+
             if (disciple.Avatar == null) disciple.Avatar = new AvatarAppearance();
 
             var oldPart = disciple.Avatar.GetSlot(slot);
@@ -252,6 +270,77 @@ namespace Xianxia.Sect
             });
 
             result = disciple.Avatar.Clone();   // return copy, not reference to live state
+            return true;
+        }
+
+        public bool TryApplyOutfit(string discipleId, string outfitId,
+                                  out string failReason, out AvatarAppearance result)
+        {
+            failReason = string.Empty;
+            result = null;
+
+            var disciple = _state.Disciples.FirstOrDefault(d => d.DiscipleId == discipleId);
+            if (disciple == null) { failReason = $"No disciple with id: {discipleId}"; return false; }
+
+            var outfit = _avatarPartPool.GetOutfit(outfitId);
+            if (outfit == null) { failReason = $"Outfit '{outfitId}' not found."; return false; }
+
+            // Validate sexTag compatibility
+            if (!string.IsNullOrEmpty(outfit.sexTag) && disciple.Sex != DiscipleSex.Unspecified)
+            {
+                if (outfit.sexTag != disciple.Sex.ToString().ToLowerInvariant())
+                {
+                    failReason = $"Outfit '{outfitId}' is for {outfit.sexTag} but disciple is {disciple.Sex}.";
+                    return false;
+                }
+            }
+
+            // Validate all partIds in outfit exist and have matching poseId
+            if (outfit.parts != null)
+            {
+                foreach (var kvp in outfit.parts)
+                {
+                    string partId = kvp.Value;
+                    var partDef = _avatarPartPool.GetById(partId);
+                    if (partDef == null)
+                    {
+                        failReason = $"Part '{partId}' in outfit '{outfitId}' not found in def-table.";
+                        return false;
+                    }
+                    if (!string.IsNullOrEmpty(partDef.poseId) && partDef.poseId != outfit.poseId)
+                    {
+                        failReason = $"Part '{partId}' has pose '{partDef.poseId}' but outfit requires '{outfit.poseId}'.";
+                        return false;
+                    }
+                }
+            }
+
+            if (disciple.Avatar == null) disciple.Avatar = new AvatarAppearance();
+
+            // Apply: set PoseId + batch SetSlot for changed slots
+            disciple.Avatar.PoseId = outfit.poseId;
+
+            if (outfit.parts != null)
+            {
+                foreach (var kvp in outfit.parts)
+                {
+                    string slot = kvp.Key;
+                    string partId = kvp.Value;
+                    string oldPart = disciple.Avatar.GetSlot(slot);
+                    if (oldPart == partId) continue; // no change
+
+                    disciple.Avatar.SetSlot(slot, partId);
+                    _avatarChangedPublisher.Publish(new AvatarEquipmentChangedMessage
+                    {
+                        DiscipleId = discipleId,
+                        Slot       = slot,
+                        OldPartId  = oldPart,
+                        NewPartId  = partId
+                    });
+                }
+            }
+
+            result = disciple.Avatar.Clone();
             return true;
         }
 

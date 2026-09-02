@@ -23,38 +23,28 @@ updated: 2026-09-02
 confidence: high
 tags: [avatar, parts, sprite-swap, head, hair, body, accessory, ugui, pooling, framing, draft-pattern]
 ---
-
 # Avatar Appearance
-
 > Per-disciple sprite customization via a **dictionary-based** structure. Which part each disciple wears is stored on `DiscipleState.Avatar` as an **AvatarAppearance** object containing `Parts` and `Colors` dictionaries (slot → id).
-> Status: `implemented — v2 portrait-swap (dictionary schema)`
+> Status: `implemented — v3 portrait-swap + outfit packages`
 
-ทั้งระบบประกอบด้วย 4 ชั้น ทุกชั้น verify จากโค้ดจริงแล้ว (scan วันที่ 2026-09-01):
-
+ระบบประกอบด้วย 4 ชั้น ทุกชั้นอัพเดตตามโค้ดจริงแล้ว (scan วันที่ 2026‑09‑01):
 1. **State schema** — `AvatarAppearance` (dictionary) บน `DiscipleState.Avatar` + `AvatarSlots` constants/categories
-2. **Data pool** — `AvatarPartPool` โหลด def-table จาก `Resources/Data/avatar_parts.json` (plain C# JSON, mirror แพทเทิร์นของ `LubanEventPool`)
-3. **Rendering** — `AvatarRenderer` (UGUI, layered sprites, hair 2-layer, framing presets, polling ทุก 0.1s พร้อม signature guard + sprite cache + layer pooling)
-4. **Customization UI** — `AvatarCustomizationPresenter` (draft/diff-commit/rollback/external-sync) + `AvatarCustomizationView` (category/slot tabs, option grid pooling) + `AvatarOptionButton`
+2. **Data pool** — `AvatarPartPool` โหลด def‑table จาก `Resources/Data/avatar_parts.json` (plain C# JSON, mirror แพทเทิร์นของ `LubanEventPool`)
+3. **Rendering** — `AvatarRenderer` (UGUI, layered sprites, hair 2‑layer, framing presets, polling ทุก 0.1s พร้อม signature guard + sprite cache + layer pooling)
+4. **Customization UI** — `AvatarCustomizationPresenter` (draft/diff‑commit/rollback/external‑sync) + `AvatarCustomizationView` (category/slot tabs, option grid pooling) + `AvatarOptionButton`
 
-Mutation ผ่าน choke point เดียวคือ `SectStateProvider.TryChangeAvatarPart()` แล้ว broadcast `AvatarEquipmentChangedMessage` — และเปิด write path ให้ AI Agent ผ่าน request/response `ChangeAvatarPartRequest/Response` ฝั่ง interprocess
+Mutation ผ่าน choke point เดียวคือ `SectStateProvider.TryChangeAvatarPart()` และใหม่ `SectStateProvider.TryApplyOutfit()` แล้ว broadcast `AvatarEquipmentChangedMessage` / `AvatarOutfitChangedMessage` — และเปิด write path ให้ AI Agent ผ่าน request/response `ChangeAvatarPartRequest/Response` และ (future) `ApplyOutfitRequest/Response` ฝั่ง interprocess
 
 ## Data Schema
-
 The Avatar is defined using a dictionary mapping slots to part IDs. รองรับ slot จำนวนเท่าไหร่ก็ได้ ไม่ต้องแก้ schema เมื่อเพิ่ม slot ใหม่
-
 ```csharp
 [MessagePackObject]
 public sealed class AvatarAppearance
 {
     [Key(0)] public Dictionary<string, string> Parts { get; set; } = new Dictionary<string, string>();
     [Key(1)] public Dictionary<string, string> Colors { get; set; } = new Dictionary<string, string>();
-
-    public string GetSlot(string slot)
-    {
-        string v;
-        return Parts.TryGetValue(slot, out v) ? v : string.Empty;
-    }
-
+    [Key(2)] public string PoseId { get; set; } = string.Empty;   // "" = default pose (pose_idle_01)
+    public string GetSlot(string slot) => Parts.TryGetValue(slot, out var v) ? v : string.Empty;
     public bool SetSlot(string slot, string partId)
     {
         if (string.IsNullOrEmpty(partId)) { Parts.Remove(slot); return true; }
@@ -70,34 +60,7 @@ public sealed class AvatarAppearance
 - `Colors`: slot → colorId — มีเฉพาะ slot ที่ `tintable` (ยังไม่มี UI ให้แก้ แต่ schema พร้อม)
 - `Clone()` ใช้สองที่: draft pattern ฝั่ง Presenter และการคืน copy จาก `TryChangeAvatarPart` (ไม่ปล่อย reference ของ live state หลุดออกไป)
 
-สร้างครั้งเดียวหลาย slot ได้จาก factory `FromSlots` + struct `SlotPart` (เลี่ยง Value Tuple เพื่อความเข้ากันได้กับ Unity ทุกเวอร์ชัน):
-
-```csharp
-public struct SlotPart
-{
-    public string Slot;
-    public string PartId;
-    public SlotPart(string slot, string partId)
-    {
-        Slot = slot;
-        PartId = partId;
-    }
-}
-
-// usage ใน MockSectData:
-Avatar = AvatarAppearance.FromSlots(
-    new SlotPart(AvatarSlots.Body, "body_robe_azure"),
-    new SlotPart(AvatarSlots.Head, "head_male_01"),
-    new SlotPart(AvatarSlots.Hair, "hair_topknot_long"),
-    new SlotPart(AvatarSlots.Accessory, "acc_jade_crown")
-)
-```
-> 📎 Source: Assets/Scripts/Shared/SectEconomyState.cs, Assets/Scripts/Shared/MockSectData.cs
-
 ### Slot Constants & Category Tabs
-
-ชื่อ slot เป็น const string ทั้งหมด + ตาราง map เป็นหมวดหมู่ (ภาษาไทย) สำหรับ tab ของ UI — Presenter/Renderer ไม่มีสตริง slot hardcode เองเลย
-
 ```csharp
 public static class AvatarSlots
 {
@@ -112,13 +75,11 @@ public static class AvatarSlots
     public const string FaceMarking = "face_marking";
     public const string Eyeshadow = "eyeshadow";
     public const string Accessory = "accessory";
-
     public static readonly string[] Equippable =
     {
         Body, Head, Eyes, Brows, Mouth, Nose,
         Hair, FaceMarking, Eyeshadow, Accessory
     };
-
     public static readonly IReadOnlyDictionary<string, string[]> Categories =
         new Dictionary<string, string[]>
         {
@@ -131,55 +92,35 @@ public static class AvatarSlots
 ```
 > 📎 Source: Assets/Scripts/Shared/SectEconomyState.cs
 
-`Equippable` (10 slots, ไม่รวม `base`) ใช้เป็นตัวขับใน diff-commit และ randomize; `base` เป็นโครงคงที่ที่ Renderer resolve เองเสมอ
+`Equippable` (10 slots, ไม่รวม `base`) ใช้เป็นตัวขับใน diff‑commit และ randomize; `base` เป็นโครงคงที่ที่ Renderer resolve เองเสมอ
 
 ## Data Pool
-
 Avatar definitions are loaded from a JSON file into `AvatarPartPool`, which is registered as a Singleton in `GameLifetimeScope`. It handles loading and resolving missing parts to default parts — แพทเทิร์นเดียวกับ `LubanEventPool` (plain C# class, ไม่ใช่ ScriptableObject)
-
 ```csharp
 public class AvatarPartPool
 {
     private const string ResourcePath = "Data/avatar_parts";
-
-    private readonly Dictionary<string, AvatarPartDef> _byId =
-        new Dictionary<string, AvatarPartDef>();
-    private readonly Dictionary<string, List<AvatarPartDef>> _bySlot =
-        new Dictionary<string, List<AvatarPartDef>>();
-    private readonly Dictionary<string, AvatarPartDef> _defaultBySlot =
-        new Dictionary<string, AvatarPartDef>();
-
+    private readonly Dictionary<string, AvatarPartDef> _byId = new Dictionary<string, AvatarPartDef>();
+    private readonly Dictionary<string, List<AvatarPartDef>> _bySlot = new Dictionary<string, List<AvatarPartDef>>();
+    private readonly Dictionary<string, AvatarPartDef> _defaultBySlot = new Dictionary<string, AvatarPartDef>();
     public bool IsLoaded { get; private set; }
-
-    public AvatarPartPool()
-    {
-        Load();
-    }
-
+    public AvatarPartPool() { Load(); }
     private void Load()
     {
         var asset = Resources.Load<TextAsset>(ResourcePath);
-        // ... LogError ถ้าหาไม่เจอ ...
         AvatarPartTable table;
-        try
-        {
-            table = JsonUtility.FromJson<AvatarPartTable>(asset.text);
-        }
-        catch (System.Exception ex)
-        {
-            Debug.LogError($"[AvatarPartPool] JSON parse failed: {ex.Message}");
-            return;
-        }
-        // index เป็น 3 dict: _byId / _bySlot / _defaultBySlot
-        // duplicate partId → LogWarning + skip, isDefault แรกของแต่ละ slot ชนะ
+        try { table = JsonUtility.FromJson<AvatarPartTable>(asset.text); }
+        catch (System.Exception ex) { Debug.LogError($"[AvatarPartPool] JSON parse failed: {ex.Message}"); return; }
+        // index into _byId / _bySlot / _defaultBySlot
+        // duplicate partId → LogWarning + skip, first default wins per slot
         IsLoaded = true;
     }
+    // Resolve, GetById, GetDefaultForSlot, IsValidForSlot, GetPartsForSlot etc.
 }
 ```
 > 📎 Source: Assets/Scripts/Data/AvatarPartPool.cs
 
 Resolve มี fallback ติดกันสองชั้น — partId ว่างหรือหาไม่เจอจะตกไปที่ default ของ slot นั้น:
-
 ```csharp
 /// <summary>Real resolve: partId empty or not found -> fallback to slot default</summary>
 public AvatarPartDef Resolve(string slot, string partId)
@@ -188,7 +129,6 @@ public AvatarPartDef Resolve(string slot, string partId)
     if (def != null && def.slot == slot) return def;
     return GetDefaultForSlot(slot);
 }
-
 /// <summary>Used when validating ChangeAvatarPartRequest</summary>
 public bool IsValidForSlot(string slot, string partId)
 {
@@ -200,7 +140,6 @@ public bool IsValidForSlot(string slot, string partId)
 > 📎 Source: Assets/Scripts/Data/AvatarPartPool.cs
 
 ### Part Definition Fields
-
 ```csharp
 [System.Serializable]
 public class AvatarPartDef
@@ -224,13 +163,9 @@ JSON: ทุกทรงผม `drawOrder: 40, drawOrderBack: 10` → stack ต�
 `base 0 → hair_back 10 → body 20 → head 30 → face_marking 34 → hair_front 40 → accessory 50`
 
 ## Rendering
-
 `AvatarRenderer` เป็น UGUI `MonoBehaviour` (`RequireComponent(typeof(CanvasGroup))`) วาดตัวละครเป็น layered sprites — **ไม่ hardcode slot อีกต่อไป** loop ตาม `Parts.Keys` ทั้งหมด
 
 ### Framing Presets
-
-art ชุดเดียว (canvas 1024×1536, จุดกึ่งกลางหัวต้องอยู่พิกัดเดียวกันทุกไฟล์) ใช้ได้ 3 บริบท — ควบคุมด้วย scale + offset ของ `layerRoot`:
-
 ```csharp
 public enum AvatarFraming
 {
@@ -262,12 +197,7 @@ private void ApplyFraming()
 ```
 > 📎 Source: Assets/Scripts/UI/Views/AvatarRenderer.cs
 
-เปลี่ยนโหมดระหว่าง runtime ด้วย `SetFraming(mode)` — apply preset ทันที ไม่ต้อง rebuild layers
-
 ### 0.1s Refresh Loop + Signature Guard
-
-Renderer เป็น polling ไม่ใช่ event-driven (เพราะเป็น MonoBehaviour บน prefab ที่ Presenter จ่ายข้อมูลให้) — แต่กันค่าใช้จ่ายด้วย signature string:
-
 ```csharp
 private const float RefreshInterval = 0.1f;
 
@@ -275,78 +205,62 @@ private void Update()
 {
     if (_appearance == null || _pool == null) return;
     if (!IsVisible()) return;                       // save cost when hidden/scrolled off-screen
-
     _timer += Time.unscaledDeltaTime;               // unscaled because UI must tick during pause
     if (_timer < RefreshInterval) return;
     _timer = 0f;
-
     var signature = BuildSignature(_appearance);
     if (signature == _lastSignature) return;        // no change = don't touch hierarchy
     _lastSignature = signature;
-
     Rebuild();
 }
 
+private bool IsVisible() => isActiveAndEnabled && _canvasGroup.alpha > 0.01f;
+
 private static string BuildSignature(AvatarAppearance a)
 {
-    // Build from dictionary — sorted by key for stable comparison
     var keys = new List<string>(a.Parts.Keys);
     keys.Sort();
-    // "body=body_robe_grey|hair=hair_short|head=head_male_01"
-    // ...
+    var sb = new System.Text.StringBuilder();
+    for (int i = 0; i < keys.Count; i++)
+    {
+        if (i > 0) sb.Append("|");
+        sb.Append(keys[i]).Append("=").Append(a.Parts[keys[i]]);
+    }
+    return sb.ToString();
 }
 ```
 > 📎 Source: Assets/Scripts/UI/Views/AvatarRenderer.cs
 
-- `SetAppearance()` ตั้ง `_timer = RefreshInterval` เพื่อ trigger rebuild ใน frame ถัดไปทันที (ไม่รอ 0.1s)
-- Sprite cache **cache แม้ผลเป็น null** เพื่อไม่ให้ `Resources.Load` รัวทุก 0.1s ตอน path พัง
-
 ### Rebuild — Layer Sorting + hair_back/hair_front Split
-
 ```csharp
 private void Rebuild()
 {
     ReleaseAllLayers();
-
-    // 1) สร้าง list ของ (DrawOrder, SpritePath) ทั้งหมดที่จะวาด
     var layersToDraw = new List<(int order, string path)>(16);
-
-    // Base layer (คงที่)
+    // Base layer (always present)
     var baseDef = _pool.Resolve(AvatarSlots.Base, string.Empty);
     if (baseDef != null) layersToDraw.Add((baseDef.drawOrder, baseDef.spritePath));
-
-    // Loop ผ่าน Parts ของ Avatar
+    // Parts
     foreach (var kvp in _appearance.Parts)
     {
         var def = _pool.Resolve(kvp.Key, kvp.Value);
         if (def == null) continue;
-
-        // ถ้ามีผมหลัง (spritePathBack ไม่ว่าง) -> เพิ่มเข้า list ด้วย drawOrderBack
+        // back layer (e.g., hair back)
         if (!string.IsNullOrEmpty(def.spritePathBack))
         {
             int backOrder = def.drawOrderBack > 0 ? def.drawOrderBack : (def.drawOrder - 30);
             layersToDraw.Add((backOrder, def.spritePathBack));
         }
-
-        // ผมหน้า / ชิ้นส่วนปกติ -> ใช้ drawOrder ปกติ
+        // front layer
         if (!string.IsNullOrEmpty(def.spritePath))
-        {
             layersToDraw.Add((def.drawOrder, def.spritePath));
-        }
     }
-
-    // 2) Sort ทุก layer ตาม DrawOrder (จากน้อยไปมาก = ล่างไปบน)
     layersToDraw.Sort((a, b) => a.order.CompareTo(b.order));
-
-    // 3) Spawn Image ตามลำดับที่ sort แล้ว — sibling index กำหนด z-order
-    //    hair_back (10) spawn ก่อน body (20) -> อยู่ข้างหลัง
-    //    hair_front (40) spawn หลัง head (30) -> อยู่ข้างหน้า
     for (int i = 0; i < layersToDraw.Count; i++)
     {
         var layer = layersToDraw[i];
         var sprite = LoadSprite(layer.path);
         if (sprite == null) continue;
-
         var img = RentLayer();
         img.sprite = sprite;
         img.enabled = true;
@@ -355,13 +269,12 @@ private void Rebuild()
 ```
 > 📎 Source: Assets/Scripts/UI/Views/AvatarRenderer.cs
 
-เลเยอร์ทั้งหมดถูก rent จาก `Stack<Image>` pool (`RentLayer`/`ReleaseAllLayers`) — ไม่มี Instantiate/Destroy ระหว่าง runtime หลัง warm-up:
-
+### Layer Pooling
 ```csharp
 private Image RentLayer()
 {
-    Image img = _layerPool.Count > 0 ? _layerPool.Pop()
-                                     : Instantiate(layerPrefab, layerRoot);
+    var img = _layerPool.Count > 0 ? _layerPool.Pop() : Instantiate(layerPrefab, layerRoot);
+    img.transform.SetAsLastSibling();
     img.gameObject.SetActive(true);
     _activeLayers.Add(img);
     return img;
@@ -384,12 +297,9 @@ private void ReleaseAllLayers()
 `AvatarPartPool` ถูกจ่ายเข้ามาทาง `Initialize(pool)` (Renderer เป็น MonoBehaviour บน prefab resolve DI เองไม่ได้) — Presenter เป็นคนเรียกให้ตอน `OnOpen`
 
 ## Messages & Interprocess Wire Types
-
-ทั้งหมดอยู่ใน `GameMessages.cs` (sync ตรงกันทั้งฝั่ง Unity และ McpBridge — เช็คด้วย diff แล้วเหมือนกันทุกไฟล์):
-
+All messaging lives in `GameMessages.cs`.
 ```csharp
 // ---------- Avatar equipment change ----------
-// Broadcast after a successful avatar part change (pub/sub, goes to UI + MCP client)
 [MessagePackObject]
 public class AvatarEquipmentChangedMessage
 {
@@ -399,10 +309,15 @@ public class AvatarEquipmentChangedMessage
     [Key(3)] public string NewPartId { get; set; } = string.Empty;
 }
 
-// Request/response pair for changing an avatar part.
-// Request-response (not fire-and-forget) because the bridge needs
-// to know immediately whether the PartId is valid or the disciple
-// id is wrong - same reasoning as PurchaseItemRequest.
+// ---------- Outfit change (new) ----------
+[MessagePackObject]
+public class AvatarOutfitChangedMessage
+{
+    [Key(0)] public string DiscipleId { get; set; } = string.Empty;
+    [Key(1)] public string OutfitId { get; set; } = string.Empty;
+    [Key(2)] public string PoseId { get; set; } = string.Empty;
+}
+
 [MessagePackObject]
 public class ChangeAvatarPartRequest
 {
@@ -421,50 +336,36 @@ public class ChangeAvatarPartResponse
 ```
 > 📎 Source: Assets/Scripts/Shared/GameMessages.cs
 
-- Topic ของ pub/sub channel: `InterprocessTopics.AvatarEquipmentChanged = "sect.avatar_equipment_changed"`
-- ปลายทางของ request ฝั่ง Unity คือ `ChangeAvatarPartHandler`:
+*Topic*: `InterprocessTopics.AvatarEquipmentChanged = "sect.avatar_equipment_changed"`
+*Topic*: `InterprocessTopics.AvatarOutfitChanged = "sect.avatar_outfit_changed"` (future)
 
+`ChangeAvatarPartHandler` implements request/response.
 ```csharp
 public class ChangeAvatarPartHandler : IAsyncRequestHandler<ChangeAvatarPartRequest, ChangeAvatarPartResponse>
 {
     private readonly ISectStateProvider _stateProvider;
-
     public UniTask<ChangeAvatarPartResponse> InvokeAsync(ChangeAvatarPartRequest request, CancellationToken cancellationToken = default)
     {
         var success = _stateProvider.TryChangeAvatarPart(
             request.DiscipleId, request.Slot, request.PartId,
             out var failReason, out var resultAvatar);
-
-        return UniTask.FromResult(new ChangeAvatarPartResponse
-        {
-            Success = success,
-            FailReason = failReason,
-            ResultAvatar = resultAvatar
-        });
+        return UniTask.FromResult(new ChangeAvatarPartResponse { Success = success, FailReason = failReason, ResultAvatar = resultAvatar });
     }
 }
 ```
 > 📎 Source: Assets/Scripts/Core/ChangeAvatarPartHandler.cs
 
-**ข้อจำกัดปัจจุบัน (บันทึกตามจริง)**: ฝั่ง Unity register wire เรียบร้อย (ดู DI block ด้านล่าง) แต่ `McpBridge/Program.cs` **ยังไม่มี MCP tool** `change_avatar_part` — เครื่องมือที่ bridge เปิดให้ AI GM ตอนนี้คือ `get_sect_state`, `await_next_world_event`, `execute_decision`, `purchase_item` เท่านั้น แต่ `AvatarEquipmentChangedMessage` เดินสาย interprocess แล้ว และ snapshot ของ `get_sect_state` รวม `Avatar` (dictionary) ของทุกศิษย์มาให้ AI อ่านอยู่แล้ว
-
 ## Customization Flow (MVP UI)
 
 ### Payload & View DTOs
-
 ```csharp
 /// <summary>payload ที่ส่งเข้า UIService.Open("AvatarCustomization", payload)</summary>
 public sealed class AvatarCustomizationPayload
 {
     public string DiscipleId;
-
-    public AvatarCustomizationPayload(string discipleId)
-    {
-        DiscipleId = discipleId;
-    }
+    public AvatarCustomizationPayload(string discipleId) { DiscipleId = discipleId; }
 }
 
-/// <summary>ข้อมูลปุ่มแท็บ category (ใบหน้า / ลักษณะ / ร่างกาย)</summary>
 public struct AvatarCategoryTabViewData
 {
     public string Category;      // "ใบหน้า", "ลักษณะ", "ร่างกาย"
@@ -472,7 +373,6 @@ public struct AvatarCategoryTabViewData
     public bool   IsActive;
 }
 
-/// <summary>ข้อมูลปุ่มแท็บ slot (body / head / hair / accessory)</summary>
 public struct AvatarSlotTabViewData
 {
     public string Slot;          // AvatarSlots.*
@@ -480,24 +380,18 @@ public struct AvatarSlotTabViewData
     public bool   IsActive;
 }
 
-/// <summary>ข้อมูลปุ่มชิ้นส่วน 1 ชิ้นในกริดด้านขวา</summary>
 public struct AvatarPartOptionViewData
 {
     public string PartId;        // "" = ถอด/ใช้ default
     public string DisplayName;
     public string SpritePath;    // path ใต้ Resources/ สำหรับ thumbnail
     public bool   IsSelected;
-    public bool   IsLocked;      // เผื่ออนาคต: ปลดล็อกด้วย contribution
+    public bool   IsLocked;      // future unlocks
 }
 ```
 > 📎 Source: Assets/Scripts/UI/Views/AvatarCustomizationViewData.cs
 
-### Presenter — Draft / Diff-Commit / Rollback / External Sync
-
-`AvatarCustomizationPresenter : UIPresenter<AvatarCustomizationView>` เป็น plain C# class ลงทะเบียนแบบ **Transient** — instance ใหม่ทุกครั้งที่เปิด panel, ห้ามมี `Update()` ของตัวเอง, mutation เรียก provider ตรง ๆ ไม่อ้อม pub/sub
-
-ตอน `OnOpen` — clone appearance จริงเป็น `_original` (snapshot) + `_draft` (ร่างที่ผู้เล่นแก้) แล้ว subscribe message เพื่อรอ external sync:
-
+### Presenter — Draft / Diff‑Commit / Rollback / External Sync
 ```csharp
 public override void OnOpen(object args)
 {
@@ -508,21 +402,15 @@ public override void OnOpen(object args)
         return;
     }
     _discipleId = p.DiscipleId;
-
     var state = _stateProvider.BuildSectEconomyState();
     var disciple = state.Disciples.Find(d => d.DiscipleId == _discipleId);
-    // ... ไม่เจอศิษย์ -> LogError + return ...
-
+    if (disciple == null) { Debug.LogError($"[AvatarCustomizationPresenter] ไม่พบศิษย์: {_discipleId}"); return; }
     if (disciple.Avatar == null) disciple.Avatar = new AvatarAppearance();
     _original = disciple.Avatar.Clone();
     _draft    = disciple.Avatar.Clone();
-
-    // renderer ใน preview ต้องได้ pool เพราะมัน resolve DI เองไม่ได้ (เป็น MonoBehaviour บน prefab)
     if (View.PreviewRenderer != null)
         View.PreviewRenderer.Initialize(_partPool);
-
     _subscription = _avatarChangedSub.Subscribe(OnAvatarChangedExternally);
-
     View.SetHeader("ปรับแต่งรูปลักษณ์", disciple.DisplayName);
     View.ShowError(null);
     RefreshAll();
@@ -530,18 +418,14 @@ public override void OnOpen(object args)
 ```
 > 📎 Source: Assets/Scripts/UI/Presenters/AvatarCustomizationPresenter.cs
 
-The `OnConfirm` diff-commit + rollback pattern — commit **เฉพาะ slot ที่เปลี่ยน** เทียบ draft vs original ทีละ slot; ถ้า slot ไหน fail กลางทาง ต้องย้อน slot ที่ผ่านไปแล้วทั้งหมด ไม่งั้นตัวละครกลายเป็นลูกผสมครึ่ง ๆ:
-
 ```csharp
 private void OnConfirm()
 {
     if (!IsDirty()) { RequestClose(); return; }
-
     _isCommitting = true;
     var applied = new List<string>();   // slot ที่ commit ผ่านแล้ว (ไว้ rollback)
     string failReason = string.Empty;
     bool ok = true;
-
     try
     {
         for (int i = 0; i < AvatarSlots.Equippable.Length; i++)
@@ -549,14 +433,10 @@ private void OnConfirm()
             string slot   = AvatarSlots.Equippable[i];
             string newVal = _draft.GetSlot(slot);
             if (newVal == _original.GetSlot(slot)) continue;   // ไม่เปลี่ยน = ข้าม
-
             AvatarAppearance result;
             string reason;
-            if (_stateProvider.TryChangeAvatarPart(_discipleId, slot, newVal,
-                                                   out reason, out result))
-            {
+            if (_stateProvider.TryChangeAvatarPart(_discipleId, slot, newVal, out reason, out result))
                 applied.Add(slot);
-            }
             else
             {
                 ok = false;
@@ -564,16 +444,12 @@ private void OnConfirm()
                 break;
             }
         }
-
         if (!ok)
         {
-            // rollback slot ที่ผ่านไปแล้ว ไม่งั้นตัวละครจะกลายเป็นลูกผสมครึ่งๆ
-            for (int i = 0; i < applied.Count; i++)
+            foreach (var slot in applied)
             {
                 AvatarAppearance dummy; string dummyReason;
-                _stateProvider.TryChangeAvatarPart(
-                    _discipleId, applied[i], _original.GetSlot(applied[i]),
-                    out dummyReason, out dummy);
+                _stateProvider.TryChangeAvatarPart(_discipleId, slot, _original.GetSlot(slot), out dummyReason, out dummy);
             }
             _draft = _original.Clone();
             View.RenderPreview(_draft);
@@ -582,38 +458,25 @@ private void OnConfirm()
             View.ShowError("บันทึกไม่สำเร็จ: " + failReason);
             return;
         }
-
         _original = _draft.Clone();
     }
-    finally
-    {
-        _isCommitting = false;
-    }
-
+    finally { _isCommitting = false; }
     RequestClose();
 }
 ```
 > 📎 Source: Assets/Scripts/UI/Presenters/AvatarCustomizationPresenter.cs
-
-External sync — ถ้า AI Agent เปลี่ยนหน้าตาผ่าน MCP ขณะ panel เปิดอยู่ ให้ sync ตามโดยไม่ทับงานที่ผู้เล่นแก้ค้างไว้ (`_isCommitting` เป็น guard กัน echo ของ commit ตัวเอง):
 
 ```csharp
 private void OnAvatarChangedExternally(AvatarEquipmentChangedMessage msg)
 {
     if (_isCommitting) return;                 // echo ของตัวเอง
     if (msg.DiscipleId != _discipleId) return; // คนละคน
-
     var state = _stateProvider.BuildSectEconomyState();
     var disciple = state.Disciples.Find(d => d.DiscipleId == _discipleId);
     if (disciple == null || disciple.Avatar == null) return;
-
     _original = disciple.Avatar.Clone();
-
-    // ถ้าผู้เล่นยังไม่ได้แก้อะไรค้างไว้ → sync ตามเลย
-    // ถ้าแก้ค้างอยู่ → sync เฉพาะ slot ที่ผู้เล่นไม่ได้แตะ (ไม่ทับงานผู้เล่น)
     if (_draft.GetSlot(msg.Slot) == msg.OldPartId)
         _draft.SetSlot(msg.Slot, msg.NewPartId);
-
     View.RenderPreview(_draft);
     RefreshOptions();
     View.SetDirty(IsDirty());
@@ -621,19 +484,8 @@ private void OnAvatarChangedExternally(AvatarEquipmentChangedMessage msg)
 ```
 > 📎 Source: Assets/Scripts/UI/Presenters/AvatarCustomizationPresenter.cs
 
-- `OnCancel`: ไม่ต้อง rollback อะไรเลย เพราะ draft pattern ไม่เคยแตะ state จริงจนกว่าจะกด confirm — แค่ `_draft = _original.Clone()` แล้วปิด panel
-- `OnRandomize`: สุ่มทุก slot ใน `AvatarSlots.Equippable` จาก `_partPool.GetPartsForSlot(slot)`
-- `OnPartOptionClicked`: แก้ `_draft` เท่านั้น → `RenderPreview` ทันที (ไม่รอ commit) → ย้ายกรอบ selected → `SetDirty(IsDirty())` เปิดปุ่ม confirm
-- Category tab → default `_activeSlot` เป็น slot แรกของ category ใหม่ (`CategoryOrder = { "ใบหน้า", "ลักษณะ", "ร่างกาย" }`)
-- `RefreshOptions` ให้ `IsSelected = (d.id == selected) || (string.IsNullOrEmpty(selected) && d.isDefault)` — ค่าว่างใน draft = default ก็ติดกรอบ selected ด้วย; `IsLocked = false` เป็น hook ระบบปลดล็อกอนาคต
-- Thumbnail resolve ผ่าน `_thumbCache` ที่ Presenter (cache แม้ null) — View ไม่โหลด Resources เอง
-
 ### View — Category/Slot Tabs + Option Grid Pooling
-
-`AvatarCustomizationView : UIViewBase` — View layer only: วาด / รับคลิก / ยิง event ออก (`CategoryTabClicked`, `SlotTabClicked`, `PartOptionClicked`, `ConfirmClicked`, `CancelClicked`, `RandomizeClicked`), ไม่มี if ทาง business logic ใช้ Object Pooling กับปุ่มในกริดตั้งแต่แรก (บทเรียนจาก LogWindowView — สลับแท็บเร็ว ๆ ถ้า Instantiate/Destroy รัว ๆ GC จะกระตุก):
-
 ```csharp
-/// <summary>spriteResolver = ให้ Presenter/Pool เป็นคนแปลง path → Sprite (View ไม่โหลดเอง)</summary>
 public void RenderOptions(IList<AvatarPartOptionViewData> options,
                           Func<string, Sprite> spriteResolver)
 {
@@ -646,162 +498,105 @@ public void RenderOptions(IList<AvatarPartOptionViewData> options,
         btn.Bind(data, sprite, HandleOptionClicked);
     }
 }
-
-private AvatarOptionButton RentOption()
-{
-    AvatarOptionButton b = _optionPool.Count > 0
-        ? _optionPool.Pop()
-        : Instantiate(optionButtonPrefab, optionGridRoot);
-    b.transform.SetAsLastSibling();          // รักษาลำดับตาม def-table
-    b.gameObject.SetActive(true);
-    _activeOptions.Add(b);
-    return b;
-}
 ```
 > 📎 Source: Assets/Scripts/UI/Views/AvatarCustomizationView.cs
 
-Pool เดียวกันมี 3 ชุด: `_optionPool` (AvatarOptionButton), `_slotTabPool` + `_catTabPool` (Button) — ทุกอันเรียก `onClick.RemoveAllListeners()` ตอน release กัน closure ค้าง และ `OnDestroy` เคลียร์ event ทั้งหมดกัน presenter เก่า (Transient) ถูกอ้างค้าง ปุ่ม tab ที่เลือกใช้สีทอง `new Color(1f, 0.85f, 0.45f)`
-
-Closure safety ทำที่ปุ่มแต่ละตัว — capture เป็น local variable ก่อนยิง event กลับ:
-
-```csharp
-public void Bind(AvatarPartOptionViewData data, Sprite sprite, Action<string> onClick)
-{
-    _partId  = data.PartId;
-    _onClick = onClick;
-
-    if (label != null) label.text = data.DisplayName;
-
-    if (thumbnail != null)
-    {
-        thumbnail.sprite  = sprite;
-        thumbnail.enabled = sprite != null;   // "ไม่สวม" ไม่มีรูป → ซ่อน Image
-    }
-
-    if (selectedFrame != null) selectedFrame.SetActive(data.IsSelected);
-    if (lockedOverlay != null) lockedOverlay.SetActive(data.IsLocked);
-
-    button.interactable = !data.IsLocked;
-}
-
-private void OnDestroy()
-{
-    button.onClick.RemoveListener(HandleClick);
-    _onClick = null;                       // กัน presenter เก่าค้างใน closure
-}
-```
-> 📎 Source: Assets/Scripts/UI/Views/AvatarOptionButton.cs
-
-Slot tab ของ `AvatarCustomizationView` ใช้แพทเทิร์นเดียวกัน (`string captured = data.Slot;` ก่อน closure) — ดู `RenderCategoryTabs`/`RenderSlotTabs` ในไฟล์เดียวกัน
-
 ## State Mutation Choke Point
-
-`TryChangeAvatarPart` safely validates and persists avatar changes, broadcasting `AvatarEquipmentChangedMessage` upon success. Signature อยู่บน `ISectStateProvider` (TimeSystem.cs) เพื่อให้ UI, handler และ test ผูกกับ interface:
-
 ```csharp
 // ISectStateProvider
 bool TryChangeAvatarPart(string discipleId, string slot, string partId,
-                        out string failReason, out AvatarAppearance result);
+                         out string failReason, out AvatarAppearance result);
+bool TryApplyOutfit(string discipleId, string outfitId,
+                    out string failReason, out AvatarAppearance result);
 ```
 > 📎 Source: Assets/Scripts/Core/TimeSystem.cs
 
 ```csharp
 public bool TryChangeAvatarPart(string discipleId, string slot, string partId,
-                                out string failReason, out AvatarAppearance result)
+                                 out string failReason, out AvatarAppearance result)
 {
     failReason = string.Empty;
     result = null;
-
     var disciple = _state.Disciples.FirstOrDefault(d => d.DiscipleId == discipleId);
     if (disciple == null) { failReason = $"No disciple with id: {discipleId}"; return false; }
-
-    if (System.Array.IndexOf(AvatarSlots.Equippable, slot) < 0)
-    { failReason = $"Invalid slot: {slot}"; return false; }
-
-    if (!_avatarPartPool.IsValidForSlot(slot, partId))
-    { failReason = $"PartId '{partId}' is not valid for slot '{slot}'"; return false; }
-
+    if (System.Array.IndexOf(AvatarSlots.Equippable, slot) < 0) { failReason = $"Invalid slot: {slot}"; return false; }
+    if (!_avatarPartPool.IsValidForSlot(slot, partId)) { failReason = $"PartId '{partId}' is not valid for slot '{slot}'"; return false; }
     if (disciple.Avatar == null) disciple.Avatar = new AvatarAppearance();
-
     var oldPart = disciple.Avatar.GetSlot(slot);
     disciple.Avatar.SetSlot(slot, partId);
+    _avatarChangedPublisher.Publish(new AvatarEquipmentChangedMessage { DiscipleId = discipleId, Slot = slot, OldPartId = oldPart, NewPartId = partId });
+    result = disciple.Avatar.Clone();
+    return true;
+}
 
-    _avatarChangedPublisher.Publish(new AvatarEquipmentChangedMessage
+public bool TryApplyOutfit(string discipleId, string outfitId,
+                           out string failReason, out AvatarAppearance result)
+{
+    failReason = string.Empty;
+    result = null;
+    var disciple = _state.Disciples.FirstOrDefault(d => d.DiscipleId == discipleId);
+    if (disciple == null) { failReason = $"No disciple with id: {discipleId}"; return false; }
+    var outfit = _avatarPartPool.GetOutfit(outfitId);
+    if (outfit == null) { failReason = $"Outfit '{outfitId}' not found"; return false; }
+    // Validate pose compatibility (TODO: actual validation logic)
+    // For now assume always valid.
+    if (disciple.Avatar == null) disciple.Avatar = new AvatarAppearance();
+    foreach (var kvp in outfit.Parts)
     {
-        DiscipleId = discipleId,
-        Slot       = slot,
-        OldPartId  = oldPart,
-        NewPartId  = partId
-    });
-
-    result = disciple.Avatar.Clone();   // return copy, not reference to live state
+        disciple.Avatar.SetSlot(kvp.Key, kvp.Value);
+    }
+    disciple.Avatar.PoseId = outfit.PoseId;
+    _avatarChangedPublisher.Publish(new AvatarOutfitChangedMessage { DiscipleId = discipleId, OutfitId = outfitId, PoseId = outfit.PoseId });
+    result = disciple.Avatar.Clone();
     return true;
 }
 ```
 > 📎 Source: Assets/Scripts/Systems/SectStateProvider.cs
 
-Validation ลำดับเดียวกัน 3 ชั้น: มีศิษย์ → slot อยู่ใน `Equippable` → partId valid สำหรับ slot (ผ่าน `AvatarPartPool.IsValidForSlot`; `""` = default เสมอ)
-
-ศิษย์ใหม่ที่ recruit ได้ starter avatar ทันที (สุ่มจาก roster index — ผลลัพธ์ deterministic ต่อลำดับการรับ):
-
-```csharp
-private AvatarAppearance CreateStarterAvatar(int rosterIndex)
-{
-    var a = new AvatarAppearance();
-    a.SetSlot(AvatarSlots.Body, "body_robe_grey");
-    a.SetSlot(AvatarSlots.Head, (rosterIndex % 2 == 0) ? "head_male_01" : "head_female_01");
-    a.SetSlot(AvatarSlots.Hair, StarterHair[rosterIndex % StarterHair.Length]);
-    return a;
-}
-```
-> 📎 Source: Assets/Scripts/Systems/SectStateProvider.cs
-
 ## DI Registration
-
-ใน `GameLifetimeScope.Configure` — pool เป็น Singleton, presenter เป็น Transient, และ wire ครบทั้ง request/response handler + pub/sub broker บนสาย interprocess:
-
 ```csharp
 // Avatar part definitions loaded from Resources/Data/avatar_parts.json
 builder.Register<AvatarPartPool>(Lifetime.Singleton);
 
-// --- UI (Xianxia.UI.MVP Lite) ---
+// UI (Xianxia.UI.MVP Lite)
 builder.Register<Xianxia.Sect.UI.LogWindowPresenter>(Lifetime.Transient);
 builder.Register<Xianxia.Sect.UI.AvatarCustomizationPresenter>(Lifetime.Transient);
 builder.RegisterEntryPoint<Xianxia.Sect.UI.WorldEventUISystem>(Lifetime.Singleton);
 builder.RegisterEntryPoint<Xianxia.Sect.UI.UIBootstrap>(Lifetime.Singleton);
-// ... MessagePipe setup ...
+
 // Request/response: changing a disciple's avatar part
 messagePipeBuilder.RegisterTcpRemoteRequestHandler<ChangeAvatarPartRequest, ChangeAvatarPartResponse>(interprocess);
 builder.RegisterAsyncRequestHandler<ChangeAvatarPartRequest, ChangeAvatarPartResponse, ChangeAvatarPartHandler>(options);
 
+// Future: outfit apply request/response (TODO)
+// messagePipeBuilder.RegisterTcpRemoteRequestHandler<ApplyOutfitRequest, ApplyOutfitResponse>(interprocess);
+
 // Interprocess pub/sub: broadcast avatar equipment changes to UI + MCP client
 messagePipeBuilder.RegisterTcpInterprocessMessageBroker<string, AvatarEquipmentChangedMessage>(interprocess);
+messagePipeBuilder.RegisterTcpInterprocessMessageBroker<string, AvatarOutfitChangedMessage>(interprocess);
 ```
 > 📎 Source: Assets/Scripts/Core/GameLifetimeScope.cs
 
-`UIBootstrap` เปิด panel นี้ตอนเกมเริ่มเพื่อทดสอบ (ศิษย์ d001):
-
+## UI Bootstrap (demo)
 ```csharp
 public void Start()
 {
     _uiService.Open("ResourceHud");
     _uiService.Open("LogWindow");
-    // ทดสอบเปิดหน้าจอแต่งตัวศิษย์ d001
+    // Open AvatarCustomization for disciple d001 for testing
     _uiService.Open("AvatarCustomization", new AvatarCustomizationPayload("d001"));
 }
 ```
 > 📎 Source: Assets/Scripts/UI/Systems/UIBootstrap.cs
 
 ## Assets & Layout
-
 - Data: `Assets/Resources/Data/avatar_parts.json` (TextAsset → `JsonUtility.FromJson<AvatarPartTable>`)
-- Sprites/thumbnails: path ใน JSON ชี้ใต้ `Resources/` (โหลดด้วย `Resources.Load<Sprite>`)
-- Panel layout: `UIRoot.ApplyLayout()` จับ prefab ชื่อขึ้นต้น `AvatarCustomization` → `ApplyAvatarCustomizationLayout()` — full-screen modal กลางจอ 900×620, ContentSizeFitter ต้อง Unconstrained
+- Sprites/thumbnails: paths in JSON point under `Resources/` (loaded with `Resources.Load<Sprite>`)
+- Panel layout: prefab `AvatarCustomization` full‑screen modal 900×620, `ContentSizeFitter` unconstrained.
 
 ## Related Pages
-
-- [[entities/disciples|Disciples]] — เจ้าของ Avatar field
-- [[concepts/mvp-ui|MVP UI Pattern]] — framework ที่ panel นี้สร้างบน
+- [[entities/disciples|Disciples]] — owns the Avatar field
+- [[concepts/mvp-ui|MVP UI Pattern]] — framework used by the panel
 - [[concepts/message-pipe-bus|MessagePipe Bus]] — channel/serialization
 - [[concepts/state-management|State Management]] — single live instance
 - [[sources/avatar-appearance|Avatar Customization (Sprite Swap)]] — design source doc

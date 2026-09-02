@@ -83,6 +83,7 @@ namespace Xianxia.Sect
     {
         [Key(0)] public Dictionary<string, string> Parts { get; set; } = new Dictionary<string, string>();
         [Key(1)] public Dictionary<string, string> Colors { get; set; } = new Dictionary<string, string>();
+        [Key(2)] public string PoseId { get; set; } = string.Empty;
 
         public string GetSlot(string slot)
         {
@@ -114,7 +115,14 @@ namespace Xianxia.Sect
             var c = new AvatarAppearance();
             c.Parts = new Dictionary<string, string>(Parts);
             c.Colors = new Dictionary<string, string>(Colors);
+            c.PoseId = PoseId;
             return c;
+        }
+
+        /// <summary>Effective pose: PoseId if set, else fallback to "pose_idle_01".</summary>
+        public string EffectivePose
+        {
+            get { return string.IsNullOrEmpty(PoseId) ? "pose_idle_01" : PoseId; }
         }
 
         /// <summary>Factory สำหรับสร้าง AvatarAppearance จาก list — ใช้ใน MockData</summary>

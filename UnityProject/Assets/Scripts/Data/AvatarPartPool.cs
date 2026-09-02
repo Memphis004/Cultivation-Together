@@ -17,6 +17,8 @@ namespace Xianxia.Sect
         public bool   isDefault;
         public bool   tintable;       // true = slot นี้รองรับ color selection
         public int drawOrderBack;  // 0 = ใช้ drawOrder (ผมหลังใช้ 10)
+        public string poseId;      // pose template ที่ part วาดสำหรับ; "" = universal
+        public string sexTag;      // "male" / "female" / "" = any
         // AvatarRenderer.Rebuild(): เก็บเป็นคู่ (order, path) ก่อน sort
         // hair_back → (drawOrderBack=10), hair_front → (drawOrder=40)
         // แล้วใน JSON: hair ทุกทรง drawOrder: 40, drawOrderBack: 10 → stack จะตรงสเปก ACPart4 เป๊ะ: 
@@ -24,9 +26,21 @@ namespace Xianxia.Sect
     }
 
     [System.Serializable]
+    public class OutfitDef
+    {
+        public string id;
+        public string displayName;
+        public string poseId;
+        public string sexTag;      // "male" / "female" / "" = any
+        public string thumbPath;
+        public Dictionary<string, string> parts; // slot → partId
+    }
+
+    [System.Serializable]
     public class AvatarPartTable
     {
         public List<AvatarPartDef> parts = new List<AvatarPartDef>();
+        public List<OutfitDef> outfits = new List<OutfitDef>();
     }
 
     /// <summary>
@@ -44,6 +58,8 @@ namespace Xianxia.Sect
             new Dictionary<string, List<AvatarPartDef>>();
         private readonly Dictionary<string, AvatarPartDef> _defaultBySlot =
             new Dictionary<string, AvatarPartDef>();
+        private readonly Dictionary<string, OutfitDef> _outfitsById =
+            new Dictionary<string, OutfitDef>();
 
         public bool IsLoaded { get; private set; }
 
@@ -97,8 +113,24 @@ namespace Xianxia.Sect
                     _defaultBySlot[p.slot] = p;
             }
 
+            // Index outfits (JsonUtility ignores if JSON has no "outfits" key — old files safe)
+            if (table.outfits != null)
+            {
+                for (int i = 0; i < table.outfits.Count; i++)
+                {
+                    var o = table.outfits[i];
+                    if (string.IsNullOrEmpty(o.id)) continue;
+                    if (_outfitsById.ContainsKey(o.id))
+                    {
+                        Debug.LogWarning($"[AvatarPartPool] Duplicate outfit id: {o.id} - skipping");
+                        continue;
+                    }
+                    _outfitsById[o.id] = o;
+                }
+            }
+
             IsLoaded = true;
-            Debug.Log($"[AvatarPartPool] Loaded {_byId.Count} parts / {_bySlot.Count} slots");
+            Debug.Log($"[AvatarPartPool] Loaded {_byId.Count} parts / {_bySlot.Count} slots / {_outfitsById.Count} outfits");
         }
 
         public AvatarPartDef GetById(string partId)
@@ -136,6 +168,45 @@ namespace Xianxia.Sect
             if (string.IsNullOrEmpty(partId)) return true;   // "" = default, always valid
             var def = GetById(partId);
             return def != null && def.slot == slot;
+        }
+
+        // ── Outfit methods (v3) ──────────────────────────────────
+
+        public OutfitDef GetOutfit(string outfitId)
+        {
+            if (string.IsNullOrEmpty(outfitId)) return null;
+            OutfitDef def;
+            return _outfitsById.TryGetValue(outfitId, out def) ? def : null;
+        }
+
+        public IReadOnlyList<OutfitDef> GetOutfitsFor(string sex)
+        {
+            var result = new List<OutfitDef>();
+            foreach (var kvp in _outfitsById)
+            {
+                var o = kvp.Value;
+                if (string.IsNullOrEmpty(o.sexTag) || o.sexTag == sex)
+                    result.Add(o);
+            }
+            return result;
+        }
+
+        public IReadOnlyList<AvatarPartDef> GetPartsForSlot(string slot, string poseId, string sex)
+        {
+            var result = new List<AvatarPartDef>();
+            List<AvatarPartDef> list;
+            if (!_bySlot.TryGetValue(slot, out list)) return result;
+
+            for (int i = 0; i < list.Count; i++)
+            {
+                var p = list[i];
+                // pose filter: empty poseId = universal, otherwise must match
+                if (!string.IsNullOrEmpty(p.poseId) && p.poseId != poseId) continue;
+                // sex filter: empty sexTag = universal, otherwise must match
+                if (!string.IsNullOrEmpty(p.sexTag) && p.sexTag != sex) continue;
+                result.Add(p);
+            }
+            return result;
         }
     }
 }

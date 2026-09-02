@@ -1,217 +1,193 @@
 ---
-title: Avatar Character Customization (Sprite Swap)
+title: Avatar Character Customization — Portrait Swap + Outfit Packages (v3)
 type: gdd
+status: v3 draft — supersedes v2 paper-doll/pure-slot design; v2 dictionary schema retained
 sources:
-  - UnityProject/Assets/Scripts/Shared/SectEconomyState.cs
-  - UnityProject/Assets/Scripts/Shared/MockSectData.cs
-  - UnityProject/Assets/Scripts/Systems/SectStateProvider.cs
-  - McpBridge/Shared/GameMessages.cs
-  - McpBridge/Program.cs
+UnityProject/Assets/Scripts/Shared/SectEconomyState.cs
+UnityProject/Assets/Scripts/Shared/MockSectData.cs
+UnityProject/Assets/Scripts/Data/AvatarPartPool.cs
+UnityProject/Assets/Scripts/UI/Views/AvatarRenderer.cs
+UnityProject/Assets/Scripts/UI/Presenters/AvatarCustomizationPresenter.cs
+UnityProject/Assets/Scripts/Systems/SectStateProvider.cs
 related:
-  - "[[entities/disciples]]"
-  - "[[concepts/state-management]]"
-  - "[[concepts/mvp-ui]]"
-  - "[[concepts/data-pipeline]]"
-  - "[[sources/architecture]]"
+"[[entities/disciples]]"
+"[[entities/avatar-appearance]]"
+"[[concepts/state-management]]"
+"[[concepts/mvp-ui]]"
+"[[concepts/sex-gender-system]]"
 created: 2026-08-31
-updated: 2026-08-31
-confidence: medium
-tags: [avatar, customization, sprite-swap, head, hair, body, accessory, parts]
+updated: 2026-09-02
+confidence: medium (v3 sections) / high (v2 implemented sections)
+tags: [avatar, customization, portrait-swap, outfit, pose, sprite-swap, parts]
+
+# Avatar Character Customization — Portrait Swap + Outfit Packages (v3)
+
+Characters render as pre-aligned full-canvas portrait chunks stacked in
+draw order (visual-novel style, reference: 觅长生 / 鬼谷八荒). v2 shipped a
+dictionary-based slot system; v3 adds **pose-linked Outfit Packages** on top
+because reference games change the character's POSE together with the outfit —
+a robe drawn for "arms crossed" cannot be worn on a "pointing hand" body.
+
+**v2 stays.** `AvatarAppearance.Parts/Colors` dictionaries, 10 slots,
+category tabs, hair 2-layer, framing presets, sex field — all implemented
+and retained. v3 adds one axis: **poseId**, plus an **outfit** def-table that
+batch-applies a coherent part set for one pose.
+
+## 1. Implemented baseline (v2 — do not regress)
+
+- `AvatarAppearance` = `{ [Key(0)] Parts: slot→partId, [Key(1)] Colors: slot→colorId }`
+  on `DiscipleState.Avatar [Key(6)]`; `""`/absent = Def-table default.
+- Slots: `base`(fixed) + equippable `body, head, eyes, brows, mouth, nose,
+  hair, face_marking, eyeshadow, accessory`; UI categories
+  ใบหน้า / ลักษณะ / ร่างกาย (`AvatarSlots.Categories`).
+- `AvatarPartDef`: id, slot, category, displayName, spritePath,
+  spritePathBack, thumbPath, drawOrder, drawOrderBack, isDefault, tintable.
+- Draw stack: `base 0 → hair_back 10 → body 20 → head 30 → face_marking 34
+  → hair_front 40 → accessory 50` (renderer builds `(order, path)` list,
+  sorts, spawns — hair back/front split from one def).
+- `AvatarFraming` presets FullBody / Bust / HeadIcon on one 1024×1536 canvas;
+  head-center must sit at identical pixel coordinates in every file.
+- `DiscipleSex [Key(7)]` on `DiscipleState`; recruitment resolves sex and
+  seeds head by sex (`CreateStarterAvatar(index, sex)`).
+- Mutation choke point `SectStateProvider.TryChangeAvatarPart()` broadcasts
+  `AvatarEquipmentChangedMessage`; UI uses draft/diff-commit/rollback;
+  interprocess write path `ChangeAvatarPartRequest/Response` registered
+  (bridge tool not yet exposed).
+
+## 2. Why Outfit Packages (v3)
+
+Reference screenshots show each outfit carries its own pose (pointing hand,
+arms crossed, holding fan). Consequences the pure-slot model cannot express:
+
+1. `body` art is pose-specific (sleeves follow the arms of THAT pose).
+2. `head`/`hair` art must be re-authored per pose (head tilt/angle changes).
+3. Letting players mix a "pointing" robe with a "standing" head produces
+   visibly broken composites.
+
+Design answer: **pose becomes the registration axis**. Every pose-dependent
+part is tagged with the pose it was drawn for; an **outfit** is an authored
+preset that batch-selects one coherent part per slot for one pose. Within a
+pose family, slots remain swappable (any hair authored for `pose_idle_01`
+fits any body of `pose_idle_01`) — freedom is preserved, broken mixes are
+structurally impossible.
+
+## 3. Data model changes (v3)
+
+### 3.1 AvatarPartDef += poseId, sexTag
+```csharp
+[System.Serializable]
+public class AvatarPartDef
+{
+    // ...existing v2 fields...
+    public string poseId;  // pose template the part was drawn for; "" = universal (fits all poses)
+    public string sexTag;  // "male" / "female" / "" = any
+}
+```
+
+### 3.2 New OutfitDef table (same JSON file)
+```json
+{
+  "outfits": [
+    { "id": "outfit_outer_male",   "displayName": "ชุดศิษย์นอก (ชาย)",  "poseId": "pose_idle_01", "sexTag": "male",
+      "thumbPath": "Avatar/thumbs/outfit_outer_male",
+      "parts": { "body": "body_robe_grey", "head": "head_male_01", "hair": "hair_short" } },
+    { "id": "outfit_outer_female", "displayName": "ชุดศิษย์นอก (หญิง)", "poseId": "pose_idle_01", "sexTag": "female",
+      "thumbPath": "Avatar/thumbs/outfit_outer_female",
+      "parts": { "body": "body_robe_grey", "head": "head_female_01", "hair": "hair_twin_tail" } },
+    { "id": "outfit_master_azure", "displayName": "ชุดฟ้าคราม (เจ้าสำนัก)", "poseId": "pose_idle_01", "sexTag": "male",
+      "thumbPath": "Avatar/thumbs/outfit_master_azure",
+      "parts": { "body": "body_robe_azure", "head": "head_male_01", "hair": "hair_topknot_long", "accessory": "acc_jade_crown" } }
+  ],
+  "parts": [ /* existing v2 parts, now tagged poseId */ ]
+}
+```
+
+### 3.3 AvatarAppearance += PoseId (append-only, back-compat)
+```csharp
+[Key(2)] public string PoseId { get; set; } = string.Empty;
+// "" = legacy/unposed → resolved as "pose_idle_01" fallback
+```
+`Parts` REMAINS the source of truth (slot→partId). Outfit apply = batch
+`SetSlot` + set `PoseId`. Renderer never needs `OutfitId`.
+
+### 3.4 Migration rule
+Tag ALL existing v2 parts with `"poseId": "pose_idle_01"` in the JSON.
+Old saves (`PoseId == ""`) therefore keep resolving exactly as before.
+
+## 4. Resolution rules (v3)
+
+`AvatarPartPool` additions (keep every v2 method signature unchanged):
+- `GetOutfit(string outfitId)`
+- `IReadOnlyList<OutfitDef> GetOutfitsFor(string sexTagOrEmpty)` — returns
+  outfits whose sexTag is "" or matches; disciple Sex Unspecified sees all.
+- `GetPartsForSlot(string slot, string poseId, string sexTag)` — filtered:
+  part.slot matches AND (part.poseId == "" OR part.poseId == poseId) AND
+  (part.sexTag == "" OR part.sexTag == sexTag).
+- Old `GetPartsForSlot(slot)` stays (unfiltered) for compatibility.
+
+`SectStateProvider` additions:
+- `TryApplyOutfit(discipleId, outfitId, out failReason, out result)`:
+  validate outfit exists → sexTag compatible with `disciple.Sex` → every
+  referenced partId exists with matching poseId → then set `PoseId` +
+  batch `SetSlot`, publish `AvatarEquipmentChangedMessage` per changed slot
+  (same message as v2; UI external-sync already handles it).
+- `TryChangeAvatarPart` gains pose validation: reject a part whose
+  `poseId` is non-empty and differs from the disciple's effective pose
+  (`Avatar.PoseId`, "" → "pose_idle_01"). Universal parts (`poseId == ""`)
+  always allowed.
+
+`AvatarRenderer`:
+- No structural change. Add `PoseId` into `BuildSignature` (defensive).
+- Optional one-time warning if equipped parts disagree on poseId.
+
+## 5. UI changes (MVP Lite)
+
+- Add a first category tab **"ชุดแต่งกาย"** (constant, not in
+  `AvatarSlots.Categories`): when active, the option grid renders
+  `GetOutfitsFor(disciple.Sex)` instead of parts; clicking an outfit calls
+  `TryApplyOutfit` on the DRAFT (preview updates immediately), committed on
+  Confirm like any slot change (diff detects PoseId/Parts deltas).
+- Existing category tabs then show slot options filtered by
+  `GetPartsForSlot(slot, draft.PoseId-or-default, disciple.Sex)` — so after
+  picking a pose-carrying outfit, only pose-compatible hair/heads appear.
+- Draft pattern, pooling, rollback, external sync: unchanged.
+
+## 6. MCP exposure (later phase, noted now)
+
+- `get_sect_state` automatically carries `Avatar.PoseId` (schema append).
+- Future write tool `apply_outfit` follows `ChangeAvatarPartRequest`
+  request/response pattern (NOT pub/sub). Do not implement in this pass.
+
+## 7. Art pipeline (v3)
+
+- One template PSD **per pose** (`Avatar_Template_pose_idle_01.psd`,
+  later `pose_point_hand`, `pose_arms_crossed`, ...), same 1024×1536 canvas
+  and head-center coordinate across ALL poses (framing presets depend on it).
+- Every pose-dependent part is drawn over its pose template and tagged with
+  that poseId in JSON; universal parts (`face_marking` center-forehead,
+  simple accessories) may use `poseId: ""` if authored to fit all poses.
+- sexTag on head/hair/body parts where sex-specific.
+- Outfit thumbnails (`thumbPath`) = pre-rendered composite of the set.
+
+## 8. What does NOT change (contract)
+
+- `AvatarAppearance` Keys 0/1 semantics; `GetSlot/SetSlot/Clone/FromSlots`.
+- `DiscipleState` keys; `DiscipleSex`.
+- Draw-order stack & hair 2-layer logic; framing presets.
+- `AvatarEquipmentChangedMessage`, `ChangeAvatarPartRequest/Response`.
+- Draft/diff-commit/rollback/external-sync presenter pattern.
+- MCP read path.
+
+## 9. Not yet decided (carried over)
+
+- Tint logic (`Colors` schema ready, no renderer logic) — phase 2.
+- `thumbPath` grid thumbnails for parts (outfits get thumbs first).
+- `AvatarIconBaker` RenderTexture cache for roster lists.
+- DialoguePanel (Bust framing consumer).
+- Whether pose switch mid-customization resets incompatible slots with a
+  confirmation prompt (v3 simply blocks incompatible picks).
+
 ---
-
-# Avatar Character Customization — Sprite Swap
-
-> A character renders as a layered sprite assembled from four swappable parts:
-> **Head, Hair, Body, Accessory**. Which part each disciple wears is chosen at
-> authoring (Def table) or at runtime (UI editor / shop / reward), stored as
-> `AvatarAppearance` inside `DiscipleState`, resolved to a draw order by
-> `AvatarRenderer`.
-
-## 1. Why a Sprite-Swap System
-
-The game is sprite-driven (no character models / skinned meshes). Rather than
-draw one avatar per disciple variant (explosive art counts), a single base
-sprite per part is reused and swapped by selecting which sprite tile to show
-per slot. This decouples art volume from character variety and makes every
-avatar unambiguously queryable through MCP — a part the AI GM may want to
-reward / lock / loot.
-
-**Trade-off by design**: simple "which tile shows" model, no blending/morph
-between parts. If verticals later need cross-sprite blending, add a
-separate effect layer — do not redesign slot selection now.
-
-## 2. Slots
-
-| Slot | Layer order (draw-from-bottom) | Notes |
-|---|---|---|
-| `base` | 0 | Always drawn. Disciple's base sprite tile. |
-| `body` | 1 | Clothing / robe / armor. Can hide body base. |
-| `head` | 2 | Face, hat, or full head piece. |
-| `hair` | 3 | Hair / hairpiece. Must not fully occlude head unless intended (author decides). |
-| `accessory` | 4 | Ring, amulet, fan — decorative, always on top. |
-
-Each slot resolves to **one or more** atlas layer groups in draw order
-(e.g. hair = `[base_hair, shine]`). See §4 resolver.
-
-## 3. Data Model (MessagePack-native)
-
-Follows the codebase rule: **Definitions live in a table; runtime state holds
-IDs, never object references** so the whole thing serializes with
-`MessagePack` and crosses the bridge. Appearance therefore rides inside
-`DiscipleState` (not a separate top-level block):
-
-```csharp
-enum AvatarPart { Body, Head, Hair, Accessory }  // draw-bottom -> top
-
-[MessagePackObject([Key(6)])]   // append after existing fields; keep order
-public class AvatarAppearance {
-    [Key(0)] public string Body   { get; set; }   // PartId or "" = default-from-def
-    [Key(1)] public string Head   { get; set; }
-    [Key(2)] public string Hair   { get; set; }
-    [Key(3)] public string Accessory { get; set; }
-}
-```
-
-```csharp
-[MessagePackObject]
-public class AvatarEquipmentChangedMessage
-{
-    [Key(0)] public string DiscipleId { get; set; }
-    [Key(1)] public string Slot { get; set; } // "Body", "Head", etc.
-    [Key(2)] public string PartId { get; set; }
-}
-```
-
-`DiscipleState` gains one field:
-
-```csharp
-[Key(6)] public AvatarAppearance Avatar { get; set; } = new AvatarAppearance();
-```
-
-- Empty slot (`""`) falls back to the **default defined in the Def table** —
-  keeps state tiny and means "un customized" is a valid default roster.
-- All part selections are PartIds (`string`), the same convention as
-  `ItemDefId`/`ItemTaskDefId`: resolved to art at runtime, so adding new art
-  never requires a schema change or save migration.
-
-**Don't introduce a new top-level `Sprite` enum or renumber keys.** Append
-`[Key(N)]` at the end of each existing MessagePack class to preserve
-backward-compatible reads — same discipline as `DiscipleState` adding
-`Avatar` (see `disciples.md` code citation).
-
-## 4. Resolver — Def Table → Draw Order
-
-Design-time (Luban/ScriptableObject, not hand-authored like world events):
-
-⚠️ Important: Do NOT use ScriptableObject for AvatarPartPool. Use plain C# class loading JSON from Resources/DataTables/, exactly like LubanEventPool.
-
-```
-AvatarParts Def             (e.g. author in Excel/Luban)
-├── Body   { PartId="robe_white",     LayerAtlas="avatar", DrawOrder=1, LayerGroups=["robe_b", "robe_b_rim"], Tint?="" }
-├── Head   { PartId="face_young",     LayerAtlas="avatar", DrawOrder=2, LayerGroups=["face_b"] }
-└── Hair   { PartId="hair_long",      LayerAtlas="avatar", DrawOrder=3, LayerGroups=["hair_b", "hair_shine"] }
-
-AvatarRenderer.Resolve(AvatarAppearance, AvatarParts) -> List<PartLayer> {
-    base -> [base_b]                                    // constant
-    sort by DrawOrder, then emit { Atlas, LayerGroup }
-}
-```
-
-Resolution order each frame (cheap, only when avatar visible):
-
-```
-resolve(base disciple ID)  ==→  list of layer groups, dedup, sort by draw order
-```
-
-## 5. Rendering (UGUI, no UI Toolkit)
-
-Per-game GameObject per disciple, always in scene (cheap — 5 sprites):
-
-```
-[char_<discipleId>] (Canvas Group, Canvas = World / HUD as design picks)
-├── CG: base    (Image, sprite[base tile])
-├── Mask
-│   ├── CG: body   (9-slice or tile)
-│   ├── CG: head
-│   └── CG: hair   (author controls which paints over which)
-└── CG: accessory (Image, on top)
-```
-
-`AvatarRenderer` runs on a 0.1s updater (only while the character is on
-screen) and drives which atlas + tile each renderer shows. Base/base-asset
-tile is constant; only 4 slots re-bind (or re-show-hide) per change.
-
-```csharp
-public class AvatarRenderer : MonoBehaviour 
-{
-}
-```
-**Canvas placement**: character canvas is the design decision — e.g. the AI
-VTuber / main disciple lives in a portrait HUD, other disciples are sprites
-in a 2D "presence" layer. Not yet decided — do not couple the renderer to one
-specific panel until the viewport choice exists.
-
-## 6. Where it Fits the Architecture
-
-```
-Authoring (design time):  Excel/Luban → cfg.AvatarParts + default per disciple in MockSectData.cs
-        ↓
-Runtime state:      DiscipleState.Avatar  (MessagePack, inside the economy state snapshot)
-        ↓
-Renderer:           AvatarRenderer (in-process, reads MockSectData Defs + Avatar)
-        ↓
-Notify:             AvatarEquipmentChangedMessage { DiscipleId, Slot, PartId, Timestamp }
-        ↓
-UI:                 AvatarCustomizationView/Presenter (MVP pattern like EventPopup)
-        ↓
-Bridge:             get_sect_state already carries .Avatar?   execute_avatar_slot?
-```
-
-**Grounded in existing parts**:
-
-- **State** — add `AvatarAppearance` to `SectEconomyState.cs`
-  `DiscipleState` (`Shared/SectEconomyState.cs`), same namespace and style.
-- **Def loader** — mirror `LubanEventPool.cs` (`concepts/data-pipeline`) as a
-  plain-C# `AvatarPartPool` that parses `cfg.AvatarParts` JSON. Keep it a
-  **plain C# class, not a ScriptableObject** — the project moved event data
-  this way in lab 12.
-- **UI** — follow the `EventPopupPresenter` MVP flow: a stateless
-  `Presenter` (Transient, resolves via VContainer enum→Type mapping, no
-  reflection) reading from `ISectStateProvider`.
-- **Notify** — new message in `GameMessages.cs`; publish from the same
-  single mutation choke point pattern used by `SectStateProvider.AdjustAndNotify`.
-- **Bridge** — `get_sect_state` already returns the full snapshot including
-  `.Avatar`, so appearance is AI-queryable on day zero via `(disciple.Avatar, body)`.
-  The AI GM could call a new write tool later — but the pattern follows
-  `execute_decision` (request/response for mutating games) rather than the
-  broken TCP-subscribe path (see `game-messages.md` — keep new mutation as
-  write/request-response to avoid the `AwaitWorldEventRequest` transport trap).
-
-**MCP exposure note**: `get_sect_state` (`McpBridge/Program.cs` `SectQueryTools`)
-returns the MessagePack-embedded `.Avatar`. No new read tool strictly needed
-until AI actions on appearance are required (e.g. reward avatar / lock avatar).
-
-## 7. Not Yet Decided
-
-- **Which tool buys/edits a part?** Shop (`purchase-item`) is items-only —
-  add an `AvatarPart` as a purchasable "item," or a separate MCP write tool.
-  Do not conflate the two until a choice is made.
-- **Do avatars cost Contribution?** Reward vs purchase vs free — all open.
-- **Canvas/viewport**: portrait-only (current UI is a single top-bar HUD +
-  center popup) vs shared 2D stage — blocks final Renderer/canvas wiring.
-- **Layer occlusion rules**: hair-overhead vs head-over-hair per slot — author
-  per slot in the Def; default = later slot paints on top.
-
-## 8. Implementation Plan (Draft)
-
-1. Add `AvatarAppearance` to `DiscipleState` (MessagePack `[Key(N)]` append).
-2. Author `cfg.AvatarParts` Excel → Luban (`AvatarParts.xsd` +
-   `AvatarParts.xlsx`) → C# rows. Add defaults per disciple in
-   `MockSectData`.
-3. `AvatarPartPool` (plain C# loader, mirror `LubanEventPool`).
-4. `AvatarRenderer` (UGUI, no UI Toolkit) — resolves def → layer groups.
-5. `AvatarEquipmentChangedMessage` + subscription in `ResourceHudView`/UI.
-6. (Later) `AvatarEditorPresenter` MVP panel + MCP write tool.
 
 ## Related Pages
 

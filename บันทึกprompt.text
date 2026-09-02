@@ -289,3 +289,111 @@ For each updated file, show:
 
 
 
+---------------------------------------------------------------------------
+## 🤖 Instructions for AI Code Agent (implement v3)
+
+Read first: this doc, `entities/avatar-appearance`, `architecture.md`.
+Ground rules: C# 8.0 only (no record/init/target-typed new); append-only
+MessagePack keys; never edit `McpBridge/Shared` copies directly — edit
+top-level `Shared/` then run `./sync-shared.sh`; do NOT touch renderer
+layer logic, framing presets, or presenter draft pattern.
+
+Tasks, in order:
+1. `Shared/SectEconomyState.cs`: append `[Key(2)] public string PoseId`
+   to `AvatarAppearance` (+ include in `Clone()`); no other schema change.
+2. `Assets/Scripts/Data/AvatarPartPool.cs`: add `poseId`, `sexTag` to
+   `AvatarPartDef`; add `OutfitDef` serializable class (id, displayName,
+   poseId, sexTag, thumbPath, `Dictionary<string,string> parts`);
+   parse `"outfits"` array in `Load()`; add `GetOutfit`,
+   `GetOutfitsFor(sex)`, `GetPartsForSlot(slot, poseId, sex)`;
+   keep all existing method signatures.
+3. `Assets/Resources/Data/avatar_parts.json`: tag every existing part with
+   `"poseId": "pose_idle_01"`; add `sexTag` to head/hair/body parts
+   (male/female per art); add the 3 starter outfits from §3.2;
+   add `"outfits": []` handling so old JSON without it still loads.
+4. `Assets/Scripts/Systems/SectStateProvider.cs`: add `TryApplyOutfit`
+   (validate → set PoseId → batch SetSlot → publish per-slot
+   `AvatarEquipmentChangedMessage`); add pose check inside
+   `TryChangeAvatarPart` (reject mismatched non-empty poseId); expose both
+   on `ISectStateProvider` (in `Core/TimeSystem.cs` interface).
+5. `AvatarCustomizationPresenter/View`: add "ชุดแต่งกาย" category tab first
+   in `CategoryOrder`; when active render outfit grid (reuse
+   `AvatarPartOptionViewData`, PartId=outfitId, SpritePath=thumbPath);
+   option click mutates `_draft` by applying outfit preset to draft
+   (PoseId + Parts); Confirm path: extend diff/rollback to include PoseId
+   (apply via `TryApplyOutfit` when PoseId+parts match an outfit, else
+   per-slot as today); `RefreshOptions` for normal tabs switches to
+   filtered `GetPartsForSlot(slot, effectivePose, sex)`.
+6. `AvatarRenderer`: add PoseId to `BuildSignature`; one-time warn on
+   equipped parts with mismatched non-empty poseId. NOTHING else.
+7. Sync shared files; verify compile on both Unity and McpBridge.
+
+Acceptance criteria:
+- [ ] Old save bytes (no PoseId) deserialize → renders as pose_idle_01.
+- [ ] Applying `outfit_outer_female` to a Male disciple fails with clear reason.
+- [ ] After applying an outfit, hair grid shows only hair parts of that pose+sex.
+- [ ] Picking a part from a different pose is rejected by TryChangeAvatarPart.
+- [ ] Draft/Cancel leaves live state untouched; Confirm rollback still works.
+- [ ] `get_sect_state` shows `PoseId` for every disciple.
+- [ ] No MCP tool added this pass.
+
+Report back: files changed, Editor-only steps (prefab/catalog: none expected
+beyond existing panel), and any JSON entries you had to add for validation.
+-----------------------------------------------------------------------------------
+อัปเดตไฟล์ LLMWiki/entities/avatar-appearance.md ให้สอดคล้องกับ Avatar System v3 (Outfit Packages + Pose) ที่เพิ่ง implement เสร็จ
+
+## สิ่งที่ต้องเพิ่ม/แก้:
+1. **Status badge**: เปลี่ยนจาก "v2 portrait-swap" เป็น "v3 portrait-swap + outfit packages"
+2. **Schema section**: เพิ่ม `[Key(2)] PoseId` เข้าไปในตารางสรุป AvatarAppearance (ตอนนี้มีแค่ Parts/Colors)
+3. **New concept**: เพิ่ม subsection "Outfit Packages" อธิบายสั้นๆ ว่า:
+   - Outfit = authored preset ของ {body, head, hair, accessory} ที่เข้าคู่กันสำหรับ pose เดียว
+   - ใช้ผ่าน TryApplyOutfit() ไม่ใช่ SetSlot ทีละตัว
+   - Pose validation: ห้ามผสม part คนละ pose
+4. **Slots table**: อัปเดตจำนวน slot จาก "4 fixed" เป็น "10 equippable + base" (ถ้ายังไม่ได้แก้)
+5. **Mutation choke point**: เพิ่ม TryApplyOutfit() คู่กับ TryChangeAvatarPart() ในรายการ mutation methods
+6. **MCP exposure**: ระบุว่า get_sect_state คืนค่า PoseId แล้ว; apply_outfit tool ยังเป็น TODO
+7. **Related links**: เพิ่ม link ไป [[sources/avatar-appearance]] (design doc v3)
+
+## Constraints:
+- อ่าน sources/avatar-appearance.md (v3 spec) เป็น source of truth
+- รักษา format เดิมของ entity page (YAML frontmatter + markdown body)
+- ไม่ลบข้อมูลเดิมที่ยังถูกต้อง (dictionary schema, hair 2-layer, framing, sex)
+- Confidence: high (เพราะโค้ด implement เสร็จแล้ว)
+- updated: วันที่วันนี้
+
+ทำเสร็จแล้วสรุปสิ่งที่เปลี่ยนให้ผมดูด้วย
+------------------------------------------------------------------------------------------
+The previous edit failed due to JSON parsing issues with embedded code blocks.
+
+Instead of using the edit tool, please:
+1. Read the current avatar-appearance.md file completely
+2. Create a NEW version of the entire file with all v3 changes applied
+3. Use the write_file tool to replace the entire file at once (not incremental edits)
+
+This avoids JSON escaping issues with code blocks containing quotes/backslashes.
+
+Apply these v3 changes to the full file:
+- Status badge: "v3 portrait-swap + outfit packages"
+- Add [Key(2)] PoseId to AvatarAppearance schema section
+- Add new "Outfit Packages" subsection explaining pose-linked outfits
+- Update slots table to show 10 equippable + base
+- Add TryApplyOutfit() to mutation choke point list
+- Note that get_sect_state returns PoseId; apply_outfit tool is TODO
+- Add link to [[sources/avatar-appearance]] in Related Pages
+- Keep all existing correct content (dictionary schema, hair 2-layer, framing, sex, draft pattern)
+- updated date: 2026-09-02
+- confidence: high
+
+Write the complete updated file content, then confirm what changed.
+-----------------------------------------------------------------------------------------------
+
+xianxia cultivator character, full body front view, standing pose, 
+anime style, transparent background, 1024x1536 pixels, 
+neutral expression, hands at sides, azure robe outfit, 
+game asset sprite sheet style, clean lineart, flat colors
+
+
+xianxia cultivator character, full body, [POSE DESCRIPTION], 
+anime style, transparent background, 1024x1536 pixels, 
+consistent art style, game asset sprite
+-----------------------------------------------------------------------------------------------
