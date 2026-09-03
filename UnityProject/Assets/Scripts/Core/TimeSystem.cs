@@ -186,7 +186,5 @@ namespace Xianxia.Sect
         PurchaseItemResponse TryPurchaseItem(string discipleId, string itemDefId, int grade, int quantity);
         bool TryChangeAvatarPart(string discipleId, string slot, string partId,
                                 out string failReason, out AvatarAppearance result);
-        bool TryApplyOutfit(string discipleId, string outfitId,
-                           out string failReason, out AvatarAppearance result);
     }
 }

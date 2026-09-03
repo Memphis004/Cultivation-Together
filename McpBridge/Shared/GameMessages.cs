@@ -46,6 +46,13 @@ namespace Xianxia.Sect.Messages
         [Key(2)] public string Reason { get; set; }
     }
 
+    // Scene lifecycle message (in-memory only — additive scenes don't cross TCP)
+    [MessagePackObject]
+    public class SceneLoadedMessage
+    {
+        [Key(0)] public string SceneName { get; set; }
+    }
+
     // Raised on random world events. RequiresDecision marks the ones that
     // should auto-pause the game and wait for the AI GM / vote window.
     // In-memory bus only now (not registered on the interprocess broker) -

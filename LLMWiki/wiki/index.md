@@ -29,7 +29,7 @@ Design documents and historical record:
 - [[sources/architecture|Architecture]] — how the subsystems fit together
 - [[sources/mechanics|Mechanics]] — per-system design (combat, gathering, crafting, ...)
 - [[sources/avatar-appearance|Avatar Customization (Sprite Swap)]] — Heads / Hairs / Bodies / Accessories, sprite-slot data model
-- [[sources/sex-gender-system|Sex / Gender for Disciples]] — proposed explicit Sex field + recruit sex selector
+- [[sources/sex-gender-system|Sex / Gender for Disciples]] — implemented `[Key(7)] DiscipleSex.Sex` + sex-aware starter avatar (UI selector ยังไม่ทำ)
 - [[sources/devlog-history|DevLog History]] — 13 lab rounds, 21-30 Aug 2026
 - [[sources/bug-log|Bug Log]] — real bugs + fixes from all labs
 - [[sources/open-questions|Open Questions]] — what's deliberately not decided

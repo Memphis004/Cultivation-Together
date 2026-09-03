@@ -119,6 +119,7 @@ namespace Xianxia.Sect
             return c;
         }
 
+        [IgnoreMember]
         /// <summary>Effective pose: PoseId if set, else fallback to "pose_idle_01".</summary>
         public string EffectivePose
         {

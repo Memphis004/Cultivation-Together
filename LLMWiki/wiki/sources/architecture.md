@@ -10,15 +10,15 @@ related:
   - "[[concepts/vcontainer-composition]]"
   - "[[concepts/message-pipe-bus]]"
 created: 2026-08-31
-updated: 2026-09-02
+updated: 2026-09-04
 confidence: high
 tags: [architecture, di, ipc, messagepipe]
 ---
 
 # Architecture
 
-> How the subsystems fit together. The single most important doc to read
-> before touching any system.
+How the subsystems fit together. The single most important doc to read
+before touching any system.
 
 ## High-Level Diagram
 
@@ -27,21 +27,20 @@ tags: [architecture, di, ipc, messagepipe]
 │  Unity (Host)                                               │
 │                                                             │
 │  ┌──────────────────┐    ┌──────────────────────────────┐   │
-│  │  GameLifetimeScope│    │  MessagePipe Bus             │   │
-│  │  (VContainer DI) │───▶│  - in-memory pub/sub         │   │
+│  │ GameLifetimeScope│    │  MessagePipe Bus             │   │
+│  │ (VContainer DI)  │───▶│  - in-memory pub/sub         │   │
 │  └──────────────────┘    │  - TCP interprocess to Bridge│   │
-│           │              └──────────────────────────────┘   │
-│           │                          ▲                      │
-│           ▼                          │                      │
+│                          └──────────────────────────────┘   │
+│                                      ▲                      │
+│                                      ▼                      │
 │  ┌──────────────────────────────────────────────┐           │
-│  │  Subsystems (VContainer entry points)        │           │
-│  │  - TimeSystem       (IStartable, ITickable)  │           │
-│  │  - DiscipleSystem   (ITickable)              │           │
+│  │ Subsystems (VContainer entry points)         │           │
+│  │  - TimeSystem (IStartable, ITickable)        │           │
+│  │  - DiscipleSystem (ITickable)                │           │
 │  │  - ResourceCraftingSystem (ITickable)        │           │
 │  │  - WorldEventSystem (ITickable)              │           │
-│  │  - BuildingSystem   (ITickable, STUB)        │           │
-│  │  - DecisionLogger   (IStartable)             │           │
-│  │  - UIService        (Singleton)              │           │
+│  │  - BuildingSystem (ITickable, STUB)          │           │
+│  │  - DecisionLogger (IStartable)               │           │
 │  └──────────────────────────────────────────────┘           │
 │           │                                                  │
 │           ▼                                                  │
@@ -53,6 +52,7 @@ tags: [architecture, di, ipc, messagepipe]
 │  │    - TickGathering() / TickCrafting()        │           │
 │  │    - RecruitOuterDisciple()                  │           │
 │  │    - TryPurchaseItem()                       │           │
+│  │    - TryChangeAvatarPart(slot, partId)       │           │
 │  └──────────────────────────────────────────────┘           │
 │           │                                                  │
 │           ▼                                                  │
@@ -61,18 +61,19 @@ tags: [architecture, di, ipc, messagepipe]
 │  │  Resources/DataTables/worldevent_*.json      │           │
 │  │  Data: AvatarPartPool (JSON → C#)            │           │
 │  │  Resources/Data/avatar_parts.json            │           │
-│  └──────────────────────────────────────────────┘           │
+│  └──────────────────────────────────────────────┘     
 │                                                             │
 │  ┌──────────────────────────────────────────────┐           │
- │  │  UI (Xianxia.UI.MVP Lite — UGUI)             │           │
- │  │  - UIRoot (Canvas)                           │           │
- │  │  - UIPanelCatalog (ScriptableObject)         │           │
- │  │  - EventPopup  (View + Presenter)            │           │
- │  │  - ResourceHud (View + Presenter)            │           │
- │  │  - LogWindow   (View + Presenter)            │           │
- │  │  - AvatarCustomization (View + Presenter,    │           │
- │  │    + AvatarRenderer layered sprites)         │           │
- │  └──────────────────────────────────────────────┘           │
+│  │ UI (Xianxia.UI.MVP Lite — UGUI)              │           │
+│  │  - UIRoot (Canvas)                           │           │
+│  │  - UIPanelCatalog (ScriptableObject)         │           │
+│  │  - EventPopup (View + Presenter)             │           │
+│  │  - ResourceHud (View + Presenter)            │           │
+│  │  - LogWindow (View + Presenter)              │           │
+│  │  - AvatarCustomization (View + Presenter,    │           │
+│  │    + AvatarRenderer layered sprites,         │           │
+│  │      slot-based / parts-only)   🔸           │           │
+│  └──────────────────────────────────────────────┘           │
 └─────────────────────────────────────────────────────────────┘
           │ TCP 127.0.0.1:3215 (MessagePipe.Interprocess)
           ▼
@@ -91,17 +92,26 @@ tags: [architecture, di, ipc, messagepipe]
 └─────────────────────────────────────────────────────────────┘
 ```
 
-## Composition Root
+## Scene Pattern
 
-**File**: `Assets/Scripts/Core/GameLifetimeScope.cs`
+เกมใช้ **Additive Scene Loading** แทน Single Scene:
 
-Wires everything in `Configure(IContainerBuilder builder)`:
+- **CoreScene** (persistent) — Canvas + UIRoot, GameLifetimeScope,
+  core systems (TimeSystem, SectStateProvider, MessagePipe),
+  EventSystem, AudioListener, MainCamera → **never unloads**
+- **GameplayScene** (transient) — Environment, NPCs, Buildings,
+  scene-specific UI (EventPopup, Dialogue) → loads additive, unload/reload ได้
+
+**Scene Transition Flow:** CoreScene (Single) → GameplayScene (Additive) → ...
+
+## DI Registration
 
 ```csharp
 // Data (Luban migration replacing ScriptableObject)
 builder.RegisterInstance(new LubanEventPool());
 
-// Avatar part definitions loaded from Resources/Data/avatar_parts.json
+// 🔸 Avatar part definitions loaded from Resources/Data/avatar_parts.json
+//    (parts-only table — outfit table ถูกยกเลิก, ดู sources/avatar-appearance §1)
 builder.Register<AvatarPartPool>(Lifetime.Singleton);
 
 // UI (Xianxia.UI.MVP Lite)
@@ -142,11 +152,31 @@ builder.RegisterEntryPoint<DiscipleSystem>(Lifetime.Singleton).AsSelf();
 builder.RegisterEntryPoint<ResourceCraftingSystem>(Lifetime.Singleton).AsSelf();
 builder.RegisterEntryPoint<WorldEventSystem>(Lifetime.Singleton).AsSelf();
 builder.RegisterEntryPoint<DecisionLogger>(Lifetime.Singleton).AsSelf();
+builder.RegisterEntryPoint<Xianxia.Sect.UI.WorldEventUISystem>(Lifetime.Singleton);
+builder.RegisterEntryPoint<Xianxia.Sect.UI.UIBootstrap>(Lifetime.Singleton);
 
 // State aggregator
 builder.Register<ISectStateProvider, SectStateProvider>(Lifetime.Singleton);
+
+// MessagePipe bus + TCP interprocess
+var options = builder.RegisterMessagePipe(pipeOptions => { /* ... */ });
+var messagePipeBuilder = builder.ToMessagePipeBuilder();
+var interprocess = messagePipeBuilder.AddTcpInterprocess("127.0.0.1", 3215, /* ... */);
 ```
-> 📎 Source: Assets/Scripts/Core/GameLifetimeScope.cs
+📎 Source: `Assets/Scripts/Core/GameLifetimeScope.cs`
+
+## Interprocess Contracts (Avatar) 🔸
+
+| Contract | รูปแบบ | สถานะ |
+|---|---|---|
+| `AvatarEquipmentChangedMessage` | pub/sub | ✅ ใช้งานอยู่ |
+| `ChangeAvatarPartRequest/Response` | request-response | ✅ registered, bridge tool `change_avatar_part` กำลังทำ |
+| ~~`AvatarOutfitChangedMessage`~~ | — | ❌ **ยกเลิก** |
+| ~~`ApplyOutfitRequest/Response`~~ | — | ❌ **ยกเลิก** |
+
+> **กฎการเลือก transport:** สิ่งที่ agent ต้องรู้ผลทันที (สำเร็จ/ล้มเหลว + reason)
+> ใช้ **request-response** เสมอ; สิ่งที่เป็นการแจ้งเตือน UI ใช้ **pub/sub**
+> การเปลี่ยน avatar part ต้องการ guaranteed feedback → request-response
 
 ## Key Architectural Decisions (with rationale)
 
@@ -317,9 +347,10 @@ Never edit the copies directly.
 
 ## Related Pages
 
-- [[concepts/vcontainer-composition|VContainer Composition Root]]
-- [[concepts/message-pipe-bus|MessagePipe Bus]]
-- [[concepts/mcp-bridge|MCP Bridge]]
-- [[concepts/decision-pipeline|Decision Pipeline]]
-- [[concepts/mvp-ui|Xianxia.UI.MVP Lite]]
-- [[concepts/data-pipeline|Luban Data Pipeline]]
+- [[concepts/vcontainer-composition]]
+- [[concepts/message-pipe-bus]]
+- [[concepts/mcp-bridge]]
+- [[concepts/decision-pipeline]]
+- [[concepts/mvp-ui]] — Xianxia.UI.MVP Lite
+- [[concepts/data-pipeline]] — Luban
+- [[entities/avatar-appearance]] 🔸

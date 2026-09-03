@@ -10,9 +10,9 @@ related:
   - "[[concepts/purchase-store]]"
   - "[[concepts/decision-pipeline]]"
 created: 2026-08-31
-updated: 2026-08-31
+updated: 2026-09-04
 confidence: high
-tags: [state, economy, gathering, crafting, purchase, recruiting]
+tags: [state, economy, gathering, crafting, purchase, recruiting, avatar]
 ---
 
 # SectStateProvider.cs
@@ -41,8 +41,9 @@ tags: [state, economy, gathering, crafting, purchase, recruiting]
 | `ApplyDecisionConsequence(eventId, choiceId)` | `void` | Applies rules for a chosen event choice |
 | `TickGathering(deltaSeconds)` | `void` | Called every frame from `DiscipleSystem` |
 | `TickCrafting(deltaSeconds)` | `void` | Called every frame from `ResourceCraftingSystem` |
-| `RecruitOuterDisciple()` | `void` | Adds a new outer disciple (round-robin task/name) |
+| `RecruitOuterDisciple(sex = Unspecified)` | `void` | Adds an outer disciple (round-robin task/name); sex ไม่ระบุ → parity even=Male/odd=Female |
 | `TryPurchaseItem(discipleId, itemDefId, grade, qty)` | `PurchaseItemResponse` | Atomic check-and-deduct purchase |
+| `TryChangeAvatarPart(discipleId, slot, partId, …)` | `bool` + `out AvatarAppearance` | เปลี่ยน avatar part ทีละ slot (pose-validated) → broadcast `AvatarEquipmentChangedMessage` |
 
 ## Constants (placeholders, awaiting real balance)
 
@@ -181,11 +182,15 @@ public void TickCrafting(float deltaTimeSeconds)
 ### Recruiting (called from decision consequence)
 
 ```csharp
-public void RecruitOuterDisciple()
+public void RecruitOuterDisciple(DiscipleSex sex = DiscipleSex.Unspecified)
 {
     var index = _state.Disciples.Count;
     var task = GatheringTasks[index % GatheringTasks.Length];
     var name = RecruitNamePool[index % RecruitNamePool.Length];
+
+    // Default parity: even index → Male, odd → Female (เมื่อ caller ไม่ระบุ sex)
+    var resolvedSex = (sex != DiscipleSex.Unspecified) ? sex
+        : (index % 2 == 0) ? DiscipleSex.Male : DiscipleSex.Female;
 
     var disciple = new DiscipleState
     {
@@ -195,6 +200,8 @@ public void RecruitOuterDisciple()
         Wallet = new CurrencyWallet(),
         PersonalInventory = new List<InventoryItem>(),
         CurrentTask = task,
+        Sex = resolvedSex,
+        Avatar = CreateStarterAvatar(index, resolvedSex),
     };
 
     _state.Disciples.Add(disciple);
@@ -204,7 +211,7 @@ public void RecruitOuterDisciple()
         DisplayName = disciple.DisplayName,
     });
 
-    Debug.Log($"[SectStateProvider] Recruited outer disciple: {disciple.DisplayName} ({disciple.DiscipleId}), assigned to {task}");
+    Debug.Log($"[SectStateProvider] Recruited outer disciple: {disciple.DisplayName} ({disciple.DiscipleId}), sex={resolvedSex}, assigned to {task}");
 }
 ```
 

@@ -1,201 +1,177 @@
 ---
-title: Sex / Gender for Disciples (Addable Property)
+title: Sex / Gender for Disciples (Implemented)
 type: gdd
-.sources:
+sources:
   - UnityProject/Assets/Scripts/Shared/SectEconomyState.cs
   - UnityProject/Assets/Scripts/Shared/MockSectData.cs
   - UnityProject/Assets/Scripts/Systems/SectStateProvider.cs
-  - UnityProject/Assets/Scripts/UI/Views/AvatarCustomizationView.cs
+  - UnityProject/Assets/Scripts/UI/Presenters/AvatarCustomizationPresenter.cs
 related:
   - "[[entities/disciples]]"
+  - "[[entities/avatar-appearance]]"
   - "[[concepts/state-management]]"
-  - "[[concepts/avatar-appearance]]"
 created: 2026-09-01
-updated: 2026-09-01
-confidence: medium
+updated: 2026-09-04
+confidence: high
 tags: [disciple, sex, gender, recruitment, avatar, data-model]
 ---
 
-# Sex / Gender for Disciples — Addable Property
+# Sex / Gender for Disciples (Implemented)
 
-> Feature: give each disciple an **explicit** sex value (Male / Female) so the
-> game state and the recruit/edit UI can reference it directly. Today sex is
-> only *implied* — `RecruitOuterDisciple()` in SectStateProvider.cs picks head/hair
-> by `rosterIndex % 2` (male on even, female on odd), and there is no field to
-> query or change it.
+> **สถานะ: ACCEPTED + implemented** — `DiscipleState.Sex [Key(7)]` มีจริงในโค้ดแล้ว
+> ตั้งแต่ v0.10 (เดิมหน้านี้เป็น proposal "Addable Property" — ตอนนี้คือ decision record ของสิ่งที่ implement แล้ว)
 
-## 1. Problem / Why Now
+สรุปสิ่งที่ implement:
+- `enum DiscipleSex { Unspecified, Male, Female }` + `[Key(7)] Sex` บน `DiscipleState`
+  (`Shared/SectEconomyState.cs`) — serialize ผ่าน MessagePack ไปกับ snapshot อัตโนมัติ
+- `MockSectData.Create()` ระบุ `Sex` ให้ทั้ง 4 founder (M/F/F/M)
+- `RecruitOuterDisciple(DiscipleSex sex = Unspecified)` รับ sex ได้;
+  ถ้าไม่ระบุ → default parity เดิม (index คู่ = Male, คี่ = Female) กัน roster ดูเปลี่ยนไป
+- `CreateStarterAvatar(index, sex)` เลือก head ตาม sex (`head_female_01` ถ้า Female, ไม่งั้น `head_male_01`)
+- `AvatarCustomizationPresenter` capture `disciple.Sex` ตอนเปิด panel → ใช้กรองหัว/ผมตอน `OnRandomize`
+  (`GetPartsForSlot(slot, poseId, sex)`) — ศิษย์ชายไม่สุ่มได้หัวหญิง (และ vice versa)
 
-Current state (`disciples.md`, `MockSectData.cs`):
+## 1. Problem ที่ปิดไปแล้ว (historical)
 
-- 4 founder disciples, `RecruitOuterDisciple()` always adds an **OuterDisciple**.
-- No `Sex`/`Gender` field exists on `DiscipleState`.
-- The only sex signal is a **side effect** of the recruit name/avatar index:
+ก่อน v0.10 ไม่มี field ใดเก็บเพศบน `DiscipleState` — เพศเป็นแค่ side effect ของ index:
+`CreateStarterAvatar(int rosterIndex)` เลือก head ด้วย `rosterIndex % 2` (male = even, female = odd)
+และถามไม่ได้ว่า "ศิษย์ X เพศอะไร" โดยไม่ต้อง parse partId ของหัว/ผม + เรียกศิษย์เพศเฉพาะไม่ได้
 
 ```csharp
-// SectStateProvider.cs:231  CreateStarterAvatar(int rosterIndex)
-var a = new AvatarAppearance();
+// ก่อน implement: CreateStarterAvatar(int rosterIndex)
 a.SetSlot(AvatarSlots.Head, (rosterIndex % 2 == 0) ? "head_male_01" : "head_female_01");
-a.SetSlot(AvatarSlots.Hair, StarterHair[rosterIndex % StarterHair.Length]);
 ```
 
-So sex = "whoever the avatar slots happen to be". You cannot ask "is disciple
-X male?" without parsing their head/hair part IDs, and you cannot recruit a
-specific sex. That's the gap this doc closes: **make sex a first-class, explicit
-data attribute** on the disciple.
+ปัญหานั้นปิดแล้ว — ส่วนที่**ยังไม่ทำ** เหลือแค่ UI surface (§5)
 
-## 2. Design Decision (opinionated)
+## 2. Design Decision (ยืนยันแล้ว)
 
-> **Recommend an explicit `DiscipleSex` field on `DiscipleState`: do NOT keep sex
-> implicit in slot choice.**
+> **ใช้ explicit `DiscipleSex` field บน `DiscipleState` — อย่าเก็บเพศไว้ในตัวเลือก slot**
 
-Rationale: the wiki's guiding invariant is *"runtime state holds ids/flags, never
-hidden derivations"* (state-management.md). Deriving sex from slot names is a
-cryptic bug-wait; an explicit enum is directly queryable, serializable, and
-becomes the source of truth when gender affects recruiting flavor, naming, or
-future gender-gated content.
+เหตุผล: ตาม invariant "runtime state holds ids/flags, never hidden derivations"
+(state-management.md) การเดาเพศจากชื่อ part เป็น bug-wait; enum ถามได้ตรง ๆ,
+serialize ได้ และเป็น source of truth เมื่อเนื้อหา gender-gated ตามมา
 
-## 3. Data Model Change
-
-`DiscipleState` (`SectEconomyState.cs:29`) gains one field, appended with the
-MessagePack key discipline already used (`[Key(7)]`, after `Avatar`):
+## 3. Data Model (implemented)
 
 ```csharp
 [MessagePackObject]
 public class DiscipleState
 {
-    // [Key(0)]-..[Key(6)] Avatar unchanged
+    // [Key(0)]..[Key(5)] ...
+    [Key(6)] public AvatarAppearance Avatar { get; set; } = new AvatarAppearance();
     [Key(7)] public DiscipleSex Sex { get; set; } = DiscipleSex.Unspecified;
+}
+
+public enum DiscipleSex { Unspecified, Male, Female }
+```
+
+- `Unspecified` เป็นค่า default ที่ปลอดภัย (roster เก่าที่ serialize ไว้ไม่มี key นี้ → deserialize ได้ 0 ค่า)
+- **Backward compatible**: `[Key(7)]` ต่อท้ายตามวินัย append-only ของ MessagePack
+
+## 4. Runtime Wires (implemented)
+
+### 4.1 Recruitment — `SectStateProvider.RecruitOuterDisciple(sex)`
+
+```csharp
+public void RecruitOuterDisciple(DiscipleSex sex = DiscipleSex.Unspecified)
+{
+    var index = _state.Disciples.Count;
+    var task = GatheringTasks[index % GatheringTasks.Length];
+    var name = RecruitNamePool[index % RecruitNamePool.Length];
+
+    // Default parity: even index → Male, odd → Female (เมื่อ caller ไม่ระบุ sex)
+    var resolvedSex = (sex != DiscipleSex.Unspecified) ? sex
+        : (index % 2 == 0) ? DiscipleSex.Male : DiscipleSex.Female;
+
+    var disciple = new DiscipleState {
+        DiscipleId = $"d{index + 1:000}",
+        DisplayName = name,
+        Rank = DiscipleRank.OuterDisciple,
+        Wallet = new CurrencyWallet(),
+        PersonalInventory = new List<InventoryItem>(),
+        CurrentTask = task,
+        Sex = resolvedSex,
+        Avatar = CreateStarterAvatar(index, resolvedSex),
+    };
+    // ...
 }
 ```
 
-```csharp
-public enum DiscipleSex { Unspecified, Male, Female }  // new
-```
-
-- `Unspecified` is the safe default for loaded/saved roster so a missing value
-  doesn't break rendering.
-- **Serialization safe**: `[Key(7)]` append reads backward compatibly on old
-  saves (same discipline as adding `Avatar` at `[Key(6)]` per
-  avatar-appearance.md §3–§4).
-
-## 4. Runtime Wires
-
-All mutation choke points (`SectStateProvider.cs`) + starterset + views.
-
-### 4.1 Recruitment — the primary surface
-
-`RecruitOuterDisciple()` (`SectStateProvider.cs:194`) currently:
+`CreateStarterAvatar(index, sex)`:
 
 ```csharp
-var disciple = new DiscipleState {
-    DiscipleId = $"d{index + 1:000}",
-    DisplayName = name,
-    Rank = DiscipleRank.OuterDisciple,
-    Wallet = new CurrencyWallet(),
-    PersonalInventory = new List<InventoryItem>(),
-    CurrentTask = task,                  // round-robin
-};
+private AvatarAppearance CreateStarterAvatar(int rosterIndex, DiscipleSex sex)
+{
+    var a = new AvatarAppearance();
+    a.SetSlot(AvatarSlots.Body, "body_robe_grey");
+    a.SetSlot(AvatarSlots.Head, (sex == DiscipleSex.Female) ? "head_female_01" : "head_male_01");
+    a.SetSlot(AvatarSlots.Hair, StarterHair[rosterIndex % StarterHair.Length]);
+    return a;
+}
 ```
 
-Change to accept a sex (inject a `RecruitSexPicker` or pass `DiscipleSex?`).
-Default keeps parity (even index → Male, odd → Female) to preserve current
-"mixed roster" look, but callers/UI can force a sex:
+Avatar ตรงกับ state เสมอ — head ถูก derive จาก `Sex` ไม่ใช่จาก index
 
-```csharp
-var disciple = new DiscipleState {
-    ...
-    CurrentTask = task,
-    Sex = sex,   // <-- new
-    Avatar = CreateStarterAvatar(index, sex),             // <-- new param
-};
-```
+### 4.2 Existing roster (`MockSectData.cs`) — implemented
 
-`CreateStarterAvatar(index, sex)` (`SectStateProvider.cs:231`) then derives its
-default head/hair from the **sex enum** instead of the raw index, so the
-avatar implicitly matches state.
+Founder ทั้ง 4 ระบุ `Sex` ชัดเจนใน `Create()` → enum มีค่าตั้งแต่วันแรก ไม่ต้องเดาจากหัว:
 
-### 4.2 Existing roster (`MockSectData.cs`)
+| id | ชื่อ | Rank | Sex |
+|---|---|---|---|
+| d000 | Liu YiFeng | SectMaster | Male |
+| d001 | Lin Feng | OuterDisciple | Female |
+| d002 | Su Yan | InnerDisciple | Female |
+| d003 | Elder Zhao | Elder | Male |
 
-Label each founder's sex explicitly in `Create()` so the enum is populated from
-day one (currently implied by their head slots). Optional but makes the field
-meaningful for the MVP roster.
+### 4.3 Part authoring + การกรอง (`AvatarPartPool`) — implemented บางส่วน
 
-### 4.3 Avatar defaults by sex (`AvatarPartPool`, authoring)
+- `AvatarPartDef` ทุกตัวมี `sexTag` (`"male"` / `"female"` / `""` = any) — data พร้อม
+- Pool มี overload `GetPartsForSlot(slot, poseId, sex)` กรอง pose/sex (`""` = universal)
+- ใช้ที่: **`OnRandomize`** (สุ่มเฉพาะ part ที่เพศตรงกับศิษย์) — implemented
+- ยังไม่ใช้ที่: **กริดตัวเลือกใน UI** — แสดงทุก part ของ slot (ผู้เล่นเลือกอิสระตามสเปก v2.5);
+  sexTag filter ในกริด = Roadmap ข้อ 5 ของ [[entities/avatar-appearance|Avatar Appearance]]
 
-`AvatarPartPool` (`Data/AvatarPartPool.cs`) is a plain C# loader mirroring
-`LubanEventPool` (NOT a ScriptableObject — see avata-appearance.md §6.2). Two
-options:
+## 5. UI Surface (⏳ ยังไม่ implement — เป็นงานต่อ)
 
-- **A. Filter-by-sex**: `GetPartsForSlot(slot, sex)` returns only parts whose
-  `sexTag` matches. Renders per-sex variant automatically.
-- **B. Sex-gated default**: the recruit's `Avatar` seeding reads the pool's
-  default-by-sex per slot.
+ตอนนี้ Sex ไม่มี UI ให้แก้ — field ถูก **อ่าน** ฝั่งเดียว (randomize) ไม่ถูกเขียนจาก UI:
 
-Option A is cleaner (avatar variants fully separated from recruit sex) but
-requires every `AvatarPart` Def to carry a `SexTag`. Option B is a smaller
-sprint (recruit gets a coherent male/female starter) and can grow into A later.
+1. **Recruit confirmation** (`EventPopup` / `new_disciple_applicant`) — ยังไม่มี sex selector;
+   เรียก `RecruitOuterDisciple()` เปล่า → ได้ parity ตาม index
+2. **Avatar customization panel — Sex toggle** — ยังไม่มี; ไม่มี `TryChangeSex` บน
+   `ISectStateProvider` (ถ้าจะทำ: เพิ่ม method + UI chip ที่หัว panel แล้ว broadcast message ให้ renderer/sync)
 
-### 4.4 Renderer / UI (no functional change, only data)
+ร่างเดิม (ถ้าทำ): chip Male↔Female ที่หัว panel เรียก mutation ผ่าน
+`ISectStateProvider` (แบบเดียวกับ `TryChangeAvatarPart`) แล้ว broadcast message ให้ renderer/Sync
 
-`AvatarAppearance` is slot-based with **no built-in sex** — so the renderer
-doesn't need edits; it just reads whatever slots are set. The sex field only
-becomes visible when **UI** exposes it (see §5).
+## 6. Bridge / MCP (implemented: read / ⏳ write)
 
-## 5. UI Surface
-
-New feature = the field must be **settable/displayable** somewhere. Two surfaces:
-
-1. **Recruit confirmation** (`EventPopupPresenter` / `new_disciple_applicant`
-   world event consequence) — add a sex selector next to "recruit this disciple".
-   Trigger `EventPopup` with a `disciple: {id, sex}` payload.
-2. **Avatar customization panel** (`AvatarCustomizationView`,
-   `AvatarCustomizationPresenter`) — add a small `Sex` chip/toggle at the top of
-   the panel so a player can flip a disciple Male↔Female live. This reuses the
-   existing `ISectStateProvider` mutation path (`BuildSectEconomyState` + a new
-   `TryChangeSex`).
-
-Presenter pattern stays the same (VContainer Transient, enum-resolved deps).
-
-## 6. Bridge / MCP Expose
-
-`SectEconomyState` already serializes via MessagePack and is served wholesale by
-`get_sect_state` — the new `[Key(7)]` enum field is included automatically, so
-`get_sect_state` already returns it. If bridge should *edit* sex, follow the
-`execute_decision` request/response pattern (NOT the broken TCP-subscribe path,
-per game-design-doc patterns) — add `set_disciple_sex` later, day-N+.
+- `get_sect_state` พา `[Key(7)] Sex` ไปให้ AI อ่านอยู่แล้ว (MessagePack ทั้ง snapshot — ฟรี ไม่ต้องแก้)
+- MCP tool ปัจจุบันที่ bridge เปิด = `get_sect_state`, `await_next_world_event`,
+  `execute_decision`, `purchase_item` — ยังไม่มี `set_disciple_sex` (ทำเมื่อ UI ต้องการ)
+- หมายเหตุ: `change_avatar_part` (write avatar part) ก็ยังไม่ expose บน bridge เช่นกัน — ดู [[entities/avatar-appearance]]
 
 ## 7. Test / Risk
 
-- Old save round-trip: serialize→deserialize a roster lacking `Sex` ⇒ defaults
-  to `Unspecified`, renders fine (Key(7) back-compat).
-- Regress: confirm even/odd recruit parity avatar look unchanged after refactor
-  (head_male_01 / head_female_01).
-- No gameplay effect on gathering/crafting/purchase — pure data + optional UI.
-  **Low risk to economy loops.**
+- Old-save round-trip: roster ที่ไม่มี key `Sex` → deserialize ได้ `Unspecified` → render ปกติ
+- Parity default: ไม่ระบุ sex → ได้ roster ผสมเหมือนเดิม (head_male_01/head_female_01)
+- ไม่กระทบ gathering/crafting/purchase — เป็น data + path การสร้างศิษย์เท่านั้น
 
-## 8. Rollout Plan (tasks, in order)
+## 8. Rollout Status (เทียบกับร่างเดิม)
 
-| # | Change | File | Risk |
+| # | Change | File | สถานะ |
 |---|---|---|---|
-| 1 | Add `DiscipleSex` enum + `[Key(7)] Sex` on `DiscipleState` | `SectEconomyState.cs` | none |
-| 2 | Set `Sex` on `MockSectData` founders | `MockSectData.cs` | none |
-| 3 | `RecruitOuterDisciple(index, sex)` + `CreateStarterAvatar(index, sex)` | `SectStateProvider.cs` | low |
-| 4 | Recruit popup: add sex selector + sex payload | `EventPopup Presenter/View`, `GameMessages.cs` | medium (new UI) |
-| 5 *(optional)* | `AvatarPartPool.GetPartsForSlot(slot, sex)` + `TryChangeSex` | `AvatarPartPool.cs`, `SectStateProvider.cs`, new View/Presenter | medium |
-| 6 *(later)* | `set_disciple_sex` MCP write tool | `McpBridge/Program.cs` | depends on bridge scope |
-
-## 9. First Change to Make — Answer to "which code first?"
-
-**Start with `SectEconomyState.cs` (task 1 above):** add the `DiscipleSex` enum
-and the `[Key(7)] public DiscipleSex Sex { get; set; }` field to `DiscipleState`.
-It's a ~3-line, zero-risk, MessagePack-backward-compatible change that makes the
-property exist in state before anything wires up around it. Then the recruit
-path (`SectStateProvider.cs`) and UI follow in the table order.
+| 1 | `DiscipleSex` enum + `[Key(7)] Sex` | `SectEconomyState.cs` | ✅ done |
+| 2 | ตั้ง `Sex` ใน `MockSectData` founders | `MockSectData.cs` | ✅ done |
+| 3 | `RecruitOuterDisciple(sex)` + `CreateStarterAvatar(index, sex)` | `SectStateProvider.cs` | ✅ done |
+| 4 | Recruit popup: sex selector + payload | `EventPopup Presenter/View`, `GameMessages.cs` | ⏳ ยังไม่ทำ |
+| 5 | `GetPartsForSlot(slot, sex)` filter | `AvatarPartPool.cs` | 🔶 ทำแล้วเป็น `(slot, poseId, sex)` ใช้ใน Randomize; grid filter ยังไม่เปิด |
+| 6 *(optional)* | Sex toggle ใน customization panel (`TryChangeSex`) | `SectStateProvider.cs`, View/Presenter | ⏳ ยังไม่ทำ |
+| 7 *(later)* | `set_disciple_sex` MCP write tool | `McpBridge/Program.cs` | ⏳ ยังไม่ทำ |
 
 ## Related Pages
 
-- [[entities/disciples]] — DiscipleState lives here; add the field
+- [[entities/disciples]] — `DiscipleState` เจ้าของ field นี้
+- [[entities/avatar-appearance]] — `sexTag` บน part + randomize filter + Roadmap grid filter
 - [[concepts/state-management]] — `[Key(N)]` MessagePack append discipline
-- [[concepts/avatar-appearance]] — sex-tagged avatar parts, render is slot-only
-- [[concepts/mcp-bridge]] — get_sect_state already carries new field
+- [[concepts/mcp-bridge]] — `get_sect_state` พา `Sex` ไปแล้ว

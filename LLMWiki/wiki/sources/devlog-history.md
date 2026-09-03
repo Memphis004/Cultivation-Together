@@ -7,14 +7,14 @@ related:
   - "[[sources/architecture]]"
   - "[[sources/bug-log]]"
 created: 2026-08-31
-updated: 2026-08-31
+updated: 2026-09-04
 confidence: high
 tags: [devlog, history, labs]
 ---
 
 # DevLog History
 
-> Summary of 13 lab rounds (21-30 August 2026) from `project_summary.md`.
+> Summary of 18 lab rounds (21 August – 3 September 2026) from `project_summary.md`.
 > Each lab was a focused work session with specific deliverables, bugs hit, and
 > decisions made. For day-by-day work going forward, create new
 > `devlog-YYYY-MM-DD.md` files.
@@ -36,6 +36,11 @@ tags: [devlog, history, labs]
 | 11 | Aug 25 | UI basics (SectHud) | Top-bar HUD, personal wallet added |
 | 12 | Aug 26 | EventData → Luban pipeline | Excel→JSON→C# replaces ScriptableObject |
 | 13 | Aug 30 | Xianxia.UI.MVP Lite | EventPopup + ResourceHud, fixed silent-no-op bug |
+| 14 | Sep 1 | LogWindow event log | Scrolling TMP log, `DecisionExecutedMessage`, auto-open via `UIBootstrap` |
+| 15 | Sep 1 | Avatar System v2.5 (portrait swap) | Dictionary `Parts/Colors`, category tabs, hair 2-layer renderer, framing presets |
+| 16 | Sep 2 | Sex/Gender system + Unity-MCP setup | `[Key(7)] Sex`, sex-aware starter avatar + randomize filter; Unity-MCP skills |
+| 17 | Sep 3 | Avatar System v3 — outfit packages | Implemented then **rolled back**; kept `poseId`/`sexTag` |
+| 18 | Sep 3 | Additive scene architecture | CoreScene/GameplayScene split, `SceneLoader`, scene A→B swap |
 
 ## Lab 1 — Proto schema + mock data
 
@@ -214,6 +219,108 @@ cleanly). Full loop: `WorldEventSystem` → `EventPopup` opens → click
 choice → `DecisionExecutor` → `SectStateProvider` logs "Recruited outer
 disciple: Jiang Yu". **Proves lab 13 bug fix is correct, not just theory.**
 
+## Lab 14 — LogWindow event log (v0.8)
+
+Real-time narrative event log:
+- `LogWindowView` — scrolling TMP log, FIFO eviction, auto-scroll
+- `LogWindowPresenter` — narrative events **only** (recruit / world event /
+decision); explicitly excludes `SectResourceChangedMessage` to avoid tick
+flooding
+- `DecisionExecutedMessage` published via `DecisionExecutor` (single funnel —
+any source: UI click or bridge decision)
+- `UIBootstrap` opens LogWindow at game start
+
+**Design decision**: the log shows story beats, not resource deltas —
+gathering ticks fire every second and would flood it.
+
+## Lab 15 — Avatar System v2.5 portrait swap
+
+Rebuilt avatar model from fixed slots to a dictionary schema:
+- `AvatarAppearance` → `Parts`/`Colors` as `Dictionary<string,string>`
+  (`[Key(0)]`/`[Key(1)]`); `GetSlot/SetSlot/Clone/FromSlots` API preserved;
+  empty value = slot default
+- `AvatarSlots` → 10 equippable slots + `Categories`
+  (`ใบหน้า / ลักษณะ / ร่างกาย`) + labels
+- `AvatarPartDef` += `category, spritePathBack, drawOrderBack, thumbPath,
+  tintable` (JSON backward-compatible)
+- `AvatarRenderer` — loops `Parts.Keys`, hair back/front 2-layer split
+  (drawOrder 10/40), `AvatarFraming` presets `FullBody / Bust / HeadIcon`
+  on a 1024×1536 canvas
+- `AvatarCustomization` — category tab bar + slot tabs filtered by category
+- `avatar_parts.json` migrated to new schema
+
+## Lab 16 — Sex/Gender system + Unity-MCP setup (v0.10)
+
+- `enum DiscipleSex { Unspecified, Male, Female }` + `[Key(7)] Sex` on
+  `DiscipleState` — MessagePack append-only, backward compatible (old saves
+deserialize as `Unspecified`)
+- `MockSectData` founders get explicit sex: d000 Liu YiFeng (M), d001 Lin
+  Feng (F), d002 Su Yan (F), d003 Elder Zhao (M)
+- `RecruitOuterDisciple(sex)` — optional param; default parity unchanged
+  (even index → Male, odd → Female) so the roster doesn't visibly change
+- `CreateStarterAvatar(index, sex)` — head chosen by sex
+  (`head_female_01` / `head_male_01`), no more `index % 2` guesswork
+- `AvatarPartPool.GetPartsForSlot(slot, poseId, sex)` — `OnRandomize`
+  filters parts by sex + pose (grid filter still off — Roadmap)
+
+**Decision**: explicit `DiscipleSex` field — never derive sex from part ids.
+Invariant: *runtime state holds ids/flags, never hidden derivations*.
+
+**Side work**: Unity-MCP integration setup — `.zcode` skills
+(`unity-initial-setup`, `unity-skill-create`, `unity-skill-generate`,
+`unity-tool-list`) + additive scene architecture draft (→ lab 18).
+
+## Lab 17 — Avatar System v3: outfit packages (implemented → rolled back)
+
+v3 draft **was implemented** (commit `0d1a696`): `PoseId` on
+`AvatarAppearance`, `outfits[]` table, `OutfitDef`, `TryApplyOutfit()`,
+`GetOutfitsFor()`, `AvatarOutfitChangedMessage`, `ApplyOutfitRequest/Response`,
+and a "ชุดแต่งกาย" UI tab.
+
+**Rolled back 2026-09-03** — current code/JSON is parts-only again. Reasons:
+1. **No new data** — `outfit.parts` is just "SetSlot several times"; 100%
+   derivable from `parts[]`
+2. **Dual source of truth** — delete a part in `parts[]` but forget it in
+   `outfits[]` → runtime crash; would need a cross-table validator
+3. **Runtime never needs `OutfitId`** — renderer doesn't use it, state
+doesn't store it → it's a UI preset, not a data model
+4. **No second pose** — every part is `pose_idle_01`, nothing to switch
+5. **Wrong priority** — real MVP gap is face customization (捏脸), not
+   outfit switching
+
+**Kept after rollback** (cheap to keep, expensive to re-tag later):
+- `poseId` + `sexTag` on `AvatarPartDef`
+- pose validation in `TryChangeAvatarPart()` (no-op with 1 pose today;
+  prevents broken art when pose 2 lands)
+- `[Key(2)] PoseId` on state + randomize filter via
+  `GetPartsForSlot(slot, poseId, sex)`
+
+**Lesson**: outfits aren't "clothing" — they're a "pose-switch button" in
+disguise. Reconsider only when a second pose actually enters the project.
+Full decision record: [[sources/avatar-appearance]].
+
+## Lab 18 — Additive scene architecture (v0.12)
+
+Single Scene → Additive Scene pattern:
+- **CoreScene** (single, never unload): persistent systems
+  (`GameLifetimeScope`, `TimeSystem`, `SectStateProvider`, MessagePipe bus,
+  `SceneLoader`) + persistent UI (Canvas, `UIRoot`, `ResourceHud`,
+  `LogWindow`, `AvatarCustomization`) + the single `EventSystem`/
+  `AudioListener`
+- **GameplayScene(s)** (additive, unload/reload): environment/terrain, NPCs,
+  buildings, scene-specific UI (`EventPopup`)
+- `SceneLoader` singleton — `LoadGameplayScene(name)` unloads the current
+gameplay scene before loading the new one (A→B swap), publishes
+`SceneLoadedMessage`; registered in `GameLifetimeScope`
+- `AdditiveSceneTest` MonoBehaviour — runtime GUI overlay to
+Load/Unload/Swap for testing
+
+**Gotchas**:
+- Both scenes must be in Build Settings for async loading to succeed
+- GameplayScene must not duplicate `EventSystem`/`AudioListener`
+- VContainer: single root scope in CoreScene chosen for now (parent-child
+  Option B deferred until scene-specific services exist)
+
 ## Where To Next (Decided Order)
 
 1. ~~ResourceCraftingSystem~~ ✅ lab 9
@@ -223,9 +330,18 @@ disciple: Jiang Yu". **Proves lab 13 bug fix is correct, not just theory.**
 5. ⏳ Combat system
 6. ⏳ Inner/Elder promotion
 7. ⏳ Save/load
+8. ⏳ Face customization — split `head` into face_shape/eyes/brows/nose/mouth
+   (avatar Roadmap #1: 3 faces → ~32k, biggest art ROI)
+9. ⏳ Additive scene Phase 2/3 — extract real GameplayScene content, scene
+   transitions with persistent UI ([[concepts/additive-scene-architecture]])
+10. ⏳ `sexTag` filter in the option grid (sex system Roadmap #5)
 
 ## Related Pages
 
 - [[sources/architecture|Architecture]]
 - [[sources/bug-log|Bug Log]]
 - [[sources/open-questions|Open Questions]]
+- [[sources/avatar-appearance|Avatar Appearance (design source)]]
+- [[sources/sex-gender-system|Sex / Gender for Disciples]]
+- [[concepts/additive-scene-architecture|Additive Scene Architecture]]
+- [[concepts/log-window|Log Window]]

@@ -26,21 +26,9 @@ namespace Xianxia.Sect
     }
 
     [System.Serializable]
-    public class OutfitDef
-    {
-        public string id;
-        public string displayName;
-        public string poseId;
-        public string sexTag;      // "male" / "female" / "" = any
-        public string thumbPath;
-        public Dictionary<string, string> parts; // slot → partId
-    }
-
-    [System.Serializable]
     public class AvatarPartTable
     {
         public List<AvatarPartDef> parts = new List<AvatarPartDef>();
-        public List<OutfitDef> outfits = new List<OutfitDef>();
     }
 
     /// <summary>
@@ -58,8 +46,6 @@ namespace Xianxia.Sect
             new Dictionary<string, List<AvatarPartDef>>();
         private readonly Dictionary<string, AvatarPartDef> _defaultBySlot =
             new Dictionary<string, AvatarPartDef>();
-        private readonly Dictionary<string, OutfitDef> _outfitsById =
-            new Dictionary<string, OutfitDef>();
 
         public bool IsLoaded { get; private set; }
 
@@ -113,24 +99,8 @@ namespace Xianxia.Sect
                     _defaultBySlot[p.slot] = p;
             }
 
-            // Index outfits (JsonUtility ignores if JSON has no "outfits" key — old files safe)
-            if (table.outfits != null)
-            {
-                for (int i = 0; i < table.outfits.Count; i++)
-                {
-                    var o = table.outfits[i];
-                    if (string.IsNullOrEmpty(o.id)) continue;
-                    if (_outfitsById.ContainsKey(o.id))
-                    {
-                        Debug.LogWarning($"[AvatarPartPool] Duplicate outfit id: {o.id} - skipping");
-                        continue;
-                    }
-                    _outfitsById[o.id] = o;
-                }
-            }
-
             IsLoaded = true;
-            Debug.Log($"[AvatarPartPool] Loaded {_byId.Count} parts / {_bySlot.Count} slots / {_outfitsById.Count} outfits");
+            Debug.Log($"[AvatarPartPool] Loaded {_byId.Count} parts / {_bySlot.Count} slots");
         }
 
         public AvatarPartDef GetById(string partId)
@@ -162,35 +132,12 @@ namespace Xianxia.Sect
                 : System.Array.Empty<AvatarPartDef>();
         }
 
-        /// <summary>Used when validating ChangeAvatarPartRequest</summary>
-        public bool IsValidForSlot(string slot, string partId)
-        {
-            if (string.IsNullOrEmpty(partId)) return true;   // "" = default, always valid
-            var def = GetById(partId);
-            return def != null && def.slot == slot;
-        }
-
-        // ── Outfit methods (v3) ──────────────────────────────────
-
-        public OutfitDef GetOutfit(string outfitId)
-        {
-            if (string.IsNullOrEmpty(outfitId)) return null;
-            OutfitDef def;
-            return _outfitsById.TryGetValue(outfitId, out def) ? def : null;
-        }
-
-        public IReadOnlyList<OutfitDef> GetOutfitsFor(string sex)
-        {
-            var result = new List<OutfitDef>();
-            foreach (var kvp in _outfitsById)
-            {
-                var o = kvp.Value;
-                if (string.IsNullOrEmpty(o.sexTag) || o.sexTag == sex)
-                    result.Add(o);
-            }
-            return result;
-        }
-
+        /// <summary>
+        /// Pose/sex-filtered listing: empty poseId = universal (fits any pose),
+        /// otherwise must match; empty sexTag = any sex, otherwise must match.
+        /// Used by UI randomize so a male disciple never rolls female-only parts
+        /// (and vice versa). Pose คงที่ที่ pose_idle_01 ในตอนนี้.
+        /// </summary>
         public IReadOnlyList<AvatarPartDef> GetPartsForSlot(string slot, string poseId, string sex)
         {
             var result = new List<AvatarPartDef>();
@@ -208,5 +155,14 @@ namespace Xianxia.Sect
             }
             return result;
         }
+
+        /// <summary>Used when validating ChangeAvatarPartRequest</summary>
+        public bool IsValidForSlot(string slot, string partId)
+        {
+            if (string.IsNullOrEmpty(partId)) return true;   // "" = default, always valid
+            var def = GetById(partId);
+            return def != null && def.slot == slot;
+        }
+
     }
 }

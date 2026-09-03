@@ -444,3 +444,12 @@ Implement Additive Scene Architecture ตาม spec ใน LLMWiki/concepts/add
 - ห้ามใช้ .Result หรือ .Wait() — blocking ไม่ได้ใน Unity main thread
 
 -----------------------------------------------------------------------------
+→ Sync wiki docs
+Update the LLMWiki docs so they describe the v2.5 parts-only avatar system instead of the v3 outfit packages
+-----------------------------------------------------------------------------
+→ Audit wiki accuracy
+Scan the whole wiki for other avatar claims that drifted from the code (sexTag, slots, presenter flow) and correct them
+-----------------------------------------------------------------------------
+→ Fix root design log
+Update project_summary.md (the root design log) so its avatar section reflects the v2.5 rollback instead of v3 outfits
+-----------------------------------------------------------------------------

@@ -1,39 +1,4 @@
 {
-  "outfits": [
-    {
-      "id": "outfit_azure_robe_male",
-      "displayName": "ชุดเซียนสีคราม (ชาย)",
-      "poseId": "pose_idle_01",
-      "sexTag": "male",
-      "thumbPath": "Avatar/thumbs/outfit_azure_robe_male",
-      "parts": {
-        "head": "head_male_01",
-        "hair": "hair_half-up_topknot"
-      }
-    },
-    {
-      "id": "outfit_azure_robe_female",
-      "displayName": "ชุดเซียนสีคราม (หญิง)",
-      "poseId": "pose_idle_01",
-      "sexTag": "female",
-      "thumbPath": "Avatar/thumbs/outfit_azure_robe_female",
-      "parts": {
-        "head": "head_female_01",
-        "hair": "hair_half_bun"
-      }
-    },
-    {
-      "id": "outfit_grey_robe_female",
-      "displayName": "ชุดเซียนสีเทา (หญิง)",
-      "poseId": "pose_idle_01",
-      "sexTag": "female",
-      "thumbPath": "Avatar/thumbs/outfit_grey_robe_female",
-      "parts": {
-        "head": "head_female_01",
-        "hair": "hair_half_bun"
-      }
-    }
-  ],
   "parts": [
     { "id": "base_silhouette", "slot": "base", "category": "ร่างกาย", "displayName": "โครงร่าง", "spritePath": "Avatar/base_silhouette", "spritePathBack": "", "thumbPath": "", "drawOrder": 0, "drawOrderBack": 0, "isDefault": true, "tintable": false, "poseId": "", "sexTag": "" },
 

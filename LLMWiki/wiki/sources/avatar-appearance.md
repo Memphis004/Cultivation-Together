@@ -1,198 +1,213 @@
 ---
-title: Avatar Character Customization — Portrait Swap + Outfit Packages (v3)
+title: Avatar Appearance — Design Notes & Decisions
 type: gdd
-status: v3 draft — supersedes v2 paper-doll/pure-slot design; v2 dictionary schema retained
 sources:
-UnityProject/Assets/Scripts/Shared/SectEconomyState.cs
-UnityProject/Assets/Scripts/Shared/MockSectData.cs
-UnityProject/Assets/Scripts/Data/AvatarPartPool.cs
-UnityProject/Assets/Scripts/UI/Views/AvatarRenderer.cs
-UnityProject/Assets/Scripts/UI/Presenters/AvatarCustomizationPresenter.cs
-UnityProject/Assets/Scripts/Systems/SectStateProvider.cs
+  - UnityProject/Assets/Scripts/Shared/SectEconomyState.cs
+  - UnityProject/Assets/Scripts/Data/AvatarPartPool.cs
+  - UnityProject/Assets/Scripts/UI/Views/AvatarRenderer.cs
+  - UnityProject/Assets/Resources/Data/avatar_parts.json
 related:
-"[[entities/disciples]]"
-"[[entities/avatar-appearance]]"
-"[[concepts/state-management]]"
-"[[concepts/mvp-ui]]"
-"[[concepts/sex-gender-system]]"
-created: 2026-08-31
-updated: 2026-09-02
-confidence: medium (v3 sections) / high (v2 implemented sections)
-tags: [avatar, customization, portrait-swap, outfit, pose, sprite-swap, parts]
+  - "[[entities/avatar-appearance]]"
+  - "[[entities/disciples]]"
+  - "[[sources/sex-gender-system]]"
+  - "[[concepts/state-management]]"
+created: 2026-09-01
+updated: 2026-09-04
+confidence: high
+tags: [avatar, design-decision, pose, outfit, face-customization]
+---
 
-# Avatar Character Customization — Portrait Swap + Outfit Packages (v3)
+# Avatar Appearance — Design Notes & Decisions
 
-Characters render as pre-aligned full-canvas portrait chunks stacked in
-draw order (visual-novel style, reference: 觅长生 / 鬼谷八荒). v2 shipped a
-dictionary-based slot system; v3 adds **pose-linked Outfit Packages** on top
-because reference games change the character's POSE together with the outfit —
-a robe drawn for "arms crossed" cannot be worn on a "pointing hand" body.
+## 0. สถานะปัจจุบัน (v2.5 parts-only MVP — implemented; v3 outfit packages rolled back 2026-09-03, do not regress)
 
-**v2 stays.** `AvatarAppearance.Parts/Colors` dictionaries, 10 slots,
-category tabs, hair 2-layer, framing presets, sex field — all implemented
-and retained. v3 adds one axis: **poseId**, plus an **outfit** def-table that
-batch-applies a coherent part set for one pose.
-
-## 1. Implemented baseline (v2 — do not regress)
-
-- `AvatarAppearance` = `{ [Key(0)] Parts: slot→partId, [Key(1)] Colors: slot→colorId }`
-  on `DiscipleState.Avatar [Key(6)]`; `""`/absent = Def-table default.
-- Slots: `base`(fixed) + equippable `body, head, eyes, brows, mouth, nose,
-  hair, face_marking, eyeshadow, accessory`; UI categories
-  ใบหน้า / ลักษณะ / ร่างกาย (`AvatarSlots.Categories`).
-- `AvatarPartDef`: id, slot, category, displayName, spritePath,
-  spritePathBack, thumbPath, drawOrder, drawOrderBack, isDefault, tintable.
-- Draw stack: `base 0 → hair_back 10 → body 20 → head 30 → face_marking 34
-  → hair_front 40 → accessory 50` (renderer builds `(order, path)` list,
-  sorts, spawns — hair back/front split from one def).
-- `AvatarFraming` presets FullBody / Bust / HeadIcon on one 1024×1536 canvas;
-  head-center must sit at identical pixel coordinates in every file.
-- `DiscipleSex [Key(7)]` on `DiscipleState`; recruitment resolves sex and
-  seeds head by sex (`CreateStarterAvatar(index, sex)`).
-- Mutation choke point `SectStateProvider.TryChangeAvatarPart()` broadcasts
-  `AvatarEquipmentChangedMessage`; UI uses draft/diff-commit/rollback;
-  interprocess write path `ChangeAvatarPartRequest/Response` registered
-  (bridge tool not yet exposed).
-
-## 2. Why Outfit Packages (v3)
-
-Reference screenshots show each outfit carries its own pose (pointing hand,
-arms crossed, holding fan). Consequences the pure-slot model cannot express:
-
-1. `body` art is pose-specific (sleeves follow the arms of THAT pose).
-2. `head`/`hair` art must be re-authored per pose (head tilt/angle changes).
-3. Letting players mix a "pointing" robe with a "standing" head produces
-   visibly broken composites.
-
-Design answer: **pose becomes the registration axis**. Every pose-dependent
-part is tagged with the pose it was drawn for; an **outfit** is an authored
-preset that batch-selects one coherent part per slot for one pose. Within a
-pose family, slots remain swappable (any hair authored for `pose_idle_01`
-fits any body of `pose_idle_01`) — freedom is preserved, broken mixes are
-structurally impossible.
-
-## 3. Data model changes (v3)
-
-### 3.1 AvatarPartDef += poseId, sexTag
-```csharp
-[System.Serializable]
-public class AvatarPartDef
-{
-    // ...existing v2 fields...
-    public string poseId;  // pose template the part was drawn for; "" = universal (fits all poses)
-    public string sexTag;  // "male" / "female" / "" = any
-}
-```
-
-### 3.2 New OutfitDef table (same JSON file)
-```json
-{
-  "outfits": [
-    { "id": "outfit_outer_male",   "displayName": "ชุดศิษย์นอก (ชาย)",  "poseId": "pose_idle_01", "sexTag": "male",
-      "thumbPath": "Avatar/thumbs/outfit_outer_male",
-      "parts": { "body": "body_robe_grey", "head": "head_male_01", "hair": "hair_short" } },
-    { "id": "outfit_outer_female", "displayName": "ชุดศิษย์นอก (หญิง)", "poseId": "pose_idle_01", "sexTag": "female",
-      "thumbPath": "Avatar/thumbs/outfit_outer_female",
-      "parts": { "body": "body_robe_grey", "head": "head_female_01", "hair": "hair_twin_tail" } },
-    { "id": "outfit_master_azure", "displayName": "ชุดฟ้าคราม (เจ้าสำนัก)", "poseId": "pose_idle_01", "sexTag": "male",
-      "thumbPath": "Avatar/thumbs/outfit_master_azure",
-      "parts": { "body": "body_robe_azure", "head": "head_male_01", "hair": "hair_topknot_long", "accessory": "acc_jade_crown" } }
-  ],
-  "parts": [ /* existing v2 parts, now tagged poseId */ ]
-}
-```
-
-### 3.3 AvatarAppearance += PoseId (append-only, back-compat)
-```csharp
-[Key(2)] public string PoseId { get; set; } = string.Empty;
-// "" = legacy/unposed → resolved as "pose_idle_01" fallback
-```
-`Parts` REMAINS the source of truth (slot→partId). Outfit apply = batch
-`SetSlot` + set `PoseId`. Renderer never needs `OutfitId`.
-
-### 3.4 Migration rule
-Tag ALL existing v2 parts with `"poseId": "pose_idle_01"` in the JSON.
-Old saves (`PoseId == ""`) therefore keep resolving exactly as before.
-
-## 4. Resolution rules (v3)
-
-`AvatarPartPool` additions (keep every v2 method signature unchanged):
-- `GetOutfit(string outfitId)`
-- `IReadOnlyList<OutfitDef> GetOutfitsFor(string sexTagOrEmpty)` — returns
-  outfits whose sexTag is "" or matches; disciple Sex Unspecified sees all.
-- `GetPartsForSlot(string slot, string poseId, string sexTag)` — filtered:
-  part.slot matches AND (part.poseId == "" OR part.poseId == poseId) AND
-  (part.sexTag == "" OR part.sexTag == sexTag).
-- Old `GetPartsForSlot(slot)` stays (unfiltered) for compatibility.
-
-`SectStateProvider` additions:
-- `TryApplyOutfit(discipleId, outfitId, out failReason, out result)`:
-  validate outfit exists → sexTag compatible with `disciple.Sex` → every
-  referenced partId exists with matching poseId → then set `PoseId` +
-  batch `SetSlot`, publish `AvatarEquipmentChangedMessage` per changed slot
-  (same message as v2; UI external-sync already handles it).
-- `TryChangeAvatarPart` gains pose validation: reject a part whose
-  `poseId` is non-empty and differs from the disciple's effective pose
-  (`Avatar.PoseId`, "" → "pose_idle_01"). Universal parts (`poseId == ""`)
-  always allowed.
-
-`AvatarRenderer`:
-- No structural change. Add `PoseId` into `BuildSignature` (defensive).
-- Optional one-time warning if equipped parts disagree on poseId.
-
-## 5. UI changes (MVP Lite)
-
-- Add a first category tab **"ชุดแต่งกาย"** (constant, not in
-  `AvatarSlots.Categories`): when active, the option grid renders
-  `GetOutfitsFor(disciple.Sex)` instead of parts; clicking an outfit calls
-  `TryApplyOutfit` on the DRAFT (preview updates immediately), committed on
-  Confirm like any slot change (diff detects PoseId/Parts deltas).
-- Existing category tabs then show slot options filtered by
-  `GetPartsForSlot(slot, draft.PoseId-or-default, disciple.Sex)` — so after
-  picking a pose-carrying outfit, only pose-compatible hair/heads appear.
-- Draft pattern, pooling, rollback, external sync: unchanged.
-
-## 6. MCP exposure (later phase, noted now)
-
-- `get_sect_state` automatically carries `Avatar.PoseId` (schema append).
-- Future write tool `apply_outfit` follows `ChangeAvatarPartRequest`
-  request/response pattern (NOT pub/sub). Do not implement in this pass.
-
-## 7. Art pipeline (v3)
-
-- One template PSD **per pose** (`Avatar_Template_pose_idle_01.psd`,
-  later `pose_point_hand`, `pose_arms_crossed`, ...), same 1024×1536 canvas
-  and head-center coordinate across ALL poses (framing presets depend on it).
-- Every pose-dependent part is drawn over its pose template and tagged with
-  that poseId in JSON; universal parts (`face_marking` center-forehead,
-  simple accessories) may use `poseId: ""` if authored to fit all poses.
-- sexTag on head/hair/body parts where sex-specific.
-- Outfit thumbnails (`thumbPath`) = pre-rendered composite of the set.
-
-## 8. What does NOT change (contract)
-
-- `AvatarAppearance` Keys 0/1 semantics; `GetSlot/SetSlot/Clone/FromSlots`.
-- `DiscipleState` keys; `DiscipleSex`.
-- Draw-order stack & hair 2-layer logic; framing presets.
-- `AvatarEquipmentChangedMessage`, `ChangeAvatarPartRequest/Response`.
-- Draft/diff-commit/rollback/external-sync presenter pattern.
-- MCP read path.
-
-## 9. Not yet decided (carried over)
-
-- Tint logic (`Colors` schema ready, no renderer logic) — phase 2.
-- `thumbPath` grid thumbnails for parts (outfits get thumbs first).
-- `AvatarIconBaker` RenderTexture cache for roster lists.
-- DialoguePanel (Bust framing consumer).
-- Whether pose switch mid-customization resets incompatible slots with a
-  confirmation prompt (v3 simply blocks incompatible picks).
+- `AvatarAppearance = { [Key(0)] Parts: slot→partId, [Key(1)] Colors: slot→colorId,
+  [Key(2)] PoseId }` บน `DiscipleState.Avatar [Key(6)]`
+  — `""` / absent = default ของ Def-table
+- **Slots**: `base`(fixed) + equippable `body, head, eyes, brows, mouth, nose,
+  hair, face_marking, eyeshadow, accessory`
+  → UI categories `ใบหน้า / ลักษณะ / ร่างกาย` (`AvatarSlots.Categories`)
+- **AvatarPartDef**: `id, slot, category, displayName, spritePath, spritePathBack,
+  thumbPath, drawOrder, drawOrderBack, isDefault, tintable, poseId, sexTag`
+- **Draw stack**: `base 0 → hair_back 10 → body 20 → head 30 → face_marking 34
+  → hair_front 40 → accessory 50`
+- **AvatarFraming** presets `FullBody / Bust / HeadIcon` บน canvas 1024×1536
+  — head-center ต้องอยู่พิกัดเดียวกันทุกไฟล์
+- **Mutation choke point** `SectStateProvider.TryChangeAvatarPart()`
+  → broadcast `AvatarEquipmentChangedMessage`
+- **UI**: draft / diff-commit / rollback + external sync
+- **Interprocess**: `ChangeAvatarPartRequest/Response` (bridge tool กำลังทำ)
+- **poseId / sexTag**: ถูกอ่านแล้ว 2 จุด — pose validation ใน `TryChangeAvatarPart()` + filter ใน `OnRandomize`
+  (ยังไม่มี UI สลับ pose, grid ยังไม่กรอง sex — ดู §2 และ Roadmap ข้อ 5)
 
 ---
 
+## 1. Decision Record — ❌ ยกเลิก "Outfit Package" (v3 draft)
+
+> **สถานะ: REJECTED — 2026-09-03**
+> ตาราง `outfits[]`, `OutfitDef`, `TryApplyOutfit()`, `GetOutfitsFor()`,
+> `AvatarOutfitChangedMessage`, `ApplyOutfitRequest/Response`
+> และแท็บ UI "ชุดแต่งกาย" — **ถูก implement ชั่วคราวใน v3 (commit 0d1a696) แล้ว rollback กลับเป็น parts-only
+> (2026-09-03); โค้ด/JSON ปัจจุบันไม่มีอีกแล้ว**
+
+### 1.1 ข้อเสนอเดิมคืออะไร
+
+ร่าง v3 เสนอตารางที่สองใน `avatar_parts.json`:
+
+```json
+{
+  "outfits": [
+    { "id": "outfit_outer_male", "displayName": "ชุดศิษย์นอก (ชาย)",
+      "poseId": "pose_idle_01", "sexTag": "male",
+      "parts": { "body": "body_robe_grey", "head": "head_male_01",
+                 "hair": "hair_short" } }
+  ],
+  "parts": [ /* ... */ ]
+}
+```
+
+เหตุผลตอนนั้น: ภาพ reference แต่ละชุด**มาพร้อม pose ของตัวเอง** (ชี้มือ / กอดอก / ถือพัด)
+ซึ่ง pure-slot model แสดงไม่ได้ เพราะ
+
+1. art ของ `body` ผูกกับ pose (แขนเสื้ออยู่ตามแขนของ pose นั้น)
+2. `head`/`hair` ต้องวาดให้เข้ากับองศาคอของ pose เดียวกัน
+
+### 1.2 ทำไมถึงปฏิเสธ
+
+| # | เหตุผล | รายละเอียด |
+|---|---|---|
+| 1 | **ไม่มีข้อมูลใหม่** | `outfit.parts` = "กด `SetSlot` หลายครั้งรวดเดียว" — derive จาก `parts[]` ได้ 100% ไม่มีบิตใดที่ `parts[]` ไม่มีอยู่แล้ว |
+| 2 | **สร้าง dual source of truth** | ลบ part ใน `parts[]` แต่ลืมลบใน `outfits[]` → `TryApplyOutfit` พังตอน runtime ต้องเขียน cross-table validator = งานงอกจากตารางที่ไม่จำเป็น |
+| 3 | **spec เองก็ยอมรับว่า runtime ไม่ต้องรู้จัก** | *"Parts REMAINS the source of truth. Renderer never needs OutfitId."* — ถ้า renderer ไม่ใช้ และ state ไม่เก็บ `OutfitId` → มันคือ **UI preset** ไม่ใช่ data model |
+| 4 | **เงื่อนไขที่ทำให้มันจำเป็นยังไม่เกิด** | outfit มีค่าก็ต่อเมื่อ **มี pose ≥ 2** ตอนนี้ทุก part เป็น `pose_idle_01` เท่านั้น → ไม่มีอะไรให้สลับ |
+| 5 | **ผิดลำดับความสำคัญ** | ปัญหาจริงของ MVP ไม่ใช่ "เปลี่ยนชุดยาก" แต่คือ **"ปั้นหน้าไม่ได้"** (ดู §3) |
+
+### 1.3 เงื่อนไขที่จะ "รื้อฟื้น" ข้อเสนอนี้
+
+🔓 นำกลับมาพิจารณา **เมื่อ (และเฉพาะเมื่อ) มี pose ที่สองเข้าโปรเจกต์จริง**
+เพราะ ณ จุดนั้น:
+
+| สถานการณ์ | 1 pose (ตอนนี้) | 2+ poses |
+|---|---|---|
+| ผสม `body`(กอดอก) + `head`(ยืนตรง) | เป็นไปไม่ได้ | **ภาพพัง — คอเอียงคนละองศา** |
+| `poseId` validation | ผ่านเสมอ = ไร้ค่า | กันภาพพังได้จริง |
+| `outfits` | shortcut เฉยๆ | **ทางเดียวที่ผู้เล่นจะเปลี่ยน pose ได้** |
+
+> 💡 **บทเรียนที่ควรจำ:** `outfits` ไม่ใช่ "ชุดเสื้อผ้า" — มันคือ **"ปุ่มเปลี่ยน pose"** ที่ปลอมตัวมา
+
+---
+
+## 2. Decision Record — ✅ เก็บ `poseId` / `sexTag` ไว้บน part
+
+> **สถานะ: ACCEPTED — เก็บ field และให้โค้ดอ่านเท่าที่จำเป็น (validation + randomize)**
+> ยัง **ไม่** มี: UI เลือก pose, pose-switching, sexTag filter ในกริดตัวเลือก
+
+เก็บ **field** ไว้ และเปิดให้โค้ด**อ่าน**ในวงจำกัด (pose validation + randomize filter)
+— กันภาพพังและกันสุ่มเพศผิด โดยไม่สร้างฟีเจอร์ (UI) ที่ยังไม่มี pose ที่ 2 ให้ใช้
+
+| | ลบทิ้ง | เก็บไว้ |
+|---|---|---|
+| **ตาราง / โค้ด outfit** | ✅ ลบ | — |
+| **`poseId` บน AvatarPartDef** | — | ✅ เก็บ + อ่านใน pose validation (`TryChangeAvatarPart`) และ filter `OnRandomize` |
+| **`sexTag` บน AvatarPartDef** | — | ✅ เก็บ + filter `OnRandomize` (grid ยังไม่ filter — Roadmap ข้อ 5) |
+| **`[Key(2)] PoseId` ใน state** | — | ✅ เก็บ — validation เทียบกับ effective pose (`""` → `pose_idle_01`) |
+
+**หลักที่ใช้ตัดสิน:**
+> ลบ **โค้ดและตาราง** ที่ยังไม่ได้ใช้ (เขียนใหม่ทีหลังฟรี)
+> แต่เก็บ **การ tag ข้อมูล** ที่ต้องอาศัยความจำของมนุษย์ (ย้อนกลับไปทำทีหลังแพงมาก)
+
+เหตุผลรูปธรรม: วันที่เพิ่ม pose ที่ 2 คุณจะไม่ต้องเปิดไฟล์ art เก่า 200 ชิ้น
+มานั่งเดาว่าชิ้นไหนวาดทับเทมเพลตอันไหน — ซึ่งตอนนั้น**ไม่มีทางจำได้แล้ว**
+
+**สิ่งที่ทำแล้ว (พอดี ๆ ไม่เกินเลย):**
+- ✅ pose validation ใน `TryChangeAvatarPart` — part ที่ poseId ไม่ตรง effective pose จะถูก reject
+  (pose เดียวตอนนี้ → ไม่เคย reject จริง แต่ต้นทุน ~0 และกันภาพพังวันที่ pose ที่ 2 เข้า)
+- ✅ `OnRandomize` กรองตัวเลือกด้วย `GetPartsForSlot(slot, effectivePose, sex)`
+  — ศิษย์ชายไม่สุ่มได้หัว/ผมของเพศหญิง (และ vice versa)
+
+**สิ่งที่ต้องไม่ทำ (ยัง):**
+- ❌ อย่าใส่ UI ให้เลือก pose / pose-switching
+- ❌ อย่าเปิด sexTag filter ในกริดตัวเลือกก่อน Roadmap ข้อ 5
+
+---
+
+## 3. ช่องว่างที่แท้จริงของ MVP — `head` เป็นก้อนเดียว
+
+### 3.1 ปัญหา
+
+เกม 捏脸 (character creator) แนวเดียวกันแยก **รูปหน้า / ตา / คิ้ว / จมูก / ปาก / หนวด**
+เป็นคนละ slot ให้เลือกอิสระ แต่โปรเจกต์เรา `head_male_01` = **ใบหน้าสำเร็จรูปทั้งใบ**
+
+| | โปรเจกต์เรา (ตอนนี้) | เป้าหมาย |
+|---|---|---|
+| slot ที่มี data | 6 | 11+ |
+| จำนวนใบหน้าที่เป็นไปได้ | **3** | หลักแสน |
+| ไฟล์ art ที่ต้องใช้ | 3 | ~50 |
+
+การเพิ่มไฟล์ `head_*.png` เป็น 20 ชิ้น ก็ยังได้แค่ "หน้าสำเร็จรูป 20 แบบ"
+— **ไม่ใช่ 捏脸** เพราะ combination ไม่โต
+
+### 3.2 ทำไม slot ย่อยถึงคุ้ม
+
+$\text{combinations} = \prod_{s \in \text{slots}} |P_s|$
+
+แตกใบหน้าเป็น 5 slot ที่มี slot ละ ~8 ตัวเลือก → $8^5 = 32{,}768$ ใบหน้า
+จากไฟล์ **40 ชิ้น** เทียบกับ 3 ใบหน้าจาก 3 ชิ้น — **ผลตอบแทนต่อไฟล์ art ต่างกันมหาศาล**
+
+### 3.3 ข้อควรระวังเชิงเทคนิค
+
+- ต้องซอย `drawOrder` ระหว่าง `head 30` กับ `face_marking 34` ให้พอ
+  (แนะนำ: `head/face_shape 30`, `brows 31`, `eyes 32`, `nose 32.5→33`, `mouth 33`)
+  → ถ้าที่ว่างไม่พอ ให้ **re-number ทั้ง stack เป็นหลักสิบ** ตั้งแต่ตอนนี้
+- ทุกชิ้นต้องวาดบน canvas 1024×1536 และอ้าง **head-center พิกัดเดียวกัน**
+  ไม่งั้นตา/จมูกจะเลื่อนเมื่อสลับรูปหน้า
+- `AvatarSlots.Categories["ใบหน้า"]` จะมี 5–7 slot → **slot tab bar ต้องเลื่อนได้**
+  (ตอนนี้เป็น HorizontalLayoutGroup ธรรมดา)
+
+---
+
+## 4. Art Pipeline (ปรับตามการตัด outfit)
+
+- **เทมเพลต PSD หนึ่งไฟล์ต่อหนึ่ง pose** — ตอนนี้มีแค่ `Avatar_Template_pose_idle_01.psd`
+- ทุก part ที่ผูกกับ pose วาดทับเทมเพลตนั้น และ tag `poseId` ใน JSON
+- part ที่ยืดหยุ่น (`face_marking` กลางหน้าผาก, accessory ง่ายๆ) ใช้ `poseId: ""` ได้
+- `sexTag` ใส่บน `head` / `hair` / `body` ที่จำเพาะเพศ
+- ❌ **ไม่ต้องทำ outfit thumbnail composite อีกแล้ว** — ประหยัดงาน pre-render ทั้งชุด
+
+---
+
+## 5. Roadmap (ลำดับที่คุ้มที่สุด)
+
+| # | งาน | ไฟล์ | ผลลัพธ์ที่ผู้เล่นเห็น |
+|---|---|---|---|
+| 1 | **แตก `head` → `face_shape/eyes/brows/nose/mouth`** + part จริง | `avatar_parts.json`, art | 3 หน้า → หลักหมื่น 🔥 |
+| 2 | เพิ่ม slot `beard` | `SectEconomyState.cs`, JSON | ครบตาม reference |
+| 3 | Color picker ให้ `tintable` | View/Presenter | variety เพิ่มฟรี |
+| 4 | แทน placeholder ด้วย art จริง | art | 🎨 **80% ของ "ความเหมือน"** |
+| 5 | `sexTag` filter ในกริดตัวเลือก | Sex system implement แล้ว (Randomize กรองแล้ว) — เหลือแค่เปิดในกริด | หญิงไม่เห็นหัวชาย |
+| 6 | *(ถ้ามี pose 2)* พิจารณา outfit ใหม่ | — | เปลี่ยนท่ายืน |
+
+---
+
+## 6. MCP Exposure
+
+- `get_sect_state` พา `Avatar.Parts` / `Colors` / `PoseId` ไปด้วยอัตโนมัติ (schema append)
+- Write tool = **`change_avatar_part`** ตาม `ChangeAvatarPartRequest/Response`
+  (request-response — ไม่ใช่ pub/sub เพราะ agent ต้องได้ผลลัพธ์ทันที)
+- ❌ **ไม่มี `apply_outfit`**
+
+---
+
+## 7. What does NOT change
+
+Draft pattern, option-grid pooling, rollback, external sync, framing presets,
+draw-stack ordering, `AvatarPartPool` fallback-to-default — **ทั้งหมดคงเดิม**
+
 ## Related Pages
 
-- [[entities/disciples|Disciples]] — appearance lives on this entity
-- [[concepts/state-management|State Management]] — MessagePack field placement
-- [[concepts/mvp-ui|MVP UI Pattern]] — customization panel flow
-- [[concepts/data-pipeline|Data Pipeline (Luban)]] — authoring `AvatarParts`
-- [[concepts/mcp-bridge|MCP Bridge]] — MCP read/write exposure
+- [[entities/avatar-appearance]] — สคีมา + โค้ดที่ implement จริง
+- [[entities/disciples]] — appearance lives on this entity
+- [[sources/sex-gender-system]] — `DiscipleState.Sex` implemented; `sexTag` ถูกอ่านใน Randomize แล้ว
+- [[concepts/state-management]] — `[Key(N)]` append discipline
+- [[concepts/data-pipeline]] — authoring AvatarParts
+- [[concepts/mcp-bridge]] — MCP read/write exposure

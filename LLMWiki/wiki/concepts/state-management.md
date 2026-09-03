@@ -10,7 +10,7 @@ related:
   - "[[concepts/decision-pipeline]]"
   - "[[concepts/purchase-store]]"
 created: 2026-08-31
-updated: 2026-09-02
+updated: 2026-09-04
 confidence: high
 tags: [state, economy, messagepack, delta-events, avatar]
 ---
@@ -49,9 +49,11 @@ SectEconomyState
 │       │   └── Contribution: long
 │       ├── PersonalInventory: List<InventoryItem>
 │       ├── CurrentTask: string      (e.g. "gathering_herb", "refining_elixir")
-│       └── Avatar: AvatarAppearance (implemented — dictionary schema:
-│             Parts: Dict<slot, partId>  (""/absent = slot default)
-│             Colors: Dict<slot, colorId> (tintable slots only))
+│       ├── Avatar: AvatarAppearance (dictionary schema — ดู entities/avatar-appearance)
+│       │     Parts:  Dict<slot, partId>   (""/absent = slot default)
+│       │     Colors: Dict<slot, colorId>  (tintable slots only)
+│       │     PoseId: string               ("" → fallback "pose_idle_01"; pose เดียว ไม่มี UI เปลี่ยน)
+│       └── Sex: DiscipleSex               (Unspecified/Male/Female — ใช้เลือก head ตอนสร้าง + filter ตอนสุ่ม)
 └── Stockpile: SectStockpile
     ├── RawResources: Dict<string, int>   (herb, wood, ore, provisions)
     └── CraftedGoods: List<InventoryItem>
@@ -147,5 +149,5 @@ resources. If you add a code path that mutates wallet without going through
 - [[concepts/decision-pipeline|Decision Pipeline]]
 - [[concepts/purchase-store|Purchase Store]]
 - [[concepts/message-pipe-bus|MessagePipe Bus]]
-- [[concepts/avatar-appearance|Avatar Appearance]]
+- [[entities/avatar-appearance|Avatar Appearance]]
 - [[sources/bug-log|Bug Log]] (BUG-L7-01)
