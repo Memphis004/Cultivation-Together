@@ -53,6 +53,8 @@
   <ItemGroup>
     <Compile Include="Assets\Scripts\UI\Views\LogWindowView.cs" />
     <Compile Include="Assets\Scripts\UI\Core\UIService.cs" />
+    <Compile Include="Assets\Scripts\Shared\MessageTypes.cs" />
+    <Compile Include="Assets\Scripts\Core\SceneLoader.cs" />
     <Compile Include="Assets\Scripts\Shared\SectEconomyState.cs" />
     <Compile Include="Assets\Scripts\UI\Core\UIPanelCatalog.cs" />
     <Compile Include="Assets\Scripts\UI\Core\UIRoot.cs" />
@@ -64,6 +66,7 @@
     <Compile Include="Assets\Scripts\Shared\GameMessages.cs" />
     <Compile Include="Assets\Scripts\Core\DecisionLogger.cs" />
     <Compile Include="Assets\Scripts\Systems\DiscipleSystem.cs" />
+    <Compile Include="Assets\Scripts\Tests\AdditiveSceneTest.cs" />
     <Compile Include="Assets\Scripts\UI\Views\AvatarRenderer.cs" />
     <Compile Include="Assets\Scripts\Data\Gen\worldevent\TbEvent.cs" />
     <Compile Include="Assets\Scripts\UI\Views\ResourceHudView.cs" />
@@ -1384,12 +1387,12 @@
       <HintPath>Library\ScriptAssemblies\Luban.Runtime.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="UnityEngine.UI">
-      <HintPath>Library\ScriptAssemblies\UnityEngine.UI.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="UnityEditor.UI">
       <HintPath>Library\ScriptAssemblies\UnityEditor.UI.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.UI">
+      <HintPath>Library\ScriptAssemblies\UnityEngine.UI.dll</HintPath>
       <Private>False</Private>
     </Reference>
   </ItemGroup>

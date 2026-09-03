@@ -397,3 +397,50 @@ xianxia cultivator character, full body, [POSE DESCRIPTION],
 anime style, transparent background, 1024x1536 pixels, 
 consistent art style, game asset sprite
 -----------------------------------------------------------------------------------------------
+
+Implement Additive Scene Architecture ตาม spec ใน LLMWiki/concepts/additive-scene-architecture.md
+
+## Tasks:
+1. สร้าง CoreScene ใหม่:
+   - ย้าย Canvas + UIRoot จาก scene เดิม
+   - ย้าย GameLifetimeScope
+   - เพิ่ม DontDestroyOnLoad ใน GameLifetimeScope.Awake()
+   - สร้าง SceneLoader singleton (register ใน VContainer)
+
+2. สร้าง GameplayScene ใหม่:
+   - ย้าย scene content (environment, NPCs) จาก scene เดิม
+   - ตรวจสอบว่าไม่มี duplicate EventSystem/AudioListener
+
+3. ใช้ SceneLoader ที่สร้างไว้:
+   - LoadGameplayScene(string sceneName) - unload old, load new additive
+   - Publish SceneLoadedMessage เมื่อโหลดเสร็จ
+
+4. แยก UI เป็น 2 ประเภท:
+   - Persistent (ResourceHud, Settings): เปิดใน UIBootstrap
+   - Scene-specific (EventPopup, Dialogue): เปิดเมื่อมี event
+
+5. ทดสอบ:
+   - CoreScene โหลดเดียว, UI ทำงาน
+   - GameplayScene โหลด additive
+   - เปลี่ยน scene: UI ยังอยู่, content เปลี่ยน
+
+## Constraints:
+- อ่าน LLMWiki/concepts/additive-scene-architecture.md ก่อน
+- ใช้ VContainer single root scope (Option A)
+- ไม่แก้ UI Framework MVP Lite
+- Backward compatible กับ scene เดิม
+
+## Acceptance Criteria:
+- [ ] CoreScene + GameplayScene โหลดพร้อมกัน
+- [ ] Persistent UI (ResourceHud) อยู่หลังเปลี่ยน scene
+- [ ] Scene-specific UI เปิดได้ปกติ
+- [ ] ไม่มี duplicate EventSystem/AudioListener
+- [ ] SceneLoader.LoadScene() ทำงาน
+
+## Technical Constraints:
+- ใช้ UniTask (Cysharp.Threading.Tasks) ไม่ใช่ System.Threading.Tasks
+- ห้ามใช้ .ContinueWith() — ใช้ async/await ตรงๆ
+- Fire-and-forget ใช้ async UniTaskVoid + .Forget()
+- ห้ามใช้ .Result หรือ .Wait() — blocking ไม่ได้ใน Unity main thread
+
+-----------------------------------------------------------------------------

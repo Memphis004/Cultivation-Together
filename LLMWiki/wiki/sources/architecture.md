@@ -260,6 +260,31 @@ collide with the hub's already-bound port. Solution: use request-response
   - Def Loader: `UnityProject/Assets/Scripts/Data/AvatarPartPool.cs` (สร้างใหม่)
 - **Avatar data flow:** `AvatarPartPool` (JSON def-table) → `AvatarRenderer` (resolve `AvatarAppearance` → sprite layers) → `AvatarCustomizationPresenter/View` (แต่งตัวผ่าน `TryChangeAvatarPart`) — รายละเอียดครบที่ [[entities/avatar-appearance]]
 
+## Scene Management
+
+### Additive Scene Pattern
+เกมใช้ **Additive Scene Loading** แทน Single Scene:
+
+- **CoreScene** (persistent):
+  - Canvas + UIRoot (persistent UI)
+  - GameLifetimeScope (VContainer root)
+  - Core systems (TimeSystem, SectStateProvider, MessagePipe)
+  - EventSystem, AudioListener, MainCamera
+  - Never unloads
+
+- **GameplayScene** (transient):
+  - Environment, NPCs, Buildings
+  - Scene-specific UI (EventPopup, Dialogue)
+  - Loads additive, can be unloaded/reloaded
+
+**Scene Transition Flow:**
+1. CoreScene loads (Single mode)
+2. GameplayScene loads (Additive mode)
+3. To change scene: Unload old GameplayScene → Load new GameplayScene
+4. CoreScene (and persistent UI) survives throughout
+
+See [[additive-scene-architecture]] for implementation details.
+
 ## Workspace Layout (multi-project monorepo)
 
 ```
@@ -287,6 +312,7 @@ Cultivation Together/              ← workspace root
 **Rule**: edit files in top-level `Shared/`, then run `./sync-shared.sh` to
 copy into both `UnityProject/Assets/Scripts/Shared/` and `McpBridge/Shared/`.
 Never edit the copies directly.
+
 
 
 ## Related Pages

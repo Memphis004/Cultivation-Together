@@ -1,40 +1,36 @@
 {
   "outfits": [
     {
-      "id": "outfit_outer_male",
-      "displayName": "ชุดศิษย์นอก (ชาย)",
+      "id": "outfit_azure_robe_male",
+      "displayName": "ชุดเซียนสีคราม (ชาย)",
       "poseId": "pose_idle_01",
       "sexTag": "male",
-      "thumbPath": "Avatar/thumbs/outfit_outer_male",
+      "thumbPath": "Avatar/thumbs/outfit_azure_robe_male",
       "parts": {
-        "body": "body_robe_grey",
         "head": "head_male_01",
-        "hair": "hair_short"
+        "hair": "hair_half-up_topknot"
       }
     },
     {
-      "id": "outfit_outer_female",
-      "displayName": "ชุดศิษย์นอก (หญิง)",
+      "id": "outfit_azure_robe_female",
+      "displayName": "ชุดเซียนสีคราม (หญิง)",
       "poseId": "pose_idle_01",
       "sexTag": "female",
-      "thumbPath": "Avatar/thumbs/outfit_outer_female",
+      "thumbPath": "Avatar/thumbs/outfit_azure_robe_female",
       "parts": {
-        "body": "body_robe_grey",
         "head": "head_female_01",
-        "hair": "hair_twin_tail"
+        "hair": "hair_half_bun"
       }
     },
     {
-      "id": "outfit_master_azure",
-      "displayName": "ชุดฟ้าคราม (เจ้าสำนัก)",
+      "id": "outfit_grey_robe_female",
+      "displayName": "ชุดเซียนสีเทา (หญิง)",
       "poseId": "pose_idle_01",
-      "sexTag": "male",
-      "thumbPath": "Avatar/thumbs/outfit_master_azure",
+      "sexTag": "female",
+      "thumbPath": "Avatar/thumbs/outfit_grey_robe_female",
       "parts": {
-        "body": "body_robe_azure",
-        "head": "head_male_01",
-        "hair": "hair_topknot_long",
-        "accessory": "acc_jade_crown"
+        "head": "head_female_01",
+        "hair": "hair_half_bun"
       }
     }
   ],

@@ -1,5 +1,5 @@
 # Xianxia Sect Simulator — MCP-Enabled Game Framework
-สรุปการออกแบบ + บันทึกความคืบหน้า (อัปเดตล่าสุด: Avatar Portrait Swap + Sex/Gender)
+สรุปการออกแบบ + บันทึกความคืบหน้า (อัปเดตล่าสุด: Avatar v3 Outfit Packages + PoseId)
 
 ## แนวคิดโปรเจกต์
 เกม simulator บริหารสำนักเซียน (xianxia cultivation sect) บน Unity ที่ออกแบบให้ AI Agent
@@ -29,14 +29,15 @@
 
 ## 🆕 ความคืบหน้าล่าสุด (รอบนี้)
 
-### 1. Avatar System — จาก Paper Doll สู่ Portrait Swap (Dictionary Schema)
-**ปัญหาเดิม:** Schema แบบ fixed property (`Body/Head/Hair/Accessory`) ขยาย slot ไม่ได้โดยไม่ break save file + ผมยาวซ้อน layer ผิด (วิกมุดหัว)
+### 1. Avatar System v3 — Outfit Packages + PoseId (Dictionary Schema)
+**ปัญหาเดิม:** Schema แบบ fixed property (`Body/Head/Hair/Accessory`) ขยาย slot ไม่ได้โดยไม่ break save file + ผมยาวซ้อน layer ผิด (วิกมุดหัว) + ไม่มีระบบ pose ต่อชุด
 
 **สิ่งที่แก้:**
 -   **`AvatarAppearance` เปลี่ยนเป็น Dictionary-based:**
     ```csharp
     [Key(0)] Dictionary<string, string> Parts;  // slot → partId
     [Key(1)] Dictionary<string, string> Colors; // slot → colorId (เตรียมไว้สำหรับ tint)
+    [Key(2)] string PoseId;                     // pose template (ใหม่ v3)
     ```
     -   เพิ่ม slot ใหม่ = แก้แค่ JSON ไม่ต้องแก้ schema
     -   AI GM ค้นพบ slot ที่มีอยู่ได้เองจาก `get_sect_state`
@@ -48,14 +49,16 @@
     -   `AvatarPartDef` เพิ่ม `spritePathBack` + `drawOrderBack`
     -   `AvatarRenderer` แยก layer: ผมหลัง (order 10, ใต้ตัว) + ผมหน้า (order 40, บนหน้า)
     -   Stack ที่ถูกต้อง: `base(0) → hair_back(10) → body(20) → head(30) → face_marking(34) → hair_front(40) → accessory(50)`
+-   **Outfit Packages (v3 ใหม่):**
+    -   `OutfitDef` ใน JSON: `{ id, displayName, poseId, sexTag, parts: {slot→partId}, thumbPath }`
+    -   `TryApplyOutfit()`: validate sexTag + poseId ของทุก part → batch SetSlot + set PoseId
+    -   Pose validation: ห้ามผสม part คนละ pose (กันชุดผิดท่า)
+    -   UI Tab "ชุดแต่งกาย": แสดง outfit presets กรองตาม sex ของศิษย์
 -   **AvatarFraming Presets:**
     -   Enum `FullBody / Bust / HeadIcon` ควบคุม scale + offset ของ `layerRoot`
     -   Art ชุดเดียว (canvas 1024×1536) ใช้ได้ทั้ง Character Creation, Dialogue Portrait, HUD Icon
--   **JSON Schema (`avatar_parts.json`):**
-    -   เพิ่ม field: `category`, `spritePathBack`, `drawOrderBack`, `thumbPath`, `tintable`
-    -   Backward compatible (field เก่ายังโหลดได้)
 
-**สถานะ:** ✅ Data Model + Renderer + UI Category Tabs เสร็จแล้ว (รอ Art ส่ง Sprite จริง + แก้ drawOrderBack ใน Renderer ให้สมบูรณ์)
+**สถานะ:** ✅ Data Model + Renderer + UI Outfit Tab + Validation เสร็จแล้ว (รอ Art ส่ง Sprite จริง + Thumbnail)
 
 ### 2. Sex / Gender System (Explicit State)
 **ปัญหาเดิม:** เพศศิษย์ถูก imply จาก `rosterIndex % 2` ใน `CreateStarterAvatar` → Query ไม่ได้, บังคับเพศตอนรับสมัครไม่ได้
@@ -85,7 +88,7 @@
 -   **ResourceHud:** แทนที่ `SectHudView` เดิม, subscribe `SectResourceChangedMessage` (มี delta มาให้ในตัว) แทน polling
 -   **AvatarCustomization:**
     -   Draft Pattern (Clone → Edit → Confirm/Rollback) → ไม่ยิง message ข้าม TCP ทุกคลิก
-    -   Category Tabs (ใบหน้า/ลักษณะ/ร่างกาย) + Slot Tabs
+    -   Category Tabs (ใบหน้า/ลักษณะ/ร่างกาย) + Outfit Tab (ชุดแต่งกาย)
     -   Object Pooling สำหรับปุ่มในกริด (กัน GC กระตุกตอนสลับแท็บ)
 -   **UIRoot Layout Fix:**
     -   Root cause เดิม: `ContentSizeFitter=PreferredSize` ทับ anchor stretch → UI กองกลางจอ
@@ -138,23 +141,51 @@
 -   Bug Fix: `DecisionExecutor` (แก้ channel ผิด), `UIRoot.ApplyLayout` (แก้ UI กองกลางจอ)
 -   **Result:** EventPopup + ResourceHud ทำงานจริง (30 ส.ค. 2026)
 
-### Lab 14 (รอบนี้): Avatar Portrait Swap + Sex/Gender
+### Lab 14: Avatar v2 Portrait Swap + Sex/Gender
 -   Dictionary Schema, Hair 2-Layer, Framing Presets, Category Tabs
 -   `DiscipleSex` enum + Recruitment Logic
--   **Result:** Data Model พร้อม, MCP คืนค่า Sex ถูกต้อง, รอ Art + UI Polish
+-   **Result:** Data Model พร้อม, MCP คืนค่า Sex ถูกต้อง
+
+### Lab 15 (รอบนี้): Avatar v3 Outfit Packages + PoseId
+-   `OutfitDef` + `TryApplyOutfit()` + pose validation
+-   UI Tab "ชุดแต่งกาย" + filtered options by pose/sex
+-   `AvatarRenderer.BuildSignature` รวม PoseId + one-time pose conflict warning
+-   **Result:** ระบบ Outfit Package ทำงานจริง, รอ Art ส่ง Sprite + Thumbnail
+
+### Lab 16 (Draft) — Additive Scene Architecture (ยังไม่ implement)
+**Motivation:** เปลี่ยนจาก Single Scene เป็น Additive Scene เพื่อให้ UI persistent ข้าม scene
+
+**Plan:**
+1. สร้าง CoreScene (Canvas + UIRoot + GameLifetimeScope + Core systems)
+2. สร้าง GameplayScene (Environment + NPCs + Scene-specific UI)
+3. Implement SceneLoader (LoadSceneAsync Additive mode)
+4. Persistent UI (ResourceHud, Settings) อยู่ใน CoreScene
+5. Scene-specific UI (EventPopup, Dialogue) instantiate จาก Prefab
+
+**Status:** Draft phase - ยังอยู่ในขั้นตอน document และ design
+**Expected Impact:** 
+- UI ไม่หายตอนเปลี่ยน scene
+- แยก concerns: core vs scene content
+- รองรับ multiple locations ในอนาคต
+
+**Open Questions:**
+- VContainer scope strategy (single root vs parent-child)
+- Scene transition effects
+- Scene-specific data persistence
 
 ---
 
 ## 🚧 สิ่งที่ยังค้าง / TODO
 
 ### High Priority (ต้องทำก่อน Art ส่งงาน)
-1.  **AvatarRenderer DrawOrder Fix:**
-    -   ตอนนี้ `Rebuild()` spawn ผมหลัง/หน้า ติดกันที่ drawOrder ของ def (40) → ผมหลังไม่มุดใต้ตัว
-    -   **แก้:** สร้าง list ของ `(order, path)` ก่อน sort → ผมหลังใช้ `drawOrderBack` (10), ผมหน้าใช้ `drawOrder` (40)
-    -   เพิ่ม `drawOrderBack` field ใน `AvatarPartDef` + JSON
-2.  **Art Handoff:**
-    -   ส่ง `ART_BRIEF_AVATAR.md` ให้ Art (Canvas 1024×1536, Pose เดียว, Overlap rules, 19 files)
-    -   เตรียม Template PSD (guide layers)
+1.  **Art Assets (Sprites + Thumbnails):**
+    -   สร้างไฟล์ sprite จริงใน `Resources/Avatar/` (body/head/hair/accessory/face_marking)
+    -   สร้าง thumbnail outfits ใน `Resources/Avatar/thumbs/` (outfit_outer_male/female/master_azure)
+    -   สร้าง hair back layers (`hair_topknot_long_back.png`, `hair_twin_tail_back.png`)
+2.  **ทดสอบ UI จริง:**
+    -   กด Play → หน้าจอ Avatar Customization ควรโผล่
+    -   ทดสอบเปลี่ยน outfit → Preview ควรอัปเดตทันที
+    -   ทดสอบ sex validation (outfit_female ให้ศิษย์ male → ควร fail)
 
 ### Medium Priority (Phase 2)
 3.  **UI Sex Selector:**
@@ -163,12 +194,11 @@
 4.  **Tinting System (Color):**
     -   `AvatarAppearance.Colors` มีอยู่แล้ว แต่ยังไม่มี logic ใน Renderer
     -   เริ่มที่ `Image.color` multiply (Method A) ก่อน
-5.  **Thumbnail (`thumbPath`):**
-    -   ตอนนี้กริดแสดง sprite ชิ้นส่วนดิบ (ผมลอยๆ)
-    -   ต้องใช้ `thumbPath` (รูปหัวสวมผมทรงนั้น) เมื่อ Art ส่งมา
-6.  **MCP Tool `change_avatar_part`:**
+5.  **MCP Tool `apply_outfit`:**
     -   Request-Response pattern (เหมือน `purchase_item`)
-    -   เรียก `SectStateProvider.TryChangeAvatarPart`
+    -   เรียก `SectStateProvider.TryApplyOutfit`
+6.  **MCP Tool `change_avatar_part`:**
+    -   Wire เรียบร้อยฝั่ง Unity (`ChangeAvatarPartHandler`) แต่ Bridge ยังไม่มี tool expose
 
 ### Low Priority (Phase 3+)
 7.  **AvatarIconBaker:**
@@ -178,6 +208,9 @@
     -   ใช้ `AvatarRenderer` ตัวเดิม
 9.  **BuildingSystem / Combat / Stats:**
     -   ยังเป็น stub / ยังไม่ตัดสินใจแนวทาง
+10. **Additive Scene Architecture:**
+    -   แยก CoreScene (persistent UI/systems) + GameplayScene (additive load)
+    -   เพื่อให้ UI ข้าม scene ได้โดยไม่ต้อง recreate
 
 ---
 
@@ -186,20 +219,20 @@
 Cultivation Together/              ← workspace root
  ├── Shared/                        ← canonical source for shared types
  │   ├── GameMessages.cs            ← sync to Unity + Bridge
- │   ├── SectEconomyState.cs        ← Dictionary AvatarAppearance + DiscipleSex
+ │   ├── SectEconomyState.cs        ← Dictionary AvatarAppearance + DiscipleSex + PoseId
  │   └── MockSectData.cs            ← FromSlots factory + explicit Sex
  ├── UnityProject/                  ← open in Unity Hub
  │   ├── Assets/Scripts/
  │   │   ├── Core/                  ← TimeSystem, DecisionExecutor, GameLifetimeScope
- │   │   ├── Data/                  ← AvatarPartPool, LubanEventPool
- │   │   ├── Systems/               ← SectStateProvider, DiscipleSystem, etc.
+ │   │   ├── Data/                  ← AvatarPartPool (OutfitDef + poseId/sexTag), LubanEventPool
+ │   │   ├── Systems/               ← SectStateProvider (TryApplyOutfit + pose validation), DiscipleSystem, etc.
  │   │   └── UI/                    ← Xianxia.UI.MVP Lite (Views/Presenters/Core)
- │   └── Resources/Data/            ← avatar_parts.json, worldevent_*.json
+ │   └── Resources/Data/            ← avatar_parts.json (outfits + parts), worldevent_*.json
  ├── McpBridge/                     ← .NET 8 console app
  │   └── Program.cs                 ← MCP server (SectQueryTools/SectActionTools)
  ├── DataTables/                    ← Luban Excel sources
  ├── Tools/Luban/                   ← Luban binary
- ├── LLMWiki/                       ← this folder (architecture.md, disciples.md, etc.)
+ ├── LLMWiki/                       ← this folder (architecture.md, disciples.md, avatar-appearance.md, etc.)
  └── sync-shared.sh                 ← copy Shared/ → Unity + Bridge
 ```
 
@@ -213,6 +246,12 @@ Cultivation Together/              ← workspace root
 -   Slot โตจาก 4 → 10+ → Fixed `[Key]` จะ break schema ทุกครั้งที่เพิ่มหมวด
 -   Dictionary = เพิ่ม slot แก้แค่ JSON, AI GM ค้นพบ slot ได้เองจาก `get_sect_state`
 -   `GetSlot/SetSlot` API เหมือนเดิม → Presenter ไม่ต้องแก้
+
+### Why Outfit Packages + PoseId (v3)
+-   Reference games (觅长生) เปลี่ยน pose ตามชุด → robe ท่ากอดอก ใส่บนท่าชี้มือไม่ได้
+-   Pose เป็น registration axis ใหม่: ทุก part มี `poseId`, outfit = preset ที่เข้าคู่กัน
+-   Within a pose family ยัง swap part ได้อิสระ (ผมทรงไหนก็ได้ถ้าวาดสำหรับ pose นั้น)
+-   Backward compatible: `PoseId == ""` → fallback `pose_idle_01`
 
 ### Why Portrait Swap (not Paper Doll Tiles)
 -   Target visual: VN-style dialogue portrait (ไม่ใช่ chibi tile เล็กๆ)
@@ -239,10 +278,37 @@ Cultivation Together/              ← workspace root
 -   ไม่ต้องคลิกสร้าง `.asset` → แก้ด้วย text editor / git diff ได้
 -   Generate C# Plain Class + JSON loader (ไม่ใช่ SO) → สอดคล้องกับแนวทาง "Plain C# everywhere"
 
+
+**Motivation:** เปลี่ยนจาก Single Scene เป็น Additive Scene เพื่อให้ UI persistent ข้าม scene
+
+**Plan:**
+1. สร้าง CoreScene (Canvas + UIRoot + GameLifetimeScope + Core systems)
+2. สร้าง GameplayScene (Environment + NPCs + Scene-specific UI)
+3. Implement SceneLoader (LoadSceneAsync Additive mode)
+4. Persistent UI (ResourceHud, Settings) อยู่ใน CoreScene
+5. Scene-specific UI (EventPopup, Dialogue) instantiate จาก Prefab
+
+**Status:** Draft phase - ยังอยู่ในขั้นตอน document และ design
+**Expected Impact:** 
+- UI ไม่หายตอนเปลี่ยน scene
+- แยก concerns: core vs scene content
+- รองรับ multiple locations ในอนาคต
+
+**Open Questions:**
+- VContainer scope strategy (single root vs parent-child)
+- Scene transition effects
+- Scene-specific data persistence
+
 ---
 
 ## 📝 Commit History (Recent)
--   `Unity-v0.5-avatar-portrait-swap`: Dictionary AvatarAppearance, category tabs, hair 2-layer renderer, framing presets, DiscipleSex enum
+-   `Unity-v0.11-implement-avatar-system-v3-portrait-swap`: OutfitDef + TryApplyOutfit, pose validation, outfit tab UI, PoseId in signature
+-   `Unity-v0.10-sex-garden`: DiscipleSex enum, recruitment logic, mock data sex tagging
+-   `Unity-v0.9-avatar-portrait-swap`: Dictionary AvatarAppearance, category tabs, hair 2-layer renderer, framing presets
+-   `Unity-v0.8-log-window`: LogWindow event log with real-time notifications
+-   `Unity-v0.7-ui-framework-and-luban-data`: MVP UI system + Luban migration
+-   `Unity-v0.6-luban-event-data`: Replace ScriptableObject with Luban-generated data tables
+-   `Unity-v0.5-data-driven-world-events`: EventData ScriptableObjects + weighted EventPool
 -   `Unity-v0.4-economic-loop-mcp-transactions`: Purchase system, execute decision publisher, world event transport fix
 -   `Unity-v0.3-live-crafting-pipeline`: Crafting system, decision consequences, singleton state mutation
 -   `Unity-v0.2-live-decision-loop`: WorldEventSystem, await_next_world_event, execute_decision round trip

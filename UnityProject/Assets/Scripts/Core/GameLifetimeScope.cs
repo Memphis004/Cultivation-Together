@@ -3,6 +3,7 @@ using UnityEngine;
 using VContainer;
 using VContainer.Unity;
 using Xianxia.Sect.Messages;
+using Xianxia.Sect.Tests;
 
 namespace Xianxia.Sect
 {
@@ -20,8 +21,18 @@ namespace Xianxia.Sect
         [SerializeField] private Xianxia.Sect.UI.UIRoot uiRoot;
         [SerializeField] private Xianxia.Sect.UI.UIPanelCatalog uiPanelCatalog;
 
+        protected override void Awake()
+        {
+            base.Awake();
+            DontDestroyOnLoad(gameObject);
+        }
+
         protected override void Configure(IContainerBuilder builder)
         {
+
+            // Scene management
+            builder.Register<SceneLoader>(Lifetime.Singleton);
+            builder.RegisterComponentInHierarchy<AdditiveSceneTest>();
             // Design-time data now sourced from Luban (see DataTables/ at
             // the workspace root and Assets/Scripts/Data/LubanEventPool.cs),
             // not a ScriptableObject dragged into the Inspector - so this is
