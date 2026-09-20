@@ -2180,11 +2180,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\UnityProjects\\Cultivation Together\\McpBridge\\McpBridge.csproj",
+      "projectUniqueName": "C:\\UnityProjects\\Cultivation Togetherold\\McpBridge\\McpBridge.csproj",
       "projectName": "McpBridge",
-      "projectPath": "C:\\UnityProjects\\Cultivation Together\\McpBridge\\McpBridge.csproj",
+      "projectPath": "C:\\UnityProjects\\Cultivation Togetherold\\McpBridge\\McpBridge.csproj",
       "packagesPath": "C:\\Users\\memph\\.nuget\\packages\\",
-      "outputPath": "C:\\UnityProjects\\Cultivation Together\\McpBridge\\obj\\",
+      "outputPath": "C:\\UnityProjects\\Cultivation Togetherold\\McpBridge\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\memph\\AppData\\Roaming\\NuGet\\NuGet.Config",

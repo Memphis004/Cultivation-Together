@@ -11,42 +11,33 @@
             "id": "d9aaed8e7b5b5eaa",
             "type": "leaf",
             "state": {
-              "type": "markdown",
-              "state": {
-                "file": "wiki/sources/sex-gender-system.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "sex-gender-system"
-            }
-          },
-          {
-            "id": "27604d454bef7679",
-            "type": "leaf",
-            "state": {
               "type": "graph",
               "state": {},
               "icon": "lucide-git-fork",
               "title": "Graph view"
             }
-          },
+          }
+        ]
+      },
+      {
+        "id": "e086deec736930bc",
+        "type": "tabs",
+        "children": [
           {
-            "id": "e8caa27cb91e9537",
+            "id": "293754eef346bc33",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "wiki/sources/devlog-history.md",
+                "file": "wiki/sources/architecture.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "devlog-history"
+              "title": "architecture"
             }
           }
-        ],
-        "currentTab": 2
+        ]
       }
     ],
     "direction": "vertical"
@@ -108,7 +99,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 281.5
+    "width": 200
   },
   "right": {
     "id": "0998908606739e51",
@@ -239,21 +230,28 @@
       "smart-connections:Toggle Footer Connections": false
     }
   },
-  "active": "e8caa27cb91e9537",
+  "active": "d9aaed8e7b5b5eaa",
   "lastOpenFiles": [
+    "wiki/sources/Game Design Doc (Draft) — Sect Managemen.md",
     "wiki/sources/architecture.md",
+    "wiki/sources/task-system.md",
+    "wiki/index.md",
+    "wiki/sources/sex-gender-system.md",
+    "wiki/concepts/purchase-store.md",
+    "wiki/concepts/crafting-system.md",
+    "wiki/concepts/task-system-v1.md",
+    "entities/d001-disciple.md",
+    "entities",
+    "wiki/sources/devlog-history.md",
     "wiki/entities/avatar-appearance.md",
     "wiki/entities/Qwen_markdown_20260904_rki7dp2dz.md",
     "wiki/concepts/additive-scene-architecture.md",
     "wiki/sources/avatar-appearance.md",
-    "wiki/sources/sex-gender-system.md",
     "wiki/entities/disciples.md",
     "wiki/concepts/state-management.md",
     "wiki/sources/game-design-doc.md",
-    "wiki/sources/Game Design Doc (Draft) — Sect Managemen.md",
     "wiki/concepts/log-window.md",
     "wiki/log.md",
-    "wiki/index.md",
     "wiki/sources/code-snippets/LogWindowView.cs.md",
     "wiki/sources/code-snippets/LogWindowPresenter.cs.md",
     "wiki/overview.md",
@@ -262,12 +260,6 @@
     "AGENTS.md",
     "wiki/sources/bug-log.md",
     "wiki/sources/Untitled.md",
-    "wiki/concepts/mcp-bridge.md",
-    "README.md",
-    "wiki/conventions.md",
-    "wiki/sources/code-snippets/GameLifetimeScope.cs.md",
-    "wiki/schema/config.md",
-    "wiki/schema",
-    "wiki/sources/devlog-history.md"
+    "wiki/schema"
   ]
 }
