@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "unity-cli": {
+      "command": "unity",
+      "args": ["mcp"]
+    }
+  }
+}
