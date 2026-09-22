@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "qXms2SvR7gI=",
+  "dgSpecHash": "4gML5Kcr70Q=",
   "success": true,
-  "projectFilePath": "C:\\UnityProjects\\Cultivation Togetherold\\McpBridge\\McpBridge.csproj",
+  "projectFilePath": "C:\\UnityProjects\\Cultivation Together\\McpBridge\\McpBridge.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\memph\\.nuget\\packages\\messagepack\\3.1.4\\messagepack.3.1.4.nupkg.sha512",
     "C:\\Users\\memph\\.nuget\\packages\\messagepack.annotations\\3.1.4\\messagepack.annotations.3.1.4.nupkg.sha512",
