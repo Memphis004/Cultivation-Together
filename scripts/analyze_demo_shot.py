@@ -1,4 +1,5 @@
 import struct, zlib
+import sys
 from collections import Counter
 
 def read_png(path):
@@ -44,7 +45,8 @@ def read_png(path):
         prev = line
     return w, h, ch, out
 
-w, h, ch, px = read_png("UnityProject/Library/demo_shot.png")
+SHOT = sys.argv[1] if len(sys.argv) > 1 else "UnityProject/Library/demo_shot.png"
+w, h, ch, px = read_png(SHOT)
 
 def pix(x, y):
     o = (y * w + x) * ch

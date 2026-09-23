@@ -46,3 +46,5 @@ Every ingest, lint run, and maintenance operation is recorded here automatically
 ## [2026-09-23] wire | wiki/index.md | Linked visual-demo-scene ใน Sources (9→10 หน้า)
 ## [2026-09-23] update | wiki/concepts/disciple-visual-system.md | §11 Phase 3: เพิ่ม ground-truth demo render acceptance (4 chibi ครบ, d002 หายพัง, HUD 7 ปุ่ม, cam depth=10, 0 exception — demo_shot.png + visual_spike_result.txt)
 ## [2026-09-23] new-tool | scripts/analyze_demo_shot.py + hud_profile.py | ตัวช่วยวิเคราะห์ backbuffer capture (ASCII density map + HUD band profile) สำหรับยืนยัน demo รอบถัด ๆ ไป
+## [2026-09-23] bugfix | ChibiSheetBaker.cs | smoke test หลัง commit จับได้ว่า chibi หายเมื่อเฟรม >= 1: painter ไม่เคยชดเชย x ตามคอลัมน์เฟรม (ทุกเฟรมวาดทับ x=0, คอลัมน์ 1-5 ว่าง) — เพิ่ม _xOffset + clip ใน Fill, re-bake แล้ว demo ผ่าน 4/4 chibi ทุกเฟรมมีเนื้อ (สคริปต์ check_sheet_frames.py ใช้ยืนยัน per-frame coverage)
+## [2026-09-23] verify | smoke test 3 รอบติดกัน (6 captures: 2 จังหวะ/รอบ, boot ใหม่ทุกรอบ) | 4/4 chibi มองเห็นทุกภาพ (fg 30-41% sprite, 18% spine), dump ครบทั้ง 3 รอบ (10 sprites ไม่ NULL, spine attachments=32), console 0 errors — ความเสถียรยืนยันหลังแก้ baker

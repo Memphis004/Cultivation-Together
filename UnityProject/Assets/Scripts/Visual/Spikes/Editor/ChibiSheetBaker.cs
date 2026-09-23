@@ -190,9 +190,17 @@ namespace Xianxia.Sect.EditorTools
             {
                 _yOffset = (rows - 1 - row) * Cell;
                 for (int f = 0; f < FramesPerRow; f++)
+                {
+                    // BUGFIX: each frame must paint into ITS OWN column (x = f*Cell).
+                    // Previously every frame painted at x=0, so column 0 held the
+                    // last-painted frame and columns 1..5 stayed fully transparent —
+                    // any chibi caught mid-animation (frame >= 1) rendered invisible.
+                    _xOffset = f * Cell;
                     paint(pixels, w, h, row, f);
+                }
             }
             _yOffset = 0;
+            _xOffset = 0;
 
             var tex = new Texture2D(w, h, TextureFormat.RGBA32, false) { filterMode = FilterMode.Point };
             tex.SetPixels(pixels);
@@ -288,9 +296,12 @@ namespace Xianxia.Sect.EditorTools
 
         // current bottom-up band offset applied by Fill (set per state row in Bake)
         private static int _yOffset;
+        // current left-to-right frame-column offset applied by Fill (set per frame in Bake)
+        private static int _xOffset;
 
         private static void Fill(Color[] g, int w, int x, int y, int rw, int rh, Color c)
         {
+            x += _xOffset;
             y += _yOffset;
             int rows = g.Length / w;
             for (int py = y; py < y + rh; py++)
@@ -301,6 +312,8 @@ namespace Xianxia.Sect.EditorTools
                 for (int px = x; px < x + rw; px++)
                 {
                     if (px < 0 || px >= w) continue;
+                    int bandX = px - _xOffset;
+                    if (bandX < 0 || bandX >= Cell) continue;          // clip inside the authored 96px cell — no spilling between frames
                     g[py * w + px] = c;
                 }
             }
