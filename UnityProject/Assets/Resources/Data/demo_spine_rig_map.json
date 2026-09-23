@@ -1,0 +1,25 @@
+{
+  "_comment": "DEV-ONLY (Visual Demo Scene) — maps our slots/activities onto the FREE Spine example rig (mix-and-match-pro). NEVER referenced in production (DevSpineOverride gate). Skin/animation names below exist in mix-and-match-pro.json (T1 survey); 'spine_demo_missing_anim' is INTENTIONALLY absent so button [7] can prove the L9 fallback path.",
+  "skeletonDataAssetPath": "Assets/Spine Examples/Spine Skeletons/mix-and-match/mix-and-match-pro_SkeletonData.asset",
+  "skeletonDataResourcePath": "Spine Examples/Spine Skeletons/mix-and-match/mix-and-match-pro_SkeletonData",
+  "slotToSkin": [
+    { "slot": "body",         "skin": "clothes/hoodie-blue-and-scarf" },
+    { "slot": "head",         "skin": "skin-base" },
+    { "slot": "hair",         "skin": "hair/long-blue-with-scarf" },
+    { "slot": "face_marking", "skin": "eyes/violet" },
+    { "slot": "accessory",    "skin": "accessories/cape-red" }
+  ],
+  "partToSkin": [
+    { "part": "hair_topknot_long", "skin": "hair/blue" },
+    { "part": "hair_short",        "skin": "hair/short-red" }
+  ],
+  "activityToAnimation": [
+    { "activity": "Idle",    "animation": "idle" },
+    { "activity": "Walking", "animation": "walk" },
+    { "activity": "Walk",    "animation": "walk" },
+    { "activity": "Working", "animation": "dance" },
+    { "activity": "Resting", "animation": "aware" },
+    { "activity": "DemoMissing", "animation": "spine_demo_missing_anim" }
+  ],
+  "intentionalMissingAnimation": "spine_demo_missing_anim"
+}

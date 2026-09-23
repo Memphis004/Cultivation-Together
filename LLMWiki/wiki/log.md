@@ -36,3 +36,9 @@ Every ingest, lint run, and maintenance operation is recorded here automatically
 ## [2026-09-01] wire | wiki/sources/architecture.md | Added LogWindow to UI box in architecture diagram
 ## [2026-09-01] wire | wiki/index.md | Linked LogWindow concept + code snippets into master catalog
 ## [2026-09-01] new-page | wiki/sources/sex-gender-system.md | Drafted GDD for adding explicit Disciple Sex (Male/Female + RecruitSexPicker) to DiscipleState
+## [2026-09-22] update | wiki/entities/avatar-appearance.md | [Key(8)] ChibiBackend เป็น render-active แล้ว (Phase 3 — VisualTierPolicy + TrySetChibiBackend; Spine ยัง INERT รอ S4 license)
+## [2026-09-22] update | wiki/concepts/disciple-visual-system.md | §11 ทำเครื่องหมาย Phase 1/2/3 acceptance ☑ (Phase 3 ผ่าน verify 24/24 ด้วย example rig — Spine render ยัง INERT รอ license)
+## [2026-09-22] update | wiki/concepts/disciple-visual-system.md | §11 ทำเครื่องหมาย Phase 4 ✅ (TaskActivityMapper + ChibiClickTarget + DiscipleDetail panel; verify 27/27)
+## [2026-09-22] update | wiki/concepts/mvp-ui.md | เพิ่ม DiscipleDetail ใน Implemented Panels (4→5) + UIService mapping
+## [2026-09-22] update | wiki/entities/disciples.md | CurrentTask ขับเคลื่อน chibi activity ในฉากแล้ว (TaskActivityMapper — derive-on-reconcile)
+## [2026-09-22] update | wiki/concepts/disciple-visual-system.md | §11 ทำเครื่องหมาย Phase 5 ✅ (entitlement ชั้น 6 + UI lock + EntitlementRandom; verify 20/20) + §14 ปิด Q2 (Preset+Reroll = Randomize + filter)

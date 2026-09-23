@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Xianxia.Sect;
+using Xianxia.Sect.Visual;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -39,7 +40,7 @@ namespace Xianxia.Sect.UI
     /// AvatarFraming ควบคุม scale + offset ของ layerRoot ใน Awake
     /// </summary>
     [RequireComponent(typeof(CanvasGroup))]
-    public class AvatarRenderer : MonoBehaviour
+    public class AvatarRenderer : MonoBehaviour, IPortraitVisual
     {
         private const float RefreshInterval = 0.1f;
 
@@ -56,6 +57,8 @@ namespace Xianxia.Sect.UI
         [SerializeField] private AvatarFraming framing = AvatarFraming.FullBody;
 
         private AvatarPartPool _pool;                         // injected via Initialize()
+        private AppearanceResolver _resolver;                 // Phase 1: resolve ผ่าน resolver เดียว (D4/L2)
+        private VisualBackend _backend = VisualBackend.Portrait;
         private CanvasGroup _canvasGroup;
 
         private readonly List<Image> _activeLayers = new List<Image>();
@@ -79,6 +82,7 @@ namespace Xianxia.Sect.UI
         public void Initialize(AvatarPartPool pool)
         {
             _pool = pool;
+            _resolver = new AppearanceResolver(pool);
         }
 
         /// <summary>เปลี่ยน framing mode แล้ว apply preset ทันที</summary>
@@ -108,6 +112,12 @@ namespace Xianxia.Sect.UI
             _timer = RefreshInterval;   // trigger rebuild in the next frame
         }
 
+        /// <summary>IPortraitVisual.Bind — map ตรงเข้า SetAppearance เดิม (C2: ไม่เปลี่ยนพฤติกรรม)</summary>
+        public void Bind(AvatarAppearance appearance)
+        {
+            SetAppearance(appearance);
+        }
+
         private void Update()
         {
             if (_appearance == null || _pool == null) return;
@@ -127,24 +137,10 @@ namespace Xianxia.Sect.UI
         private bool IsVisible()
         {
             return isActiveAndEnabled && _canvasGroup.alpha > 0.01f;
-        }
-
-        private static string BuildSignature(AvatarAppearance a)
+        }        private string BuildSignature(AvatarAppearance a)
         {
-            // Build from dictionary — sorted by key for stable comparison
-            var keys = new List<string>(a.Parts.Keys);
-            keys.Sort();
-            var sb = new System.Text.StringBuilder();
-            sb.Append("P=");
-            sb.Append(a.PoseId ?? "");
-            for (int i = 0; i < keys.Count; i++)
-            {
-                sb.Append("|");
-                sb.Append(keys[i]);
-                sb.Append("=");
-                sb.Append(a.Parts[keys[i]]);
-            }
-            return sb.ToString();
+            // Phase 1: signature มาจาก resolver (รวม backend) — ครอบคลุมเท่าเดิม
+            return _resolver.Signature(a, _backend);
         }
 
         /// <summary>
@@ -165,51 +161,22 @@ namespace Xianxia.Sect.UI
         {
             ReleaseAllLayers();
 
-            // 1) สร้าง list ของ (DrawOrder, SpritePath) ทั้งหมดที่จะวาด
-            //    แทนที่จะ sort แค่ def แล้ว spawn ตามนั้น
-            var layersToDraw = new List<(int order, string path)>(16);
+            // Phase 1 (D4/L2): resolve ผ่าน AppearanceResolver เดียว — layer list ต้องเหมือนเดิมเป๊ะ
+            // (base 0 → hair_back 10 → body 20 → head 30 → face_marking 34 → hair_front 40 → accessory 50)
+            var layersToDraw = _resolver.Resolve(_appearance, _backend);
 
-            // Base layer (คงที่)
-            var baseDef = _pool.Resolve(AvatarSlots.Base, string.Empty);
-            if (baseDef != null) layersToDraw.Add((baseDef.drawOrder, baseDef.spritePath));
-
-            // Loop ผ่าน Parts ของ Avatar
-            foreach (var kvp in _appearance.Parts)
-            {
-                var def = _pool.Resolve(kvp.Key, kvp.Value);
-                if (def == null) continue;
-
-                // ถ้ามีผมหลัง (spritePathBack ไม่ว่าง) -> เพิ่มเข้า list ด้วย drawOrderBack
-                if (!string.IsNullOrEmpty(def.spritePathBack))
-                {
-                    // ใช้ drawOrderBack ถ้ามีค่า (>0) ไม่งั้นใช้ drawOrder - 30 (fallback)
-                    int backOrder = def.drawOrderBack > 0 ? def.drawOrderBack : (def.drawOrder - 30);
-                    layersToDraw.Add((backOrder, def.spritePathBack));
-                }
-
-                // ผมหน้า / ชิ้นส่วนปกติ -> ใช้ drawOrder ปกติ
-                if (!string.IsNullOrEmpty(def.spritePath))
-                {
-                    layersToDraw.Add((def.drawOrder, def.spritePath));
-                }
-            }
-
-            // 2) Sort ทุก layer ตาม DrawOrder (จากน้อยไปมาก = ล่างไปบน)
-            layersToDraw.Sort((a, b) => a.order.CompareTo(b.order));
-
-            // 3) Spawn Image ตามลำดับที่ sort แล้ว
             for (int i = 0; i < layersToDraw.Count; i++)
             {
                 var layer = layersToDraw[i];
-                var sprite = LoadSprite(layer.path);
+                var sprite = LoadSprite(layer.Asset);
                 if (sprite == null) continue;
 
                 var img = RentLayer();
                 img.sprite = sprite;
                 img.enabled = true;
-                // Sibling index จะเรียงตามลำดับที่ sort แล้ว -> ถูกต้อง!
-                // hair_back (10) จะถูก spawn ก่อน body (20) -> อยู่ข้างหลัง
-                // hair_front (40) จะถูก spawn หลัง head (30) -> อยู่ข้างหน้า
+                // Sibling index เรียงตามลำดับ sort แล้ว (resolver sort Order น้อย→มากให้)
+                // hair_back (10) spawn ก่อน body (20) → อยู่ข้างหลัง
+                // hair_front (40) spawn หลัง head (30) → อยู่ข้างหน้า
             }
         }
 

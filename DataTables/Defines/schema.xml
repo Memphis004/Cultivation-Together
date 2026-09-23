@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<module name="game">
+    <bean name="EventDef">
+        <var name="id" type="string"/>
+        <var name="description" type="string"/>
+        <var name="requiresDecision" type="bool"/>
+        <var name="weight" type="float"/>
+    </bean>
+    <table name="TbEventDef" value="EventDef" input="EventDef.csv" index="id"/>
+
+    <!-- Two flat tables joined by eventId instead of nesting choices as a
+         list-in-one-row inside EventDef. Two flat, bulk-editable CSVs
+         joined by a plain string key are simpler and safer to hand-author,
+         and still solve the original goal (no per-item Editor asset
+         clicking). -->
+    <bean name="EventChoiceDef">
+        <var name="eventId" type="string"/>
+        <var name="choiceId" type="string"/>
+        <var name="label" type="string"/>
+    </bean>
+    <table name="TbEventChoiceDef" value="EventChoiceDef" input="EventChoiceDef.csv" mode="list"/>
+</module>

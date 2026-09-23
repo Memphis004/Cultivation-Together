@@ -117,6 +117,8 @@ Each disciple has exactly ONE `CurrentTask` at a time. Known tasks:
 
 ⏳ **TODO**: inner/elder promotion, task assignment UI, technique learning
 
+> 🎨 **Chibi activity (Phase 4):** `CurrentTask` ยังขับเคลื่อน gathering/crafting ticks เหมือนเดิม และตอนนี้ **มองเห็นได้ในฉากแล้ว** — `TaskActivityMapper` (data-driven, `chibi_activity_task_map.json`) แปลง task เป็น chibi activity ตอน Reconcile (event-triggered ไม่มี polling): `gathering_*`→Walk, `refining_/forging_/crafting_/training`→Working, `meditation`→Resting, ไม่ match→Idle — ฝั่ง Sprite tier ยังเล่นได้แค่ Idle/Walk (state อื่น fallback เป็น Idle + warn ครั้งเดียว) ดู [[concepts/disciple-visual-system]] §6.2/§11
+
 ## Recruitment
 
 Triggered by `new_disciple_applicant` world event → `execute_decision` with

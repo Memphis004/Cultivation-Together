@@ -1,0 +1,6 @@
+{
+  "states": [
+    { "state": "Idle", "fps": 6, "frames": 6, "loop": true },
+    { "state": "Walk", "fps": 10, "frames": 6, "loop": true }
+  ]
+}

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e6f601455c0e0549b841c969d30c2b7, type: 3}
   m_Name: EditorPipelineManager
   m_EditorClassIdentifier: Unity.Pipeline.Editor::Unity.Pipeline.Editor.EditorPipelineManager
-  m_Port: 25382
+  m_Port: 0
   m_AutoStart: 1
   m_WatchdogEnabled: 1
   m_WatchdogIntervalSeconds: 5

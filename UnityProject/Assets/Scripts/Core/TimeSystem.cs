@@ -186,5 +186,12 @@ namespace Xianxia.Sect
         PurchaseItemResponse TryPurchaseItem(string discipleId, string itemDefId, int grade, int quantity);
         bool TryChangeAvatarPart(string discipleId, string slot, string partId,
                                 out string failReason, out AvatarAppearance result);
+
+        /// <summary>
+        /// Mutate DiscipleState.ChibiBackend (entitlement) + publish
+        /// DiscipleChibiBackendChangedMessage (in-memory). DiscipleVisualSystem respawns
+        /// the visual in place on that message — position/activity/facing preserved (§7).
+        /// </summary>
+        bool TrySetChibiBackend(string discipleId, ChibiBackend backend, out string failReason);
     }
 }

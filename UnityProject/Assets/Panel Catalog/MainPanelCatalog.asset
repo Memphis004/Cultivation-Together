@@ -25,3 +25,6 @@ MonoBehaviour:
   - PanelId: AvatarCustomization
     Prefab: {fileID: 3672726505200475846, guid: 5e7e2a35015cec84d9de1bacc98bb4b5, type: 3}
     PresenterKind: 3
+  - PanelId: DiscipleDetail
+    Prefab: {fileID: 3013095126885163442, guid: 456ddcc0f122bb04499f672456f9babe, type: 3}
+    PresenterKind: 5

@@ -1,0 +1,21 @@
+{
+    "name": "Xianxia.Sect.Visual.Spine.Spikes",
+    "rootNamespace": "Xianxia.Sect.Visual.Spines",
+    "references": [
+        "spine-unity",
+        "Xianxia.Sect.Visual.Core.Spikes",
+        "Xianxia.Sect.Visual.Spine",
+        "Xianxia.Sect.Runtime",
+        "MessagePipe",
+        "VContainer"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

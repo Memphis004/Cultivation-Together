@@ -1,0 +1,28 @@
+{
+    "name": "Xianxia.Sect.Visual.Spikes.Editor",
+    "rootNamespace": "Xianxia.Sect.Visual.Spikes.EditorTools",
+    "references": [
+        "Xianxia.Sect.Visual.Core.Spikes",
+        "Xianxia.Sect.Visual.Spine.Spikes",
+        "Xianxia.Sect.Visual.Spine",
+        "spine-unity",
+        "Xianxia.Sect.Runtime",
+        "VContainer",
+        "MessagePipe",
+        "UniTask",
+        "Unity.TextMeshPro",
+        "Unity.2D.Sprite.Editor",
+        "Unity.2D.Common.Editor"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

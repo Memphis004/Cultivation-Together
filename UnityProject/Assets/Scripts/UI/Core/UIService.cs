@@ -77,6 +77,7 @@ namespace Xianxia.Sect.UI
                 case UIPresenterKind.ResourceHud: return typeof(ResourceHudPresenter);
                 case UIPresenterKind.LogWindow: return typeof(LogWindowPresenter);
                 case UIPresenterKind.AvatarCustomization: return typeof(AvatarCustomizationPresenter);
+                case UIPresenterKind.DiscipleDetail: return typeof(DiscipleDetailPresenter);
                 case UIPresenterKind.DiscipleList:
                     throw new NotImplementedException("DiscipleListPresenter is not implemented yet.");
                 default:

@@ -1,0 +1,13 @@
+{
+  "mappings": [
+    { "taskPrefix": "gathering_",  "activity": "Walk" },
+    { "taskPrefix": "refining_",   "activity": "Working" },
+    { "taskPrefix": "forging_",    "activity": "Working" },
+    { "taskPrefix": "crafting_",   "activity": "Working" },
+    { "taskPrefix": "meditation",  "activity": "Resting" },
+    { "taskPrefix": "patrol",      "activity": "Walk" },
+    { "taskPrefix": "training",    "activity": "Working" },
+    { "taskPrefix": "demo_missing", "activity": "DemoMissing" }
+  ],
+  "defaultActivity": "Idle"
+}

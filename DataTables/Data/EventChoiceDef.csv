@@ -1,0 +1,7 @@
+##,eventId,choiceId,label
+,bandit_raid_001,send_inner_disciples,Send inner disciples to repel the raid
+,bandit_raid_001,pay_tribute,Pay tribute to avoid conflict
+,new_disciple_applicant,accept,Accept the applicant
+,new_disciple_applicant,reject,Turn them away
+,wandering_merchant,trade,Trade with the merchant
+,wandering_merchant,decline,Decline to trade

@@ -30,7 +30,8 @@ namespace Xianxia.Sect
             {
                 DiscipleId = "d000",
                 DisplayName = "Liu YiFeng",
-                Sex = DiscipleSex.Male, 
+                Sex = DiscipleSex.Male,
+                ChibiBackend = ChibiBackend.Spine, // SectMaster = Spine tier (แผน §4.1)
                 Rank = DiscipleRank.SectMaster,
                 Wallet = new CurrencyWallet { SpiritStones = 1200, Contribution = 3400 },
                 CurrentTask = "meditation",
@@ -49,6 +50,7 @@ namespace Xianxia.Sect
                 DiscipleId = "d001",
                 DisplayName = "Lin Feng",
                 Sex = DiscipleSex.Female,
+                ChibiBackend = ChibiBackend.SpriteSheet, // Outer = SpriteSheet (แผน §4.1)
                 Rank = DiscipleRank.OuterDisciple,
                 Wallet = new CurrencyWallet { SpiritStones = 12, Contribution = 340 },
                 CurrentTask = "gathering_herb",
@@ -65,7 +67,8 @@ namespace Xianxia.Sect
             {
                 DiscipleId = "d002",
                 DisplayName = "Su Yan",
-                Sex = DiscipleSex.Female, 
+                Sex = DiscipleSex.Female,
+                ChibiBackend = ChibiBackend.SpriteSheet, // Inner = SpriteSheet (แผน §4.1)
                 Rank = DiscipleRank.InnerDisciple,
                 Wallet = new CurrencyWallet { SpiritStones = 45, Contribution = 1120 },
                 CurrentTask = "refining_elixir",
@@ -84,7 +87,8 @@ namespace Xianxia.Sect
             {
                 DiscipleId = "d003",
                 DisplayName = "Elder Zhao",
-                Sex = DiscipleSex.Male, 
+                Sex = DiscipleSex.Male,
+                ChibiBackend = ChibiBackend.Spine, // Elder = Spine tier (แผน §4.1)
                 Rank = DiscipleRank.Elder,
                 Wallet = new CurrencyWallet { SpiritStones = 210, Contribution = 4300 },
                 CurrentTask = "forging_artifact",

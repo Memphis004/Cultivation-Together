@@ -179,6 +179,32 @@ namespace Xianxia.Sect.Messages
         [Key(2)] public long RemainingContribution { get; set; }
     }
 
+    // ---------- Chibi backend entitlement change (Phase 3) ----------
+    // Published in-memory by SectStateProvider.TrySetChibiBackend after mutating
+    // DiscipleState.ChibiBackend. DiscipleVisualSystem respawns the visual IN PLACE
+    // (same position/activity/facing) on this message.
+    // ⚠️ Deliberately NOT added to InterprocessTopics — visual-tier churn is
+    // irrelevant to the MCP bridge; keep it off the TCP broker (same rule as
+    // every DiscipleVisualSystem message).
+    [MessagePackObject]
+    public class DiscipleChibiBackendChangedMessage
+    {
+        [Key(0)] public string DiscipleId { get; set; } = string.Empty;
+        [Key(1)] public ChibiBackend Old { get; set; }
+        [Key(2)] public ChibiBackend New { get; set; }
+    }
+
+    // ---------- Disciple selected (Phase 4 — chibi click) ----------
+    // Published in-memory by ChibiClickTarget when the player clicks a chibi
+    // in the gameplay scene. DiscipleDetailUISystem opens the DiscipleDetail
+    // panel on this message. ⚠️ Deliberately NOT added to InterprocessTopics —
+    // same in-memory-only rule as every DiscipleVisualSystem message.
+    [MessagePackObject]
+    public class DiscipleSelectedMessage
+    {
+        [Key(0)] public string DiscipleId { get; set; } = string.Empty;
+    }
+
     // ---------- Avatar equipment change ----------
     // Broadcast after a successful avatar part change (pub/sub, goes to UI + MCP client)
     [MessagePackObject]

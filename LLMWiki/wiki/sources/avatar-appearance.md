@@ -19,6 +19,12 @@ tags: [avatar, design-decision, pose, outfit, face-customization]
 
 # Avatar Appearance — Design Notes & Decisions
 
+> ⚠️ **BANNER (Phase 1, 2026-09-22):** สถาปัตยกรรม **render** ของหน้าตาตัวละครถูกแทนด้วย
+> [[disciple-visual-system]] (3 backend: Portrait / SpriteSheet / Spine) — ส่วน §1 (outfit
+> rejected) และ §2 (poseId/sexTag เก็บไว้) ในเอกสารนี้ **ยังมีผลควบคุมทั้งหมด**
+> (decision record ห้ามฟื้น outfit ยัง enforce อยู่); หน้านี้คงค่าเป็น design notes
+> ฝั่ง Portrait/state ที่ยังใช้งานอยู่
+
 ## 0. สถานะปัจจุบัน (v2.5 parts-only MVP — implemented; v3 outfit packages rolled back 2026-09-03, do not regress)
 
 - `AvatarAppearance = { [Key(0)] Parts: slot→partId, [Key(1)] Colors: slot→colorId,

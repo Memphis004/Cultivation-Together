@@ -1,5 +1,6 @@
 #if UNITY_EDITOR
 using System.IO;
+using TMPro;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
@@ -22,12 +23,13 @@ namespace Xianxia.EditorTools
         {
             EnsureFolder(RootFolder);
 
-            // ลำดับสำคัญ: ต้องสร้าง 3 ตัวนี้ก่อน เพราะ Panel ต้องลาก reference ไปใส่
+            // ลำดับสำคัญ: ต้องสร้าง 4 ตัวนี้ก่อน เพราะ Panel ต้องลาก reference ไปใส่
             GameObject layerImagePrefab   = GenerateLayerImagePrefab();
+            GameObject categoryTabPrefab  = GenerateCategoryTabButtonPrefab();
             GameObject slotTabPrefab      = GenerateSlotTabButtonPrefab();
             GameObject optionButtonPrefab = GenerateAvatarOptionButtonPrefab();
 
-            GenerateAvatarCustomizationPanel(layerImagePrefab, slotTabPrefab, optionButtonPrefab);
+            GenerateAvatarCustomizationPanel(layerImagePrefab, categoryTabPrefab, slotTabPrefab, optionButtonPrefab);
 
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
@@ -52,6 +54,30 @@ namespace Xianxia.EditorTools
         }
 
         // ══════════════════════════════════════════════════════
+        // 2b) CategoryTabButtonPrefab — แท็บหมวด (ใบหน้า/ลักษณะ/ร่างกาย)
+        // ══════════════════════════════════════════════════════
+        private static GameObject GenerateCategoryTabButtonPrefab()
+        {
+            var root = new GameObject("CategoryTabButtonPrefab",
+                typeof(RectTransform), typeof(Image), typeof(Button));
+            var rt = root.GetComponent<RectTransform>();
+            rt.sizeDelta = new Vector2(120f, 40f);
+
+            var img = root.GetComponent<Image>();
+            img.color = Color.white;
+
+            var button = root.GetComponent<Button>();
+            button.targetGraphic = img;
+
+            var label = CreateText(root.transform, "Label", "");
+            StretchFull(label.rectTransform);
+            label.alignment = TextAlignmentOptions.Center;
+            label.fontSize = 16;
+
+            return SavePrefab(root, "CategoryTabButtonPrefab");
+        }
+
+        // ══════════════════════════════════════════════════════
         // 2) SlotTabButtonPrefab — ปุ่มแท็บ slot (body/head/hair/accessory)
         // ══════════════════════════════════════════════════════
         private static GameObject GenerateSlotTabButtonPrefab()
@@ -69,7 +95,7 @@ namespace Xianxia.EditorTools
 
             var label = CreateText(root.transform, "Label", "");
             StretchFull(label.rectTransform);
-            label.alignment = TextAnchor.MiddleCenter;
+            label.alignment = TextAlignmentOptions.Center;
             label.fontSize = 16;
 
             return SavePrefab(root, "SlotTabButtonPrefab");
@@ -100,7 +126,7 @@ namespace Xianxia.EditorTools
             SetAnchor(labelRt, new Vector2(0f, 0f), new Vector2(1f, 0f), new Vector2(0.5f, 0f));
             labelRt.sizeDelta = new Vector2(0f, 28f);
             labelRt.anchoredPosition = Vector2.zero;
-            label.alignment = TextAnchor.MiddleCenter;
+            label.alignment = TextAlignmentOptions.Center;
             label.fontSize = 14;
 
             // SelectedFrame (เต็มพื้นที่, เริ่มปิด)
@@ -139,7 +165,8 @@ namespace Xianxia.EditorTools
         // 4) AvatarCustomizationPanel — ตัวหลัก
         // ══════════════════════════════════════════════════════
         private static void GenerateAvatarCustomizationPanel(
-            GameObject layerImagePrefab, GameObject slotTabPrefab, GameObject optionButtonPrefab)
+            GameObject layerImagePrefab, GameObject categoryTabPrefab,
+            GameObject slotTabPrefab, GameObject optionButtonPrefab)
         {
             // ── root ──
             var root = new GameObject("AvatarCustomizationPanel",
@@ -173,7 +200,7 @@ namespace Xianxia.EditorTools
 
             var titleText = CreateText(header.transform, "TitleText", "ปรับแต่งรูปลักษณ์");
             titleText.fontSize = 28;
-            titleText.fontStyle = FontStyle.Bold;
+            titleText.fontStyle = FontStyles.Bold;
 
             var subtitleText = CreateText(header.transform, "SubtitleText", "");
             subtitleText.fontSize = 18;
@@ -218,6 +245,16 @@ namespace Xianxia.EditorTools
             var editVLG = editPane.GetComponent<VerticalLayoutGroup>();
             editVLG.spacing = 12f;
             editVLG.childForceExpandWidth = true;
+
+            // CategoryTabBar — แถวแท็บหมวด (ใบหน้า/ลักษณะ/ร่างกาย) เหนือ slot tabs
+            // (เดิม generator ไม่ได้สร้าง/wire — สลับ category ไม่ได้ตั้งแต่ Phase 2)
+            var categoryTabBar = CreateChild(editPane.transform, "CategoryTabBar",
+                typeof(HorizontalLayoutGroup), typeof(LayoutElement));
+            var catTabLE = categoryTabBar.GetComponent<LayoutElement>();
+            catTabLE.preferredHeight = 44f;
+            var catTabHLG = categoryTabBar.GetComponent<HorizontalLayoutGroup>();
+            catTabHLG.spacing = 6f;
+            catTabHLG.childAlignment = TextAnchor.MiddleLeft;
 
             // SlotTabBar
             var slotTabBar = CreateChild(editPane.transform, "SlotTabBar",
@@ -290,6 +327,9 @@ namespace Xianxia.EditorTools
             SetRef(viewSo, "titleText", titleText);
             SetRef(viewSo, "subtitleText", subtitleText);
             SetRef(viewSo, "previewRenderer", avatarRenderer);
+            SetRef(viewSo, "categoryTabRoot", categoryTabBar.GetComponent<RectTransform>());
+            if (categoryTabPrefab != null)
+                SetRef(viewSo, "categoryTabPrefab", categoryTabPrefab.GetComponent<Button>());
             SetRef(viewSo, "slotTabRoot", slotTabBar.GetComponent<RectTransform>());
             SetRef(viewSo, "slotTabPrefab", slotTabPrefab.GetComponent<Button>());
             SetRef(viewSo, "optionGridRoot", contentRt);
@@ -346,18 +386,16 @@ namespace Xianxia.EditorTools
             rt.pivot = pivot;
         }
 
-        private static Text CreateText(Transform parent, string name, string content)
+        private static TMP_Text CreateText(Transform parent, string name, string content)
         {
-            var go = CreateChild(parent, name, typeof(Text));
-            var text = go.GetComponent<Text>();
+            var go = CreateChild(parent, name, typeof(TextMeshProUGUI));
+            var text = go.GetComponent<TextMeshProUGUI>();
             text.text = content;
-            
-            // แก้ไข: ใช้ LegacyRuntime.ttf แทน Arial.ttf สำหรับ Unity เวอร์ชันใหม่
-            // หากต้องการรองรับทั้งเวอร์ชันเก่าและใหม่ สามารถใช้ try-catch หรือตรวจสอบเวอร์ชันได้
-            text.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
-            
             text.color = Color.black;
-            text.alignment = TextAnchor.MiddleLeft;
+            text.alignment = TextAlignmentOptions.Left;
+            text.raycastTarget = false;
+            // Font: TMP Settings default (LiberationSans SDF) — Thai glyphs need the
+            // project's fallback chain; nothing to set here beyond defaults.
             return text;
         }
 
@@ -371,7 +409,7 @@ namespace Xianxia.EditorTools
 
             var text = CreateText(go.transform, "Label", label);
             StretchFull(text.rectTransform);
-            text.alignment = TextAnchor.MiddleCenter;
+            text.alignment = TextAlignmentOptions.Center;
             text.color = Color.black;
 
             var le = go.AddComponent<LayoutElement>();

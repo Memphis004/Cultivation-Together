@@ -1,0 +1,10 @@
+{
+  "entries": [
+    { "activity": "Idle",     "animation": "Idle" },
+    { "activity": "Walking",  "animation": "Walk" },
+    { "activity": "Walk",     "animation": "Walk" },
+    { "activity": "Talking",  "animation": "Talk" },
+    { "activity": "Working",  "animation": "Work" },
+    { "activity": "Resting",  "animation": "Rest" }
+  ]
+}

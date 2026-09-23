@@ -4,6 +4,7 @@ using System.Linq;
 using MessagePipe;
 using UnityEngine;
 using Xianxia.Sect.Messages;
+using Xianxia.Sect.Visual;
 
 namespace Xianxia.Sect
 {
@@ -58,7 +59,12 @@ namespace Xianxia.Sect
         private readonly IPublisher<DiscipleRecruitedMessage> _discipleRecruitedPublisher;
         private readonly IPublisher<SectResourceChangedMessage> _resourceChangedPublisher;
         private readonly IPublisher<AvatarEquipmentChangedMessage> _avatarChangedPublisher;
+        private readonly IPublisher<DiscipleChibiBackendChangedMessage> _chibiBackendPublisher;
         private readonly AvatarPartPool _avatarPartPool;
+        private readonly VisualRuntimeConfig _visualConfig;
+        private readonly IVisualEntitlementProvider _entitlementProvider;
+        /// <summary>Concrete ref to the injected provider (null when a test/substitute implements the interface directly) — used only for bind-late wiring, not for resolution.</summary>
+        private readonly DefaultEntitlementProvider _defaultEntitlementProvider;
 
         // Fractional resource accumulated per task since the last whole
         // unit was added to the stockpile - avoids losing sub-1 production
@@ -75,12 +81,47 @@ namespace Xianxia.Sect
             IPublisher<DiscipleRecruitedMessage> discipleRecruitedPublisher,
             IPublisher<SectResourceChangedMessage> resourceChangedPublisher,
             IPublisher<AvatarEquipmentChangedMessage> avatarChangedPublisher,
-            AvatarPartPool avatarPartPool)
+            IPublisher<DiscipleChibiBackendChangedMessage> chibiBackendPublisher,
+            AvatarPartPool avatarPartPool,
+            VisualRuntimeConfig visualConfig,
+            IVisualEntitlementProvider entitlementProvider)
         {
             _discipleRecruitedPublisher = discipleRecruitedPublisher;
             _resourceChangedPublisher = resourceChangedPublisher;
             _avatarChangedPublisher = avatarChangedPublisher;
+            _chibiBackendPublisher = chibiBackendPublisher;
             _avatarPartPool = avatarPartPool;
+            _visualConfig = visualConfig;
+            _entitlementProvider = entitlementProvider;
+            _defaultEntitlementProvider = entitlementProvider as DefaultEntitlementProvider;
+
+            // Phase 5 — bind the provider's rank source HERE instead of injecting
+            // ISectStateProvider into the provider itself: that direction would be a
+            // DI cycle (SectStateProvider → provider → SectStateProvider). Bind-late
+            // keeps the provider ignorant of the state module; before this line runs,
+            // CanUse(discipleId, "owner") fails closed (Unspecified = deny).
+            //
+            // Note: inject the INTERFACE, not the concrete type. In this VContainer
+            // version Register<I, Impl> registers only the interface (concrete Resolve
+            // is not available), so consumers must resolve IVisualEntitlementProvider
+            // and reach the concrete for bind-late via a type test.
+            _defaultEntitlementProvider?.BindRankLookup(id =>
+            {
+                var d = FindDisciple(id);
+                return d != null ? d.Rank : DiscipleRank.Unspecified;
+            });
+        }
+
+        /// <summary>Single lookup helper — also used by the entitlement rank binding.</summary>
+        private DiscipleState FindDisciple(string discipleId)
+        {
+            if (string.IsNullOrEmpty(discipleId)) return null;
+            for (int i = 0; i < _state.Disciples.Count; i++)
+            {
+                var d = _state.Disciples[i];
+                if (d != null && d.DiscipleId == discipleId) return d;
+            }
+            return null;
         }
 
         public SectEconomyState BuildSectEconomyState()
@@ -256,6 +297,50 @@ namespace Xianxia.Sect
                 }
             }
 
+            // Validation ชั้น 5 — coverage (Phase 1): part ต้อง Supports() ทุก backend ที่
+            // VisualRuntimeConfig เปิดใช้ (L4) — Phase 1 flags เป็น false ทั้งคู่ (C12)
+            // จึงไม่ reject อะไรในทางปฏิบัติ (ถูกต้อง — ยังไม่มี chibi asset ให้ validate)
+            // Portrait บังคับเสมอเพราะเป็น backend เดียวที่มีอยู่จริงทุก part วันนี้
+            if (!string.IsNullOrEmpty(partId))
+            {
+                var partDef = _avatarPartPool.GetById(partId);
+                if (partDef != null)
+                {
+                    if (!partDef.Supports(VisualBackend.Portrait))
+                    {
+                        failReason = $"Part '{partId}' has no Portrait art (coverage check).";
+                        return false;
+                    }
+                    if (_visualConfig != null && _visualConfig.SpriteSheetEnabled &&
+                        !partDef.Supports(VisualBackend.SpriteSheet))
+                    {
+                        failReason = $"Part '{partId}' has no SpriteSheet chibi art (coverage check).";
+                        return false;
+                    }
+                    if (_visualConfig != null && _visualConfig.SpineEnabled &&
+                        !partDef.Supports(VisualBackend.Spine))
+                    {
+                        failReason = $"Part '{partId}' has no Spine skin (coverage check).";
+                        return false;
+                    }
+                }
+            }
+
+            // Validation ชั้น 6 — entitlement (Phase 5, §8): part ที่ติด entitlement
+            // ต้องผ่าน IVisualEntitlementProvider เท่านั้น — ต่างจากชั้น 5 ที่ป้องกัน
+            // "render ไม่ได้" ชั้นนี้ป้องกัน "ไม่มีสิทธิ์ใช้" — failReason เขียนให้
+            // AI/UI อ่านแล้วเข้าใจเหตุผล (ตามสเปก Phase 5)
+            if (!string.IsNullOrEmpty(partId) && _entitlementProvider != null)
+            {
+                var entitlementDef = _avatarPartPool.GetById(partId);
+                if (entitlementDef != null && !string.IsNullOrEmpty(entitlementDef.entitlement) &&
+                    !_entitlementProvider.CanUse(discipleId, entitlementDef.entitlement))
+                {
+                    failReason = $"Part '{partId}' requires entitlement '{entitlementDef.entitlement}'.";
+                    return false;
+                }
+            }
+
             if (disciple.Avatar == null) disciple.Avatar = new AvatarAppearance();
 
             var oldPart = disciple.Avatar.GetSlot(slot);
@@ -270,6 +355,33 @@ namespace Xianxia.Sect
             });
 
             result = disciple.Avatar.Clone();   // return copy, not reference to live state
+            return true;
+        }
+
+        /// <summary>
+        /// §7 promotion/demotion path — mutate the ENTITLEMENT in state and publish
+        /// (in-memory MessagePipe only, never interprocess). Whether the visual actually
+        /// re-renders as Spine is decided later by VisualTierPolicy (entitlement ∩ budget),
+        /// so a demote-to-Sprite command under a tight budget is a no-op on screen but
+        /// still updates state.
+        /// </summary>
+        public bool TrySetChibiBackend(string discipleId, ChibiBackend backend, out string failReason)
+        {
+            failReason = string.Empty;
+
+            var disciple = _state.Disciples.FirstOrDefault(d => d.DiscipleId == discipleId);
+            if (disciple == null) { failReason = $"No disciple with id: {discipleId}"; return false; }
+
+            ChibiBackend old = disciple.ChibiBackend;
+            if (old == backend) return true; // idempotent — no message spam
+
+            disciple.ChibiBackend = backend;
+            _chibiBackendPublisher.Publish(new DiscipleChibiBackendChangedMessage
+            {
+                DiscipleId = discipleId,
+                Old        = old,
+                New        = backend
+            });
             return true;
         }
 

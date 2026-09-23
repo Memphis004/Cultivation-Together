@@ -7,5 +7,6 @@ namespace Xianxia.Sect.UI
         LogWindow,
         AvatarCustomization,
         DiscipleList, // not implemented yet - resolving this kind throws
+        DiscipleDetail, // Phase 4 — click chibi → detail panel (appended last: catalog assets store this enum as int)
     }
 }

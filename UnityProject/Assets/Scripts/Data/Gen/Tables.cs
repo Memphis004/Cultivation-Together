@@ -14,20 +14,20 @@ namespace cfg
 {
 public partial class Tables
 {
-    public worldevent.TbEvent TbEvent {get; }
-    public worldevent.TbEventChoice TbEventChoice {get; }
+    public game.TbEventDef TbEventDef {get; }
+    public game.TbEventChoiceDef TbEventChoiceDef {get; }
 
     public Tables(System.Func<string, JSONNode> loader)
     {
-        TbEvent = new worldevent.TbEvent(loader("worldevent_tbevent"));
-        TbEventChoice = new worldevent.TbEventChoice(loader("worldevent_tbeventchoice"));
+        TbEventDef = new game.TbEventDef(loader("game_tbeventdef"));
+        TbEventChoiceDef = new game.TbEventChoiceDef(loader("game_tbeventchoicedef"));
         ResolveRef();
     }
     
     private void ResolveRef()
     {
-        TbEvent.ResolveRef(this);
-        TbEventChoice.ResolveRef(this);
+        TbEventDef.ResolveRef(this);
+        TbEventChoiceDef.ResolveRef(this);
     }
 }
 

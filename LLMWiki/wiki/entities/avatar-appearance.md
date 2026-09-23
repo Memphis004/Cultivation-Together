@@ -124,9 +124,24 @@ public class DiscipleState
     // [Key(0)]..[Key(5)] ...
     [Key(6)] public AvatarAppearance Avatar { get; set; } = new AvatarAppearance();
     [Key(7)] public DiscipleSex Sex { get; set; } = DiscipleSex.Unspecified;  // implemented
+    [Key(8)] public ChibiBackend ChibiBackend { get; set; } = ChibiBackend.SpriteSheet;  // 🆕 Phase 1 — entitlement (2 ค่า: SpriteSheet=0, Spine=1)
 }
 ```
 📎 Source: `Assets/Scripts/Shared/SectEconomyState.cs`
+
+`[Key(8)] ChibiBackend` (Phase 1 ของ [[disciple-visual-system]]) เป็น **entitlement**
+แกนแยกจาก AvatarAppearance — state เก่าที่ไม่มี key นี้ deserialize ได้ `SpriteSheet`
+(default index 0, test ครอบใน `ChibiBackendDeserializationTests`)
+
+🆕 **Phase 3: ChibiBackend เป็น render-active แล้ว** — `VisualTierPolicy` resolve
+*effective* backend (entitlement ∩ `SpineBudget`) ทุก spawn/reconcile ของ
+`DiscipleVisualSystem` และเปลี่ยนค่าได้ผ่าน mutation choke point
+`ISectStateProvider.TrySetChibiBackend` (publish `DiscipleChibiBackendChangedMessage`
+→ respawn แบบคง position/activity/facing; degrade ที่ budget ไม่พอเปลี่ยนเฉพาะ
+effective backend ไม่แตะ state) — ⚠️ **Spine backend ยัง INERT** จนกว่า S4 license
+จะถูกยืนยัน (`VisualRuntimeConfig.SpineActivationRequested` = false, ดู
+[[disciple-visual-system]] §6.3/§7) — ตอนนี้ entitled disciples render เป็น
+SpriteSheet ทั้งหมด
 
 `Sex` implement แล้วตาม [[sources/sex-gender-system]] (recruitment เลือก head ตาม sex จริง,
 MockSectData ระบุ sex ชัดเจน) — แต่ `sexTag` filter ในกริดยังไม่ได้เปิดใช้ (ดู Roadmap)

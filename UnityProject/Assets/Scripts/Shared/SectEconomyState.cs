@@ -10,6 +10,17 @@ namespace Xianxia.Sect
     public enum DiscipleRank { Unspecified, OuterDisciple, InnerDisciple, Elder, SectMaster }
     public enum DiscipleSex { Unspecified, Male, Female }
 
+    /// <summary>
+    /// Entitlement ของศิษย์: "ได้สิทธิ์" แสดง chibi ในฉากด้วย backend ไหน — ไม่ใช่สิ่งที่ render จริงเสมอไป
+    /// (runtime อาจ degrade Spine → SpriteSheet เมื่อเกิน SpineBudget โดยไม่แก้ค่านี้ — ดู §7 ของแผน)
+    /// 0 = default → save/roster เก่าที่ไม่มี [Key(8)] deserialize ได้ SpriteSheet (L5)
+    /// </summary>
+    public enum ChibiBackend
+    {
+        SpriteSheet = 0,
+        Spine = 1
+    }
+
     [MessagePackObject]
     public class CurrencyWallet
     {
@@ -37,6 +48,8 @@ namespace Xianxia.Sect
         [Key(5)] public string CurrentTask { get; set; }
         [Key(6)] public AvatarAppearance Avatar { get; set; } = new AvatarAppearance();
         [Key(7)] public DiscipleSex Sex { get; set; } = DiscipleSex.Unspecified;
+        /// <summary>Entitlement (แกนแยกจาก AvatarAppearance) — default SpriteSheet เมื่อ deserialize state เก่า (L1/L5)</summary>
+        [Key(8)] public ChibiBackend ChibiBackend { get; set; } = ChibiBackend.SpriteSheet;
     }
 
     [MessagePackObject]

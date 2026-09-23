@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using Xianxia.Sect.Visual;
 
 namespace Xianxia.Sect
 {
@@ -19,6 +20,64 @@ namespace Xianxia.Sect
         public int drawOrderBack;  // 0 = ใช้ drawOrder (ผมหลังใช้ 10)
         public string poseId;      // pose template ที่ part วาดสำหรับ; "" = universal
         public string sexTag;      // "male" / "female" / "" = any
+        // --- SpriteSheet chibi (Phase 1 schema; asset มาใน Phase 2) ---
+        public string chibiSheetPath;     // "" = part นี้ไม่มี layer บน chibi
+        public string chibiSheetPathBack; // ผมหลังบน chibi — ว่าง = ไม่มี back layer
+        public int    chibiOrder;         // 0 = ใช้ค่า default ของ slot
+        public int    chibiOrderBack;     // 0 = ใช้ chibiOrder
+        // --- Spine ---
+        public string spineSkin;          // เช่น "hair/hair_topknot_long"; "" = ไม่มี
+        // --- Access (Phase 5; ว่าง = free) ---
+        public string entitlement;        // "" | "owner" | "dlc:<packId>"
+
+        /// <summary>
+        /// Coverage = คำนวณสดจาก path/skin ที่มี — ห้ามเก็บซ้ำเป็น field ใน JSON
+        /// (C6 — กัน dual source of truth แบบที่เคยเกิดกับ outfit)
+        /// </summary>
+        public bool Supports(VisualBackend b)
+        {
+            switch (b)
+            {
+                case VisualBackend.Portrait:    return !string.IsNullOrEmpty(spritePath);
+                case VisualBackend.SpriteSheet: return !string.IsNullOrEmpty(chibiSheetPath);
+                case VisualBackend.Spine:       return !string.IsNullOrEmpty(spineSkin);
+                default: return false;
+            }
+        }
+
+        /// <summary>Back-layer path ของ backend นั้น — ว่างถ้าไม่มี back layer</summary>
+        public string BackPathFor(VisualBackend b)
+        {
+            switch (b)
+            {
+                case VisualBackend.Portrait:    return spritePathBack;
+                case VisualBackend.SpriteSheet: return chibiSheetPathBack;
+                default: return string.Empty;   // Spine: back layer อยู่ใน rig แล้ว
+            }
+        }
+
+        /// <summary>Draw order ของ layer หลักบน backend นั้น (0 = ใช้ค่า default ของ slot)</summary>
+        public int OrderFor(VisualBackend b)
+        {
+            switch (b)
+            {
+                case VisualBackend.Portrait:    return drawOrder;
+                case VisualBackend.SpriteSheet: return chibiOrder;
+                default: return drawOrder;      // Spine ไม่ใช้ order จาก part
+            }
+        }
+
+        /// <summary>Draw order ของ back layer (0 = ใช้ order ของ layer หลัก)</summary>
+        public int BackOrderFor(VisualBackend b)
+        {
+            switch (b)
+            {
+                case VisualBackend.Portrait:    return drawOrderBack;
+                case VisualBackend.SpriteSheet: return chibiOrderBack;
+                default: return 0;
+            }
+        }
+
         // AvatarRenderer.Rebuild(): เก็บเป็นคู่ (order, path) ก่อน sort
         // hair_back → (drawOrderBack=10), hair_front → (drawOrder=40)
         // แล้วใน JSON: hair ทุกทรง drawOrder: 40, drawOrderBack: 10 → stack จะตรงสเปก ACPart4 เป๊ะ: 

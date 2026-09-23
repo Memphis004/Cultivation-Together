@@ -4,6 +4,7 @@ using MessagePipe;
 using UnityEngine;
 using Xianxia.Sect;
 using Xianxia.Sect.Messages;
+using Xianxia.Sect.Visual;
 
 namespace Xianxia.Sect.UI
 {
@@ -28,6 +29,7 @@ namespace Xianxia.Sect.UI
         private readonly AvatarPartPool     _partPool;
         private readonly ISubscriber<AvatarEquipmentChangedMessage> _avatarChangedSub;
         private readonly UIService _uiService;
+        private readonly IVisualEntitlementProvider _entitlementProvider;
 
         private IDisposable _subscription;
 
@@ -49,12 +51,14 @@ namespace Xianxia.Sect.UI
             ISectStateProvider stateProvider,
             AvatarPartPool partPool,
             ISubscriber<AvatarEquipmentChangedMessage> avatarChangedSub,
-            UIService uiService)
+            UIService uiService,
+            IVisualEntitlementProvider entitlementProvider)
         {
             _stateProvider    = stateProvider;
             _partPool         = partPool;
             _avatarChangedSub = avatarChangedSub;
             _uiService        = uiService;
+            _entitlementProvider = entitlementProvider;
         }
         
 
@@ -176,7 +180,13 @@ namespace Xianxia.Sect.UI
                 string slot = AvatarSlots.Equippable[i];
                 var list = _partPool.GetPartsForSlot(slot, effectivePose, sex);
                 if (list == null || list.Count == 0) continue;
-                _draft.SetSlot(slot, list[rng.Next(list.Count)].id);
+
+                // Phase 5 (§8): randomize เคารพ entitlement เดียวกับกริด — reservoir
+                // pick เฉพาะ part ที่ CanUse ผ่าน; slot ที่ล็อกล้วน → helper คืน null
+                // → ข้ามเงียบ ๆ (pattern เดิม: ว่าง = continue, ไม่ throw)
+                var pick = EntitlementRandom.Pick(list, _discipleId, _entitlementProvider, rng);
+                if (pick == null) continue;
+                _draft.SetSlot(slot, pick.id);
             }
             View.RenderPreview(_draft);
             RefreshOptions();
@@ -341,7 +351,11 @@ namespace Xianxia.Sect.UI
                 // "" ใน draft = default → ให้ default part ติดกรอบ selected ด้วย
                 o.IsSelected  = (d.id == selected) ||
                                 (string.IsNullOrEmpty(selected) && d.isDefault);
-                o.IsLocked    = false;      // hook ไว้ให้ระบบปลดล็อกในอนาคต
+                // Phase 5 (§8): lock จริงตาม entitlement — no more hardcoded false.
+                // AvatarOptionButton.Bind already wires lockedOverlay +
+                // button.interactable = !IsLocked.
+                o.IsLocked    = _entitlementProvider != null &&
+                                !_entitlementProvider.CanUse(_discipleId, d.entitlement);
                 options.Add(o);
             }
 

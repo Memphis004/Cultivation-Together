@@ -1,0 +1,14 @@
+{
+    "name": "Xianxia.Sect.Visual.Core.Spikes",
+    "rootNamespace": "Xianxia.Sect.Visual.Spikes",
+    "references": [],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

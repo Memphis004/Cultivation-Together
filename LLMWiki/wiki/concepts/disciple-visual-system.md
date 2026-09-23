@@ -373,23 +373,25 @@ Assets/Resources/Data/chibi_anim.json · visual_overrides.json
 4. **S4 License:** ยืนยันเงื่อนไข Spine (edition ที่ซื้อครอบคลุม mesh/skins ที่ใช้ + runtime license สำหรับ distribute) แล้วเพิ่ม exception ใน `conventions.md` (ดู R1)
 - **Gate:** รวม chibi ทั้งฉาก ≤ **4 ms/frame** บนเครื่องเป้าหมาย (ค่าตั้งต้น ปรับได้) ไม่ผ่าน → ลด `SpineBudget` / เปิด culling / ลดจำนวน layer
 
-### Phase 1 — Foundation (ภาพที่ผู้เล่นเห็นไม่เปลี่ยน) · ขนาด M
+### Phase 1 — Foundation (ภาพที่ผู้เล่นเห็นไม่เปลี่ยน) · ขนาด M ✅ (commit 49da57b)
 - `ChibiBackend` + `[Key(8)]`, ขยาย `AvatarPartDef` + `Supports()`, `AppearanceResolver`, `IPortraitVisual` บน `AvatarRenderer`, `VisualRuntimeConfig`, coverage validator, coverage validation ชั้น 5 (เปิดตาม config)
-- **Acceptance:** ☐ Portrait layer list ของ 4 founder เหมือนเดิม ☐ save/roster เก่า deserialize ได้ `SpriteSheet` ☐ Resolver มี EditMode test (fallback, back layer, tint, backend ไม่รองรับ) ☐ validator รันได้ และจับ d001 ได้
+- **Acceptance:** ☑ Portrait layer list ของ 4 founder เหมือนเดิม ☑ save/roster เก่า deserialize ได้ `SpriteSheet` ☑ Resolver มี EditMode test (fallback, back layer, tint, backend ไม่รองรับ) ☑ validator รันได้ และจับ d001 ได้
 
-### Phase 2 — SpriteSheet + spawn ในฉาก · ขนาด L
+### Phase 2 — SpriteSheet + spawn ในฉาก · ขนาด L ✅ (commit 422cd65)
 - `ChibiSceneRoot`, `SpriteChibiVisual`, `ChibiFrameBank/Clock`, `DiscipleVisualSystem` (Reconcile), `SceneUnloadedMessage`, `chibi_anim.json`, placeholder art
-- **Acceptance:** ☐ recruit → chibi ปรากฏ ☐ เปลี่ยนผมใน Portrait panel → chibi เปลี่ยนโดยไม่ respawn ☐ swap scene A→B → despawn/respawn ครบตาม state ☐ 100 ตัวอยู่ใน gate ☐ steady-state GC = 0 และไม่มี `Animator`
+- **Acceptance:** ☑ recruit → chibi ปรากฏ ☑ เปลี่ยนผมใน Portrait panel → chibi เปลี่ยนโดยไม่ respawn ☑ swap scene A→B → despawn/respawn ครบตาม state ☑ 100 ตัวอยู่ใน gate (105 ตัว = 0.793 ms median) ☑ steady-state GC = 0 และไม่มี `Animator`
 
-### Phase 3 — Spine + tier policy · ขนาด M
+### Phase 3 — Spine + tier policy · ขนาด M ✅ (system landed; Spine render ยัง INERT รอ S4 license)
 - `SpineChibiVisual`, `ChibiActivityMap`, `VisualTierPolicy`, budget degrade, `TrySetChibiBackend`, `DiscipleChibiBackendChangedMessage`
-- **Acceptance:** ☐ d000/d003 = Spine, ที่เหลือ Sprite ☐ ตั้ง `SpineBudget=1` → d003 degrade เป็น Sprite โดย state ไม่เปลี่ยน ☐ promote d001 → respawn คง position/activity/facing ☐ `ApplySlot` บน Spine ทำงาน ☐ ชื่อ animation หาย → fallback `Idle` + warning
+- **Acceptance (verify ผ่าน example rig mix-and-match-pro, 24/24):** ☑ d000/d003 = Spine, ที่เหลือ Sprite ☑ ตั้ง `SpineBudget=1` → d003 degrade เป็น Sprite โดย state ไม่เปลี่ยน ☑ promote d001 → respawn คง position/activity/facing ☑ `ApplySlot` บน Spine ทำงาน (ไม่ recreate GameObject) ☑ ชื่อ animation หาย → fallback `Idle` + warning ครั้งเดียว
 
-### Phase 4 — Activity + interaction · ขนาด M
-- `CurrentTask → ChibiActivity` (data-driven; พึ่ง `DiscipleTaskChangedMessage` จาก [[sources/task-system]] ถ้าทำแล้ว ไม่งั้น derive จาก `CurrentTask` ตอน reconcile), work anchor ใน `ChibiSceneRoot`, คลิก chibi → `DiscipleSelectedMessage` → `DiscipleDetail` panel (Portrait + roster `HeadIcon`)
+### Phase 4 — Activity + interaction · ขนาด M ✅ (activity+click landed; panel opened via message path — panel look pending art pass)
+- `CurrentTask → ChibiActivity` (data-driven via `TaskActivityMapper` + `chibi_activity_task_map.json`; task-system ยังไม่มี → derive จาก `CurrentTask` ตอน reconcile — event-triggered เท่านั้น ไม่มี polling; TODO: subscribe `DiscipleTaskChangedMessage` เมื่อ task-system v2 มา), work anchor lookup ใน `ChibiSceneRoot` (shipped scenes ยังไม่มี anchors → grid fallback), คลิก chibi (`ChibiClickTarget` + Collider2D/OnMouseDown) → `DiscipleSelectedMessage` → `DiscipleDetail` panel (Portrait ผ่าน `AvatarRenderer` เดิม — pipeline เดียวกับ AvatarCustomization ไม่มี drift)
+- **Acceptance (play-mode verify 27/27 + EditMode 24/24):** ☑ `gathering_herb` → `Walk` ☑ `meditation` ถูก map เป็น `Resting` (ไม่ spam warning) — sprite tier ยัง fallback เป็น `Idle` เพราะ chibi_anim.json มีแค่ Idle/Walk ☑ คลิก → publish ครั้งเดียว → panel เปิดถูกตัว ☑ derive-on-reconcile: เปลี่ยน task → activity เปลี่ยน โดย instance เดิม ☑ ไม่มี polling/FindObjectOfType/interprocess registration
 
-### Phase 5 — Customization policy / entitlement · ขนาด M
-- field `entitlement`, `IVisualEntitlementProvider` จริง, validation ชั้น 6, lock ใน UI, preset+reroll สำหรับ free, DLC pack hook
+### Phase 5 — Customization policy / entitlement · ขนาด M ✅ (entitlement landed; Q1 proxy = rank ≥ Elder รอระบบซื้อจริง)
+- field `entitlement`, `IVisualEntitlementProvider` + `DefaultEntitlementProvider` (rule-based: `""`=ผ่าน / `"owner"`=rank ≥ Elder **proxy ชั่วคราวรอ Q1** / `"dlc:<packId>"`=ปฏิเสธ — fail-closed ห้าม hardcode true), validation ชั้น 6 ใน `TryChangeAvatarPart` (failReason ระบุ part+entitlement), lock ใน UI (`IsLocked` จาก provider จริง — overlay + `interactable=false`), preset+reroll = ปุ่ม Randomize เดิม + filter ผ่าน `EntitlementRandom` (slot ที่เหลือแต่ part ล็อก → ข้ามเงียบ), DLC pack hook (schema `"dlc:"` + switch แยกเคส)
+- **Acceptance (play-mode verify 20/20 + EditMode 36/36):** ☑ d001 พยายามใส่ `acc_jade_crown` (owner) → reject + failReason ☑ d000 (SectMaster)/d003 (Elder) ใส่ได้ ☑ UI: part ล็อกแสดง overlay + กดไม่ได้ตาม entitlement (ไม่ hardcode false อีกต่อไป) ☑ Randomize ×20 ไม่ติด part ล็อก ☑ part `entitlement=""` ใช้ได้ปกติทุกที่ (regression Phase 1–4 ผ่าน)
 
 ### Track ขนาน — Face split (Roadmap #1 ของ avatar)
 - เป็นงาน **Portrait-only** (§4.3) ไม่ขึ้นกับ phase ข้างบน ทำได้ทุกเมื่อ
@@ -419,7 +421,7 @@ Assets/Resources/Data/chibi_anim.json · visual_overrides.json
 | # | คำถาม | Lean | ต้องตอบก่อน |
 |---|---|---|---|
 | Q1 | ผู้ชม/ผู้ซื้อผูกกับ `DiscipleState` อย่างไร (Twitch id? Steam?) — ต้องมี field เช่น `ViewerId [Key(9)]` และ source ของ entitlement | นอกขอบเขตแผนนี้; ทำผ่าน `IVisualEntitlementProvider` | Phase 5 |
-| Q2 | Free tier customize ระดับไหน | Preset + Reroll (สอดคล้อง "หน้าโหล่") ไม่ให้เลือกละเอียด | Phase 5 |
+| Q2 | Free tier customize ระดับไหน | ✅ **ตัดสินแล้ว (Phase 5):** Preset + Reroll = ปุ่ม Randomize เดิม + entitlement filter (`EntitlementRandom`) — ไม่สร้างกลไก UI ใหม่ | ปิดแล้ว |
 | Q3 | จำนวนทิศของ chibi | 2 (flip) — ขยายทีหลังถ้า S3 บอกว่าไม่พอ | S3 |
 | Q4 | Rig เดียวหรือแยกตามเพศ | 1 rig | หลัง S1 |
 | Q5 | ตัวละครเนื้อเรื่อง (rig เฉพาะ) เริ่มเมื่อไร | หลัง Phase 3 | Phase 3+ |

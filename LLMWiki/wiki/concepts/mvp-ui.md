@@ -82,6 +82,7 @@ private static Type ResolvePresenterType(UIPresenterKind kind)
         case UIPresenterKind.ResourceHud: return typeof(ResourceHudPresenter);
         case UIPresenterKind.LogWindow: return typeof(LogWindowPresenter);
         case UIPresenterKind.AvatarCustomization: return typeof(AvatarCustomizationPresenter);
+        case UIPresenterKind.DiscipleDetail: return typeof(DiscipleDetailPresenter);
         case UIPresenterKind.DiscipleList:
             throw new NotImplementedException("DiscipleListPresenter is not implemented yet.");
         default:
@@ -93,7 +94,7 @@ private static Type ResolvePresenterType(UIPresenterKind kind)
 
 ⏳ **TODO**: implement `DiscipleListPresenter` when the panel is added.
 
-## Implemented Panels (4)
+## Implemented Panels (5)
 
 | Panel | Presenter | Subscribes to |
 |---|---|---|
@@ -101,6 +102,7 @@ private static Type ResolvePresenterType(UIPresenterKind kind)
 | `ResourceHud` | `ResourceHudPresenter` | `SectResourceChangedMessage` |
 | `LogWindow` | `LogWindowPresenter` | `DiscipleRecruitedMessage`, `WorldEventTriggeredMessage`, `DecisionExecutedMessage` |
 | `AvatarCustomization` | `AvatarCustomizationPresenter` | `AvatarEquipmentChangedMessage` (external sync) — ดู [[entities/avatar-appearance]] |
+| `DiscipleDetail` | `DiscipleDetailPresenter` | เปิดโดย `DiscipleDetailUISystem` เมื่อได้รับ `DiscipleSelectedMessage` (คลิก chibi — Phase 4) |
 
 See [[concepts/log-window]] for the full LogWindow architecture and data flow.
 
