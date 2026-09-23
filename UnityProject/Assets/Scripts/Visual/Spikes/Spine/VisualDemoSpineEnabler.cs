@@ -82,7 +82,19 @@ namespace Xianxia.Sect.Visual.Spines
 
             _productionFactory = DiscipleVisualSystem.SpineVisualFactory; // usually null; restore on unload
             DiscipleVisualSystem.SpineVisualFactory = (d, parent) =>
-                SpineChibiVisual.Create(rig, parent, resolver, pool, activityMap, config, demoRigMap);
+            {
+                var visual = SpineChibiVisual.Create(rig, parent, resolver, pool, activityMap, config, demoRigMap);
+                if (visual != null)
+                {
+                    // DEV-ONLY demo sizing: the example rig renders ~8 world units tall at the
+                    // asset's baked scale (0.01) — taller than the sprite chibis (~0.9) and the
+                    // 2×2 demo grid. Uniform ROOT scale (same pattern as Marooned's ElenaChibi
+                    // prefab scale 0.3) shrinks it to match; the L8 rule is untouched — facing
+                    // flip still lives ONLY on Skeleton.ScaleX, never on localScale.x.
+                    visual.Transform.localScale = new Vector3(0.12f, 0.12f, 1f);
+                }
+                return visual;
+            };
 
             Debug.Log("[VisualDemoSpineEnabler] demo SpineVisualFactory registered — shared example rig '" +
                       rig.name + "', SpineBudget=" + config.SpineBudget +

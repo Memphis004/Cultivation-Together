@@ -33,6 +33,7 @@ Design documents and historical record:
 - [[sources/devlog-history|DevLog History]] — 13 lab rounds, 21-30 Aug 2026
 - [[sources/bug-log|Bug Log]] — real bugs + fixes from all labs
 - [[sources/open-questions|Open Questions]] — what's deliberately not decided
+- [[sources/visual-demo-scene|Visual Demo Scene (DEV-ONLY)]] — DiscipleVisualSystem Phase 3 demo บน Spine example rig + DevSpineOverride seam + guards
 
 ## Code Snippets (Important Scripts)
 
@@ -94,8 +95,8 @@ Catalogs of game entities:
 
 ## Maintenance
 
-- Last index update: 2026-09-02
-- Total source pages: 9 (+ 9 code snippets)
+- Last index update: 2026-09-23
+- Total source pages: 10 (+ 9 code snippets)
 - Total concept pages: 14
 - Total entity pages: 7
 - Total bug log entries: 11 (across 13 labs)

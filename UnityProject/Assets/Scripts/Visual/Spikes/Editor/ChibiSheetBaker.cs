@@ -133,7 +133,7 @@ namespace Xianxia.Sect.EditorTools
             int n = Bake(name, rows, (g, w, h, row, frame) =>
             {
                 float bob = Mathf.Sin((frame / (float)FramesPerRow) * Mathf.PI * 2f) * 1.5f;
-                Fill(g, w, 24, 86 + (int)bob, 48, 12, hair); // crown
+                Fill(g, w, 24, 82 + (int)bob, 48, 12, hair); // crown (fits cell 82..95 — was 86, overflowed)
                 Fill(g, w, 22, 74 + (int)bob, 6, 16, hair);  // fringe (right side)
             });
             if (withBack)
@@ -153,7 +153,7 @@ namespace Xianxia.Sect.EditorTools
             {
                 float bob = Mathf.Sin((frame / (float)FramesPerRow) * Mathf.PI * 2f) * 1.5f;
                 if (name.Contains("crown"))
-                    Fill(g, w, 30, 94 + (int)bob, 36, 7, accent);
+                    Fill(g, w, 30, 88 + (int)bob, 36, 7, accent);   // fits cell (88..95) — was 94, overflowed into the next band
                 else if (name.Contains("hairpin"))
                     Fill(g, w, 60, 90 + (int)bob, 14, 4, accent);
                 else if (name.Contains("gourd"))
@@ -181,9 +181,18 @@ namespace Xianxia.Sect.EditorTools
             var clear = new Color(0f, 0f, 0f, 0f);
             for (int i = 0; i < pixels.Length; i++) pixels[i] = clear;
 
+            // Paint helpers author inside the BOTTOM 96px cell (y = 0..95, feet at y=0);
+            // shift each state row into its own 96px band (row 0 = state 0 = top band,
+            // matching ConfigureSheetImport's rect = (rows-1-row)*Cell).
+            // BUGFIX: previously the row offset was never applied — every state row was
+            // painted on top of the bottom cell, so Idle (top rows) came out empty.
             for (int row = 0; row < rows; row++)
+            {
+                _yOffset = (rows - 1 - row) * Cell;
                 for (int f = 0; f < FramesPerRow; f++)
                     paint(pixels, w, h, row, f);
+            }
+            _yOffset = 0;
 
             var tex = new Texture2D(w, h, TextureFormat.RGBA32, false) { filterMode = FilterMode.Point };
             tex.SetPixels(pixels);
@@ -277,11 +286,18 @@ namespace Xianxia.Sect.EditorTools
             Fill(g, w, 56 + (int)legSpread, 16, 8, 18, robe * 0.8f);
         }
 
+        // current bottom-up band offset applied by Fill (set per state row in Bake)
+        private static int _yOffset;
+
         private static void Fill(Color[] g, int w, int x, int y, int rw, int rh, Color c)
         {
+            y += _yOffset;
+            int rows = g.Length / w;
             for (int py = y; py < y + rh; py++)
             {
-                if (py < 0 || py >= 96 * 8) break; // hard safety (sheets are at most 8 rows tall)
+                if (py < 0 || py >= rows) continue;                    // texture bounds
+                int bandY = py - _yOffset;
+                if (bandY < 0 || bandY >= Cell) continue;              // clip inside the authored 96px cell — no spilling between state bands
                 for (int px = x; px < x + rw; px++)
                 {
                     if (px < 0 || px >= w) continue;

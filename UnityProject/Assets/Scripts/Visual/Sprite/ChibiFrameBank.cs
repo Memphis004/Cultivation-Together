@@ -93,6 +93,30 @@ namespace Xianxia.Sect.Visual
         }
 
         /// <summary>
+        /// Resources prefix the chibi sheet baker writes to and the coverage validator
+        /// checks against (ChibiSheetBaker.OutputDir / VisualCoverageValidator) — the
+        /// single source of the "avatar_parts.json paths are relative to here" rule.
+        /// </summary>
+        public const string SheetResourcePrefix = "Data/Arts/Avatar/";
+
+        /// <summary>
+        /// Lazy sheet load for one part (dev/demo path — the demo scene runs without a
+        /// preload step). Slices the part's main sheet on first use; no-op afterwards
+        /// (LoadSheet is idempotent) and no-op when the part has no chibi sheet.
+        /// Back sheets are intentionally NOT loaded here: the bank keys frames by
+        /// partId, so a back sheet would overwrite the main strip — placeholder art
+        /// renders the main strip on both layers (same as the pre-load behaviour).
+        /// Returns true when frames exist for the part afterwards.
+        /// </summary>
+        public bool EnsureSheetLoaded(Xianxia.Sect.AvatarPartDef def)
+        {
+            if (def == null || string.IsNullOrEmpty(def.chibiSheetPath)) return false;
+            if (!_byPart.ContainsKey(def.id))
+                LoadSheet(SheetResourcePrefix + def.chibiSheetPath, def.id);
+            return _byPart.ContainsKey(def.id);
+        }
+
+        /// <summary>
         /// Load one sheet PNG (Resources path from avatar_parts.json) and slice it
         /// into per-state strips. Idempotent — repeat loads of the same path are no-ops.
         /// Safe to call for paths that don't exist (logs once, stores nothing).

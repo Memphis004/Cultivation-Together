@@ -319,7 +319,20 @@ namespace Xianxia.Sect.Visual
 
             // 2) one mixed skin per resolved part (resolver already dropped slots the
             //    rig/backend can't support — fallback chain ran there, D4).
+            //
+            //    DEV-ONLY demo exception: production avatar_parts.json carries NO
+            //    spineSkin yet (T2 — example-rig names must never pollute production
+            //    data), so with DevSpineOverride live the resolver legitimately drops
+            //    every slot before the demo map can translate them. When the resolved
+            //    list comes back EMPTY and the demo map is live, drive the mix from the
+            //    demo map's slot table instead (applied over the DEFAULT part of each
+            //    slot — the demo stands in for future spineSkin data, it never writes
+            //    to it). Ship builds never take this branch (DevSpineOverride=false).
             var layers = _resolver.Resolve(appearance, VisualBackend.Spine);
+            if (layers.Count == 0 && _config != null && _config.DevSpineOverride && _demoRigMap != null)
+            {
+                layers = BuildDemoLayers();
+            }
             for (int i = 0; i < layers.Count; i++)
             {
                 var layer = layers[i];
@@ -355,6 +368,38 @@ namespace Xianxia.Sect.Visual
             skeleton.SetSkin(_instanceSkin);
             skeleton.SetSlotsToSetupPose();
             _skeletonAnimation.LateUpdate();
+        }
+
+        /// <summary>
+        /// DEV-ONLY: fallback layer list for the demo — one main layer per slot the
+        /// demo rig map can translate, using each slot's DEFAULT production part as
+        /// PartId (resolver fallback L2 ran nowhere because every slot was dropped).
+        /// Ship builds never call this (guarded by DevSpineOverride at the caller).
+        /// </summary>
+        private List<ResolvedLayer> BuildDemoLayers()
+        {
+            var layers = new List<ResolvedLayer>(8);
+            foreach (var slot in AvatarSlots.Equippable)
+            {
+                var skinName = _demoRigMap.ResolveSkinForSlot(slot);
+                if (string.IsNullOrEmpty(skinName)) continue; // slot not mapped in the demo — skip silently
+
+                var def = _pool.GetDefaultForSlot(slot);
+                if (def == null) continue;
+
+                layers.Add(new ResolvedLayer
+                {
+                    Slot = def.slot,
+                    PartId = def.id,
+                    Asset = string.Empty,
+                    SpineSkin = skinName, // demo map already resolved the example-rig skin
+                    Order = def.chibiOrder,
+                    IsBack = false,
+                    Tint = Color.white,
+                });
+            }
+            layers.Sort((x, y) => x.Order.CompareTo(y.Order));
+            return layers;
         }
     }
 }

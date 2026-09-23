@@ -34,7 +34,7 @@ namespace Xianxia.Sect.UI
             // --- Persistent UI (stays across scene transitions) ---
             _uiService.Open("ResourceHud");
             _uiService.Open("LogWindow");
-            _uiService.Open("AvatarCustomization", new AvatarCustomizationPayload("d001"));
+            // _uiService.Open("AvatarCustomization", new AvatarCustomizationPayload("d001"));
 
             // Subscribe to scene loads for scene-specific UI setup if needed.
             // Currently scene-specific UI (EventPopup) is handled by

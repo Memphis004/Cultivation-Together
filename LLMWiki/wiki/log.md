@@ -42,3 +42,7 @@ Every ingest, lint run, and maintenance operation is recorded here automatically
 ## [2026-09-22] update | wiki/concepts/mvp-ui.md | เพิ่ม DiscipleDetail ใน Implemented Panels (4→5) + UIService mapping
 ## [2026-09-22] update | wiki/entities/disciples.md | CurrentTask ขับเคลื่อน chibi activity ในฉากแล้ว (TaskActivityMapper — derive-on-reconcile)
 ## [2026-09-22] update | wiki/concepts/disciple-visual-system.md | §11 ทำเครื่องหมาย Phase 5 ✅ (entitlement ชั้น 6 + UI lock + EntitlementRandom; verify 20/20) + §14 ปิด Q2 (Preset+Reroll = Randomize + filter)
+## [2026-09-23] new-page | wiki/sources/visual-demo-scene.md | Visual Demo Scene (DEV-ONLY): วิธีเปิดเดโม, ปุ่ม→สิ่งที่พิสูจน์, mapping mix-and-match-pro, คำเตือน DevSpineOverride + R1/S4, guards T8
+## [2026-09-23] wire | wiki/index.md | Linked visual-demo-scene ใน Sources (9→10 หน้า)
+## [2026-09-23] update | wiki/concepts/disciple-visual-system.md | §11 Phase 3: เพิ่ม ground-truth demo render acceptance (4 chibi ครบ, d002 หายพัง, HUD 7 ปุ่ม, cam depth=10, 0 exception — demo_shot.png + visual_spike_result.txt)
+## [2026-09-23] new-tool | scripts/analyze_demo_shot.py + hud_profile.py | ตัวช่วยวิเคราะห์ backbuffer capture (ASCII density map + HUD band profile) สำหรับยืนยัน demo รอบถัด ๆ ไป

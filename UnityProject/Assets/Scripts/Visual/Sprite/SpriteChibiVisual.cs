@@ -278,6 +278,11 @@ namespace Xianxia.Sect.Visual
                 var layer = _layers[i];
                 if (layer.Renderer == null) continue;
 
+                // Lazy sheet load (demo/dev path — no preload step runs): slice the
+                // part's sheet on first use, then read frames as before.
+                if (_pool != null)
+                    _bank.EnsureSheetLoaded(_pool.GetById(layer.PartId));
+
                 var frames = _bank.GetFrames(layer.PartId, _activity);
                 if (frames == null || frames.Length == 0)
                 {

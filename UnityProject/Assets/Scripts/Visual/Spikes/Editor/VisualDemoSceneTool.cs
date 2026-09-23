@@ -104,7 +104,6 @@ namespace Xianxia.Sect.Visual.Spikes.EditorTools
 
             // (b) DevSpineOverride must be written ONLY by VisualDemoSpineEnabler (C3)
             // Paths are relative to the Unity project (Editor cwd = UnityProject/).
-            const string seamFile = "Assets/Scripts/Visual/Core/VisualRuntimeConfig.cs";
             var dirs = new[] { "Assets/Scripts" };
             for (int d = 0; d < dirs.Length; d++)
             {
@@ -169,13 +168,18 @@ namespace Xianxia.Sect.Visual.Spikes.EditorTools
             Directory.CreateDirectory(Path.GetDirectoryName(DemoScenePath));
             var scene = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
 
-            // orthographic 2D camera (same setup philosophy as SpikeSceneBootstrap.EnsureSceneCamera)
-            var camGo = new GameObject("Main Camera", typeof(Camera), typeof(AudioListener));
+            // Orthographic 2D camera (same setup philosophy as SpikeSceneBootstrap.EnsureSceneCamera).
+            // ⚠ NO AudioListener here: SceneLoader.RemoveDuplicateSingletons DESTROYS any
+            // GameObject carrying one on additive load (CoreScene owns the canonical one) —
+            // with a listener the demo camera itself was destroyed and the boot camera
+            // (ortho size 0.0866) rendered instead → empty frame.
+            var camGo = new GameObject("Main Camera", typeof(Camera));
             var cam = camGo.GetComponent<Camera>();
             cam.orthographic = true;
             cam.orthographicSize = 4.5f; // 4 chibis in a 2×2 grid, clearly visible
             cam.clearFlags = CameraClearFlags.SolidColor;
             cam.backgroundColor = new Color(0.12f, 0.14f, 0.18f, 1f);
+            cam.depth = 10f; // render ABOVE the boot-scene camera (depth 0) — demo owns the frame
             camGo.transform.position = new Vector3(0f, 1.2f, -10f);
 
             // demo objects — scripts from the Spike assemblies (C1: demo lives in spikes)
@@ -187,9 +191,25 @@ namespace Xianxia.Sect.Visual.Spikes.EditorTools
 
             new GameObject("VisualDemoSpineEnabler", typeof(Spines.VisualDemoSpineEnabler));
             new GameObject("VisualDemoHud", typeof(Spines.VisualDemoHud));
+            EnsureGlobalLight2D();
             AssignRigToEnabler();
 
             EditorSceneManager.SaveScene(scene, DemoScenePath);
+        }
+
+        /// <summary>
+        /// Global Light2D for the demo scene — the project uses URP with the 2D Renderer
+        /// and Sprite-Lit materials, so a scene without any Light2D renders every sprite
+        /// black. Dev-only scaffold piece (C1); production scenes own their lighting.
+        /// </summary>
+        private static void EnsureGlobalLight2D()
+        {
+            if (GameObject.Find("Global Light2D") != null) return;
+            var lightGo = new GameObject("Global Light2D", typeof(UnityEngine.Rendering.Universal.Light2D));
+            var light = lightGo.GetComponent<UnityEngine.Rendering.Universal.Light2D>();
+            light.lightType = UnityEngine.Rendering.Universal.Light2D.LightType.Global;
+            light.color = Color.white;
+            light.intensity = 1f;
         }
 
         private static void Refresh(Scene scene)
@@ -197,16 +217,21 @@ namespace Xianxia.Sect.Visual.Spikes.EditorTools
             // keep the scene authoritative but self-heal if someone deleted a demo object
             if (GameObject.Find("Main Camera") == null)
             {
-                var camGo = new GameObject("Main Camera", typeof(Camera), typeof(AudioListener));
+                // Same rules as BuildOrUpdateScene: no AudioListener (dedupe would destroy it), depth 10 (over boot camera).
+                var camGo = new GameObject("Main Camera", typeof(Camera));
                 var cam = camGo.GetComponent<Camera>();
                 cam.orthographic = true;
                 cam.orthographicSize = 4.5f;
+                cam.clearFlags = CameraClearFlags.SolidColor;
+                cam.backgroundColor = new Color(0.12f, 0.14f, 0.18f, 1f);
+                cam.depth = 10f;
                 camGo.transform.position = new Vector3(0f, 1.2f, -10f);
             }
             if (GameObject.Find("VisualDemoSpineEnabler") == null)
                 new GameObject("VisualDemoSpineEnabler", typeof(Spines.VisualDemoSpineEnabler));
             if (GameObject.Find("VisualDemoHud") == null)
                 new GameObject("VisualDemoHud", typeof(Spines.VisualDemoHud));
+            EnsureGlobalLight2D();
             AssignRigToEnabler();
         }
 
