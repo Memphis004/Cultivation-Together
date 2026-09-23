@@ -1,0 +1,468 @@
+fileFormatVersion: 2
+guid: 42b44c6bd9a07b9448817df4345648a4
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -796867724528170218
+    second: shanlin_tudi_altas_0
+  - first:
+      213: 6407807823734446246
+    second: shanlin_tudi_altas_1
+  - first:
+      213: -7055964737046974184
+    second: shanlin_tudi_altas_2
+  - first:
+      213: 1945488224586011968
+    second: shanlin_tudi_altas_3
+  - first:
+      213: -5407132550500059385
+    second: shanlin_tudi_altas_4
+  - first:
+      213: 3107275622953971499
+    second: shanlin_tudi_altas_5
+  - first:
+      213: -180475052997772814
+    second: shanlin_tudi_altas_6
+  - first:
+      213: -8119857732056474155
+    second: shanlin_tudi_altas_7
+  - first:
+      213: -5454530710363078256
+    second: shanlin_tudi_altas_8
+  - first:
+      213: -2903250273190876074
+    second: shanlin_tudi_altas_9
+  - first:
+      213: -5741581638997239809
+    second: shanlin_tudi_altas_10
+  - first:
+      213: -8845965873639944257
+    second: shanlin_tudi_altas_11
+  - first:
+      213: 4746601334539468865
+    second: shanlin_tudi_altas_12
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: shanlin_tudi_altas_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 687
+        width: 775
+        height: 718
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 61b468ac605f0f4f0800000000000000
+      internalID: -796867724528170218
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: shanlin_tudi_altas_1
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 17
+        width: 517
+        height: 710
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6a819a2044b1de850800000000000000
+      internalID: 6407807823734446246
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: shanlin_tudi_altas_2
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 322
+        width: 2046
+        height: 1725
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 811f1aca47d241e90800000000000000
+      internalID: -7055964737046974184
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: shanlin_tudi_altas_3
+      rect:
+        serializedVersion: 2
+        x: 515
+        y: 4
+        width: 344
+        height: 750
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 045972d8b33cffa10800000000000000
+      internalID: 1945488224586011968
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: shanlin_tudi_altas_4
+      rect:
+        serializedVersion: 2
+        x: 785
+        y: 767
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 707fdf1f79106f4b0800000000000000
+      internalID: -5407132550500059385
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: shanlin_tudi_altas_5
+      rect:
+        serializedVersion: 2
+        x: 791
+        y: 761
+        width: 10
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b2fe66d47b24f1b20800000000000000
+      internalID: 3107275622953971499
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: shanlin_tudi_altas_6
+      rect:
+        serializedVersion: 2
+        x: 797
+        y: 755
+        width: 10
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2f97f3f35e2de7df0800000000000000
+      internalID: -180475052997772814
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: shanlin_tudi_altas_7
+      rect:
+        serializedVersion: 2
+        x: 803
+        y: 749
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5dd901ed968705f80800000000000000
+      internalID: -8119857732056474155
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: shanlin_tudi_altas_8
+      rect:
+        serializedVersion: 2
+        x: 809
+        y: 743
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0918950e73d9d44b0800000000000000
+      internalID: -5454530710363078256
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: shanlin_tudi_altas_9
+      rect:
+        serializedVersion: 2
+        x: 809
+        y: 728
+        width: 22
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 65ce664324595b7d0800000000000000
+      internalID: -2903250273190876074
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: shanlin_tudi_altas_10
+      rect:
+        serializedVersion: 2
+        x: 815
+        y: 737
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ff71aa66bedc150b0800000000000000
+      internalID: -5741581638997239809
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: shanlin_tudi_altas_11
+      rect:
+        serializedVersion: 2
+        x: 839
+        y: 718
+        width: 28
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fbf8676e7e0dc3580800000000000000
+      internalID: -8845965873639944257
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: shanlin_tudi_altas_12
+      rect:
+        serializedVersion: 2
+        x: 857
+        y: 712
+        width: 40
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 140ce93e3c05fd140800000000000000
+      internalID: 4746601334539468865
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      shanlin_tudi_altas_0: -796867724528170218
+      shanlin_tudi_altas_1: 6407807823734446246
+      shanlin_tudi_altas_10: -5741581638997239809
+      shanlin_tudi_altas_11: -8845965873639944257
+      shanlin_tudi_altas_12: 4746601334539468865
+      shanlin_tudi_altas_2: -7055964737046974184
+      shanlin_tudi_altas_3: 1945488224586011968
+      shanlin_tudi_altas_4: -5407132550500059385
+      shanlin_tudi_altas_5: 3107275622953971499
+      shanlin_tudi_altas_6: -180475052997772814
+      shanlin_tudi_altas_7: -8119857732056474155
+      shanlin_tudi_altas_8: -5454530710363078256
+      shanlin_tudi_altas_9: -2903250273190876074
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

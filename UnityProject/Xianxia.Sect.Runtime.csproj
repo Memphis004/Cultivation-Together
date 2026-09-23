@@ -44,8 +44,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Analyzer Include="C:\Users\memph\.vscode\extensions\visualstudiotoolsforunity.vstuc-1.3.1\Analyzers\Microsoft.Unity.Analyzers.dll" />
-    <Analyzer Include="C:\UnityProjects\Cultivation Together\UnityProject\Assets\Packages\MessagePackAnalyzer.3.1.8\analyzers\roslyn4.3\cs\MessagePack.SourceGenerator.dll" />
-    <Analyzer Include="C:\UnityProjects\Cultivation Together\UnityProject\Assets\Packages\MessagePackAnalyzer.3.1.8\analyzers\roslyn4.3\cs\MessagePack.Analyzers.CodeFixes.dll" />
+    <Analyzer Include="C:\UnityProjects\Cultivation-Together\UnityProject\Assets\Packages\MessagePackAnalyzer.3.1.8\analyzers\roslyn4.3\cs\MessagePack.SourceGenerator.dll" />
+    <Analyzer Include="C:\UnityProjects\Cultivation-Together\UnityProject\Assets\Packages\MessagePackAnalyzer.3.1.8\analyzers\roslyn4.3\cs\MessagePack.Analyzers.CodeFixes.dll" />
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\6000.3.9f1\Editor\Data\Tools\BuildPipeline\Unity.SourceGenerators\Unity.SourceGenerators.dll" />
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\6000.3.9f1\Editor\Data\Tools\BuildPipeline\Unity.SourceGenerators\Unity.Properties.SourceGenerator.dll" />
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\6000.3.9f1\Editor\Data\Tools\BuildPipeline\Unity.SourceGenerators\Unity.UIToolkit.SourceGenerator.dll" />
@@ -74,6 +74,7 @@
     <Compile Include="Assets\Scripts\Tests\AdditiveSceneTest.cs" />
     <Compile Include="Assets\Scripts\Visual\Core\TaskActivityMapper.cs" />
     <Compile Include="Assets\Scripts\UI\Views\AvatarRenderer.cs" />
+    <Compile Include="Assets\Scripts\Data\Gen\worldevent\TbEvent.cs" />
     <Compile Include="Assets\Scripts\UI\Views\ResourceHudView.cs" />
     <Compile Include="Assets\Scripts\Visual\Core\IChibiVisual.cs" />
     <Compile Include="Assets\Scripts\UI\Presenters\ResourceHudPresenter.cs" />
@@ -88,6 +89,7 @@
     <Compile Include="Assets\Scripts\Visual\Core\DefaultEntitlementProvider.cs" />
     <Compile Include="Assets\Scripts\Core\TimeSystem.cs" />
     <Compile Include="Assets\Scripts\UI\Views\AvatarOptionButton.cs" />
+    <Compile Include="Assets\Scripts\Data\Gen\worldevent\TbEventChoice.cs" />
     <Compile Include="Assets\Scripts\UI\Systems\UIBootstrap.cs" />
     <Compile Include="Assets\Scripts\Core\DecisionExecutor.cs" />
     <Compile Include="Assets\Scripts\UI\Views\AvatarCustomizationViewData.cs" />
@@ -102,12 +104,14 @@
     <Compile Include="Assets\Scripts\Systems\WorldEventSystem.cs" />
     <Compile Include="Assets\Scripts\UI\Systems\WorldEventUISystem.cs" />
     <Compile Include="Assets\Scripts\Systems\SectStateProvider.cs" />
+    <Compile Include="Assets\Scripts\Data\Gen\worldevent\EventChoiceRow.cs" />
     <Compile Include="Assets\Scripts\UI\Presenters\LogWindowPresenter.cs" />
     <Compile Include="Assets\Scripts\UI\Views\AvatarCustomizationView.cs" />
     <Compile Include="Assets\Scripts\Data\AvatarPartPool.cs" />
     <Compile Include="Assets\Scripts\Data\Gen\game\TbEventDef.cs" />
     <Compile Include="Assets\Scripts\UI\Presenters\DiscipleDetailPresenter.cs" />
     <Compile Include="Assets\Scripts\Visual\Core\VisualRuntimeConfig.cs" />
+    <Compile Include="Assets\Scripts\Data\Gen\worldevent\EventRow.cs" />
     <Compile Include="Assets\Scripts\Visual\Scene\ChibiSceneRoot.cs" />
     <Compile Include="Assets\Scripts\Core\SceneMessages.cs" />
     <Compile Include="Assets\Scripts\Visual\Scene\ChibiClickTarget.cs" />

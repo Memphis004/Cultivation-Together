@@ -67,9 +67,20 @@ namespace Xianxia.Sect.Visual
                 if (!a.Parts.TryGetValue(slot, out partId)) partId = string.Empty;
 
                 var def = _pool.Resolve(slot, partId);
-                if (def == null || !def.Supports(backend))
+                if (def == null)
                 {
                     // Fallback: default ของ slot ก็ไม่รองรับ backend นี้ → ข้าม slot + เตือนครั้งเดียว
+                    WarnOnce(slot, backend, def);
+                    continue;
+                }
+                if (def.IsEmptyLayer)
+                {
+                    // Empty layer (เช่น *_none defaults) = เจตนา "ไม่มีอะไรจะวาด" —
+                    // ข้ามเงียบ ๆ ทุก backend ไม่ใช่ความผิดพลาดของ data
+                    continue;
+                }
+                if (!def.Supports(backend))
+                {
                     WarnOnce(slot, backend, def);
                     continue;
                 }

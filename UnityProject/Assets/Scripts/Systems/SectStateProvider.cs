@@ -297,30 +297,25 @@ namespace Xianxia.Sect
                 }
             }
 
-            // Validation ชั้น 5 — coverage (Phase 1): part ต้อง Supports() ทุก backend ที่
-            // VisualRuntimeConfig เปิดใช้ (L4) — Phase 1 flags เป็น false ทั้งคู่ (C12)
-            // จึงไม่ reject อะไรในทางปฏิบัติ (ถูกต้อง — ยังไม่มี chibi asset ให้ validate)
-            // Portrait บังคับเสมอเพราะเป็น backend เดียวที่มีอยู่จริงทุก part วันนี้
+            // Validation ชั้น 5 — coverage: part ต้องมี art อย่างน้อย 1 backend ที่เปิดใช้
+            // (empty layer = เจตนา "ถอดออก" ผ่านเสมอ — *_none defaults)
+            // Face split (Roadmap #1): face sub-layers เป็น portrait-only ตามดีไซน์ (R4 —
+            // chibi เก็บ feature baked-in) จึงผ่านด้วย Portrait เดี่ยว โดยไม่ต้องมี chibi/spine art
+            // (แก้ latent bug: acc_none — ชิ้น "ถอดเครื่องประดับ" ที่มีแต่ chibi art — เคยโดน reject)
             if (!string.IsNullOrEmpty(partId))
             {
                 var partDef = _avatarPartPool.GetById(partId);
-                if (partDef != null)
+                if (partDef != null && !partDef.IsEmptyLayer)
                 {
-                    if (!partDef.Supports(VisualBackend.Portrait))
+                    bool anyCovered =
+                        partDef.Supports(VisualBackend.Portrait) ||
+                        (_visualConfig != null && _visualConfig.SpriteSheetEnabled &&
+                         partDef.Supports(VisualBackend.SpriteSheet)) ||
+                        (_visualConfig != null && _visualConfig.SpineEnabled &&
+                         partDef.Supports(VisualBackend.Spine));
+                    if (!anyCovered)
                     {
-                        failReason = $"Part '{partId}' has no Portrait art (coverage check).";
-                        return false;
-                    }
-                    if (_visualConfig != null && _visualConfig.SpriteSheetEnabled &&
-                        !partDef.Supports(VisualBackend.SpriteSheet))
-                    {
-                        failReason = $"Part '{partId}' has no SpriteSheet chibi art (coverage check).";
-                        return false;
-                    }
-                    if (_visualConfig != null && _visualConfig.SpineEnabled &&
-                        !partDef.Supports(VisualBackend.Spine))
-                    {
-                        failReason = $"Part '{partId}' has no Spine skin (coverage check).";
+                        failReason = $"Part '{partId}' has no art on any enabled backend (coverage check).";
                         return false;
                     }
                 }

@@ -101,6 +101,10 @@ namespace Xianxia.Sect.Visual.Spikes.EditorTools
                     Xianxia.Sect.EditorTools.ChibiSheetBaker.GenerateAll();
                     WriteResult("baked_chibi");
                     break;
+                case "bake_portrait":
+                    Xianxia.Sect.EditorTools.PortraitPlaceholderBaker.GenerateAll(); // face split: portrait placeholder sheets into Assets/Resources/Avatar
+                    WriteResult("baked_portrait");
+                    break;
                 case "phase2_verify":
                     Phase2VerifyRunner.RunVerify(); // async: report lands in Library/phase2_verify_report.txt
                     WriteResult("phase2_verify_started");

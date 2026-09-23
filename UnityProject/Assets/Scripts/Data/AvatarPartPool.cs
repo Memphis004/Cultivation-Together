@@ -31,6 +31,23 @@ namespace Xianxia.Sect
         public string entitlement;        // "" | "owner" | "dlc:<packId>"
 
         /// <summary>
+        /// Empty-layer part: เจตนา "ไม่มี art ทุก backend" (ถอดชิ้นนี้ออก) —
+        /// ต้องผ่าน coverage เสมอ เพราะคือวิธีที่ผู้เล่นถอด face_marking ฯลฯ
+        /// (ยืนยันโดย *_none defaults ใน avatar_parts.json)
+        /// </summary>
+        public bool IsEmptyLayer
+        {
+            get
+            {
+                return string.IsNullOrEmpty(spritePath)
+                    && string.IsNullOrEmpty(spritePathBack)
+                    && string.IsNullOrEmpty(chibiSheetPath)
+                    && string.IsNullOrEmpty(chibiSheetPathBack)
+                    && string.IsNullOrEmpty(spineSkin);
+            }
+        }
+
+        /// <summary>
         /// Coverage = คำนวณสดจาก path/skin ที่มี — ห้ามเก็บซ้ำเป็น field ใน JSON
         /// (C6 — กัน dual source of truth แบบที่เคยเกิดกับ outfit)
         /// </summary>

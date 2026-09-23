@@ -1,0 +1,2002 @@
+fileFormatVersion: 2
+guid: 446c237969c907d4898f7c310c1102af
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 1245862014976333316
+    second: xukong_altas_0
+  - first:
+      213: 1943080934759117645
+    second: xukong_altas_1
+  - first:
+      213: 8386255783549771984
+    second: xukong_altas_2
+  - first:
+      213: 3551049700433708432
+    second: xukong_altas_3
+  - first:
+      213: -6091554466777358590
+    second: xukong_altas_4
+  - first:
+      213: 8414920600882056241
+    second: xukong_altas_5
+  - first:
+      213: 8817289887091681069
+    second: xukong_altas_6
+  - first:
+      213: 3826041928077078556
+    second: xukong_altas_7
+  - first:
+      213: 2580055764163671855
+    second: xukong_altas_8
+  - first:
+      213: 3754875987443278322
+    second: xukong_altas_9
+  - first:
+      213: -4704967133483922939
+    second: xukong_altas_10
+  - first:
+      213: -1605162021253733733
+    second: xukong_altas_11
+  - first:
+      213: 176639935370452129
+    second: xukong_altas_12
+  - first:
+      213: -121989690092978420
+    second: xukong_altas_13
+  - first:
+      213: -4203473510726159606
+    second: xukong_altas_14
+  - first:
+      213: 7962361267558378553
+    second: xukong_altas_15
+  - first:
+      213: -7075457227580376074
+    second: xukong_altas_16
+  - first:
+      213: 306555752382740084
+    second: xukong_altas_17
+  - first:
+      213: -891447787767377397
+    second: xukong_altas_18
+  - first:
+      213: 7681722921555774380
+    second: xukong_altas_19
+  - first:
+      213: 8519102660540676937
+    second: xukong_altas_20
+  - first:
+      213: -1846112793920346111
+    second: xukong_altas_21
+  - first:
+      213: 4264042094957505530
+    second: xukong_altas_22
+  - first:
+      213: 7413524030178938023
+    second: xukong_altas_23
+  - first:
+      213: -6232082620633469828
+    second: xukong_altas_24
+  - first:
+      213: 2307588760509746228
+    second: xukong_altas_25
+  - first:
+      213: -7879719082742972004
+    second: xukong_altas_26
+  - first:
+      213: -1370137786936732313
+    second: xukong_altas_27
+  - first:
+      213: 4228831865685709112
+    second: xukong_altas_28
+  - first:
+      213: -6583886171810118769
+    second: xukong_altas_29
+  - first:
+      213: 7957170282186145789
+    second: xukong_altas_30
+  - first:
+      213: 7340698687764392437
+    second: xukong_altas_31
+  - first:
+      213: 2949158033361637030
+    second: xukong_altas_32
+  - first:
+      213: 554126125964049438
+    second: xukong_altas_33
+  - first:
+      213: 7370801055103068588
+    second: xukong_altas_34
+  - first:
+      213: -1144827677353223157
+    second: xukong_altas_35
+  - first:
+      213: 7750562647175605679
+    second: xukong_altas_36
+  - first:
+      213: 3428635107863408672
+    second: xukong_altas_37
+  - first:
+      213: -1191035228962672184
+    second: xukong_altas_38
+  - first:
+      213: -5103032816424586964
+    second: xukong_altas_39
+  - first:
+      213: -7261320648499447531
+    second: xukong_altas_40
+  - first:
+      213: 4764386994324390995
+    second: xukong_altas_41
+  - first:
+      213: 480120063510387784
+    second: xukong_altas_42
+  - first:
+      213: 6960299725017222952
+    second: xukong_altas_43
+  - first:
+      213: -5695342196382672837
+    second: xukong_altas_44
+  - first:
+      213: 2976230547967594791
+    second: xukong_altas_45
+  - first:
+      213: 901256358561869390
+    second: xukong_altas_46
+  - first:
+      213: 4955405692464787792
+    second: xukong_altas_47
+  - first:
+      213: -132366896407229013
+    second: xukong_altas_48
+  - first:
+      213: -9115222711091807349
+    second: xukong_altas_49
+  - first:
+      213: 9108342487624630135
+    second: xukong_altas_50
+  - first:
+      213: 1256391405555340326
+    second: xukong_altas_51
+  - first:
+      213: -3689166468785772861
+    second: xukong_altas_52
+  - first:
+      213: -4533586833995633079
+    second: xukong_altas_53
+  - first:
+      213: -6453472006489573275
+    second: xukong_altas_54
+  - first:
+      213: -4091258223012599820
+    second: xukong_altas_55
+  - first:
+      213: 7453785677373970186
+    second: xukong_altas_56
+  - first:
+      213: -296070940103540756
+    second: xukong_altas_57
+  - first:
+      213: -6365706103708438812
+    second: xukong_altas_58
+  - first:
+      213: -5130611734412569554
+    second: xukong_altas_59
+  - first:
+      213: -2587123735744691473
+    second: xukong_altas_60
+  - first:
+      213: 7148474853364017343
+    second: xukong_altas_61
+  - first:
+      213: -6609978572241617749
+    second: xukong_altas_62
+  - first:
+      213: 259163549936353435
+    second: xukong_altas_63
+  - first:
+      213: 1685174670584909808
+    second: xukong_altas_64
+  - first:
+      213: 372117401358859024
+    second: xukong_altas_65
+  - first:
+      213: -4567480963654423195
+    second: xukong_altas_66
+  - first:
+      213: -8025551476330429151
+    second: xukong_altas_67
+  - first:
+      213: -3005171092827967829
+    second: xukong_altas_68
+  - first:
+      213: -1240045692231422277
+    second: xukong_altas_69
+  - first:
+      213: 3917735542570768950
+    second: xukong_altas_70
+  - first:
+      213: -2217287260040742487
+    second: xukong_altas_71
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: xukong_altas_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1331
+        width: 541
+        height: 716
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 40611d9d6e03a4110800000000000000
+      internalID: 1245862014976333316
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: xukong_altas_1
+      rect:
+        serializedVersion: 2
+        x: 515
+        y: 1426
+        width: 518
+        height: 583
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d43b626b0d537fa10800000000000000
+      internalID: 1943080934759117645
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: xukong_altas_2
+      rect:
+        serializedVersion: 2
+        x: 516
+        y: 1391
+        width: 7
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0d0ac0ee337f16470800000000000000
+      internalID: 8386255783549771984
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: xukong_altas_3
+      rect:
+        serializedVersion: 2
+        x: 761
+        y: 1355
+        width: 20
+        height: 45
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 095cb1663ecd74130800000000000000
+      internalID: 3551049700433708432
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: xukong_altas_4
+      rect:
+        serializedVersion: 2
+        x: 1029
+        y: 1397
+        width: 520
+        height: 650
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 20f9ac5ac73767ba0800000000000000
+      internalID: -6091554466777358590
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: xukong_altas_5
+      rect:
+        serializedVersion: 2
+        x: 1061
+        y: 1397
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 13c01bcc3bdc7c470800000000000000
+      internalID: 8414920600882056241
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: xukong_altas_6
+      rect:
+        serializedVersion: 2
+        x: 1067
+        y: 1391
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d276eb1bf6e4d5a70800000000000000
+      internalID: 8817289887091681069
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: xukong_altas_7
+      rect:
+        serializedVersion: 2
+        x: 1157
+        y: 1301
+        width: 110
+        height: 110
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c10f8c2ccd4d81530800000000000000
+      internalID: 3826041928077078556
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: xukong_altas_8
+      rect:
+        serializedVersion: 2
+        x: 1319
+        y: 1313
+        width: 104
+        height: 104
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f27bcab3c033ec320800000000000000
+      internalID: 2580055764163671855
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: xukong_altas_9
+      rect:
+        serializedVersion: 2
+        x: 1559
+        y: 947
+        width: 489
+        height: 628
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2f1633ff0dffb1430800000000000000
+      internalID: 3754875987443278322
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: xukong_altas_10
+      rect:
+        serializedVersion: 2
+        x: 743
+        y: 1379
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 50a8dc0f15994beb0800000000000000
+      internalID: -4704967133483922939
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: xukong_altas_11
+      rect:
+        serializedVersion: 2
+        x: 905
+        y: 1295
+        width: 98
+        height: 98
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b92293c65a159b9e0800000000000000
+      internalID: -1605162021253733733
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: xukong_altas_12
+      rect:
+        serializedVersion: 2
+        x: 1073
+        y: 1385
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1ac57e8d51d837200800000000000000
+      internalID: 176639935370452129
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: xukong_altas_13
+      rect:
+        serializedVersion: 2
+        x: 1079
+        y: 1379
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c0f7fbfe50b9e4ef0800000000000000
+      internalID: -121989690092978420
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: xukong_altas_14
+      rect:
+        serializedVersion: 2
+        x: 1085
+        y: 1373
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a03376aec134aa5c0800000000000000
+      internalID: -4203473510726159606
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: xukong_altas_15
+      rect:
+        serializedVersion: 2
+        x: 1091
+        y: 1367
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 93c652ee26dff7e60800000000000000
+      internalID: 7962361267558378553
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: xukong_altas_16
+      rect:
+        serializedVersion: 2
+        x: 509
+        y: 1351
+        width: 32
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6fbf99e832deecd90800000000000000
+      internalID: -7075457227580376074
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: xukong_altas_17
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 773
+        width: 263
+        height: 589
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 47630a425da114400800000000000000
+      internalID: 306555752382740084
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: xukong_altas_18
+      rect:
+        serializedVersion: 2
+        x: 1097
+        y: 1361
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b02515ac5f0f0a3f0800000000000000
+      internalID: -891447787767377397
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: xukong_altas_19
+      rect:
+        serializedVersion: 2
+        x: 1103
+        y: 1355
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cabce423c46fa9a60800000000000000
+      internalID: 7681722921555774380
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: xukong_altas_20
+      rect:
+        serializedVersion: 2
+        x: 515
+        y: 1342
+        width: 26
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 94bbc9ecbbee93670800000000000000
+      internalID: 8519102660540676937
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: xukong_altas_21
+      rect:
+        serializedVersion: 2
+        x: 827
+        y: 1342
+        width: 32
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 108e21fe13a4166e0800000000000000
+      internalID: -1846112793920346111
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: xukong_altas_22
+      rect:
+        serializedVersion: 2
+        x: 1109
+        y: 1349
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: afb214981bbec2b30800000000000000
+      internalID: 4264042094957505530
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: xukong_altas_23
+      rect:
+        serializedVersion: 2
+        x: 1115
+        y: 1343
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7ac43a0b3d022e660800000000000000
+      internalID: 7413524030178938023
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: xukong_altas_24
+      rect:
+        serializedVersion: 2
+        x: 515
+        y: 1331
+        width: 21
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c7ca14220e13389a0800000000000000
+      internalID: -6232082620633469828
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: xukong_altas_25
+      rect:
+        serializedVersion: 2
+        x: 1121
+        y: 1337
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 43c0ed560c3360020800000000000000
+      internalID: 2307588760509746228
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: xukong_altas_26
+      rect:
+        serializedVersion: 2
+        x: 1127
+        y: 1331
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c910d372e3d95a290800000000000000
+      internalID: -7879719082742972004
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: xukong_altas_27
+      rect:
+        serializedVersion: 2
+        x: 257
+        y: 1319
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 765db4c21fa4cfce0800000000000000
+      internalID: -1370137786936732313
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: xukong_altas_28
+      rect:
+        serializedVersion: 2
+        x: 509
+        y: 1319
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8319c013d24dfaa30800000000000000
+      internalID: 4228831865685709112
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: xukong_altas_29
+      rect:
+        serializedVersion: 2
+        x: 1133
+        y: 1325
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f83c6afd86651a4a0800000000000000
+      internalID: -6583886171810118769
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: xukong_altas_30
+      rect:
+        serializedVersion: 2
+        x: 1139
+        y: 1319
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dfffff6763c8d6e60800000000000000
+      internalID: 7957170282186145789
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: xukong_altas_31
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 599
+        width: 517
+        height: 721
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5f96f5750966fd560800000000000000
+      internalID: 7340698687764392437
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: xukong_altas_32
+      rect:
+        serializedVersion: 2
+        x: 275
+        y: 1307
+        width: 12
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6ae82052b938de820800000000000000
+      internalID: 2949158033361637030
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: xukong_altas_33
+      rect:
+        serializedVersion: 2
+        x: 1145
+        y: 1313
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e1cb9d296c6a0b700800000000000000
+      internalID: 554126125964049438
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: xukong_altas_34
+      rect:
+        serializedVersion: 2
+        x: 1151
+        y: 1307
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ca92e77e1885a4660800000000000000
+      internalID: 7370801055103068588
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: xukong_altas_35
+      rect:
+        serializedVersion: 2
+        x: 785
+        y: 753
+        width: 10
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b0c53520b41cc10f0800000000000000
+      internalID: -1144827677353223157
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: xukong_altas_36
+      rect:
+        serializedVersion: 2
+        x: 791
+        y: 701
+        width: 53
+        height: 58
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fad2052d9a78f8b60800000000000000
+      internalID: 7750562647175605679
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: xukong_altas_37
+      rect:
+        serializedVersion: 2
+        x: 839
+        y: 0
+        width: 1208
+        height: 1274
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 020b1a40775f49f20800000000000000
+      internalID: 3428635107863408672
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: xukong_altas_38
+      rect:
+        serializedVersion: 2
+        x: 515
+        y: 743
+        width: 8
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8c134b605c7987fe0800000000000000
+      internalID: -1191035228962672184
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: xukong_altas_39
+      rect:
+        serializedVersion: 2
+        x: 731
+        y: 725
+        width: 20
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c21f9d3c0b26e29b0800000000000000
+      internalID: -5103032816424586964
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: xukong_altas_40
+      rect:
+        serializedVersion: 2
+        x: 767
+        y: 743
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5193bf1a75b9a3b90800000000000000
+      internalID: -7261320648499447531
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: xukong_altas_41
+      rect:
+        serializedVersion: 2
+        x: 515
+        y: 119
+        width: 260
+        height: 574
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 35442318ab08e1240800000000000000
+      internalID: 4764386994324390995
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: xukong_altas_42
+      rect:
+        serializedVersion: 2
+        x: 827
+        y: 691
+        width: 8
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 84c131b67aab9a600800000000000000
+      internalID: 480120063510387784
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: xukong_altas_43
+      rect:
+        serializedVersion: 2
+        x: 839
+        y: 692
+        width: 16
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 82f86eff8b3f79060800000000000000
+      internalID: 6960299725017222952
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: xukong_altas_44
+      rect:
+        serializedVersion: 2
+        x: 269
+        y: 579
+        width: 10
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b385156927416f0b0800000000000000
+      internalID: -5695342196382672837
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: xukong_altas_45
+      rect:
+        serializedVersion: 2
+        x: 275
+        y: 473
+        width: 116
+        height: 123
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 72156452ae1bd4920800000000000000
+      internalID: 2976230547967594791
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: xukong_altas_46
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 569
+        width: 7
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e4e64af02e7e18c00800000000000000
+      internalID: 901256358561869390
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: xukong_altas_47
+      rect:
+        serializedVersion: 2
+        x: 131
+        y: 467
+        width: 104
+        height: 104
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 051ff41f83325c440800000000000000
+      internalID: 4955405692464787792
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: xukong_altas_48
+      rect:
+        serializedVersion: 2
+        x: 251
+        y: 569
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bad40af420db92ef0800000000000000
+      internalID: -132366896407229013
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: xukong_altas_49
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 47
+        width: 151
+        height: 158
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b8bbcc02d39308180800000000000000
+      internalID: -9115222711091807349
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: xukong_altas_50
+      rect:
+        serializedVersion: 2
+        x: 3
+        y: 0
+        width: 322
+        height: 283
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 77fb6730c35576e70800000000000000
+      internalID: 9108342487624630135
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: xukong_altas_51
+      rect:
+        serializedVersion: 2
+        x: 785
+        y: 101
+        width: 11
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 624daf2a3599f6110800000000000000
+      internalID: 1256391405555340326
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: xukong_altas_52
+      rect:
+        serializedVersion: 2
+        x: 791
+        y: 95
+        width: 10
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3c6edb684a27dccc0800000000000000
+      internalID: -3689166468785772861
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: xukong_altas_53
+      rect:
+        serializedVersion: 2
+        x: 797
+        y: 83
+        width: 28
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 94e6d416bc67511c0800000000000000
+      internalID: -4533586833995633079
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: xukong_altas_54
+      rect:
+        serializedVersion: 2
+        x: 515
+        y: 89
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 568f24de669a076a0800000000000000
+      internalID: -6453472006489573275
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: xukong_altas_55
+      rect:
+        serializedVersion: 2
+        x: 545
+        y: 0
+        width: 92
+        height: 91
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4f720f4925ee837c0800000000000000
+      internalID: -4091258223012599820
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: xukong_altas_56
+      rect:
+        serializedVersion: 2
+        x: 767
+        y: 89
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a0715cbe49a217760800000000000000
+      internalID: 7453785677373970186
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: xukong_altas_57
+      rect:
+        serializedVersion: 2
+        x: 803
+        y: 83
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cefffc27c0524ebf0800000000000000
+      internalID: -296070940103540756
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: xukong_altas_58
+      rect:
+        serializedVersion: 2
+        x: 809
+        y: 77
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4ee2cef860878a7a0800000000000000
+      internalID: -6365706103708438812
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: xukong_altas_59
+      rect:
+        serializedVersion: 2
+        x: 815
+        y: 71
+        width: 10
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e2453e98fc76cc8b0800000000000000
+      internalID: -5130611734412569554
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: xukong_altas_60
+      rect:
+        serializedVersion: 2
+        x: 821
+        y: 65
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fe2c4f46ba0b81cd0800000000000000
+      internalID: -2587123735744691473
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: xukong_altas_61
+      rect:
+        serializedVersion: 2
+        x: 827
+        y: 59
+        width: 9
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fb82390410c743360800000000000000
+      internalID: 7148474853364017343
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: xukong_altas_62
+      rect:
+        serializedVersion: 2
+        x: 833
+        y: 53
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bac389c7283a444a0800000000000000
+      internalID: -6609978572241617749
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: xukong_altas_63
+      rect:
+        serializedVersion: 2
+        x: 839
+        y: 47
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b908fa420ebb89300800000000000000
+      internalID: 259163549936353435
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: xukong_altas_64
+      rect:
+        serializedVersion: 2
+        x: 845
+        y: 41
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0ff03b83f61f26710800000000000000
+      internalID: 1685174670584909808
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: xukong_altas_65
+      rect:
+        serializedVersion: 2
+        x: 851
+        y: 35
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 01b7cb21ec60a2500800000000000000
+      internalID: 372117401358859024
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: xukong_altas_66
+      rect:
+        serializedVersion: 2
+        x: 857
+        y: 29
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 56de40b534c0d90c0800000000000000
+      internalID: -4567480963654423195
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: xukong_altas_67
+      rect:
+        serializedVersion: 2
+        x: 863
+        y: 23
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 12586b614738f9090800000000000000
+      internalID: -8025551476330429151
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: xukong_altas_68
+      rect:
+        serializedVersion: 2
+        x: 869
+        y: 17
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bae67ba20dc7b46d0800000000000000
+      internalID: -3005171092827967829
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: xukong_altas_69
+      rect:
+        serializedVersion: 2
+        x: 875
+        y: 11
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bbeea4153097acee0800000000000000
+      internalID: -1240045692231422277
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: xukong_altas_70
+      rect:
+        serializedVersion: 2
+        x: 881
+        y: 5
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 63a5ada08b79e5630800000000000000
+      internalID: 3917735542570768950
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: xukong_altas_71
+      rect:
+        serializedVersion: 2
+        x: 887
+        y: 0
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9a9b5441cfc9a31e0800000000000000
+      internalID: -2217287260040742487
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      xukong_altas_0: 1245862014976333316
+      xukong_altas_1: 1943080934759117645
+      xukong_altas_10: -4704967133483922939
+      xukong_altas_11: -1605162021253733733
+      xukong_altas_12: 176639935370452129
+      xukong_altas_13: -121989690092978420
+      xukong_altas_14: -4203473510726159606
+      xukong_altas_15: 7962361267558378553
+      xukong_altas_16: -7075457227580376074
+      xukong_altas_17: 306555752382740084
+      xukong_altas_18: -891447787767377397
+      xukong_altas_19: 7681722921555774380
+      xukong_altas_2: 8386255783549771984
+      xukong_altas_20: 8519102660540676937
+      xukong_altas_21: -1846112793920346111
+      xukong_altas_22: 4264042094957505530
+      xukong_altas_23: 7413524030178938023
+      xukong_altas_24: -6232082620633469828
+      xukong_altas_25: 2307588760509746228
+      xukong_altas_26: -7879719082742972004
+      xukong_altas_27: -1370137786936732313
+      xukong_altas_28: 4228831865685709112
+      xukong_altas_29: -6583886171810118769
+      xukong_altas_3: 3551049700433708432
+      xukong_altas_30: 7957170282186145789
+      xukong_altas_31: 7340698687764392437
+      xukong_altas_32: 2949158033361637030
+      xukong_altas_33: 554126125964049438
+      xukong_altas_34: 7370801055103068588
+      xukong_altas_35: -1144827677353223157
+      xukong_altas_36: 7750562647175605679
+      xukong_altas_37: 3428635107863408672
+      xukong_altas_38: -1191035228962672184
+      xukong_altas_39: -5103032816424586964
+      xukong_altas_4: -6091554466777358590
+      xukong_altas_40: -7261320648499447531
+      xukong_altas_41: 4764386994324390995
+      xukong_altas_42: 480120063510387784
+      xukong_altas_43: 6960299725017222952
+      xukong_altas_44: -5695342196382672837
+      xukong_altas_45: 2976230547967594791
+      xukong_altas_46: 901256358561869390
+      xukong_altas_47: 4955405692464787792
+      xukong_altas_48: -132366896407229013
+      xukong_altas_49: -9115222711091807349
+      xukong_altas_5: 8414920600882056241
+      xukong_altas_50: 9108342487624630135
+      xukong_altas_51: 1256391405555340326
+      xukong_altas_52: -3689166468785772861
+      xukong_altas_53: -4533586833995633079
+      xukong_altas_54: -6453472006489573275
+      xukong_altas_55: -4091258223012599820
+      xukong_altas_56: 7453785677373970186
+      xukong_altas_57: -296070940103540756
+      xukong_altas_58: -6365706103708438812
+      xukong_altas_59: -5130611734412569554
+      xukong_altas_6: 8817289887091681069
+      xukong_altas_60: -2587123735744691473
+      xukong_altas_61: 7148474853364017343
+      xukong_altas_62: -6609978572241617749
+      xukong_altas_63: 259163549936353435
+      xukong_altas_64: 1685174670584909808
+      xukong_altas_65: 372117401358859024
+      xukong_altas_66: -4567480963654423195
+      xukong_altas_67: -8025551476330429151
+      xukong_altas_68: -3005171092827967829
+      xukong_altas_69: -1240045692231422277
+      xukong_altas_7: 3826041928077078556
+      xukong_altas_70: 3917735542570768950
+      xukong_altas_71: -2217287260040742487
+      xukong_altas_8: 2580055764163671855
+      xukong_altas_9: 3754875987443278322
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

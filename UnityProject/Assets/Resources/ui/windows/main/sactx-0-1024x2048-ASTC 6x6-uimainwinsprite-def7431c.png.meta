@@ -1,0 +1,5850 @@
+fileFormatVersion: 2
+guid: 13675ab0ba2b5004bbdd954ac69b067c
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -1781467080141980489
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_0
+  - first:
+      213: 2967299962928878891
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_1
+  - first:
+      213: 5813035499788208526
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_2
+  - first:
+      213: -9117649614762889915
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_3
+  - first:
+      213: -7347091272101770633
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_4
+  - first:
+      213: -8928927587892220113
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_5
+  - first:
+      213: 8295228446262262634
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_6
+  - first:
+      213: 7905430127769795964
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_7
+  - first:
+      213: -6912899336099066319
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_8
+  - first:
+      213: -8532087055826314253
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_9
+  - first:
+      213: 5056447604922106292
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_10
+  - first:
+      213: 1848557441433280674
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_11
+  - first:
+      213: 3557788820848095200
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_12
+  - first:
+      213: 849434317213975242
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_13
+  - first:
+      213: -7656522492383848425
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_14
+  - first:
+      213: 1074753705930175114
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_15
+  - first:
+      213: -3651342004103038531
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_16
+  - first:
+      213: 7866151764018687857
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_17
+  - first:
+      213: 6715783834658769777
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_18
+  - first:
+      213: -776034576409493790
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_19
+  - first:
+      213: 1115525038729540074
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_20
+  - first:
+      213: -8290787596353460001
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_21
+  - first:
+      213: -8359639201206731770
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_22
+  - first:
+      213: 3472727813711182534
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_23
+  - first:
+      213: 4079023512194308608
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_24
+  - first:
+      213: -2066002055152988245
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_25
+  - first:
+      213: 6182472747411757431
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_26
+  - first:
+      213: 3246543170753806066
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_27
+  - first:
+      213: -305832338892282065
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_28
+  - first:
+      213: 8397913545585816791
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_29
+  - first:
+      213: 4690000433706229412
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_30
+  - first:
+      213: -7081472602865902637
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_31
+  - first:
+      213: -5623569605905726865
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_32
+  - first:
+      213: 2144861836874991228
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_33
+  - first:
+      213: -4213092805102833750
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_34
+  - first:
+      213: -4328947966385453754
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_35
+  - first:
+      213: -5510960293678662986
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_36
+  - first:
+      213: -5090827258321798505
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_37
+  - first:
+      213: 2817792756712061296
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_38
+  - first:
+      213: 7369028616926023355
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_39
+  - first:
+      213: -6268996232549833816
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_40
+  - first:
+      213: 1750790723757377924
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_41
+  - first:
+      213: 5706017161229206265
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_42
+  - first:
+      213: 3282268339963484059
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_43
+  - first:
+      213: 1091150518247608001
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_44
+  - first:
+      213: -8220370807980253043
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_45
+  - first:
+      213: 4296189812451846098
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_46
+  - first:
+      213: -3812644212443781409
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_47
+  - first:
+      213: 7774412325881809135
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_48
+  - first:
+      213: 1407886660126800870
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_49
+  - first:
+      213: 1774749308305030900
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_50
+  - first:
+      213: 3265161346920686040
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_51
+  - first:
+      213: -262195410693003536
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_52
+  - first:
+      213: 2424789532451439096
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_53
+  - first:
+      213: -7029976465111797319
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_54
+  - first:
+      213: -5370771480011872131
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_55
+  - first:
+      213: 4007443741036784498
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_56
+  - first:
+      213: 1101987844417733043
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_57
+  - first:
+      213: 1644178406787695684
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_58
+  - first:
+      213: -1149843659768796879
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_59
+  - first:
+      213: -8775102363429958616
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_60
+  - first:
+      213: -552628745272165650
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_61
+  - first:
+      213: 7012699473392405332
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_62
+  - first:
+      213: -2229999851109453335
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_63
+  - first:
+      213: 3339998789401766196
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_64
+  - first:
+      213: -2379412700514906278
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_65
+  - first:
+      213: -8252337543358679888
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_66
+  - first:
+      213: -5904962096124341937
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_67
+  - first:
+      213: 1427057434270447588
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_68
+  - first:
+      213: 5251712310308506891
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_69
+  - first:
+      213: -9025816211291066197
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_70
+  - first:
+      213: 6943844380373745891
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_71
+  - first:
+      213: 5892952788298559435
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_72
+  - first:
+      213: 6726067377477911492
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_73
+  - first:
+      213: 8652095174192997862
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_74
+  - first:
+      213: -1721081056839232726
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_75
+  - first:
+      213: -5548362421070049648
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_76
+  - first:
+      213: -4386594601780242390
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_77
+  - first:
+      213: 6709556095391237256
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_78
+  - first:
+      213: 8519190258217511102
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_79
+  - first:
+      213: 7595883917892241647
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_80
+  - first:
+      213: -6759120971456849085
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_81
+  - first:
+      213: 4678103621625093454
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_82
+  - first:
+      213: 2598840186872847404
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_83
+  - first:
+      213: -3839329250205242927
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_84
+  - first:
+      213: 4881602688310090320
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_85
+  - first:
+      213: -5767658388663782753
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_86
+  - first:
+      213: -1102810202885414117
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_87
+  - first:
+      213: 1540506929943996048
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_88
+  - first:
+      213: -6583299852040871253
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_89
+  - first:
+      213: -1328934933850916093
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_90
+  - first:
+      213: 3834569382516188861
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_91
+  - first:
+      213: -4916527900815495306
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_92
+  - first:
+      213: 306094875967351934
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_93
+  - first:
+      213: -4067409343997745401
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_94
+  - first:
+      213: -8889623092945475449
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_95
+  - first:
+      213: 9077823551497799857
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_96
+  - first:
+      213: -7164653457029043354
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_97
+  - first:
+      213: 4526091129169281642
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_98
+  - first:
+      213: -5334821660896233819
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_99
+  - first:
+      213: -7268732000343406969
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_100
+  - first:
+      213: 7709009039723717370
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_101
+  - first:
+      213: 2556471848976293883
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_102
+  - first:
+      213: 6246793166798888270
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_103
+  - first:
+      213: -601141309836240228
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_104
+  - first:
+      213: 9036599164811328111
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_105
+  - first:
+      213: -3365845267977026628
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_106
+  - first:
+      213: -3361867580316465726
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_107
+  - first:
+      213: -5728491486210584537
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_108
+  - first:
+      213: -8033348619408144473
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_109
+  - first:
+      213: 3292994797765141474
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_110
+  - first:
+      213: 2261716866998976493
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_111
+  - first:
+      213: -5663985075525139664
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_112
+  - first:
+      213: -6479576921451010487
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_113
+  - first:
+      213: -1708981401765205477
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_114
+  - first:
+      213: 1721347467289607829
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_115
+  - first:
+      213: 2908533488467763944
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_116
+  - first:
+      213: -7472962492836969540
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_117
+  - first:
+      213: 8813792996886208480
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_118
+  - first:
+      213: 3523001969265917784
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_119
+  - first:
+      213: -161369749468153452
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_120
+  - first:
+      213: 8843152452052665482
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_121
+  - first:
+      213: -2515161286536713822
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_122
+  - first:
+      213: 8445965037716626069
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_123
+  - first:
+      213: 7044651203996913239
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_124
+  - first:
+      213: 6351132775646440274
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_125
+  - first:
+      213: 4948612441210775246
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_126
+  - first:
+      213: 4648228053369108995
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_127
+  - first:
+      213: -5073935256827667439
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_128
+  - first:
+      213: 4409272969562813164
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_129
+  - first:
+      213: 7990950570919429696
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_130
+  - first:
+      213: -8201109868571360962
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_131
+  - first:
+      213: 5145781290182672321
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_132
+  - first:
+      213: 4051901808720451575
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_133
+  - first:
+      213: 8003583915561057400
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_134
+  - first:
+      213: -3006475848410624960
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_135
+  - first:
+      213: 1905129511433739100
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_136
+  - first:
+      213: 332095745298211367
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_137
+  - first:
+      213: -2323879746363375137
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_138
+  - first:
+      213: -1383036909516620792
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_139
+  - first:
+      213: 1801425844094410645
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_140
+  - first:
+      213: -2430122448681309634
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_141
+  - first:
+      213: 4035679959515311519
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_142
+  - first:
+      213: -6752189820907425134
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_143
+  - first:
+      213: 7606607437535105342
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_144
+  - first:
+      213: -4903058194220225187
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_145
+  - first:
+      213: 1796482062748030848
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_146
+  - first:
+      213: -8664435268895191332
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_147
+  - first:
+      213: -8380688976766250179
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_148
+  - first:
+      213: -5771952931600312307
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_149
+  - first:
+      213: 2433782989205710164
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_150
+  - first:
+      213: 8500774898673489237
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_151
+  - first:
+      213: 7700239217626685695
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_152
+  - first:
+      213: -6812917131723433027
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_153
+  - first:
+      213: 7538585434840997780
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_154
+  - first:
+      213: 4238921723997948468
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_155
+  - first:
+      213: 1933819134440549881
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_156
+  - first:
+      213: 4608085461264429688
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_157
+  - first:
+      213: 1494887735790085999
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_158
+  - first:
+      213: 4267650480251431539
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_159
+  - first:
+      213: 4227368976725022450
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_160
+  - first:
+      213: -3808063270886709986
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_161
+  - first:
+      213: 2449016617904840977
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_162
+  - first:
+      213: 6201092097483930189
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_163
+  - first:
+      213: -227086109514081938
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_164
+  - first:
+      213: -599747014091383415
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_165
+  - first:
+      213: -6269409079559213854
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_166
+  - first:
+      213: -3684681354017096890
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_167
+  - first:
+      213: 1663456083884371212
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_168
+  - first:
+      213: -5624165512255498703
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_169
+  - first:
+      213: -80318108094497518
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_170
+  - first:
+      213: 306247478020785451
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_171
+  - first:
+      213: -2897823188894985135
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_172
+  - first:
+      213: 6829702836883569313
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_173
+  - first:
+      213: 3680118648276400744
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_174
+  - first:
+      213: 7264669263063666837
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_175
+  - first:
+      213: 2460237157244101549
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_176
+  - first:
+      213: -702672575316506172
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_177
+  - first:
+      213: -755737119220493482
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_178
+  - first:
+      213: 4788915803571015245
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_179
+  - first:
+      213: -4229018962378505626
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_180
+  - first:
+      213: -1693140004967456122
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_181
+  - first:
+      213: -1077913342992726150
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_182
+  - first:
+      213: 4369373015144512075
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_183
+  - first:
+      213: 7165660369878459231
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_184
+  - first:
+      213: 2125708087436498566
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_185
+  - first:
+      213: 2631155725405954580
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_186
+  - first:
+      213: 3794560214721166569
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_187
+  - first:
+      213: -5764800393997886107
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_188
+  - first:
+      213: -8574449178874968973
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_189
+  - first:
+      213: -579354540827811906
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_190
+  - first:
+      213: -3306763201410756726
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_191
+  - first:
+      213: 1750895554421959162
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_192
+  - first:
+      213: -2480931263404966829
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_193
+  - first:
+      213: 7664278526744751297
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_194
+  - first:
+      213: -3152207048277027063
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_195
+  - first:
+      213: 3104611614014524503
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_196
+  - first:
+      213: 8015679766886212503
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_197
+  - first:
+      213: -8403421533324564823
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_198
+  - first:
+      213: 6341742765393090021
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_199
+  - first:
+      213: 103203730412933971
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_200
+  - first:
+      213: -6632636167078477987
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_201
+  - first:
+      213: 2215067221065985071
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_202
+  - first:
+      213: 1813186771782124084
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_203
+  - first:
+      213: -111596276606850475
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_204
+  - first:
+      213: 3753446211331396012
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_205
+  - first:
+      213: -3428160565520039049
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_206
+  - first:
+      213: -4326824223663557790
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_207
+  - first:
+      213: -250761448039164129
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_208
+  - first:
+      213: -2845905255047816681
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_209
+  - first:
+      213: -7089137381695917053
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_210
+  - first:
+      213: -2298927542063977689
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_211
+  - first:
+      213: -4430292277765261085
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_212
+  - first:
+      213: -1010922317352223209
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_213
+  - first:
+      213: 8956144967855253401
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_214
+  - first:
+      213: 2876185518139244359
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_215
+  - first:
+      213: 2842125505952713582
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_216
+  - first:
+      213: -5722110278797935172
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_217
+  - first:
+      213: 940575512196226555
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_218
+  - first:
+      213: 9216967392153572073
+    second: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_219
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1970
+        width: 22
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7bcb5151125f647e0800000000000000
+      internalID: -1781467080141980489
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_1
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1829
+        width: 1024
+        height: 146
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b25d7684897fd2920800000000000000
+      internalID: 2967299962928878891
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_2
+      rect:
+        serializedVersion: 2
+        x: 125
+        y: 1961
+        width: 110
+        height: 38
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e898c9ffcfc0ca050800000000000000
+      internalID: 5813035499788208526
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_3
+      rect:
+        serializedVersion: 2
+        x: 125
+        y: 1967
+        width: 8
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 54da4959bf9977180800000000000000
+      internalID: -9117649614762889915
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_4
+      rect:
+        serializedVersion: 2
+        x: 342
+        y: 1955
+        width: 125
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 77a40022a63e90a90800000000000000
+      internalID: -7347091272101770633
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_5
+      rect:
+        serializedVersion: 2
+        x: 139
+        y: 1955
+        width: 8
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f2faf729aa3161480800000000000000
+      internalID: -8928927587892220113
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_6
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1661
+        width: 199
+        height: 236
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a6b7d2662529e1370800000000000000
+      internalID: 8295228446262262634
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_7
+      rect:
+        serializedVersion: 2
+        x: 191
+        y: 1799
+        width: 70
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c7db36201dab5bd60800000000000000
+      internalID: 7905430127769795964
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_8
+      rect:
+        serializedVersion: 2
+        x: 203
+        y: 1819
+        width: 6
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 13e08cf0ea27010a0800000000000000
+      internalID: -6912899336099066319
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_9
+      rect:
+        serializedVersion: 2
+        x: 233
+        y: 1763
+        width: 185
+        height: 60
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3fb93c41700f79980800000000000000
+      internalID: -8532087055826314253
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_10
+      rect:
+        serializedVersion: 2
+        x: 267
+        y: 1820
+        width: 16
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4b1c1c47e4c1c2640800000000000000
+      internalID: 5056447604922106292
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_11
+      rect:
+        serializedVersion: 2
+        x: 325
+        y: 1820
+        width: 13
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2a0298be23567a910800000000000000
+      internalID: 1848557441433280674
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_12
+      rect:
+        serializedVersion: 2
+        x: 342
+        y: 1798
+        width: 25
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0efa184251ecf5130800000000000000
+      internalID: 3557788820848095200
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_13
+      rect:
+        serializedVersion: 2
+        x: 421
+        y: 1766
+        width: 54
+        height: 65
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ac2c091d20cc9cb00800000000000000
+      internalID: 849434317213975242
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_14
+      rect:
+        serializedVersion: 2
+        x: 480
+        y: 1777
+        width: 33
+        height: 52
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7181ca2fb519eb590800000000000000
+      internalID: -7656522492383848425
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_15
+      rect:
+        serializedVersion: 2
+        x: 635
+        y: 1762
+        width: 131
+        height: 84
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a82b00f1dca4aee00800000000000000
+      internalID: 1074753705930175114
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_16
+      rect:
+        serializedVersion: 2
+        x: 515
+        y: 1775
+        width: 38
+        height: 26
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: db9b9fbfac3d35dc0800000000000000
+      internalID: -3651342004103038531
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_17
+      rect:
+        serializedVersion: 2
+        x: 590
+        y: 1767
+        width: 50
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 17f65ab4a5f2a2d60800000000000000
+      internalID: 7866151764018687857
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_18
+      rect:
+        serializedVersion: 2
+        x: 749
+        y: 1799
+        width: 20
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 17b852dd0d1433d50800000000000000
+      internalID: 6715783834658769777
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_19
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 1800
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2eef0b31aa8fa35f0800000000000000
+      internalID: -776034576409493790
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_20
+      rect:
+        serializedVersion: 2
+        x: 191
+        y: 1775
+        width: 8
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ae13787cc142b7f00800000000000000
+      internalID: 1115525038729540074
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_21
+      rect:
+        serializedVersion: 2
+        x: 767
+        y: 1789
+        width: 8
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fd8232b8b9431fc80800000000000000
+      internalID: -8290787596353460001
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_22
+      rect:
+        serializedVersion: 2
+        x: 173
+        y: 1713
+        width: 65
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 60c74a110789cfb80800000000000000
+      internalID: -8359639201206731770
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_23
+      rect:
+        serializedVersion: 2
+        x: 497
+        y: 1763
+        width: 8
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6cabfd91c8b913030800000000000000
+      internalID: 3472727813711182534
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_24
+      rect:
+        serializedVersion: 2
+        x: 510
+        y: 1725
+        width: 91
+        height: 54
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 00adec2d54a9b9830800000000000000
+      internalID: 4079023512194308608
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_25
+      rect:
+        serializedVersion: 2
+        x: 551
+        y: 1777
+        width: 8
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: baf0165b3161453e0800000000000000
+      internalID: -2066002055152988245
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_26
+      rect:
+        serializedVersion: 2
+        x: 761
+        y: 1762
+        width: 14
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 779d207253e8cc550800000000000000
+      internalID: 6182472747411757431
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_27
+      rect:
+        serializedVersion: 2
+        x: 299
+        y: 1707
+        width: 86
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2fe30c810d90e0d20800000000000000
+      internalID: 3246543170753806066
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_28
+      rect:
+        serializedVersion: 2
+        x: 413
+        y: 1763
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f27af7fab1771cbf0800000000000000
+      internalID: -305832338892282065
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_29
+      rect:
+        serializedVersion: 2
+        x: 443
+        y: 1707
+        width: 68
+        height: 58
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7d4751b20e16b8470800000000000000
+      internalID: 8397913545585816791
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_30
+      rect:
+        serializedVersion: 2
+        x: 455
+        y: 1757
+        width: 14
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4aedc77bb8a361140800000000000000
+      internalID: 4690000433706229412
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_31
+      rect:
+        serializedVersion: 2
+        x: 683
+        y: 1709
+        width: 64
+        height: 57
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3db548bdf2e89bd90800000000000000
+      internalID: -7081472602865902637
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_32
+      rect:
+        serializedVersion: 2
+        x: 381
+        y: 1679
+        width: 61
+        height: 63
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f624e460d3115f1b0800000000000000
+      internalID: -5623569605905726865
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_33
+      rect:
+        serializedVersion: 2
+        x: 392
+        y: 1739
+        width: 13
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c76c9370a7414cd10800000000000000
+      internalID: 2144861836874991228
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_34
+      rect:
+        serializedVersion: 2
+        x: 406
+        y: 1739
+        width: 12
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: aaf671a6a661885c0800000000000000
+      internalID: -4213092805102833750
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_35
+      rect:
+        serializedVersion: 2
+        x: 434
+        y: 1741
+        width: 8
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6450274a2cc7ce3c0800000000000000
+      internalID: -4328947966385453754
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_36
+      rect:
+        serializedVersion: 2
+        x: 503
+        y: 1735
+        width: 14
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6ba300cafc22583b0800000000000000
+      internalID: -5510960293678662986
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_37
+      rect:
+        serializedVersion: 2
+        x: 617
+        y: 1715
+        width: 64
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 79a7ad6b49fb959b0800000000000000
+      internalID: -5090827258321798505
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_38
+      rect:
+        serializedVersion: 2
+        x: 161
+        y: 1643
+        width: 73
+        height: 71
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 079bd7a359fca1720800000000000000
+      internalID: 2817792756712061296
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_39
+      rect:
+        serializedVersion: 2
+        x: 233
+        y: 1684
+        width: 7
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bbe409bfb7c044660800000000000000
+      internalID: 7369028616926023355
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_40
+      rect:
+        serializedVersion: 2
+        x: 239
+        y: 1710
+        width: 62
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8a3ea9c142d0009a0800000000000000
+      internalID: -6268996232549833816
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_41
+      rect:
+        serializedVersion: 2
+        x: 445
+        y: 1703
+        width: 6
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4898b9d13ee0c4810800000000000000
+      internalID: 1750790723757377924
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_42
+      rect:
+        serializedVersion: 2
+        x: 499
+        y: 1703
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9f289595068df2f40800000000000000
+      internalID: 5706017161229206265
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_43
+      rect:
+        serializedVersion: 2
+        x: 517
+        y: 1665
+        width: 55
+        height: 62
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b97d80d3aa5fc8d20800000000000000
+      internalID: 3282268339963484059
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_44
+      rect:
+        serializedVersion: 2
+        x: 575
+        y: 1661
+        width: 46
+        height: 63
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1cec1ac7d9b842f00800000000000000
+      internalID: 1091150518247608001
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_45
+      rect:
+        serializedVersion: 2
+        x: 623
+        y: 1661
+        width: 62
+        height: 50
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d80a854bd406bed80800000000000000
+      internalID: -8220370807980253043
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_46
+      rect:
+        serializedVersion: 2
+        x: 731
+        y: 1706
+        width: 16
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2d728da4fd12f9b30800000000000000
+      internalID: 4296189812451846098
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_47
+      rect:
+        serializedVersion: 2
+        x: 227
+        y: 1408
+        width: 286
+        height: 298
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fd6e65ef944c61bc0800000000000000
+      internalID: -3812644212443781409
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_48
+      rect:
+        serializedVersion: 2
+        x: 347
+        y: 1693
+        width: 30
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fe88a9dd1d244eb60800000000000000
+      internalID: 7774412325881809135
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_49
+      rect:
+        serializedVersion: 2
+        x: 686
+        y: 1671
+        width: 53
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6eb7ed44571d98310800000000000000
+      internalID: 1407886660126800870
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_50
+      rect:
+        serializedVersion: 2
+        x: 737
+        y: 1666
+        width: 37
+        height: 35
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4fe34e6c71d21a810800000000000000
+      internalID: 1774749308305030900
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_51
+      rect:
+        serializedVersion: 2
+        x: 767
+        y: 1679
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8d12b8902fe205d20800000000000000
+      internalID: 3265161346920686040
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_52
+      rect:
+        serializedVersion: 2
+        x: 153
+        y: 1655
+        width: 13
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0f6e7e3c9ae7c5cf0800000000000000
+      internalID: -262195410693003536
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_53
+      rect:
+        serializedVersion: 2
+        x: 509
+        y: 1601
+        width: 62
+        height: 66
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8f18ad09b3596a120800000000000000
+      internalID: 2424789532451439096
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_54
+      rect:
+        serializedVersion: 2
+        x: 683
+        y: 1667
+        width: 6
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9b1b7a1c6a1807e90800000000000000
+      internalID: -7029976465111797319
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_55
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1583
+        width: 79
+        height: 83
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d78e7146bcf2775b0800000000000000
+      internalID: -5370771480011872131
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_56
+      rect:
+        serializedVersion: 2
+        x: 65
+        y: 1655
+        width: 20
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 27b2cd1a9dc4d9730800000000000000
+      internalID: 4007443741036784498
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_57
+      rect:
+        serializedVersion: 2
+        x: 65
+        y: 1649
+        width: 17
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3b1415d1b1c0b4f00800000000000000
+      internalID: 1101987844417733043
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_58
+      rect:
+        serializedVersion: 2
+        x: 80
+        y: 1578
+        width: 76
+        height: 81
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 444c2fbbc8b41d610800000000000000
+      internalID: 1644178406787695684
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_59
+      rect:
+        serializedVersion: 2
+        x: 575
+        y: 1601
+        width: 60
+        height: 56
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 139ee38984fea00f0800000000000000
+      internalID: -1149843659768796879
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_60
+      rect:
+        serializedVersion: 2
+        x: 623
+        y: 1648
+        width: 8
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 82c011894e2983680800000000000000
+      internalID: -8775102363429958616
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_61
+      rect:
+        serializedVersion: 2
+        x: 691
+        y: 1617
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: eeaf169851ba458f0800000000000000
+      internalID: -552628745272165650
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_62
+      rect:
+        serializedVersion: 2
+        x: 742
+        y: 1641
+        width: 24
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 45b8f14240d125160800000000000000
+      internalID: 7012699473392405332
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_63
+      rect:
+        serializedVersion: 2
+        x: 155
+        y: 1572
+        width: 71
+        height: 67
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9e1727153f27d01e0800000000000000
+      internalID: -2229999851109453335
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_64
+      rect:
+        serializedVersion: 2
+        x: 173
+        y: 1637
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 439e680f33f0a5e20800000000000000
+      internalID: 3339998789401766196
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_65
+      rect:
+        serializedVersion: 2
+        x: 733
+        y: 1589
+        width: 48
+        height: 51
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a5f81cb61c0aafed0800000000000000
+      internalID: -2379412700514906278
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_66
+      rect:
+        serializedVersion: 2
+        x: 629
+        y: 1619
+        width: 15
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0b47c712abec97d80800000000000000
+      internalID: -8252337543358679888
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_67
+      rect:
+        serializedVersion: 2
+        x: 433
+        y: 1529
+        width: 206
+        height: 79
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f41dc58624c5d0ea0800000000000000
+      internalID: -5904962096124341937
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_68
+      rect:
+        serializedVersion: 2
+        x: 587
+        y: 1599
+        width: 8
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4e735c3fc2dedc310800000000000000
+      internalID: 1427057434270447588
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_69
+      rect:
+        serializedVersion: 2
+        x: 642
+        y: 1560
+        width: 67
+        height: 53
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b0d0c7e7584d1e840800000000000000
+      internalID: 5251712310308506891
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_70
+      rect:
+        serializedVersion: 2
+        x: 745
+        y: 1555
+        width: 46
+        height: 45
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ba0b8060afbddb280800000000000000
+      internalID: -9025816211291066197
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_71
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1493
+        width: 139
+        height: 92
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3e005c38cad7d5060800000000000000
+      internalID: 6943844380373745891
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_72
+      rect:
+        serializedVersion: 2
+        x: 161
+        y: 1497
+        width: 76
+        height: 69
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bcfeea8b659f7c150800000000000000
+      internalID: 5892952788298559435
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_73
+      rect:
+        serializedVersion: 2
+        x: 633
+        y: 1538
+        width: 15
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4c30ae1c4aac75d50800000000000000
+      internalID: 6726067377477911492
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_74
+      rect:
+        serializedVersion: 2
+        x: 641
+        y: 1505
+        width: 50
+        height: 52
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6e525ac58ba621870800000000000000
+      internalID: 8652095174192997862
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_75
+      rect:
+        serializedVersion: 2
+        x: 705
+        y: 1511
+        width: 43
+        height: 62
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a239171c5ed7d18e0800000000000000
+      internalID: -1721081056839232726
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_76
+      rect:
+        serializedVersion: 2
+        x: 743
+        y: 1460
+        width: 92
+        height: 98
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 09e4ef646c14003b0800000000000000
+      internalID: -5548362421070049648
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_77
+      rect:
+        serializedVersion: 2
+        x: 509
+        y: 1511
+        width: 7
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a281e3b637faf13c0800000000000000
+      internalID: -4386594601780242390
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_78
+      rect:
+        serializedVersion: 2
+        x: 516
+        y: 1469
+        width: 79
+        height: 65
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8840a5258b12d1d50800000000000000
+      internalID: 6709556095391237256
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_79
+      rect:
+        serializedVersion: 2
+        x: 592
+        y: 1445
+        width: 65
+        height: 66
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: eb8e50b376e3a3670800000000000000
+      internalID: 8519190258217511102
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_80
+      rect:
+        serializedVersion: 2
+        x: 593
+        y: 1493
+        width: 14
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fe8c119bd200a6960800000000000000
+      internalID: 7595883917892241647
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_81
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1409
+        width: 91
+        height: 94
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 34bdb6ea947c232a0800000000000000
+      internalID: -6759120971456849085
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_82
+      rect:
+        serializedVersion: 2
+        x: 108
+        y: 1454
+        width: 38
+        height: 53
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e4d9e6d4576fbe040800000000000000
+      internalID: 4678103621625093454
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_83
+      rect:
+        serializedVersion: 2
+        x: 161
+        y: 1432
+        width: 86
+        height: 61
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c2cd096716fe01420800000000000000
+      internalID: 2598840186872847404
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_84
+      rect:
+        serializedVersion: 2
+        x: 173
+        y: 1487
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1d9efb97366f7bac0800000000000000
+      internalID: -3839329250205242927
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_85
+      rect:
+        serializedVersion: 2
+        x: 509
+        y: 1493
+        width: 7
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 05a905bf7cfeeb340800000000000000
+      internalID: 4881602688310090320
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_86
+      rect:
+        serializedVersion: 2
+        x: 697
+        y: 1468
+        width: 48
+        height: 39
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f92b4edf04925ffa0800000000000000
+      internalID: -5767658388663782753
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_87
+      rect:
+        serializedVersion: 2
+        x: 807
+        y: 1433
+        width: 62
+        height: 61
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b13a652a6f702b0f0800000000000000
+      internalID: -1102810202885414117
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_88
+      rect:
+        serializedVersion: 2
+        x: 455
+        y: 1404
+        width: 80
+        height: 70
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 096e65d04eaf06510800000000000000
+      internalID: 1540506929943996048
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_89
+      rect:
+        serializedVersion: 2
+        x: 659
+        y: 1469
+        width: 8
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ba2e8351aab63a4a0800000000000000
+      internalID: -6583299852040871253
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_90
+      rect:
+        serializedVersion: 2
+        x: 89
+        y: 1362
+        width: 84
+        height: 98
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 30b753af7bcae8de0800000000000000
+      internalID: -1328934933850916093
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_91
+      rect:
+        serializedVersion: 2
+        x: 202
+        y: 1421
+        width: 20
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: db667777980273530800000000000000
+      internalID: 3834569382516188861
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_92
+      rect:
+        serializedVersion: 2
+        x: 473
+        y: 1301
+        width: 290
+        height: 158
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 67f689f4cebf4cbb0800000000000000
+      internalID: -4916527900815495306
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_93
+      rect:
+        serializedVersion: 2
+        x: 687
+        y: 1427
+        width: 125
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e7ce99dfaa77f3400800000000000000
+      internalID: 306094875967351934
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_94
+      rect:
+        serializedVersion: 2
+        x: 809
+        y: 1379
+        width: 68
+        height: 55
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 707e8ee60c8ad87c0800000000000000
+      internalID: -4067409343997745401
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_95
+      rect:
+        serializedVersion: 2
+        x: 869
+        y: 1410
+        width: 14
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 78820ed65e6b1a480800000000000000
+      internalID: -8889623092945475449
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_96
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1193
+        width: 289
+        height: 227
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1b883b87c68eafd70800000000000000
+      internalID: 9077823551497799857
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_97
+      rect:
+        serializedVersion: 2
+        x: 251
+        y: 1344
+        width: 68
+        height: 75
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 66b620b04a9029c90800000000000000
+      internalID: -7164653457029043354
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_98
+      rect:
+        serializedVersion: 2
+        x: 323
+        y: 1340
+        width: 143
+        height: 74
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a628e27d6e7efce30800000000000000
+      internalID: 4526091129169281642
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_99
+      rect:
+        serializedVersion: 2
+        x: 358
+        y: 1403
+        width: 9
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5a6783ae6f7e6f5b0800000000000000
+      internalID: -5334821660896233819
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_100
+      rect:
+        serializedVersion: 2
+        x: 877
+        y: 1397
+        width: 6
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7864400d1c6402b90800000000000000
+      internalID: -7268732000343406969
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_101
+      rect:
+        serializedVersion: 2
+        x: 762
+        y: 1303
+        width: 181
+        height: 90
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: af2e107a0e6ebfa60800000000000000
+      internalID: 7709009039723717370
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_102
+      rect:
+        serializedVersion: 2
+        x: 805
+        y: 1385
+        width: 12
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bff94841a996a7320800000000000000
+      internalID: 2556471848976293883
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_103
+      rect:
+        serializedVersion: 2
+        x: 875
+        y: 1379
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e4d926cc94111b650800000000000000
+      internalID: 6246793166798888270
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_104
+      rect:
+        serializedVersion: 2
+        x: 257
+        y: 1248
+        width: 147
+        height: 85
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c9ad567e92158a7f0800000000000000
+      internalID: -601141309836240228
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_105
+      rect:
+        serializedVersion: 2
+        x: 317
+        y: 1331
+        width: 14
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f6abb2cff03786d70800000000000000
+      internalID: 9036599164811328111
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_106
+      rect:
+        serializedVersion: 2
+        x: 359
+        y: 1325
+        width: 8
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cb3cc41df8d1a41d0800000000000000
+      internalID: -3365845267977026628
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_107
+      rect:
+        serializedVersion: 2
+        x: 376
+        y: 1329
+        width: 8
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2c5c5556f3f3851d0800000000000000
+      internalID: -3361867580316465726
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_108
+      rect:
+        serializedVersion: 2
+        x: 407
+        y: 1273
+        width: 71
+        height: 68
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7209199185f4080b0800000000000000
+      internalID: -5728491486210584537
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_109
+      rect:
+        serializedVersion: 2
+        x: 422
+        y: 1331
+        width: 16
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7a78d4f3effc38090800000000000000
+      internalID: -8033348619408144473
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_110
+      rect:
+        serializedVersion: 2
+        x: 473
+        y: 1272
+        width: 77
+        height: 76
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2e32000525113bd20800000000000000
+      internalID: 3292994797765141474
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_111
+      rect:
+        serializedVersion: 2
+        x: 545
+        y: 1265
+        width: 86
+        height: 74
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: defbbf7e18b336f10800000000000000
+      internalID: 2261716866998976493
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_112
+      rect:
+        serializedVersion: 2
+        x: 403
+        y: 1318
+        width: 11
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 033c538359b7561b0800000000000000
+      internalID: -5663985075525139664
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_113
+      rect:
+        serializedVersion: 2
+        x: 403
+        y: 1308
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 946e716ce1be316a0800000000000000
+      internalID: -6479576921451010487
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_114
+      rect:
+        serializedVersion: 2
+        x: 727
+        y: 1247
+        width: 65
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b1a290c387a7848e0800000000000000
+      internalID: -1708981401765205477
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_115
+      rect:
+        serializedVersion: 2
+        x: 401
+        y: 1289
+        width: 8
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 59eb0d2c66473e710800000000000000
+      internalID: 1721347467289607829
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_116
+      rect:
+        serializedVersion: 2
+        x: 651
+        y: 1247
+        width: 78
+        height: 59
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8e2e2753ccf2d5820800000000000000
+      internalID: 2908533488467763944
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_117
+      rect:
+        serializedVersion: 2
+        x: 793
+        y: 1295
+        width: 6
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cb382aac434ba4890800000000000000
+      internalID: -7472962492836969540
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_118
+      rect:
+        serializedVersion: 2
+        x: 389
+        y: 1241
+        width: 29
+        height: 26
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0ef5a3f7802e05a70800000000000000
+      internalID: 8813792996886208480
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_119
+      rect:
+        serializedVersion: 2
+        x: 411
+        y: 1234
+        width: 22
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 85fb81910a734e030800000000000000
+      internalID: 3523001969265917784
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_120
+      rect:
+        serializedVersion: 2
+        x: 428
+        y: 1251
+        width: 11
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 499f47d5113b2cdf0800000000000000
+      internalID: -161369749468153452
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_121
+      rect:
+        serializedVersion: 2
+        x: 434
+        y: 1199
+        width: 85
+        height: 73
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a8449375d4039ba70800000000000000
+      internalID: 8843152452052665482
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_122
+      rect:
+        serializedVersion: 2
+        x: 449
+        y: 1265
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2a92a23c22a581dd0800000000000000
+      internalID: -2515161286536713822
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_123
+      rect:
+        serializedVersion: 2
+        x: 509
+        y: 1265
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 59ad7720478163570800000000000000
+      internalID: 8445965037716626069
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_124
+      rect:
+        serializedVersion: 2
+        x: 527
+        y: 1265
+        width: 14
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 75e83c422f0a3c160800000000000000
+      internalID: 7044651203996913239
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_125
+      rect:
+        serializedVersion: 2
+        x: 593
+        y: 1257
+        width: 14
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 25b2fb51c91c32850800000000000000
+      internalID: 6351132775646440274
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_126
+      rect:
+        serializedVersion: 2
+        x: 790
+        y: 1253
+        width: 130
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ec66271ebc00da440800000000000000
+      internalID: 4948612441210775246
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_127
+      rect:
+        serializedVersion: 2
+        x: 329
+        y: 1231
+        width: 26
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 30a321489c2d18040800000000000000
+      internalID: 4648228053369108995
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_128
+      rect:
+        serializedVersion: 2
+        x: 355
+        y: 1235
+        width: 7
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 11cd47b44c2c599b0800000000000000
+      internalID: -5073935256827667439
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_129
+      rect:
+        serializedVersion: 2
+        x: 366
+        y: 1233
+        width: 14
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ce2f58c8762e03d30800000000000000
+      internalID: 4409272969562813164
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_130
+      rect:
+        serializedVersion: 2
+        x: 516
+        y: 1209
+        width: 69
+        height: 54
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0468b55d43f85ee60800000000000000
+      internalID: 7990950570919429696
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_131
+      rect:
+        serializedVersion: 2
+        x: 575
+        y: 1243
+        width: 14
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e318adf960ecf2e80800000000000000
+      internalID: -8201109868571360962
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_132
+      rect:
+        serializedVersion: 2
+        x: 587
+        y: 1190
+        width: 68
+        height: 71
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1cf7035e1dc796740800000000000000
+      internalID: 5145781290182672321
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_133
+      rect:
+        serializedVersion: 2
+        x: 657
+        y: 1181
+        width: 67
+        height: 68
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7f79b852a3f3b3830800000000000000
+      internalID: 4051901808720451575
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_134
+      rect:
+        serializedVersion: 2
+        x: 729
+        y: 1187
+        width: 58
+        height: 58
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 87cfb099a21721f60800000000000000
+      internalID: 8003583915561057400
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_135
+      rect:
+        serializedVersion: 2
+        x: 792
+        y: 1207
+        width: 55
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 04c81b5152ad646d0800000000000000
+      internalID: -3006475848410624960
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_136
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1122
+        width: 91
+        height: 80
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c5b1f146231607a10800000000000000
+      internalID: 1905129511433739100
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_137
+      rect:
+        serializedVersion: 2
+        x: 106
+        y: 1181
+        width: 15
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7222be12257db9400800000000000000
+      internalID: 332095745298211367
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_138
+      rect:
+        serializedVersion: 2
+        x: 281
+        y: 1157
+        width: 78
+        height: 73
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fd14941eeabefbfd0800000000000000
+      internalID: -2323879746363375137
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_139
+      rect:
+        serializedVersion: 2
+        x: 364
+        y: 1155
+        width: 81
+        height: 87
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 80cf10922477ecce0800000000000000
+      internalID: -1383036909516620792
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_140
+      rect:
+        serializedVersion: 2
+        x: 461
+        y: 1127
+        width: 82
+        height: 82
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 59f9476c243fff810800000000000000
+      internalID: 1801425844094410645
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_141
+      rect:
+        serializedVersion: 2
+        x: 545
+        y: 1195
+        width: 13
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e3ae5ad1288764ed0800000000000000
+      internalID: -2430122448681309634
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_142
+      rect:
+        serializedVersion: 2
+        x: 552
+        y: 1187
+        width: 13
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f9da21e8a8d910830800000000000000
+      internalID: 4035679959515311519
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_143
+      rect:
+        serializedVersion: 2
+        x: 575
+        y: 1199
+        width: 8
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 292fdcce1276b42a0800000000000000
+      internalID: -6752189820907425134
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_144
+      rect:
+        serializedVersion: 2
+        x: 779
+        y: 1145
+        width: 74
+        height: 57
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e31df14b929109960800000000000000
+      internalID: 7606607437535105342
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_145
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 910
+        width: 265
+        height: 285
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d5d6f64cc86d4fbb0800000000000000
+      internalID: -4903058194220225187
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_146
+      rect:
+        serializedVersion: 2
+        x: 538
+        y: 1115
+        width: 81
+        height: 80
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 087157bfae26ee810800000000000000
+      internalID: 1796482062748030848
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_147
+      rect:
+        serializedVersion: 2
+        x: 639
+        y: 1181
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cdec222770eb1c780800000000000000
+      internalID: -8664435268895191332
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_148
+      rect:
+        serializedVersion: 2
+        x: 647
+        y: 1187
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d33d0d647cfc1bb80800000000000000
+      internalID: -8380688976766250179
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_149
+      rect:
+        serializedVersion: 2
+        x: 653
+        y: 1181
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d0850bbc367e5efa0800000000000000
+      internalID: -5771952931600312307
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_150
+      rect:
+        serializedVersion: 2
+        x: 353
+        y: 1169
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 455aef3ebb886c120800000000000000
+      internalID: 2433782989205710164
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_151
+      rect:
+        serializedVersion: 2
+        x: 619
+        y: 1121
+        width: 72
+        height: 60
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5559df63bb1d8f570800000000000000
+      internalID: 8500774898673489237
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_152
+      rect:
+        serializedVersion: 2
+        x: 687
+        y: 1120
+        width: 70
+        height: 61
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ff0ab2455cebcda60800000000000000
+      internalID: 7700239217626685695
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_153
+      rect:
+        serializedVersion: 2
+        x: 743
+        y: 1164
+        width: 14
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dbb937f07f7a371a0800000000000000
+      internalID: -6812917131723433027
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_154
+      rect:
+        serializedVersion: 2
+        x: 833
+        y: 1067
+        width: 68
+        height: 119
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 49f91a8038f6e9860800000000000000
+      internalID: 7538585434840997780
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_155
+      rect:
+        serializedVersion: 2
+        x: 176
+        y: 875
+        width: 287
+        height: 288
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 43a859569dca3da30800000000000000
+      internalID: 4238921723997948468
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_156
+      rect:
+        serializedVersion: 2
+        x: 384
+        y: 1079
+        width: 81
+        height: 72
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9fdae28c14e46da10800000000000000
+      internalID: 1933819134440549881
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_157
+      rect:
+        serializedVersion: 2
+        x: 467
+        y: 1068
+        width: 72
+        height: 61
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 872fe45ff4533ff30800000000000000
+      internalID: 4608085461264429688
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_158
+      rect:
+        serializedVersion: 2
+        x: 546
+        y: 1049
+        width: 67
+        height: 69
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f672bd6b978eeb410800000000000000
+      internalID: 1494887735790085999
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_159
+      rect:
+        serializedVersion: 2
+        x: 617
+        y: 1050
+        width: 68
+        height: 68
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 37a69e4308db93b30800000000000000
+      internalID: 4267650480251431539
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_160
+      rect:
+        serializedVersion: 2
+        x: 683
+        y: 1091
+        width: 14
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2f69330dfa1aaaa30800000000000000
+      internalID: 4227368976725022450
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_161
+      rect:
+        serializedVersion: 2
+        x: 701
+        y: 1103
+        width: 26
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e15e59091aa072bc0800000000000000
+      internalID: -3808063270886709986
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_162
+      rect:
+        serializedVersion: 2
+        x: 746
+        y: 1099
+        width: 15
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1112f3773a7acf120800000000000000
+      internalID: 2449016617904840977
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_163
+      rect:
+        serializedVersion: 2
+        x: 755
+        y: 1097
+        width: 92
+        height: 56
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d4af20a6864be0650800000000000000
+      internalID: 6201092097483930189
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_164
+      rect:
+        serializedVersion: 2
+        x: 887
+        y: 1049
+        width: 73
+        height: 89
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e69dcf4f26a39dcf0800000000000000
+      internalID: -227086109514081938
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_165
+      rect:
+        serializedVersion: 2
+        x: 541
+        y: 1091
+        width: 6
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 98d5bfda4454da7f0800000000000000
+      internalID: -599747014091383415
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_166
+      rect:
+        serializedVersion: 2
+        x: 689
+        y: 1045
+        width: 64
+        height: 56
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2eca34da8a59ef8a0800000000000000
+      internalID: -6269409079559213854
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_167
+      rect:
+        serializedVersion: 2
+        x: 467
+        y: 1067
+        width: 8
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 64b3e4fa4d16ddcc0800000000000000
+      internalID: -3684681354017096890
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_168
+      rect:
+        serializedVersion: 2
+        x: 533
+        y: 1071
+        width: 10
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c0de363be78c51710800000000000000
+      internalID: 1663456083884371212
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_169
+      rect:
+        serializedVersion: 2
+        x: 749
+        y: 1067
+        width: 12
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1361204c343f2f1b0800000000000000
+      internalID: -5624165512255498703
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_170
+      rect:
+        serializedVersion: 2
+        x: 809
+        y: 1067
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 21dfef13b17a2eef0800000000000000
+      internalID: -80318108094497518
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_171
+      rect:
+        serializedVersion: 2
+        x: 499
+        y: 1048
+        width: 6
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b25c9cc6572004400800000000000000
+      internalID: 306247478020785451
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_172
+      rect:
+        serializedVersion: 2
+        x: 521
+        y: 1061
+        width: 14
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 154560cb92dd8c7d0800000000000000
+      internalID: -2897823188894985135
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_173
+      rect:
+        serializedVersion: 2
+        x: 747
+        y: 1060
+        width: 16
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1aa3ce97b8af7ce50800000000000000
+      internalID: 6829702836883569313
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_174
+      rect:
+        serializedVersion: 2
+        x: 791
+        y: 1056
+        width: 8
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 86a3ec99968621330800000000000000
+      internalID: 3680118648276400744
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_175
+      rect:
+        serializedVersion: 2
+        x: 799
+        y: 1014
+        width: 59
+        height: 50
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 590db93743a41d460800000000000000
+      internalID: 7264669263063666837
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_176
+      rect:
+        serializedVersion: 2
+        x: 802
+        y: 1062
+        width: 12
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: da360ccd8a4842220800000000000000
+      internalID: 2460237157244101549
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_177
+      rect:
+        serializedVersion: 2
+        x: 857
+        y: 1009
+        width: 56
+        height: 55
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4c9c9d2040b9f36f0800000000000000
+      internalID: -702672575316506172
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_178
+      rect:
+        serializedVersion: 2
+        x: 869
+        y: 1055
+        width: 8
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 653194918151385f0800000000000000
+      internalID: -755737119220493482
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_179
+      rect:
+        serializedVersion: 2
+        x: 947
+        y: 1049
+        width: 14
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d4eca13fc85a57240800000000000000
+      internalID: 4788915803571015245
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_180
+      rect:
+        serializedVersion: 2
+        x: 509
+        y: 971
+        width: 77
+        height: 86
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 662c907f8a18f45c0800000000000000
+      internalID: -4229018962378505626
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_181
+      rect:
+        serializedVersion: 2
+        x: 535
+        y: 1051
+        width: 8
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 68269e8d222c088e0800000000000000
+      internalID: -1693140004967456122
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_182
+      rect:
+        serializedVersion: 2
+        x: 581
+        y: 971
+        width: 80
+        height: 80
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a77c34c868b7a01f0800000000000000
+      internalID: -1077913342992726150
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_183
+      rect:
+        serializedVersion: 2
+        x: 657
+        y: 1037
+        width: 10
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b4abdda7b9123ac30800000000000000
+      internalID: 4369373015144512075
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_184
+      rect:
+        serializedVersion: 2
+        x: 785
+        y: 1037
+        width: 14
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f5323bf142a817360800000000000000
+      internalID: 7165660369878459231
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_185
+      rect:
+        serializedVersion: 2
+        x: 449
+        y: 1032
+        width: 8
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 686d3d73e38008d10800000000000000
+      internalID: 2125708087436498566
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_186
+      rect:
+        serializedVersion: 2
+        x: 662
+        y: 965
+        width: 142
+        height: 80
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 412ae89113eb38420800000000000000
+      internalID: 2631155725405954580
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_187
+      rect:
+        serializedVersion: 2
+        x: 923
+        y: 985
+        width: 55
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9ecf84d296cf8a430800000000000000
+      internalID: 3794560214721166569
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_188
+      rect:
+        serializedVersion: 2
+        x: 935
+        y: 1025
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 56d59bab5905fffa0800000000000000
+      internalID: -5764800393997886107
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_189
+      rect:
+        serializedVersion: 2
+        x: 418
+        y: 989
+        width: 48
+        height: 38
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3748484b6ef610980800000000000000
+      internalID: -8574449178874968973
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_190
+      rect:
+        serializedVersion: 2
+        x: 461
+        y: 1013
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ebfd2fa5d18b5f7f0800000000000000
+      internalID: -579354540827811906
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_191
+      rect:
+        serializedVersion: 2
+        x: 815
+        y: 1004
+        width: 8
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a8f049763640c12d0800000000000000
+      internalID: -3306763201410756726
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_192
+      rect:
+        serializedVersion: 2
+        x: 971
+        y: 1013
+        width: 8
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: af9a128ea3e6c4810800000000000000
+      internalID: 1750895554421959162
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_193
+      rect:
+        serializedVersion: 2
+        x: 414
+        y: 899
+        width: 97
+        height: 87
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 35cf5941926f19dd0800000000000000
+      internalID: -2480931263404966829
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_194
+      rect:
+        serializedVersion: 2
+        x: 829
+        y: 815
+        width: 114
+        height: 194
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1cc664686bcfc5a60800000000000000
+      internalID: 7664278526744751297
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_195
+      rect:
+        serializedVersion: 2
+        x: 929
+        y: 924
+        width: 81
+        height: 67
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 90717f4046c1144d0800000000000000
+      internalID: -3152207048277027063
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_196
+      rect:
+        serializedVersion: 2
+        x: 997
+        y: 981
+        width: 13
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 75c43e260dbc51b20800000000000000
+      internalID: 3104611614014524503
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_197
+      rect:
+        serializedVersion: 2
+        x: 531
+        y: 865
+        width: 208
+        height: 109
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 793e982774a6d3f60800000000000000
+      internalID: 8015679766886212503
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_198
+      rect:
+        serializedVersion: 2
+        x: 731
+        y: 617
+        width: 108
+        height: 302
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9a6225083ac016b80800000000000000
+      internalID: -8403421533324564823
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_199
+      rect:
+        serializedVersion: 2
+        x: 741
+        y: 918
+        width: 43
+        height: 45
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5e59824f175620850800000000000000
+      internalID: 6341742765393090021
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_200
+      rect:
+        serializedVersion: 2
+        x: 791
+        y: 919
+        width: 8
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 35312cafe37ae6100800000000000000
+      internalID: 103203730412933971
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_201
+      rect:
+        serializedVersion: 2
+        x: 943
+        y: 908
+        width: 12
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d5ff0e81c8424f3a0800000000000000
+      internalID: -6632636167078477987
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_202
+      rect:
+        serializedVersion: 2
+        x: 984
+        y: 908
+        width: 7
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f2cef31d6ef7dbe10800000000000000
+      internalID: 2215067221065985071
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_203
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 836
+        width: 139
+        height: 76
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 432c28323cbb92910800000000000000
+      internalID: 1813186771782124084
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_204
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 963
+        height: 901
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 55aa79617c7837ef0800000000000000
+      internalID: -111596276606850475
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_205
+      rect:
+        serializedVersion: 2
+        x: 143
+        y: 839
+        width: 135
+        height: 73
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ca191fd417be61430800000000000000
+      internalID: 3753446211331396012
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_206
+      rect:
+        serializedVersion: 2
+        x: 436
+        y: 809
+        width: 105
+        height: 98
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7730d2bf02abc60d0800000000000000
+      internalID: -3428160565520039049
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_207
+      rect:
+        serializedVersion: 2
+        x: 938
+        y: 659
+        width: 46
+        height: 38
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2637af60b4804f3c0800000000000000
+      internalID: -4326824223663557790
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_208
+      rect:
+        serializedVersion: 2
+        x: 983
+        y: 653
+        width: 8
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f175346aacd158cf0800000000000000
+      internalID: -250761448039164129
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_209
+      rect:
+        serializedVersion: 2
+        x: 935
+        y: 596
+        width: 74
+        height: 62
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 71a1570bf305188d0800000000000000
+      internalID: -2845905255047816681
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_210
+      rect:
+        serializedVersion: 2
+        x: 1001
+        y: 641
+        width: 8
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 30472187c135e9d90800000000000000
+      internalID: -7089137381695917053
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_211
+      rect:
+        serializedVersion: 2
+        x: 787
+        y: 491
+        width: 209
+        height: 129
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 72b2aeaa4919810e0800000000000000
+      internalID: -2298927542063977689
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_212
+      rect:
+        serializedVersion: 2
+        x: 995
+        y: 605
+        width: 14
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3e835a465a07482c0800000000000000
+      internalID: -4430292277765261085
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_213
+      rect:
+        serializedVersion: 2
+        x: 995
+        y: 599
+        width: 14
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 71eb4ba228b78f1f0800000000000000
+      internalID: -1010922317352223209
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_214
+      rect:
+        serializedVersion: 2
+        x: 965
+        y: 485
+        width: 8
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9972ae5856e9a4c70800000000000000
+      internalID: 8956144967855253401
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_215
+      rect:
+        serializedVersion: 2
+        x: 973
+        y: 488
+        width: 8
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 74fffc47d734ae720800000000000000
+      internalID: 2876185518139244359
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_216
+      rect:
+        serializedVersion: 2
+        x: 776
+        y: 185
+        width: 204
+        height: 211
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e6b8365e612417720800000000000000
+      internalID: 2842125505952713582
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_217
+      rect:
+        serializedVersion: 2
+        x: 913
+        y: 355
+        width: 61
+        height: 55
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cbd33aab40bf690b0800000000000000
+      internalID: -5722110278797935172
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_218
+      rect:
+        serializedVersion: 2
+        x: 599
+        y: 0
+        width: 401
+        height: 194
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bfd13e8e1789d0d00800000000000000
+      internalID: 940575512196226555
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_219
+      rect:
+        serializedVersion: 2
+        x: 989
+        y: 41
+        width: 14
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9e21ca3720f39ef70800000000000000
+      internalID: 9216967392153572073
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_0: -1781467080141980489
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_1: 2967299962928878891
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_10: 5056447604922106292
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_100: -7268732000343406969
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_101: 7709009039723717370
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_102: 2556471848976293883
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_103: 6246793166798888270
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_104: -601141309836240228
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_105: 9036599164811328111
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_106: -3365845267977026628
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_107: -3361867580316465726
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_108: -5728491486210584537
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_109: -8033348619408144473
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_11: 1848557441433280674
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_110: 3292994797765141474
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_111: 2261716866998976493
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_112: -5663985075525139664
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_113: -6479576921451010487
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_114: -1708981401765205477
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_115: 1721347467289607829
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_116: 2908533488467763944
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_117: -7472962492836969540
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_118: 8813792996886208480
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_119: 3523001969265917784
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_12: 3557788820848095200
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_120: -161369749468153452
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_121: 8843152452052665482
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_122: -2515161286536713822
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_123: 8445965037716626069
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_124: 7044651203996913239
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_125: 6351132775646440274
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_126: 4948612441210775246
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_127: 4648228053369108995
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_128: -5073935256827667439
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_129: 4409272969562813164
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_13: 849434317213975242
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_130: 7990950570919429696
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_131: -8201109868571360962
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_132: 5145781290182672321
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_133: 4051901808720451575
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_134: 8003583915561057400
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_135: -3006475848410624960
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_136: 1905129511433739100
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_137: 332095745298211367
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_138: -2323879746363375137
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_139: -1383036909516620792
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_14: -7656522492383848425
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_140: 1801425844094410645
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_141: -2430122448681309634
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_142: 4035679959515311519
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_143: -6752189820907425134
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_144: 7606607437535105342
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_145: -4903058194220225187
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_146: 1796482062748030848
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_147: -8664435268895191332
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_148: -8380688976766250179
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_149: -5771952931600312307
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_15: 1074753705930175114
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_150: 2433782989205710164
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_151: 8500774898673489237
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_152: 7700239217626685695
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_153: -6812917131723433027
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_154: 7538585434840997780
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_155: 4238921723997948468
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_156: 1933819134440549881
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_157: 4608085461264429688
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_158: 1494887735790085999
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_159: 4267650480251431539
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_16: -3651342004103038531
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_160: 4227368976725022450
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_161: -3808063270886709986
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_162: 2449016617904840977
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_163: 6201092097483930189
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_164: -227086109514081938
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_165: -599747014091383415
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_166: -6269409079559213854
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_167: -3684681354017096890
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_168: 1663456083884371212
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_169: -5624165512255498703
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_17: 7866151764018687857
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_170: -80318108094497518
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_171: 306247478020785451
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_172: -2897823188894985135
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_173: 6829702836883569313
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_174: 3680118648276400744
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_175: 7264669263063666837
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_176: 2460237157244101549
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_177: -702672575316506172
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_178: -755737119220493482
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_179: 4788915803571015245
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_18: 6715783834658769777
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_180: -4229018962378505626
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_181: -1693140004967456122
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_182: -1077913342992726150
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_183: 4369373015144512075
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_184: 7165660369878459231
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_185: 2125708087436498566
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_186: 2631155725405954580
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_187: 3794560214721166569
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_188: -5764800393997886107
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_189: -8574449178874968973
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_19: -776034576409493790
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_190: -579354540827811906
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_191: -3306763201410756726
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_192: 1750895554421959162
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_193: -2480931263404966829
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_194: 7664278526744751297
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_195: -3152207048277027063
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_196: 3104611614014524503
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_197: 8015679766886212503
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_198: -8403421533324564823
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_199: 6341742765393090021
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_2: 5813035499788208526
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_20: 1115525038729540074
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_200: 103203730412933971
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_201: -6632636167078477987
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_202: 2215067221065985071
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_203: 1813186771782124084
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_204: -111596276606850475
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_205: 3753446211331396012
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_206: -3428160565520039049
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_207: -4326824223663557790
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_208: -250761448039164129
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_209: -2845905255047816681
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_21: -8290787596353460001
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_210: -7089137381695917053
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_211: -2298927542063977689
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_212: -4430292277765261085
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_213: -1010922317352223209
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_214: 8956144967855253401
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_215: 2876185518139244359
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_216: 2842125505952713582
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_217: -5722110278797935172
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_218: 940575512196226555
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_219: 9216967392153572073
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_22: -8359639201206731770
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_23: 3472727813711182534
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_24: 4079023512194308608
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_25: -2066002055152988245
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_26: 6182472747411757431
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_27: 3246543170753806066
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_28: -305832338892282065
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_29: 8397913545585816791
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_3: -9117649614762889915
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_30: 4690000433706229412
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_31: -7081472602865902637
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_32: -5623569605905726865
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_33: 2144861836874991228
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_34: -4213092805102833750
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_35: -4328947966385453754
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_36: -5510960293678662986
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_37: -5090827258321798505
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_38: 2817792756712061296
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_39: 7369028616926023355
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_4: -7347091272101770633
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_40: -6268996232549833816
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_41: 1750790723757377924
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_42: 5706017161229206265
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_43: 3282268339963484059
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_44: 1091150518247608001
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_45: -8220370807980253043
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_46: 4296189812451846098
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_47: -3812644212443781409
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_48: 7774412325881809135
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_49: 1407886660126800870
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_5: -8928927587892220113
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_50: 1774749308305030900
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_51: 3265161346920686040
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_52: -262195410693003536
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_53: 2424789532451439096
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_54: -7029976465111797319
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_55: -5370771480011872131
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_56: 4007443741036784498
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_57: 1101987844417733043
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_58: 1644178406787695684
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_59: -1149843659768796879
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_6: 8295228446262262634
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_60: -8775102363429958616
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_61: -552628745272165650
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_62: 7012699473392405332
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_63: -2229999851109453335
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_64: 3339998789401766196
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_65: -2379412700514906278
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_66: -8252337543358679888
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_67: -5904962096124341937
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_68: 1427057434270447588
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_69: 5251712310308506891
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_7: 7905430127769795964
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_70: -9025816211291066197
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_71: 6943844380373745891
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_72: 5892952788298559435
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_73: 6726067377477911492
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_74: 8652095174192997862
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_75: -1721081056839232726
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_76: -5548362421070049648
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_77: -4386594601780242390
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_78: 6709556095391237256
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_79: 8519190258217511102
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_8: -6912899336099066319
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_80: 7595883917892241647
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_81: -6759120971456849085
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_82: 4678103621625093454
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_83: 2598840186872847404
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_84: -3839329250205242927
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_85: 4881602688310090320
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_86: -5767658388663782753
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_87: -1102810202885414117
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_88: 1540506929943996048
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_89: -6583299852040871253
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_9: -8532087055826314253
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_90: -1328934933850916093
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_91: 3834569382516188861
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_92: -4916527900815495306
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_93: 306094875967351934
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_94: -4067409343997745401
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_95: -8889623092945475449
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_96: 9077823551497799857
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_97: -7164653457029043354
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_98: 4526091129169281642
+      sactx-0-1024x2048-ASTC 6x6-uimainwinsprite-def7431c_99: -5334821660896233819
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

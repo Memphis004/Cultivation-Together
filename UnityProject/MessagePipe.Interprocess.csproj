@@ -44,8 +44,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Analyzer Include="C:\Users\memph\.vscode\extensions\visualstudiotoolsforunity.vstuc-1.3.1\Analyzers\Microsoft.Unity.Analyzers.dll" />
-    <Analyzer Include="C:\UnityProjects\Cultivation Together\UnityProject\Assets\Packages\MessagePackAnalyzer.3.1.8\analyzers\roslyn4.3\cs\MessagePack.SourceGenerator.dll" />
-    <Analyzer Include="C:\UnityProjects\Cultivation Together\UnityProject\Assets\Packages\MessagePackAnalyzer.3.1.8\analyzers\roslyn4.3\cs\MessagePack.Analyzers.CodeFixes.dll" />
+    <Analyzer Include="C:\UnityProjects\Cultivation-Together\UnityProject\Assets\Packages\MessagePackAnalyzer.3.1.8\analyzers\roslyn4.3\cs\MessagePack.SourceGenerator.dll" />
+    <Analyzer Include="C:\UnityProjects\Cultivation-Together\UnityProject\Assets\Packages\MessagePackAnalyzer.3.1.8\analyzers\roslyn4.3\cs\MessagePack.Analyzers.CodeFixes.dll" />
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\6000.3.9f1\Editor\Data\Tools\BuildPipeline\Unity.SourceGenerators\Unity.SourceGenerators.dll" />
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\6000.3.9f1\Editor\Data\Tools\BuildPipeline\Unity.SourceGenerators\Unity.Properties.SourceGenerator.dll" />
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\6000.3.9f1\Editor\Data\Tools\BuildPipeline\Unity.SourceGenerators\Unity.UIToolkit.SourceGenerator.dll" />
