@@ -1,0 +1,146 @@
+
+1123102_1.png
+size: 529,113
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+1123102_1fa1
+  rotate: false
+  xy: 420, 12
+  size: 35, 38
+  orig: 35, 38
+  offset: 0, 0
+  index: -1
+1123102_1fa2
+  rotate: true
+  xy: 232, 3
+  size: 29, 67
+  orig: 29, 67
+  offset: 0, 0
+  index: -1
+1123102_1fa3
+  rotate: true
+  xy: 301, 6
+  size: 28, 64
+  orig: 28, 64
+  offset: 0, 0
+  index: -1
+1123102_1fa5
+  rotate: false
+  xy: 67, 3
+  size: 13, 20
+  orig: 13, 20
+  offset: 0, 0
+  index: -1
+1123102_1fa6
+  rotate: true
+  xy: 116, 27
+  size: 84, 43
+  orig: 84, 43
+  offset: 0, 0
+  index: -1
+1123102_1houbai
+  rotate: false
+  xy: 473, 19
+  size: 52, 33
+  orig: 52, 36
+  offset: 0, 0
+  index: -1
+1123102_1shenti
+  rotate: false
+  xy: 335, 46
+  size: 50, 65
+  orig: 50, 65
+  offset: 0, 0
+  index: -1
+1123102_1tou
+  rotate: true
+  xy: 387, 52
+  size: 59, 58
+  orig: 59, 58
+  offset: 0, 0
+  index: -1
+1123102_1toushi1
+  rotate: true
+  xy: 161, 34
+  size: 77, 120
+  orig: 77, 120
+  offset: 0, 0
+  index: -1
+1123102_1toushi2
+  rotate: true
+  xy: 2, 25
+  size: 86, 112
+  orig: 86, 112
+  offset: 0, 0
+  index: -1
+1123102_1wuguan
+  rotate: false
+  xy: 138, 2
+  size: 32, 23
+  orig: 32, 23
+  offset: 0, 0
+  index: -1
+1123102_1youshou
+  rotate: false
+  xy: 457, 18
+  size: 14, 34
+  orig: 14, 34
+  offset: 0, 0
+  index: -1
+1123102_1youtui
+  rotate: true
+  xy: 82, 8
+  size: 15, 54
+  orig: 15, 54
+  offset: 0, 0
+  index: -1
+1123102_1youxiu1
+  rotate: true
+  xy: 39, 2
+  size: 21, 26
+  orig: 21, 26
+  offset: 0, 0
+  index: -1
+1123102_1youxiu2
+  rotate: true
+  xy: 172, 2
+  size: 30, 58
+  orig: 30, 58
+  offset: 0, 0
+  index: -1
+1123102_1youxiu3
+  rotate: true
+  xy: 367, 4
+  size: 40, 51
+  orig: 40, 51
+  offset: 0, 0
+  index: -1
+1123102_1zuoshou
+  rotate: true
+  xy: 2, 2
+  size: 21, 35
+  orig: 21, 35
+  offset: 0, 0
+  index: -1
+1123102_1zuotui
+  rotate: false
+  xy: 501, 56
+  size: 26, 55
+  orig: 26, 55
+  offset: 0, 0
+  index: -1
+1123102_1zuoxiu1
+  rotate: true
+  xy: 283, 36
+  size: 75, 50
+  orig: 75, 50
+  offset: 0, 0
+  index: -1
+1123102_1zuoxiu2
+  rotate: false
+  xy: 447, 54
+  size: 52, 57
+  orig: 52, 57
+  offset: 0, 0
+  index: -1

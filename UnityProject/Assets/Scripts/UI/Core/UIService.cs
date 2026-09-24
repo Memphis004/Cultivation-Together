@@ -31,8 +31,9 @@ namespace Xianxia.Sect.UI
             var definition = _catalog.Get(panelId);
             var instance = UnityEngine.Object.Instantiate(definition.Prefab, _uiRoot.Root);
 
-            // --- Ensure the RectTransform fills the parent correctly ---
-            UIRoot.ApplyLayout(instance);
+            // --- Data-driven layout (open question #13): the view applies its
+            // own default layout — no prefab-name string matching. ---
+            instance.GetComponent<UIViewBase>()?.ApplyDefaultLayout();
 
             var view = instance.GetComponent<IUIView>();
             if (view == null)
@@ -74,7 +75,7 @@ namespace Xianxia.Sect.UI
             switch (kind)
             {
                 case UIPresenterKind.EventPopup: return typeof(EventPopupPresenter);
-                case UIPresenterKind.ResourceHud: return typeof(ResourceHudPresenter);
+                case UIPresenterKind.ResourceHud: return typeof(WalletHudPresenter);
                 case UIPresenterKind.LogWindow: return typeof(LogWindowPresenter);
                 case UIPresenterKind.AvatarCustomization: return typeof(AvatarCustomizationPresenter);
                 case UIPresenterKind.DiscipleDetail: return typeof(DiscipleDetailPresenter);

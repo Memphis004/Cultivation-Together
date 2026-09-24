@@ -107,15 +107,17 @@ discovery events, high money → more merchant events, etc.)
 
 ## 12. Dedicated WalletChangedMessage
 
-**Status**: ⏳ `ResourceHudPresenter` piggybacks on `SectResourceChangedMessage`
+**Status**: ⏳ `WalletHudPresenter` piggybacks on `SectResourceChangedMessage`
 **Tradeoff accepted**: works fine because all wallet-changing events also
 change resources (e.g. `purchase_item` deducts contribution after checking
 stock)
 
 ## 13. UIRoot.ApplyLayout() String Matching
 
-**Status**: ⏳ works for 2 panels
-**When to fix**: when panel count > 5; migrate to `IUIView.ApplyDefaultLayout()`
+**Status**: ✅ resolved 25 Sep 2026 — migrated to
+`UIViewBase.ApplyDefaultLayout()` virtual overrides, called from
+`UIService.Open()` and `UIRoot.Awake()` (lab 20). No prefab-name matching
+left in UIRoot.
 
 ## 14. Save / Load System
 

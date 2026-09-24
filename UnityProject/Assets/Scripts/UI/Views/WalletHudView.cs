@@ -8,7 +8,7 @@ using UnityEngine.UI;
 namespace Xianxia.Sect.UI
 {
     // Same icon+value+delta pattern as the old SectHudView (now removed),
-    // just driven by SectResourceChangedMessage via ResourceHudPresenter
+    // just driven by SectResourceChangedMessage via WalletHudPresenter
     // instead of polling ISectStateProvider every N seconds.
     [Serializable]
     public class ResourceSlotBinding
@@ -19,7 +19,7 @@ namespace Xianxia.Sect.UI
         public TMP_Text deltaText;
     }
 
-    public class ResourceHudView : UIViewBase
+    public class WalletHudView : UIViewBase
     {
         [Header("Stockpile (with delta indicators)")]
         [SerializeField]
@@ -99,6 +99,62 @@ namespace Xianxia.Sect.UI
         {
             if (spiritStonesText != null) spiritStonesText.text = spiritStones.ToString();
             if (contributionText != null) contributionText.text = contribution.ToString();
+        }
+
+        // Data-driven layout (open question #13) - moved verbatim from
+        // UIRoot.ApplyWalletHudLayout: top-stretch bar whose wallet cluster
+        // hugs the top-RIGHT (mirrors the BottomMenu bar).
+        public override void ApplyDefaultLayout()
+        {
+            // Top-stretch bar: full width, 100 px tall.
+            var rt = GetComponent<RectTransform>();
+            if (rt == null) return;
+            rt.anchorMin = new Vector2(0f, 1f);
+            rt.anchorMax = new Vector2(1f, 1f);
+            rt.pivot     = new Vector2(0.5f, 1f);
+            rt.sizeDelta = new Vector2(0f, 100f);
+            rt.anchoredPosition = Vector2.zero;
+
+            var hlg = GetComponent<HorizontalLayoutGroup>();
+            if (hlg != null)
+            {
+                hlg.padding           = new RectOffset(20, 36, 10, 10); // right inset larger so the wallet cluster clears the screen edge
+                hlg.spacing           = 12f;
+                hlg.childAlignment    = TextAnchor.MiddleRight;
+                hlg.childControlWidth  = true;
+                hlg.childControlHeight = true;
+                // Wallet-only panel: no force expand, so the pair hugs the
+                // top-RIGHT as a compact cluster (mirror of BottomMenu).
+                hlg.childForceExpandWidth  = false;
+                hlg.childForceExpandHeight = false;
+            }
+
+            var csf = GetComponent<ContentSizeFitter>();
+            if (csf != null)
+            {
+                csf.horizontalFit = ContentSizeFitter.FitMode.Unconstrained;
+                csf.verticalFit   = ContentSizeFitter.FitMode.Unconstrained;
+            }
+
+            foreach (Transform child in rt)
+            {
+                var cr = child.GetComponent<RectTransform>();
+                if (cr == null) continue;
+                cr.anchorMin = new Vector2(0.5f, 0.5f);
+                cr.anchorMax = new Vector2(0.5f, 0.5f);
+                cr.pivot     = new Vector2(0.5f, 0.5f);
+
+                cr.sizeDelta = new Vector2(150f, 80f);
+                if (child.name == "SpiritStonesText" || child.name == "ContributionText")
+                {
+                    var text = child.GetComponent<TMPro.TMP_Text>();
+                    if (text != null)
+                    {
+                        text.alignment = TMPro.TextAlignmentOptions.MidlineRight;
+                        text.margin = new Vector4(42f, 0f, 8f, 0f);
+                    }
+                }
+            }
         }
 
         private void OnEnable()

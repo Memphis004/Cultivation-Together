@@ -16,7 +16,7 @@ MonoBehaviour:
   - PanelId: EventPopup
     Prefab: {fileID: 2283175409436536035, guid: b829aa7043c31db498f9e8086c254ec0, type: 3}
     PresenterKind: 0
-  - PanelId: ResourceHud
+  - PanelId: WalletHud
     Prefab: {fileID: 2144103126168093755, guid: b65514388194efa4899e1b87d81cd5d5, type: 3}
     PresenterKind: 1
   - PanelId: LogWindow

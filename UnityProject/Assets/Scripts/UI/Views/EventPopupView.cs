@@ -22,6 +22,38 @@ namespace Xianxia.Sect.UI
         [SerializeField] private Transform choicesRoot;
         [SerializeField] private Button choiceButtonPrefab;
 
+        // Data-driven layout (open question #13) - moved verbatim from
+        // UIRoot.ApplyEventPopupLayout.
+        public override void ApplyDefaultLayout()
+        {
+            var rt = GetComponent<RectTransform>();
+            if (rt == null) return;
+            rt.anchorMin = new Vector2(0.5f, 0.5f);
+            rt.anchorMax = new Vector2(0.5f, 0.5f);
+            rt.pivot     = new Vector2(0.5f, 0.5f);
+            rt.sizeDelta = new Vector2(600f, 400f);
+            rt.anchoredPosition = Vector2.zero;
+
+            var vlg = GetComponent<VerticalLayoutGroup>();
+            if (vlg != null)
+            {
+                vlg.padding           = new RectOffset(20, 20, 20, 20);
+                vlg.spacing           = 15f;
+                vlg.childAlignment    = TextAnchor.UpperCenter;
+                vlg.childControlWidth  = true;
+                vlg.childControlHeight = false;
+                vlg.childForceExpandWidth  = true;
+                vlg.childForceExpandHeight = false;
+            }
+
+            var csf = GetComponent<ContentSizeFitter>();
+            if (csf != null)
+            {
+                csf.horizontalFit = ContentSizeFitter.FitMode.Unconstrained;
+                csf.verticalFit   = ContentSizeFitter.FitMode.PreferredSize;
+            }
+        }
+
         public event Action<string> ChoiceClicked;
 
         private readonly List<GameObject> _spawnedButtons = new List<GameObject>();

@@ -60,6 +60,30 @@ namespace Xianxia.Sect.UI
         public TMP_Text TitleText => titleText;
         public Transform RowsRoot => rowsRoot;
 
+        // Data-driven layout (open question #13) - moved verbatim from
+        // UIRoot.ApplyResourcePopupLayout.
+        public override void ApplyDefaultLayout()
+        {
+            var rt = GetComponent<RectTransform>();
+            if (rt == null) return;
+            // Centered modal, same footprint family as EventPopup.
+            rt.anchorMin = new Vector2(0.5f, 0.5f);
+            rt.anchorMax = new Vector2(0.5f, 0.5f);
+            rt.pivot     = new Vector2(0.5f, 0.5f);
+            rt.sizeDelta = new Vector2(460f, 520f);
+            rt.anchoredPosition = Vector2.zero;
+
+            var csf = GetComponent<ContentSizeFitter>();
+            if (csf != null)
+            {
+                csf.horizontalFit = ContentSizeFitter.FitMode.Unconstrained;
+                csf.verticalFit   = ContentSizeFitter.FitMode.Unconstrained;
+            }
+
+            // Layout of children is fully prefab-driven (rows live under
+            // RowsRoot with their own VerticalLayoutGroup).
+        }
+
         private void Awake()
         {
             if (closeButton != null)

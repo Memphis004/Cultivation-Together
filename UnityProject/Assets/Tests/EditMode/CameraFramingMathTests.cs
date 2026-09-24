@@ -37,9 +37,9 @@ namespace Xianxia.Sect.Tests
         [Test]
         public void ComputeOrthoSize_Overview_AtMeasuredAspect_MatchesRuntimeLog()
         {
-            // Runtime log (Game view aspect 3.048): Overview orthoSize=6.618 in
-            // editor logs with a different aspect; at 3.048 the exact value is:
-            Assert.AreEqual(5.249344f, _config.ComputeOrthoSize(CameraFramingConfig.OverviewVisibleTiles, 3.048f), 1e-5f);
+            // OverviewVisibleTiles=12 (reskin task 2; was 25). Verified with the
+            // same op-for-op float32 evaluation of the production expression.
+            Assert.AreEqual(2.5196848f, _config.ComputeOrthoSize(CameraFramingConfig.OverviewVisibleTiles, 3.048f), 1e-5f);
         }
 
         [Test]
@@ -51,7 +51,7 @@ namespace Xianxia.Sect.Tests
         [Test]
         public void ComputeOrthoSize_At16By9_GivesExactFractions()
         {
-            Assert.AreEqual(9.0f, _config.ComputeOrthoSize(CameraFramingConfig.OverviewVisibleTiles, 16f / 9f), 1e-4f);
+            Assert.AreEqual(4.32f, _config.ComputeOrthoSize(CameraFramingConfig.OverviewVisibleTiles, 16f / 9f), 1e-4f);
             Assert.AreEqual(3.6f, _config.ComputeOrthoSize(CameraFramingConfig.PlacementVisibleTiles, 16f / 9f), 1e-4f);
         }
 

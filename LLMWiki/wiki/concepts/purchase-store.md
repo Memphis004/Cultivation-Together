@@ -87,7 +87,7 @@ in the sect store.
 ## Wallet Changes Don't Publish Yet
 
 After the purchase, `disciple.Wallet.Contribution` decreases. There's no
-`WalletChangedMessage` yet — `ResourceHudPresenter` piggybacks on the
+`WalletChangedMessage` yet — `WalletHudPresenter` piggybacks on the
 per-resource `SectResourceChangedMessage` for refresh.
 
 **Works only because purchase deducts raw resources from the stockpile** —

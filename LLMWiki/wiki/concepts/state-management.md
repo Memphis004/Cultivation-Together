@@ -135,7 +135,7 @@ is expected to decode them to JSON for the AI client.
 
 ## Missing: Dedicated WalletChangedMessage
 
-There's no `WalletChangedMessage` yet. `ResourceHudPresenter` refreshes the
+There's no `WalletChangedMessage` yet. `WalletHudPresenter` refreshes the
 wallet piggyback on every `SectResourceChangedMessage`.
 
 This works because all current wallet mutations (purchase) also change

@@ -7,7 +7,7 @@ related:
   - "[[sources/architecture]]"
   - "[[sources/bug-log]]"
 created: 2026-08-31
-updated: 2026-09-04
+updated: 2026-09-25
 confidence: high
 tags: [devlog, history, labs]
 ---
@@ -41,6 +41,8 @@ tags: [devlog, history, labs]
 | 16 | Sep 2 | Sex/Gender system + Unity-MCP setup | `[Key(7)] Sex`, sex-aware starter avatar + randomize filter; Unity-MCP skills |
 | 17 | Sep 3 | Avatar System v3 — outfit packages | Implemented then **rolled back**; kept `poseId`/`sexTag` |
 | 18 | Sep 3 | Additive scene architecture | CoreScene/GameplayScene split, `SceneLoader`, scene A→B swap |
+| 19 | Sep 25 | WalletHud rename + reposition | `ResourceHud` panel → **WalletHud** (wallet-only: SpiritStones + Contribution), prefab renamed, classes renamed, moved top-right, ImmortalWay button removed |
+| 20 | Sep 25 | Data-driven panel layout | `UIRoot.ApplyLayout` string-matching → `UIViewBase.ApplyDefaultLayout()` overrides (open question #13 closed) |
 
 ## Lab 1 — Proto schema + mock data
 
@@ -320,6 +322,44 @@ Load/Unload/Swap for testing
 - GameplayScene must not duplicate `EventSystem`/`AudioListener`
 - VContainer: single root scope in CoreScene chosen for now (parent-child
   Option B deferred until scene-specific services exist)
+
+## Lab 19 — WalletHud rename + reposition (v0.13)
+
+The HUD panel formerly known as **ResourceHud** is now **WalletHud** —
+wallet-only (SpiritStones + Contribution; the 4 stockpile slots Herb/Wood/
+Ore/Provisions were removed):
+- `ResourceHudPrefab.prefab` → `WalletHudPrefab.prefab` via
+  `AssetDatabase.RenameAsset` (**GUID preserved** — scenes/catalog unaffected);
+  `MainPanelCatalog` PanelId `ResourceHud` → `WalletHud` (PresenterKind int
+  value 1 unchanged)
+- Classes renamed: `ResourceHudView` → `WalletHudView`,
+  `ResourceHudPresenter` → `WalletHudPresenter` (.cs moved **with .meta** so
+  script GUIDs survived; `m_EditorClassIdentifier` patched in the prefab)
+- `UIPresenterKind.ResourceHud` enum member keeps its legacy name — the
+  catalog serializes `PresenterKind` as int and changing member positions
+  would shift all later values (BottomMenu=6, ResourcePopup=7)
+- Layout: `UIRoot.ApplyWalletHudLayout()` — top-RIGHT cluster (childAlignment
+  MiddleRight, padding.right 36), mirroring BottomMenu
+- ImmortalWayButton (โลก) removed from BottomMenuPrefab (was never wired —
+  `BottomMenuView.immortalWayButton` field remains, null, unused)
+- Verified in Play Mode: hud_children=2, stones=1200, contribution=3400,
+  align_hud=MiddleRight, menu_children=3, immortal_present=False
+
+## Lab 20 — Data-driven panel layout (v0.13)
+
+Closed open question #13 (also bug-log watch list #2): the prefab-name
+string-matching in `UIRoot.ApplyLayout()` is gone.
+- `UIViewBase` gained `virtual void ApplyDefaultLayout()` (no-op default —
+  `DiscipleDetailView` keeps the no-op, its layout is prefab-driven)
+- Each panel view overrides it with the layout code moved verbatim from the
+  old `UIRoot.Apply*Layout` methods: WalletHud top-right cluster,
+  BottomMenu bottom-right bar, EventPopup/ResourcePopup/AvatarCustomization
+  centered modals, LogWindow bottom-left (10,10)
+- Callers: `UIService.Open()` applies right after instantiation;
+  `UIRoot.Awake()` applies to any panel already baked into the scene
+- Play-mode verified: WalletHud align=MiddleRight (stones 1200 /
+  contribution 3400), BottomMenu align=MiddleRight (3 buttons), LogWindow
+  anchor (0,0) pos (10,10) — identical to the pre-migration layout
 
 ## Where To Next (Decided Order)
 

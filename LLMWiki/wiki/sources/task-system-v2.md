@@ -127,8 +127,8 @@ dictionary directly:
 _state.Stockpile.RawResources[kvp.Key] -= (int)kvp.Value;
 ```
 
-This bypasses `SectResourceChangedMessage`, which `ResourceHudPresenter`
-depends on for its live delta display (lab 13). The numbers would still be
+This bypasses `SectResourceChangedMessage`, which `WalletHudPresenter`
+depends on for its live wallet refresh (lab 13). The numbers would still be
 correct internally, but the HUD would stop updating for crafting-consumed
 resources specifically — a quiet regression, not a crash, so it's easy to
 ship without noticing.

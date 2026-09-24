@@ -80,7 +80,7 @@ User/AI choice click
   → DecisionExecutor.Execute
   → ISectStateProvider.ApplyDecisionConsequence
   → AdjustAndNotify (for resource changes)
-  → ResourceHudPresenter refreshes on SectResourceChangedMessage
+  → WalletHudPresenter refreshes on SectResourceChangedMessage
   → TimeSystem.SetPaused(false) (unpause)
   → WorldEventSystem.Tick resumes normal interval
 ```
@@ -105,7 +105,7 @@ Every frame (VContainer ITickable)
 
 | Event | Published when | Subscribers |
 |---|---|---|
-| `SectResourceChangedMessage` | Resource change | `ResourceHudPresenter` |
+| `SectResourceChangedMessage` | Resource change | `WalletHudPresenter` |
 | `DiscipleRecruitedMessage` | New disciple added | (none yet, but available) |
 | `DiscipleRankChangedMessage` | Rank change | (none yet) |
 | `ContributionEarnedMessage` | Contribution gain | (none yet) |

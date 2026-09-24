@@ -85,7 +85,5 @@ namespace Xianxia.EditorTools
             }
         }
     }
-
-    /// <summary>
-    }
+}
 #endif

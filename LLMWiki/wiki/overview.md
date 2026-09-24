@@ -82,7 +82,7 @@ systems to solidify (see [[sources/open-questions]]).
 - ✅ ResourceCraftingSystem — 2 recipes (refining_elixir, forging_artifact) with ownership rules
 - ✅ `purchase_item` — disciples buy from sect stockpile with contribution
 - ✅ WorldEventSystem — weighted random from Luban-generated pool
-- ✅ MVP-Lite UI (EventPopup + ResourceHud) with proper subscribe-driven delta updates
+- ✅ MVP-Lite UI (EventPopup + WalletHud) with proper subscribe-driven delta updates
 - ✅ Luban pipeline for event/choice data (replaced ScriptableObject)
 
 ## What's Stubbed / Deferred

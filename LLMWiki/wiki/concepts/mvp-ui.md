@@ -79,7 +79,7 @@ private static Type ResolvePresenterType(UIPresenterKind kind)
     switch (kind)
     {
         case UIPresenterKind.EventPopup: return typeof(EventPopupPresenter);
-        case UIPresenterKind.ResourceHud: return typeof(ResourceHudPresenter);
+        case UIPresenterKind.ResourceHud: return typeof(WalletHudPresenter); // enum member keeps its legacy name — catalog serializes kind as int
         case UIPresenterKind.LogWindow: return typeof(LogWindowPresenter);
         case UIPresenterKind.AvatarCustomization: return typeof(AvatarCustomizationPresenter);
         case UIPresenterKind.DiscipleDetail: return typeof(DiscipleDetailPresenter);
@@ -99,7 +99,7 @@ private static Type ResolvePresenterType(UIPresenterKind kind)
 | Panel | Presenter | Subscribes to |
 |---|---|---|
 | `EventPopup` | `EventPopupPresenter` | n/a (called via `OnOpen(args)`) |
-| `ResourceHud` | `ResourceHudPresenter` | `SectResourceChangedMessage` |
+| `WalletHud` | `WalletHudPresenter` | `SectResourceChangedMessage` |
 | `LogWindow` | `LogWindowPresenter` | `DiscipleRecruitedMessage`, `WorldEventTriggeredMessage`, `DecisionExecutedMessage` |
 | `AvatarCustomization` | `AvatarCustomizationPresenter` | `AvatarEquipmentChangedMessage` (external sync) — ดู [[entities/avatar-appearance]] |
 | `DiscipleDetail` | `DiscipleDetailPresenter` | เปิดโดย `DiscipleDetailUISystem` เมื่อได้รับ `DiscipleSelectedMessage` (คลิก chibi — Phase 4) |
@@ -116,12 +116,11 @@ Originally all panels landed center-screen. Root cause:
 **Fix**:
 - `UIRoot.Awake()` enforces RectTransform stretch to full Canvas
 - `ContentSizeFitter` set to `Unconstrained`
-- `UIRoot.ApplyLayout()` (static helper) called from `UIService.Open()` for
-  runtime-instantiated panels
-
-⏳ **TODO**: `ApplyLayout()` does string matching on prefab names. Works
-for 2 panels, will break at 5+. Migrate to `IUIView.ApplyDefaultLayout()`
-on the view itself.
+- Each panel view applies its own layout by overriding
+  `UIViewBase.ApplyDefaultLayout()`, called from `UIService.Open()` and from
+  `UIRoot.Awake()` for baked-in clones — data-driven migration done
+  25 Sep 2026 (lab 20), replacing the old `UIRoot.ApplyLayout()`
+  prefab-name string matching
 
 ## Adding a New Panel — Checklist
 
@@ -136,8 +135,8 @@ on the view itself.
    ```
 7. Add a `UIPanelDefinition` to `MainPanelCatalog.asset` ScriptableObject
 8. Create the prefab in `Assets/Prefabs/`
-9. (Optional) Add layout method to `UIRoot.ApplyLayout()` if your prefab
-   needs special handling
+9. (Optional) Override `ApplyDefaultLayout()` on your view if your prefab
+   needs a default layout applied at open time
 
 ## Core Interfaces
 
@@ -165,7 +164,7 @@ public class UIBootstrap : IStartable
 {
     public void Start()
     {
-        _uiService.Open("ResourceHud");
+        _uiService.Open("WalletHud");
         _uiService.Open("LogWindow");
         // ทดสอบเปิดหน้าจอแต่งตัวศิษย์ d001
         _uiService.Open("AvatarCustomization", new AvatarCustomizationPayload("d001"));

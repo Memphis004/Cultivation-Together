@@ -102,13 +102,15 @@ Pattern: View (MonoBehaviour) / Presenter (plain C#, Transient) / Service
 (orchestrator) — panel resolve ผ่าน VContainer ด้วย explicit enum→Type
 mapping ไม่ scan assembly
 
-**Panel ที่มีแล้ว**: `ResourceHud` (top bar, delta indicator สีเขียว/แดง
-auto-clear หลัง 1 วิ), `EventPopup` (เปิดอัตโนมัติเมื่อมี event ต้อง
-ตัดสินใจ), `LogWindow` (log เหตุการณ์สำคัญ — รับสมัคร/event/decision
-เท่านั้น ไม่รวม resource tick ที่จะรกเกินไป)
+**Panel ที่มีแล้ว**: `WalletHud` (top-right bar, SpiritStones + Contribution
+— เดิมชื่อ `ResourceHud` และแสดง stockpile 4 ช่องพร้อม delta indicator,
+delta ถูกลบไปพร้อมช่อง stockpile ตั้งแต่ 25 ก.ย. 2026), `EventPopup`
+(เปิดอัตโนมัติเมื่อมี event ต้องตัดสินใจ), `LogWindow` (log เหตุการณ์สำคัญ —
+รับสมัคร/event/decision เท่านั้น ไม่รวม resource tick ที่จะรกเกินไป)
 
-`SectHudView` เดิม (polling-based) **ถูกลบทิ้งแล้ว** แทนที่ด้วย
-`ResourceHud` panel ที่ message-driven ทั้งหมด
+`SectHudView` เดิม (polling-based) **ถูกลบทิ้งแล้ว** แทนที่ด้วย panel
+ที่ message-driven ทั้งหมด (วันนั้นชื่อ `ResourceHud` — ปัจจุบันคือ
+`WalletHud` ดู lab 19 ใน [[sources/devlog-history]])
 
 ---
 

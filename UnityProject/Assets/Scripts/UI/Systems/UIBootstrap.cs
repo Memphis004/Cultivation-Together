@@ -8,7 +8,7 @@ namespace Xianxia.Sect.UI
     /// Opens persistent UI panels when CoreScene starts.
     /// These panels survive scene transitions (GameplayScene add/unload).
     ///
-    /// Persistent panels (loaded here):        ///   - ResourceHud: top resource bar
+    /// Persistent panels (loaded here):        ///   - WalletHud: Sect Master wallet bar (SpiritStones + Contribution only)
         ///   - LogWindow: decision/event log
         ///   - AvatarCustomization: avatar editor
         ///   - BottomMenu: bottom bar (สร้าง / ศิษย์)
@@ -40,7 +40,12 @@ namespace Xianxia.Sect.UI
         public void Start()
         {
             // --- Persistent UI (stays across scene transitions) ---
-            _uiService.Open("ResourceHud");
+            // WalletHud (formerly ResourceHud): top-left floating bar showing
+            // only the Sect Master's personal wallet (SpiritStones +
+            // Contribution). The 4 stockpile slots were removed - stockpile
+            // numbers live in the warehouse ResourcePopup instead. Prefab
+            // renamed WalletHudPrefab, PanelId renamed in MainPanelCatalog.
+            _uiService.Open("WalletHud");
             _uiService.Open("LogWindow");
             _uiService.Open("BottomMenu");
             // _uiService.Open("AvatarCustomization", new AvatarCustomizationPayload("d001"));

@@ -44,6 +44,29 @@ namespace Xianxia.Sect.UI
         [SerializeField] private Button randomizeButton;
         [SerializeField] private TMP_Text errorText;
 
+        // Data-driven layout (open question #13) - moved verbatim from
+        // UIRoot.ApplyAvatarCustomizationLayout.
+        public override void ApplyDefaultLayout()
+        {
+            var rt = GetComponent<RectTransform>();
+            if (rt == null) return;
+            // Full-screen modal: centered, 900x620
+            rt.anchorMin = new Vector2(0.5f, 0.5f);
+            rt.anchorMax = new Vector2(0.5f, 0.5f);
+            rt.pivot     = new Vector2(0.5f, 0.5f);
+            rt.sizeDelta = new Vector2(900f, 620f);
+            rt.anchoredPosition = Vector2.zero;
+
+            // ContentSizeFitter must be Unconstrained on the panel root
+            // (the real layout is driven by anchors + sizeDelta above)
+            var csf = GetComponent<ContentSizeFitter>();
+            if (csf != null)
+            {
+                csf.horizontalFit = ContentSizeFitter.FitMode.Unconstrained;
+                csf.verticalFit   = ContentSizeFitter.FitMode.Unconstrained;
+            }
+        }
+
         // ── events → Presenter ────────────────────────────────
         public event Action<string> CategoryTabClicked;  // category
         public event Action<string> SlotTabClicked;      // slot

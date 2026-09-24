@@ -86,7 +86,7 @@ before snapping to bottom.
 ## Bootstrap
 
 `UIBootstrap.Start()` calls `_uiService.Open("LogWindow")` at game start,
-making the log always-visible alongside `ResourceHud`.
+making the log always-visible alongside `WalletHud`.
 
 ## Layout
 

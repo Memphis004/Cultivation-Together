@@ -5,14 +5,14 @@ using Xianxia.Sect.Messages;
 
 namespace Xianxia.Sect.UI
 {
-    public class ResourceHudPresenter : UIPresenter<ResourceHudView>
+    public class WalletHudPresenter : UIPresenter<WalletHudView>
     {
         private readonly ISubscriber<SectResourceChangedMessage> _resourceSubscriber;
         private readonly ISectStateProvider _stateProvider;
 
         private IDisposable _subscription;
 
-        public ResourceHudPresenter(
+        public WalletHudPresenter(
             ISubscriber<SectResourceChangedMessage> resourceSubscriber,
             ISectStateProvider stateProvider)
         {
@@ -54,7 +54,7 @@ namespace Xianxia.Sect.UI
             var sectMaster = state.Disciples.Find(d => d.Rank == DiscipleRank.SectMaster);
             if (sectMaster == null)
             {
-                Debug.LogWarning("[ResourceHudPresenter] No disciple with Rank.SectMaster found - wallet left unset.");
+                Debug.LogWarning("[WalletHudPresenter] No disciple with Rank.SectMaster found - wallet left unset.");
                 return;
             }
 

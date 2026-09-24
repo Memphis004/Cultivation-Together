@@ -130,7 +130,7 @@ namespace Xianxia.Sect.UI
 
 - `EventPopupPresenter` — `OnChoiceClicked` event from view → calls
   `DecisionExecutor.Execute(...)` directly
-- `ResourceHudPresenter` — subscribes to `SectResourceChangedMessage`,
+- `WalletHudPresenter` — subscribes to `SectResourceChangedMessage`,
   updates TMP text with delta indicators
 
 ## Known Issues

@@ -176,13 +176,13 @@ tags: [bug, fix, debugging, mcp, messagepipe]
 
 These are patterns that haven't broken yet but are likely to:
 
-1. **WalletChangedMessage missing** — `ResourceHudPresenter` refreshes wallet
+1. **WalletChangedMessage missing** — `WalletHudPresenter` refreshes wallet
    piggyback on `SectResourceChangedMessage`. Works only because
    `AdjustAndNotify()` fires on every relevant change. Adding a code path that
    mutates wallet without going through it will silently desync UI
-2. **`UIRoot.ApplyLayout()` string-matches prefab names** — works for 2
-   panels, will break at 5+. Migrate to `IUIView.ApplyDefaultLayout()` when
-   panel count grows
+2. ~~**`UIRoot.ApplyLayout()` string-matches prefab names**~~ — ✅ resolved
+   25 Sep 2026: migrated to `UIViewBase.ApplyDefaultLayout()` overrides
+   (lab 20); adding a panel no longer touches UIRoot
 3. **Consequence rules hardcoded in `SectStateProvider.ApplyDecisionConsequence()`**
    — adding a new event requires code change. Move to data-driven when events
    exceed ~10

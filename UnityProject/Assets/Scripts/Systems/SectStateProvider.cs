@@ -431,7 +431,7 @@ namespace Xianxia.Sect
         }
 
         // Same as Adjust, but also publishes SectResourceChangedMessage so
-        // UI (ResourceHudPresenter) picks up the change - single choke
+        // UI (WalletHudPresenter) picks up the change - single choke
         // point instead of scattering publish calls at every mutation site.
         // Publishes the *actual* applied delta, not the requested one - the
         // two can differ when Adjust clamps at 0 (e.g. requesting -50 on a

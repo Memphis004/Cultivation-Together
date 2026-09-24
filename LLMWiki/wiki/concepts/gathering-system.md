@@ -75,8 +75,9 @@ simple.
 
 ## How UI Sees Gathering
 
-Every `+1 herb` etc. fires `SectResourceChangedMessage`. `ResourceHudView`
-subscribes and updates the top bar with green delta indicator.
+Every `+1 herb` etc. fires `SectResourceChangedMessage`. `WalletHudPresenter`
+piggybacks a wallet refresh on it. The HUD no longer shows per-resource
+stockpile values or delta indicators (wallet-only since 25 Sep 2026).
 
 ## Related Pages
 

@@ -89,7 +89,7 @@ namespace Xianxia.Sect
             builder.RegisterInstance(Xianxia.Sect.Visual.VisualTierPolicy.Instance);
 
             // --- UI (Xianxia.UI.MVP Lite) ---
-            // SectHudView is gone - replaced by the ResourceHud panel below,
+            // SectHudView is gone - replaced by the WalletHud panel below,
             // which gets its data from SectResourceChangedMessage instead of
             // polling ISectStateProvider on a timer.
             builder.RegisterInstance(uiRoot);
@@ -97,7 +97,7 @@ namespace Xianxia.Sect
             builder.Register<Xianxia.Sect.UI.UIService>(Lifetime.Singleton);
             builder.Register<DecisionExecutor>(Lifetime.Singleton);
             builder.Register<Xianxia.Sect.UI.EventPopupPresenter>(Lifetime.Transient);
-            builder.Register<Xianxia.Sect.UI.ResourceHudPresenter>(Lifetime.Transient);
+            builder.Register<Xianxia.Sect.UI.WalletHudPresenter>(Lifetime.Transient);
             builder.Register<Xianxia.Sect.UI.LogWindowPresenter>(Lifetime.Transient);
             builder.Register<Xianxia.Sect.UI.AvatarCustomizationPresenter>(Lifetime.Transient);
             builder.Register<Xianxia.Sect.Visual.TaskActivityMapper>(Lifetime.Singleton); // Phase 4: CurrentTask→activity (data-driven)

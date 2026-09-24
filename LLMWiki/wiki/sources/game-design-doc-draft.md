@@ -218,7 +218,7 @@ mapping (ไม่ scan assembly)
 
 | Panel | สถานะ | หน้าที่ |
 |---|---|---|
-| `ResourceHud` | ✅ | Top bar, stockpile + wallet, delta indicator สีเขียว/แดง auto-clear |
+| `WalletHud` | ✅ | Top-right bar, SpiritStones + Contribution (เดิมชื่อ `ResourceHud` แสดง stockpile ด้วย) |
 | `EventPopup` | ✅ | เปิดอัตโนมัติเมื่อมี event ต้องตัดสินใจ |
 | `LogWindow` | ✅ | Log เหตุการณ์สำคัญ (รับสมัคร/event/decision) ไม่รวม resource tick |
 | Avatar Customization | 🔶 กำลังทำ | Draft/diff-commit pattern |

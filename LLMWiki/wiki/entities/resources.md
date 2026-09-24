@@ -100,10 +100,11 @@ stockpile was only 20.
 
 ## UI Display
 
-`ResourceHudView` (top bar) shows all 4 resources with:
-- Current amount (TMP text)
-- Green "+N" indicator on `SectResourceChangedMessage` (delta > 0)
-- Red "−N" indicator on `SectResourceChangedMessage` (delta < 0)
+`WalletHudView` (top bar, right-aligned) shows the Sect Master's personal
+wallet — SpiritStones + Contribution. (Formerly `ResourceHudView`, which also
+showed the 4 stockpile slots with green/red delta indicators — those were
+removed 25 Sep 2026 when the panel became wallet-only; the stockpile-slot
+machinery still exists in the class but `resourceSlots` is empty.)
 
 ## ⏳ TODO
 

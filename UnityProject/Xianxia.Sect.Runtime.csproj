@@ -78,11 +78,9 @@
     <Compile Include="Assets\Scripts\UI\Views\AvatarRenderer.cs" />
     <Compile Include="Assets\Scripts\Visual\Scene\TerrainBackdropRenderer.cs" />
     <Compile Include="Assets\Scripts\Data\Gen\worldevent\TbEvent.cs" />
-    <Compile Include="Assets\Scripts\UI\Views\ResourceHudView.cs" />
     <Compile Include="Assets\Scripts\Visual\Core\IChibiVisual.cs" />
     <Compile Include="Assets\Scripts\Visual\Scene\IsometricCellMath.cs" />
     <Compile Include="Assets\Scripts\Visual\Scene\GridOverlayRenderer.cs" />
-    <Compile Include="Assets\Scripts\UI\Presenters\ResourceHudPresenter.cs" />
     <Compile Include="Assets\Scripts\Visual\Scene\CameraRigPorts.cs" />
     <Compile Include="Assets\Scripts\Data\Gen\game\EventDef.cs" />
     <Compile Include="Assets\Scripts\Core\PurchaseItemHandler.cs" />
@@ -105,6 +103,7 @@
     <Compile Include="Assets\Scripts\UI\Presenters\BottomMenuPresenter.cs" />
     <Compile Include="Assets\Scripts\Visual\Core\AppearanceResolver.cs" />
     <Compile Include="Assets\Scripts\UI\Presenters\EventPopupPresenter.cs" />
+    <Compile Include="Assets\Scripts\UI\Views\WalletHudView.cs" />
     <Compile Include="Assets\Scripts\UI\Core\IUIView.cs" />
     <Compile Include="Assets\Scripts\Core\GameLifetimeScope.cs" />
     <Compile Include="Assets\Scripts\Data\Gen\Tables.cs" />
@@ -113,6 +112,7 @@
     <Compile Include="Assets\Scripts\UI\Systems\WorldEventUISystem.cs" />
     <Compile Include="Assets\Scripts\Visual\Scene\CameraRigController.cs" />
     <Compile Include="Assets\Scripts\Systems\SectStateProvider.cs" />
+    <Compile Include="Assets\Scripts\UI\Presenters\WalletHudPresenter.cs" />
     <Compile Include="Assets\Scripts\Data\Gen\worldevent\EventChoiceRow.cs" />
     <Compile Include="Assets\Scripts\UI\Presenters\LogWindowPresenter.cs" />
     <Compile Include="Assets\Scripts\UI\Views\AvatarCustomizationView.cs" />

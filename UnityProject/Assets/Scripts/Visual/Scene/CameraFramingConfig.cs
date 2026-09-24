@@ -10,7 +10,9 @@ namespace Xianxia.Sect.Visual
     public sealed class CameraFramingConfig
     {
         // --- Presets (tiles visible horizontally, per the reference art) ---
-        public const int OverviewVisibleTiles = 25;
+        // Overview was 25 (zoomed out); reskin task 2 brought it down to 12 so the
+        // idle camera matches the build-mode zoom of reference image #3.
+        public const int OverviewVisibleTiles = 12;
         public const int PlacementVisibleTiles = 10;
 
         // --- Source-of-truth asset paths (Resources) ---

@@ -68,7 +68,7 @@ before touching any system.
 │  │  - UIRoot (Canvas)                           │           │
 │  │  - UIPanelCatalog (ScriptableObject)         │           │
 │  │  - EventPopup (View + Presenter)             │           │
-│  │  - ResourceHud (View + Presenter)            │           │
+│  │  - WalletHud (View + Presenter)              │           │
 │  │  - LogWindow (View + Presenter)              │           │
 │  │  - AvatarCustomization (View + Presenter,    │           │
 │  │    + AvatarRenderer layered sprites,         │           │
@@ -120,7 +120,7 @@ builder.RegisterInstance(uiPanelCatalog);
 builder.Register<Xianxia.Sect.UI.UIService>(Lifetime.Singleton);
 builder.Register<DecisionExecutor>(Lifetime.Singleton);
 builder.Register<Xianxia.Sect.UI.EventPopupPresenter>(Lifetime.Transient);
-builder.Register<Xianxia.Sect.UI.ResourceHudPresenter>(Lifetime.Transient);
+builder.Register<Xianxia.Sect.UI.WalletHudPresenter>(Lifetime.Transient);
 builder.Register<Xianxia.Sect.UI.LogWindowPresenter>(Lifetime.Transient);
 builder.Register<Xianxia.Sect.UI.AvatarCustomizationPresenter>(Lifetime.Transient);
 builder.RegisterEntryPoint<Xianxia.Sect.UI.WorldEventUISystem>(Lifetime.Singleton);

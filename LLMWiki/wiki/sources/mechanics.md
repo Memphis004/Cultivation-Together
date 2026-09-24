@@ -189,7 +189,7 @@ Runtime state held in memory by `SectStateProvider`. No save/load to disk yet.
 | Panel | View | Presenter | Subscribes to |
 |---|---|---|---|
 | EventPopup | `EventPopupView` | `EventPopupPresenter` | n/a (passes args directly) |
-| ResourceHud | `ResourceHudView` | `ResourceHudPresenter` | `SectResourceChangedMessage` |
+| WalletHud | `WalletHudView` | `WalletHudPresenter` | `SectResourceChangedMessage` |
 
 ⏳ **TODO**: DiscipleList panel (enum reserved, throws `NotImplementedException`)
 
@@ -207,7 +207,7 @@ not the requested delta. UI panels subscribe and refresh on the event.
 
 ### Wallet Changes Piggyback on Resource Changes
 
-No dedicated `WalletChangedMessage` exists. `ResourceHudPresenter` refreshes
+No dedicated `WalletChangedMessage` exists. `WalletHudPresenter` refreshes
 the wallet piggyback on every `SectResourceChangedMessage`. Acceptable
 tradeoff until there's a real reason to add a dedicated message.
 

@@ -35,7 +35,7 @@ tags: [scene-management, additive-loading, core-scene, architecture]
 **Persistent UI:**
 - Canvas (Screen Space - Overlay)
 - UIRoot
-- ResourceHud (top bar)
+- WalletHud (top bar)
 - SettingsPanel
 - HotkeyMenu
 
@@ -95,7 +95,7 @@ public class SceneLoader
 // เปิดครั้งเดียวตอน CoreScene load
 public class UIBootstrap : IStartable {
     public void Start() {
-        _uiService.Open("ResourceHud");  // persistent
+        _uiService.Open("WalletHud");  // persistent
         _uiService.Open("HotkeyMenu");   // persistent
     }
 }
