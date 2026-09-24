@@ -22,7 +22,7 @@ related:
   - "[[concepts/message-pipe-bus|MessagePipe Bus]]"
   - "[[concepts/state-management|State Management]]"
 created: 2026-08-31
-updated: 2026-09-04
+updated: 2026-09-25
 confidence: high
 tags: [avatar, parts, sprite-swap, dictionary-schema, hair-2-layer, framing, draft-pattern, parts-only]
 
@@ -138,10 +138,13 @@ public class DiscipleState
 `DiscipleVisualSystem` และเปลี่ยนค่าได้ผ่าน mutation choke point
 `ISectStateProvider.TrySetChibiBackend` (publish `DiscipleChibiBackendChangedMessage`
 → respawn แบบคง position/activity/facing; degrade ที่ budget ไม่พอเปลี่ยนเฉพาะ
-effective backend ไม่แตะ state) — ⚠️ **Spine backend ยัง INERT** จนกว่า S4 license
-จะถูกยืนยัน (`VisualRuntimeConfig.SpineActivationRequested` = false, ดู
-[[disciple-visual-system]] §6.3/§7) — ตอนนี้ entitled disciples render เป็น
-SpriteSheet ทั้งหมด
+effective backend ไม่แตะ state) — ✅ **Spine backend render-active แล้ว (S4 ยืนยัน 2026-09-25 — เปิดถาวร):**
+`VisualRuntimeConfig.SpineActivationRequested` = true ตั้งที่ composition root
+(`GameLifetimeScope.Configure`, ดู [[disciple-visual-system]] §6.3/§7 +
+[[decisions/visual-overrides-straight-alpha]]) — entitled disciples ได้ Spine render
+จริง: ตัวละครเนื้อเรื่อง (d000/d002) ใช้ rig ตัวเองผ่าน Q5 override
+(`visual_overrides.json`), ศิษย์ทั่วไปใช้ interim shared rig `1113103_1`
+(แทน chibi_base ที่ยังไม่มี)
 
 `Sex` implement แล้วตาม [[sources/sex-gender-system]] (recruitment เลือก head ตาม sex จริง,
 MockSectData ระบุ sex ชัดเจน) — แต่ `sexTag` filter ในกริดยังไม่ได้เปิดใช้ (ดู Roadmap)

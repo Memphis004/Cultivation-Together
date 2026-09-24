@@ -121,6 +121,14 @@ namespace Xianxia.Sect.Visual.Spikes.EditorTools
                     Phase5VerifyRunner.Run(); // async: report lands in Library/phase5_verify_report.txt
                     WriteResult("phase5_verify_started");
                     break;
+                case "visual_overrides_verify":
+                    VisualOverridesVerifyRunner.Run(); // async: report lands in Library/visual_overrides_verify_report.txt
+                    WriteResult("visual_overrides_verify_started");
+                    break;
+                case "visual_overrides_shot":
+                    VisualOverridesShotRunner.Run(); // async: PNGs land in Library/visual_overrides_shot*.png
+                    WriteResult("visual_overrides_shot_started");
+                    break;
                 case "play_demo":
                     VisualDemoSceneTool.PlayDemo(); // guards + scaffold + boot scene + play; loader drives the additive demo load
                     WriteResult("play_demo_started");

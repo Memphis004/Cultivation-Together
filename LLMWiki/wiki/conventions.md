@@ -32,6 +32,7 @@ tags: [workflow, preferences]
   - MessagePack (NOT protobuf — dropped in lab 7)
   - Luban for bulk design-time data, not hand-created ScriptableObjects
 - **Open-source first**: every dependency in the project is OSS or Unity built-in
+  - Exception (approved 2026-09-25, S4): `Spine-Unity` runtime (Esoteric Software) เป็น dependency ของ visual system Tier-2 — license ยืนยันแล้วว่าครอบคลุม ([[decisions/visual-overrides-straight-alpha]]); example assets ของ Esoteric ห้ามตกค้างใน build จริง; asmdef แยกเพื่อสลับไป Unity 2D Animation ได้หากจำเป็น
 - **No reflection** in UI panel resolution (enum→Type mapping instead)
 
 ## Wiki Usage

@@ -80,12 +80,24 @@ namespace Xianxia.Sect
                              Xianxia.Sect.Visual.DefaultEntitlementProvider>(Lifetime.Singleton);
 
             // --- Visual system Phase 3 (tier policy — §7 render-only allocation) ---
+            // S4 LICENSE DECISION (2026-09-25 — confirmed by product owner):
+            // Spine Editor + runtime license verified per phase0-results §4 → the gate
+            // flips TRUE here at the composition root (the sanctioned human-decision
+            // point, same pattern as SpriteSheetEnabled above). VisualSpineBootstrap
+            // still owns the actual activation and stays INERT if the rig asset fails
+            // to load — this line only records the human decision.
+            Xianxia.Sect.Visual.VisualRuntimeConfig.Instance.SpineActivationRequested = true;
+            // Interim shared rig: no chibi_base exists yet — the generic MALE rig stands
+            // in for every Spine-allocated disciple WITHOUT a Q5 override (today: only
+            // d003). Story characters (d000/d002) always render their own rigs through
+            // Resources/Data/visual_overrides.json regardless of this path.
+            Xianxia.Sect.Visual.VisualRuntimeConfig.Instance.SpineSkeletonResourcePath =
+                "Avatar/Spine/male/1113103_1";
             // Spine backend activates ONLY inside VisualSpineBootstrap (Visual.Spine
-            // assembly, self-activating via [RuntimeInitializeOnLoadMethod]) after the
-            // human S4 license decision sets VisualRuntimeConfig.Instance
-            // .SpineActivationRequested = true AND a SkeletonDataAsset loads. This
-            // scope deliberately does NOT reference the Visual.Spine assembly —
-            // referencing it would drag spine-unity back into the core compile.
+            // assembly, self-activating via [RuntimeInitializeOnLoadMethod]) — it never
+            // sets the gate itself. This scope deliberately does NOT reference the
+            // Visual.Spine assembly — referencing it would drag spine-unity back into
+            // the core compile.
             builder.RegisterInstance(Xianxia.Sect.Visual.VisualTierPolicy.Instance);
 
             // --- UI (Xianxia.UI.MVP Lite) ---

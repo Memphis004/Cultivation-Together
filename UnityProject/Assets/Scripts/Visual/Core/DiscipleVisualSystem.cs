@@ -23,6 +23,16 @@ namespace Xianxia.Sect.Visual
     /// (budget degrade never mutates the entitlement in state, §7). Spawn order is
     /// rank-desc then DiscipleId (VisualTierPolicy.CompareSpawnPriority) so priority
     /// disciples win the limited Spine slots.
+    ///
+    /// Q5 story-character overrides (visual_overrides.json): a disciple whose id has
+    /// an override renders from its OWN per-character rig through
+    /// <see cref="SpineOverrideProbe"/> + <see cref="SpineOverrideVisualFactory"/>
+    /// (assigned by VisualSpineBootstrap INSIDE the license-gated block) — the branch
+    /// runs BEFORE the §7 allocation/budget logic and does NOT count against
+    /// SpineBudget. That is a deliberate decision (per-character rigs are not part of
+    /// the shared-rig pool the budget sizes; change it only with the team's sign-off).
+    /// Everything else takes the §7 path unchanged.
+    ///
     /// No FindObjectOfType / reflection (C12): backend choice is a plain
     /// enum→factory map, scene root is found by scanning loaded scene roots (C3).
     /// </summary>
@@ -37,6 +47,23 @@ namespace Xianxia.Sect.Visual
         /// and ONLY after the S4 license gate is confirmed — never before.
         /// </summary>
         public static Func<DiscipleState, Transform, IChibiVisual> SpineVisualFactory { get; set; }
+
+        /// <summary>
+        /// Q5 story-character override probe — discipleId → SkeletonDataAsset Resources
+        /// path, or "" when the disciple has no override. Assigned ONLY by
+        /// VisualSpineBootstrap inside the S4 license-gated block (null otherwise) —
+        /// never a bypass of the gate. Core never touches Spine types: the probe
+        /// returns a path string and the actual asset load stays in Visual.Spine.
+        /// </summary>
+        public static Func<string, string> SpineOverrideProbe { get; set; }
+
+        /// <summary>
+        /// Q5 override factory — same contract as <see cref="SpineVisualFactory"/> but
+        /// building the visual from the disciple's OWN rig (no shared chibi_base, no
+        /// part mixing). Returning null = caller degrades to SpriteSheet.
+        /// Assigned alongside the probe by VisualSpineBootstrap after the gate.
+        /// </summary>
+        public static Func<DiscipleState, Transform, IChibiVisual> SpineOverrideVisualFactory { get; set; }
 
         private readonly ISectStateProvider _stateProvider;
         private readonly AppearanceResolver _resolver;
@@ -169,8 +196,9 @@ namespace Xianxia.Sect.Visual
 
             // Skip the respawn when the EFFECTIVE backend is unchanged (e.g. Spine off
             // or budget full → allocation keeps the visual on Sprite) — never respawn
-            // on an incremental change that renders identically.
-            var wantBackend = _spineAllocated.Contains(msg.DiscipleId)
+            // on an incremental change that renders identically. Q5-aware: overridden
+            // disciples keep "wanting" Spine regardless of the budget.
+            var wantBackend = WantsSpineRender(msg.DiscipleId)
                 ? VisualBackend.Spine
                 : VisualBackend.SpriteSheet;
             if (oldVisual.Backend == wantBackend)
@@ -282,7 +310,7 @@ namespace Xianxia.Sect.Visual
             _effectiveChanged.Clear();
             foreach (var kvp in _active)
             {
-                var wantBackend = _spineAllocated.Contains(kvp.Key)
+                var wantBackend = WantsSpineRender(kvp.Key)
                     ? VisualBackend.Spine
                     : VisualBackend.SpriteSheet;
                 if (kvp.Value.Backend != wantBackend)
@@ -360,14 +388,56 @@ namespace Xianxia.Sect.Visual
         }
 
         /// <summary>
-        /// enum→factory map (C12 — no reflection). The Spine branch only engages when
-        /// the disciple is in THIS reconcile's allocation set AND the Visual.Spine
-        /// assembly registered a factory (license gate + skeleton asset both confirmed
-        /// at ITS bootstrap); otherwise degrade to SpriteSheet with a warn-once per
-        /// disciple. Entitlement in state is NEVER touched here (§7).
+        /// Q5-aware effective-backend predicate for the in-place respawn decision:
+        /// overridden disciples always "want" Spine while the override hooks are live
+        /// (they render their OWN rig — the §7 budget never applies, see CreateVisual),
+        /// everyone else wants Spine only when THIS reconcile's allocation set contains
+        /// them. Keeps Reconcile / OnChibiBackendChanged from churning an override
+        /// visual's backend every time SpineBudget moves.
+        /// </summary>
+        private bool WantsSpineRender(string discipleId)
+        {
+            var probe = SpineOverrideProbe;
+            if (probe != null && SpineOverrideVisualFactory != null &&
+                !string.IsNullOrEmpty(probe(discipleId))) return true;
+            return _spineAllocated.Contains(discipleId);
+        }
+
+        /// <summary>
+        /// CreateVisual — backend decision ladder (in order):
+        ///   1. Q5 story-character override (visual_overrides.json): render the
+        ///      disciple's OWN per-character rig. Runs BEFORE the §7 allocation/budget
+        ///      logic and does NOT count against SpineBudget — DELIBERATE DECISION:
+        ///      the budget sizes the shared-rig pool (§7), while these rigs are unique
+        ///      per-character assets with no part mixing (Q5 path), so counting them
+        ///      would silently degrade story characters for no measured reason. Revisit
+        ///      only with the team's sign-off (comment kept for that review).
+        ///   2. §7 allocation path — Spine-allocated AND a shared-rig factory exists →
+        ///      shared chibi_base rig; budget-full/unavailable → warn-once + SpriteSheet.
+        ///   3. Default — SpriteSheet.
+        /// Every failure path degrades to SpriteSheet — never a hard crash.
         /// </summary>
         private IChibiVisual CreateVisual(DiscipleState d)
         {
+            // 1) Q5 story-character override — own rig, outside the §7 budget.
+            var probe = SpineOverrideProbe;
+            var overrideFactory = SpineOverrideVisualFactory;
+            if (probe != null && overrideFactory != null &&
+                !string.IsNullOrEmpty(probe(d.DiscipleId)))
+            {
+                var overridden = overrideFactory(d, _root.transform);
+                if (overridden != null) return overridden;
+
+                if (_overrideDegradeWarned.Add(d.DiscipleId))
+                {
+                    Debug.LogWarning("[DiscipleVisualSystem] " + d.DiscipleId +
+                                     " has a story-character skeleton override but its rig failed to load — " +
+                                     "rendering as SpriteSheet (scene keeps running).");
+                }
+                return SpriteChibiVisual.Create(_root.transform, _resolver, _bank, _clock, _pool);
+            }
+
+            // 2) §7 allocation path (unchanged) — shared-rig Spine with budget degrade.
             if (_spineAllocated.Contains(d.DiscipleId))
             {
                 var factory = SpineVisualFactory;
@@ -474,5 +544,6 @@ namespace Xianxia.Sect.Visual
         private readonly List<DiscipleState> _effectiveChanged = new List<DiscipleState>(8);
         private readonly HashSet<string> _spineAllocated = new HashSet<string>(StringComparer.Ordinal);
         private readonly HashSet<string> _spineDegradeWarned = new HashSet<string>(StringComparer.Ordinal);
+        private readonly HashSet<string> _overrideDegradeWarned = new HashSet<string>(StringComparer.Ordinal); // Q5 warn-once
     }
 }

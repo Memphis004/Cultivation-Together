@@ -26,8 +26,9 @@ namespace Xianxia.Sect.Visual
         /// true = มนุษย์ยืนยันแล้วว่า Spine Editor/runtime license ถูกซื้อครบตาม
         /// phase0-results §4 checklist — จึงอนุญาตให้ VisualSpineBootstrap ผูก
         /// SpineVisualFactory และ flip SpineEnabled = true ตอนรัน
-        /// false (default, production) = bootstrap เป็น no-op — Spine path ปิดสนิท
-        /// ห้าม set true ในโค้ด — ตั้งผ่าน bootstrap config เมื่อ license ผ่านเท่านั้น
+        /// false (default) = bootstrap เป็น no-op — Spine path ปิดสนิท
+        /// ตั้งได้เฉพาะที่ composition root (GameLifetimeScope) เมื่อ license ผ่าน —
+        /// S4 ผ่านแล้ว บันทึกการตัดสินใจ 2026-09-25; bootstrap เองไม่มีสิทธิ์ set flag นี้
         /// </summary>
         public bool SpineActivationRequested { get { return _spineActivationRequested; } set { _spineActivationRequested = value; } }
         private volatile bool _spineActivationRequested;
@@ -63,12 +64,14 @@ namespace Xianxia.Sect.Visual
         private int _spineBudget = 20;
 
         /// <summary>
-        /// Q5 stub (Phase 3+) — Resources path of the future story-character rig
-        /// override table (discipleId → skeletonDataId). Loader/resolution logic is
-        /// NOT built yet; only the config slot exists so Visual.Spine can read the
-        /// path once that work lands. Empty = no overrides.
+        /// Q5 — Resources path of the story-character rig override table
+        /// (discipleId → skeletonDataResourcePath), resolved by VisualOverrideMap
+        /// (Visual.Spine assembly). Overridden disciples bypass the §7 allocation /
+        /// SpineBudget path entirely (per-character rigs, no part mixing) — the hook
+        /// wiring happens in VisualSpineBootstrap AFTER the S4 license gate. Empty =
+        /// no overrides.
         /// </summary>
         public string VisualOverridesPath { get { return _visualOverridesPath; } set { _visualOverridesPath = value; } }
-        private string _visualOverridesPath = string.Empty;
+        private string _visualOverridesPath = "Data/visual_overrides"; // shipped table — see Resources/Data/visual_overrides.json
     }
 }

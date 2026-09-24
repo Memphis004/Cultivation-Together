@@ -45,6 +45,7 @@ namespace Xianxia.Sect.Visual
         private readonly ChibiActivityMap _activityMap;
         private readonly VisualRuntimeConfig _config;
         private readonly DemoSpineRigMap _demoRigMap; // DEV-ONLY: example-rig mapping, null in production
+        private readonly VisualOverrideMap _overrideActivityMap; // Q5 per-rig activity→animation, null on shared-rig instances
 
         // instance skin state — the per-instance mixed skin is rebuilt from scratch on
         // every change (rig source skins are never mutated).
@@ -69,7 +70,8 @@ namespace Xianxia.Sect.Visual
             AvatarPartPool pool,
             ChibiActivityMap activityMap,
             VisualRuntimeConfig config,
-            DemoSpineRigMap demoRigMap = null)
+            DemoSpineRigMap demoRigMap = null,
+            VisualOverrideMap overrideActivityMap = null)
         {
             _go = go;
             _goTransform = go.transform;
@@ -79,6 +81,7 @@ namespace Xianxia.Sect.Visual
             _activityMap = activityMap;
             _config = config;
             _demoRigMap = demoRigMap; // null in production — example-rig mapping is dev-only
+            _overrideActivityMap = overrideActivityMap; // null unless created through the Q5 override path
         }
 
         /// <summary>
@@ -93,7 +96,8 @@ namespace Xianxia.Sect.Visual
             AvatarPartPool pool,
             ChibiActivityMap activityMap,
             VisualRuntimeConfig config,
-            DemoSpineRigMap demoRigMap = null)
+            DemoSpineRigMap demoRigMap = null,
+            VisualOverrideMap overrideActivityMap = null)
         {
             if (skeletonDataAsset == null)
             {
@@ -124,7 +128,7 @@ namespace Xianxia.Sect.Visual
                 return null;
             }
 
-            var visual = new SpineChibiVisual(go, skeletonAnimation, resolver, pool, activityMap, config, demoRigMap);
+            var visual = new SpineChibiVisual(go, skeletonAnimation, resolver, pool, activityMap, config, demoRigMap, overrideActivityMap);
             visual.ApplySorting();
             visual.ApplyFacing();
             visual.LogRigContentsOnce(); // L9: log slots/skins/animations once per instance (Marooned lesson)
@@ -150,6 +154,9 @@ namespace Xianxia.Sect.Visual
 
         /// <summary>Skeleton access — diagnostics/verify only; production code never pokes the skeleton directly.</summary>
         public Skeleton Skeleton { get { return _skeletonAnimation != null ? _skeletonAnimation.skeleton : null; } }
+
+        /// <summary>AnimationState access — diagnostics/verify only (e.g. assert the currently playing animation).</summary>
+        public Spine.AnimationState AnimationState { get { return _skeletonAnimation != null ? _skeletonAnimation.AnimationState : null; } }
 
         /// <summary>
         /// L9 (Marooned lesson): log the rig's slots/skins/animations once per
@@ -211,13 +218,22 @@ namespace Xianxia.Sect.Visual
 
             var skeletonData = _skeletonAnimation.skeleton.Data; // spine 3.8: Skeleton.Data (SkeletonData)
 
-            // DEV-ONLY demo override: while DevSpineOverride is live, the demo rig map
-            // (example-rig animation names) wins over ChibiActivityMap — never true in ship.
             var animName = string.Empty;
-            if (_config != null && _config.DevSpineOverride && _demoRigMap != null)
+            // 1) Q5 per-rig mapping (visual_overrides.json) — real rigs name animations
+            //    their own way (idle1/walk/run), so the mapping ships with the rig table.
+            //    Production path — consulted BEFORE the shared ChibiActivityMap.
+            if (_overrideActivityMap != null)
+            {
+                animName = _overrideActivityMap.ResolveAnimationForActivity(_discipleId, activityName);
+            }
+            // 2) DEV-ONLY demo override: while DevSpineOverride is live, the demo rig map
+            //    (example-rig animation names) wins over ChibiActivityMap — never true in ship.
+            //    (Unchanged for demo instances: they are created without an override map.)
+            if (string.IsNullOrEmpty(animName) && _config != null && _config.DevSpineOverride && _demoRigMap != null)
             {
                 animName = _demoRigMap.ResolveAnimationForActivity(activityName);
             }
+            // 3) shared ChibiActivityMap (chibi_activity_map.json)
             if (string.IsNullOrEmpty(animName))
             {
                 animName = _activityMap.ResolveAnimation(_discipleId, activityName);
@@ -232,6 +248,16 @@ namespace Xianxia.Sect.Visual
                                      "' (" + _discipleId + ")");
                 }
                 animName = ChibiActivityMap.FallbackState;
+
+                // Q5 per-rig mapping for the fallback activity too ("Idle" → "idle1" on
+                // the real rigs) — otherwise the literal "Idle" misses and the chain
+                // ends with no pose on production rigs.
+                if (_overrideActivityMap != null)
+                {
+                    var rigFallback = _overrideActivityMap.ResolveAnimationForActivity(
+                        _discipleId, ChibiActivityMap.FallbackState);
+                    if (!string.IsNullOrEmpty(rigFallback)) animName = rigFallback;
+                }
 
                 // DEV-ONLY: while the demo rig map is live, resolve the fallback
                 // through it too — example rigs name animations lowercase ("idle"),

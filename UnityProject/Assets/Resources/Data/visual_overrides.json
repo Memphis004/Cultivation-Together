@@ -1,0 +1,24 @@
+{
+  "overrides": [
+    {
+      "discipleId": "d000",
+      "skeletonDataResourcePath": "Avatar/Spine/male/1113103_1",
+      "activityToAnimation": [
+        { "activity": "Idle",     "animation": "idle1" },
+        { "activity": "Walking",  "animation": "walk" },
+        { "activity": "Walk",     "animation": "walk" },
+        { "activity": "Running",  "animation": "run" }
+      ]
+    },
+    {
+      "discipleId": "d002",
+      "skeletonDataResourcePath": "Avatar/Spine/female/1123102_1_SkeletonData",
+      "activityToAnimation": [
+        { "activity": "Idle",     "animation": "idle1" },
+        { "activity": "Walking",  "animation": "walk" },
+        { "activity": "Walk",     "animation": "walk" },
+        { "activity": "Running",  "animation": "run" }
+      ]
+    }
+  ]
+}

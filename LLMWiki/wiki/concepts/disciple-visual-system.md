@@ -20,7 +20,7 @@ related:
   - "[[concepts/mvp-ui]]"
   - "[[sources/task-system]]"
 created: 2026-09-22
-updated: 2026-09-22
+updated: 2026-09-25
 confidence: medium
 tags: [visual, avatar, chibi, spine, sprite-sheet, portrait, tier, monetization, plan]
 ---
@@ -370,7 +370,7 @@ Assets/Resources/Data/chibi_anim.json · visual_overrides.json
 1. **S1 Spine shared rig:** 1 rig, 6 slot, 20 instance สุ่ม skin — วัด CPU ms/frame, draw calls, GC ตอน `SetSkin`, ตรวจ API 4.3
 2. **S2 Sprite layered:** 300 instance × ~4 layer, atlas เดียว, central clock — วัด CPU ms/frame, batch count, GC steady-state
 3. **S3 ขนาด+ทิศ:** วาด placeholder 1 ชุดเข้าฉากเทียบภาพ reference → ล็อก cell size และ 2/4 ทิศ
-4. **S4 License:** ยืนยันเงื่อนไข Spine (edition ที่ซื้อครอบคลุม mesh/skins ที่ใช้ + runtime license สำหรับ distribute) แล้วเพิ่ม exception ใน `conventions.md` (ดู R1)
+4. **S4 License:** ✅ **ยืนยันแล้ว (2026-09-25 — เปิดถาวร):** license ครอบคลุมตาม checklist → gate ตั้ง true ที่ composition root (จุดตัดสินใจของมนุษย์ L12) + exception ของ Spine ลง `conventions.md` แล้ว (ดู R1) — รายละเอียดครบใน [[decisions/visual-overrides-straight-alpha]]
 - **Gate:** รวม chibi ทั้งฉาก ≤ **4 ms/frame** บนเครื่องเป้าหมาย (ค่าตั้งต้น ปรับได้) ไม่ผ่าน → ลด `SpineBudget` / เปิด culling / ลดจำนวน layer
 
 ### Phase 1 — Foundation (ภาพที่ผู้เล่นเห็นไม่เปลี่ยน) · ขนาด M ✅ (commit 49da57b)
@@ -381,10 +381,11 @@ Assets/Resources/Data/chibi_anim.json · visual_overrides.json
 - `ChibiSceneRoot`, `SpriteChibiVisual`, `ChibiFrameBank/Clock`, `DiscipleVisualSystem` (Reconcile), `SceneUnloadedMessage`, `chibi_anim.json`, placeholder art
 - **Acceptance:** ☑ recruit → chibi ปรากฏ ☑ เปลี่ยนผมใน Portrait panel → chibi เปลี่ยนโดยไม่ respawn ☑ swap scene A→B → despawn/respawn ครบตาม state ☑ 100 ตัวอยู่ใน gate (105 ตัว = 0.793 ms median) ☑ steady-state GC = 0 และไม่มี `Animator`
 
-### Phase 3 — Spine + tier policy · ขนาด M ✅ (system + demo render landed; production rig ยัง INERT รอ S4 license — demo ใช้ example rig ผ่าน DevSpineOverride)
+### Phase 3 — Spine + tier policy · ขนาด M ✅ (system + demo + production render landed; S4 ยืนยัน 2026-09-25 — production ใช้ rig จริงผ่าน VisualSpineBootstrap, demo ยังใช้ example rig ผ่าน DevSpineOverride)
 - `SpineChibiVisual`, `ChibiActivityMap`, `VisualTierPolicy`, budget degrade, `TrySetChibiBackend`, `DiscipleChibiBackendChangedMessage`
 - **Acceptance (verify ผ่าน example rig mix-and-match-pro, 24/24):** ☑ d000/d003 = Spine, ที่เหลือ Sprite ☑ ตั้ง `SpineBudget=1` → d003 degrade เป็น Sprite โดย state ไม่เปลี่ยน ☑ promote d001 → respawn คง position/activity/facing ☑ `ApplySlot` บน Spine ทำงาน (ไม่ recreate GameObject) ☑ ชื่อ animation หาย → fallback `Idle` + warning ครั้งเดียว
 - **Visual demo ground truth (2026-09-23, backbuffer capture):** ☑ demo_shot.png เห็น chibi 4 ตัวครบ (d000/d003 = Spine `attachments=32`, d001/d002 = Sprite — `spriteRenderers=10` ไม่มี sprite NULL, rect 96×96 ครบ) ☑ d002 (top-left, Idle) เรนเดอร์ครบชุด ไม่ใช่เส้นส้ม (36% fg, 17 สี: โรบขาว+ผิว+ผมเทา) ☑ HUD แสดง 2 label + ปุ่ม 7 ปุ่ม (DevSpineOverride=True, SpineBudget=20, SpineEnabled=False) ☑ cam[0] depth=10 ชนะ boot camera ☑ 0 exception ใหม่ (evidence: `Library/demo_shot.png` + `visual_spike_result.txt`; วิเคราะห์ด้วย `scripts/analyze_demo_shot.py` + `scripts/hud_profile.py`)
+- **Production activation (S4, 2026-09-25):** ☑ `visual_overrides verify` production-wiring **pass=41 fail=0** (runner ไม่ register hooks เอง — bootstrap ผูกทั้งหมด): d000/d002 render rig ตัวเองผ่าน Q5 override (`visual_overrides.json` + per-rig `activityToAnimation` idle1/walk/run), d003 เรนเดอร์ interim shared rig `1113103_1` (แทน chibi_base ที่ยังไม่มี), override อยู่นอก SpineBudget ☑ visual spot-check บนฉากจริง: 3 rig silhouette ครบ, ขอบมืด = outline ศิลป์เอง (dark edge opaque = 0), blend p95 = 0 — straight-alpha ไม่มี artifact (evidence: `Library/visual_overrides_verify_report.txt` + `Library/visual_overrides_shot*.png`; รายละเอียด [[decisions/visual-overrides-straight-alpha]])
 
 ### Phase 4 — Activity + interaction · ขนาด M ✅ (activity+click landed; panel opened via message path — panel look pending art pass)
 - `CurrentTask → ChibiActivity` (data-driven via `TaskActivityMapper` + `chibi_activity_task_map.json`; task-system ยังไม่มี → derive จาก `CurrentTask` ตอน reconcile — event-triggered เท่านั้น ไม่มี polling; TODO: subscribe `DiscipleTaskChangedMessage` เมื่อ task-system v2 มา), work anchor lookup ใน `ChibiSceneRoot` (shipped scenes ยังไม่มี anchors → grid fallback), คลิก chibi (`ChibiClickTarget` + Collider2D/OnMouseDown) → `DiscipleSelectedMessage` → `DiscipleDetail` panel (Portrait ผ่าน `AvatarRenderer` เดิม — pipeline เดียวกับ AvatarCustomization ไม่มี drift)
@@ -414,7 +415,7 @@ Assets/Resources/Data/chibi_anim.json · visual_overrides.json
 
 | # | ความเสี่ยง | แผนรับมือ |
 |---|---|---|
-| R1 | **Spine ขัดกับกฎ "Open-source first" ใน `conventions.md`** + มีเงื่อนไข license (ต้องมี Spine license ที่ครอบคลุมฟีเจอร์ที่ใช้ และ runtime license ตอน distribute) | S4 ตรวจก่อนลงทุน; เพิ่ม exception ใน conventions; `IChibiVisual` + asmdef แยกทำให้สลับ Tier-2 เป็น Unity 2D Animation (built-in, ไม่มี license) ได้ถ้าจำเป็น |
+| R1 | ~~Spine ขัดกับกฎ "Open-source first"~~ **ปิดแล้ว (2026-09-25):** license ยืนยัน + exception ใน `conventions.md` แล้ว; เงื่อนไขคงเหลือ: example assets ของ Esoteric ห้ามตกค้างใน build จริง, runtime license ผูก edition ที่ซื้อ | asmdef แยก (`Visual.Spine`) ยังทำให้สลับ Tier-2 เป็น Unity 2D Animation (built-in) ได้ถ้าจำเป็น |
 | R2 | Art ต่อ part ×3 | ลำดับส่งมอบ §9; ตัด face detail ออกจาก chibi |
 | R3 | Rig เดียวรองรับรูปร่างหลากหลายไม่พอ (เช่น ชาย/หญิงต่างสัดส่วน) | ตัดสินหลัง S1 — lean: 1 rig + body skin ตามเพศ ไม่ใช่ 2 rig |
 | R4 | Sprite tier 300 ตัวหนักกว่าคาด | S2 gate; culling; ลดจำนวน layer (รวม hair_back เข้า body สำหรับผมสั้น) |

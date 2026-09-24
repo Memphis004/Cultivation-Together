@@ -14,7 +14,7 @@ related:
   - "[[sources/disciple-visual-system]]"
   - "[[entities/avatar-appearance]]"
 created: 2026-09-23
-updated: 2026-09-23
+updated: 2026-09-25
 confidence: high
 tags: [visual, demo, dev-only, spine, example-rig, tier-policy]
 ---
@@ -34,8 +34,11 @@ click → message, fallback animation, budget ตัดสิน effective backe
 
 - ✅ Implement ครบ (T1–T6, T8) — **demo verify COMPLETE pass=33 fail=0**
   (2026-09-22, `UnityProject/Library/demo_verify_report.txt`)
-- ⚠️ Spine ยัง **INERT ใน production** — R1/S4 license ยังไม่ตัดสิน
-  (`SpineEnabled=false`, `SpineActivationRequested=false` ตามเดิมทุกอย่าง)
+- ✅ **อัปเดต (2026-09-25):** S4 ยืนยันแล้ว — production เปิด Spine ถาวรผ่าน
+  `VisualSpineBootstrap` (gate `SpineActivationRequested` = true ที่ composition root,
+  ดู [[decisions/visual-overrides-straight-alpha]]) — เดโมหน้านี้จึงเหลือหน้าที่เป็น
+  **DEV-ONLY harness** สำหรับทดสอบ tier policy บน example rig โดยเฉพาะ
+  (สิ่งที่เดโมพิสูจน์เกี่ยวกับ budget/degrade ยังใช้ได้เหมือนเดิม)
 
 ## 1. วิธีเปิดเดโม
 
@@ -80,14 +83,15 @@ public bool DevSpineOverride { get; set; }   // default false — ship ไม่
 | กฎ | รายละเอียด |
 |---|---|
 | ใครเขียนได้ | **`VisualDemoSpineEnabler` เท่านั้น** — Awake → `true` + register demo factory, OnDestroy → restore factory + `false` (Spine path ปิดตอน scene ตายพอดี) |
-| ไม่ใช่ S4 gate | `SpineActivationRequested` (การตัดสิน license ของมนุษย์) **ไม่ถูกแตะ** — production bootstrap ยัง INERT เหมือนเดิม |
+| ไม่ใช่ S4 gate | `SpineActivationRequested` (การตัดสิน license ของมนุษย์) **ไม่ถูกแตะ** โดยเดโม — gate ถูกตั้ง true แล้วที่ composition root (`GameLifetimeScope`, 2026-09-25) ไม่ใช่ที่นี่ |
 | Ship defaults | `SpineEnabled` ยัง `false`, `DevSpineOverride` เป็น `true` เฉพาะช่วง demo scene มีชีวิตอยู่ |
 | Guard | T8(b) grep-level — เขียนนอก enabler = guard fail, เปิดเดโมไม่ได้ |
 
-**R1/S4 คำเตือน:** การใช้ example rig ในเดโมไม่ใช่การอนุมัติ license — Spine ยังขัดกับ
-กฎ "Open-source first" ใน `conventions.md` จนกว่า S4 จะตัดสิน (ดู R1 ของ
-[[sources/disciple-visual-system]]) ห้าม flip `SpineEnabled`/`SpineActivationRequested`
-ในโค้ด — ต้องเป็นการตัดสินของมนุษย์
+**R1/S4 สถานะ (อัปเดต 2026-09-25):** คำเตือนเดิมหมดผลแล้ว — S4 ยืนยัน + exception
+"Open-source first" ลง `conventions.md` แล้ว (ดู R1 ของ
+[[sources/disciple-visual-system]] + [[decisions/visual-overrides-straight-alpha]])
+กฎที่ยังคงอยู่: ห้าม flip gate ในโค้ด demo/tools — การตัดสินใจยังต้องเกิดที่
+composition root เท่านั้น และ example assets ของ Esoteric ยังห้ามตกค้างใน build จริง
 
 ## 3. HUD buttons → สิ่งที่พิสูจน์ (T5)
 

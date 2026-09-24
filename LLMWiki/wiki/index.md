@@ -34,6 +34,7 @@ Design documents and historical record:
 - [[sources/bug-log|Bug Log]] — real bugs + fixes from all labs
 - [[sources/open-questions|Open Questions]] — what's deliberately not decided
 - [[sources/visual-demo-scene|Visual Demo Scene (DEV-ONLY)]] — DiscipleVisualSystem Phase 3 demo บน Spine example rig + DevSpineOverride seam + guards
+- [[decisions/visual-overrides-straight-alpha|Visual Overrides — Straight-Alpha Conversion]] — ADR: atlas ของ rig เฉพาะตัวละคร (Q5) เป็น straight alpha บน Linear color space + วิธี re-export จาก Spine IDE + การเปิด Spine ถาวร (S4 activation — license ยืนยัน 2026-09-25, gate ตั้งที่ composition root)
 
 ## Code Snippets (Important Scripts)
 
@@ -95,8 +96,8 @@ Catalogs of game entities:
 
 ## Maintenance
 
-- Last index update: 2026-09-23
-- Total source pages: 10 (+ 9 code snippets)
+- Last index update: 2026-09-25
+- Total source pages: 11 (+ 9 code snippets)
 - Total concept pages: 14
 - Total entity pages: 7
 - Total bug log entries: 11 (across 13 labs)
