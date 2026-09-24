@@ -12,7 +12,7 @@ related:
   - "[[sources/sex-gender-system]]"
   - "[[concepts/state-management]]"
 created: 2026-09-01
-updated: 2026-09-04
+updated: 2026-09-24
 confidence: high
 tags: [avatar, design-decision, pose, outfit, face-customization]
 ---
@@ -35,8 +35,9 @@ tags: [avatar, design-decision, pose, outfit, face-customization]
   → UI categories `ใบหน้า / ลักษณะ / ร่างกาย` (`AvatarSlots.Categories`)
 - **AvatarPartDef**: `id, slot, category, displayName, spritePath, spritePathBack,
   thumbPath, drawOrder, drawOrderBack, isDefault, tintable, poseId, sexTag`
-- **Draw stack**: `base 0 → hair_back 10 → body 20 → head 30 → face_marking 34
-  → hair_front 40 → accessory 50`
+- **Draw stack**: `base 0 → hair_back 10 → body 20 → head 30 → brows 31 → eyes 32
+  → nose 33 → mouth 34 → face_marking 35 → eyeshadow 36–39 → hair_front 40 → accessory 50`
+  (face window ขยายตาม face split 2026-09-24 — ดู [[concepts/disciple-visual-system]] Track ขนาน)
 - **AvatarFraming** presets `FullBody / Bust / HeadIcon` บน canvas 1024×1536
   — head-center ต้องอยู่พิกัดเดียวกันทุกไฟล์
 - **Mutation choke point** `SectStateProvider.TryChangeAvatarPart()`
@@ -162,9 +163,9 @@ $\text{combinations} = \prod_{s \in \text{slots}} |P_s|$
 
 ### 3.3 ข้อควรระวังเชิงเทคนิค
 
-- ต้องซอย `drawOrder` ระหว่าง `head 30` กับ `face_marking 34` ให้พอ
-  (แนะนำ: `head/face_shape 30`, `brows 31`, `eyes 32`, `nose 32.5→33`, `mouth 33`)
-  → ถ้าที่ว่างไม่พอ ให้ **re-number ทั้ง stack เป็นหลักสิบ** ตั้งแต่ตอนนี้
+- ✅ **ซอย drawOrder แล้ว (2026-09-24)**: `head 30`, `brows 31`, `eyes 32`, `nose 33`,
+  `mouth 34`, `face_marking 35`, `eyeshadow 36–39` — ที่ว่างพอโดยไม่ต้อง re-number เป็นหลักสิบ
+  (eyeshadow วาดทับ brows จงใจ และอยู่ใต้ hair_front 40; `FaceSplitTests` ล็อก window นี้)
 - ทุกชิ้นต้องวาดบน canvas 1024×1536 และอ้าง **head-center พิกัดเดียวกัน**
   ไม่งั้นตา/จมูกจะเลื่อนเมื่อสลับรูปหน้า
 - `AvatarSlots.Categories["ใบหน้า"]` จะมี 5–7 slot → **slot tab bar ต้องเลื่อนได้**
@@ -186,7 +187,7 @@ $\text{combinations} = \prod_{s \in \text{slots}} |P_s|$
 
 | # | งาน | ไฟล์ | ผลลัพธ์ที่ผู้เล่นเห็น |
 |---|---|---|---|
-| 1 | **แตก `head` → `face_shape/eyes/brows/nose/mouth`** + part จริง | `avatar_parts.json`, art | 3 หน้า → หลักหมื่น 🔥 |
+| 1 | **แตก `head` → `eyes/brows/nose/mouth/eyeshadow`** + part จริง ✅ (placeholder 41 parts ลงแล้ว 2026-09-24 — รอแทน art จริงในข้อ 4) | `avatar_parts.json`, art | 3 หน้า → หลักหมื่น 🔥 |
 | 2 | เพิ่ม slot `beard` | `SectEconomyState.cs`, JSON | ครบตาม reference |
 | 3 | Color picker ให้ `tintable` | View/Presenter | variety เพิ่มฟรี |
 | 4 | แทน placeholder ด้วย art จริง | art | 🎨 **80% ของ "ความเหมือน"** |

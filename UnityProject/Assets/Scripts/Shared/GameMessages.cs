@@ -79,6 +79,24 @@ namespace Xianxia.Sect.Messages
         [Key(1)] public bool Paused { get; set; }
     }
 
+    // Internal-only: entering build (placement) mode. CameraRigController
+    // zooms to the Placement preset and GridOverlayRenderer shows the grid;
+    // Payload carries the ghost transform when one exists (may be null).
+    [MessagePackObject]
+    public class BuildModeStartedMessage
+    {
+        [Key(0)] public string SourceId { get; set; }
+        [Key(1)] public string GhostId { get; set; }
+    }
+
+    // Internal-only: leaving build mode (confirm, cancel, or system stop).
+    [MessagePackObject]
+    public class BuildModeEndedMessage
+    {
+        [Key(0)] public string SourceId { get; set; }
+        [Key(1)] public bool Confirmed { get; set; }
+    }
+
     // Request/response pair: the MCP bridge asks Unity for a full state
     // snapshot on demand (e.g. when the AI GM calls the get_sect_state tool).
     [MessagePackObject]

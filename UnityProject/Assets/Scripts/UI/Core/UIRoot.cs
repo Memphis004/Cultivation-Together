@@ -49,13 +49,16 @@ namespace Xianxia.Sect.UI
                 ApplyLogWindowLayout(rt);
             else if (name.StartsWith("AvatarCustomization"))
                 ApplyAvatarCustomizationLayout(rt);
-                            
+            else if (name.StartsWith("BottomMenu"))
+                ApplyBottomMenuLayout(rt);
+            else if (name.StartsWith("ResourcePopup"))
+                ApplyResourcePopupLayout(rt);
         }
 
         // ---------- ResourceHud ----------
         private static void ApplyResourceHudLayout(RectTransform rt)
         {
-            // Top-stretch bar: full width,100 px tall
+            // Top-stretch bar: full width, 100 px tall.
             rt.anchorMin = new Vector2(0f, 1f);
             rt.anchorMax = new Vector2(1f, 1f);
             rt.pivot     = new Vector2(0.5f, 1f);
@@ -66,7 +69,7 @@ namespace Xianxia.Sect.UI
             if (hlg != null)
             {
                 hlg.padding           = new RectOffset(20, 20, 10, 10);
-                hlg.spacing           = 20f;
+                hlg.spacing           = 12f;
                 hlg.childAlignment    = TextAnchor.MiddleLeft;
                 hlg.childControlWidth  = true;
                 hlg.childControlHeight = true;
@@ -87,9 +90,81 @@ namespace Xianxia.Sect.UI
                 if (cr == null) continue;
                 cr.anchorMin = new Vector2(0.5f, 0.5f);
                 cr.anchorMax = new Vector2(0.5f, 0.5f);
-                cr.sizeDelta = new Vector2(150f, 80f);
                 cr.pivot     = new Vector2(0.5f, 0.5f);
+
+                cr.sizeDelta = new Vector2(150f, 80f);
+                if (child.name == "SpiritStonesText" || child.name == "ContributionText")
+                {
+                    var text = child.GetComponent<TMPro.TMP_Text>();
+                    if (text != null)
+                    {
+                        text.alignment = TMPro.TextAlignmentOptions.MidlineRight;
+                        text.margin = new Vector4(42f, 0f, 8f, 0f);
+                    }
+                }
             }
+        }
+
+        // ---------- BottomMenu ----------
+        private static void ApplyBottomMenuLayout(RectTransform rt)
+        {
+            // Bottom bar: full width, fixed height, anchored to the bottom edge.
+            rt.anchorMin = new Vector2(0f, 0f);
+            rt.anchorMax = new Vector2(1f, 0f);
+            rt.pivot     = new Vector2(0.5f, 0f);
+            rt.sizeDelta = new Vector2(0f, 120f);
+            rt.anchoredPosition = Vector2.zero;
+
+            var hlg = rt.GetComponent<HorizontalLayoutGroup>();
+            if (hlg != null)
+            {
+                hlg.padding           = new RectOffset(24, 24, 12, 12);
+                hlg.spacing           = 16f;
+                hlg.childAlignment    = TextAnchor.MiddleCenter;
+                hlg.childControlWidth  = true;
+                hlg.childControlHeight = true;
+                hlg.childForceExpandWidth  = false;
+                hlg.childForceExpandHeight = false;
+            }
+
+            var csf = rt.GetComponent<ContentSizeFitter>();
+            if (csf != null)
+            {
+                csf.horizontalFit = ContentSizeFitter.FitMode.Unconstrained;
+                csf.verticalFit   = ContentSizeFitter.FitMode.Unconstrained;
+            }
+
+            // Buttons keep their native sprite aspect (96x95): width ~110, height ~110.
+            foreach (Transform child in rt)
+            {
+                var cr = child.GetComponent<RectTransform>();
+                if (cr == null) continue;
+                cr.anchorMin = new Vector2(0.5f, 0.5f);
+                cr.anchorMax = new Vector2(0.5f, 0.5f);
+                cr.pivot     = new Vector2(0.5f, 0.5f);
+                cr.sizeDelta = new Vector2(110f, 110f);
+            }
+        }
+
+        // ---------- ResourcePopup (คลังสินค้า) ----------
+        private static void ApplyResourcePopupLayout(RectTransform rt)
+        {
+            // Centered modal, same footprint family as EventPopup.
+            rt.anchorMin = new Vector2(0.5f, 0.5f);
+            rt.anchorMax = new Vector2(0.5f, 0.5f);
+            rt.pivot     = new Vector2(0.5f, 0.5f);
+            rt.sizeDelta = new Vector2(460f, 520f);
+            rt.anchoredPosition = Vector2.zero;
+
+            var csf = rt.GetComponent<ContentSizeFitter>();
+            if (csf != null)
+            {
+                csf.horizontalFit = ContentSizeFitter.FitMode.Unconstrained;
+                csf.verticalFit   = ContentSizeFitter.FitMode.Unconstrained;
+            }
+
+            // Layout of children is fully prefab-driven (rows live under
+            // RowsRoot with their own VerticalLayoutGroup).
         }
 
         // ---------- EventPopup ----------

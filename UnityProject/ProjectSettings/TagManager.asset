@@ -41,3 +41,6 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: GridOverlay
+    uniqueID: 3857265920
+    locked: 0

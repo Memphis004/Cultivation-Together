@@ -394,8 +394,13 @@ Assets/Resources/Data/chibi_anim.json · visual_overrides.json
 - field `entitlement`, `IVisualEntitlementProvider` + `DefaultEntitlementProvider` (rule-based: `""`=ผ่าน / `"owner"`=rank ≥ Elder **proxy ชั่วคราวรอ Q1** / `"dlc:<packId>"`=ปฏิเสธ — fail-closed ห้าม hardcode true), validation ชั้น 6 ใน `TryChangeAvatarPart` (failReason ระบุ part+entitlement), lock ใน UI (`IsLocked` จาก provider จริง — overlay + `interactable=false`), preset+reroll = ปุ่ม Randomize เดิม + filter ผ่าน `EntitlementRandom` (slot ที่เหลือแต่ part ล็อก → ข้ามเงียบ), DLC pack hook (schema `"dlc:"` + switch แยกเคส)
 - **Acceptance (play-mode verify 20/20 + EditMode 36/36):** ☑ d001 พยายามใส่ `acc_jade_crown` (owner) → reject + failReason ☑ d000 (SectMaster)/d003 (Elder) ใส่ได้ ☑ UI: part ล็อกแสดง overlay + กดไม่ได้ตาม entitlement (ไม่ hardcode false อีกต่อไป) ☑ Randomize ×20 ไม่ติด part ล็อก ☑ part `entitlement=""` ใช้ได้ปกติทุกที่ (regression Phase 1–4 ผ่าน)
 
-### Track ขนาน — Face split (Roadmap #1 ของ avatar)
-- เป็นงาน **Portrait-only** (§4.3) ไม่ขึ้นกับ phase ข้างบน ทำได้ทุกเมื่อ
+### Track ขนาน — Face split (Roadmap #1 ของ avatar) ✅ (2026-09-24 — portrait-only; chibi ยังเก็บ feature baked-in ตาม R4)
+- ซอยสล็อต **eyes / brows / nose / mouth / eyeshadow** ออกจาก head บน portrait — `avatar_parts.json` 41 parts (brows×4, eyes×4, nose×3, mouth×4, eyeshadow×2 + `*_none` empty-layer default ของ face slot ทั้ง 5); face_marking red_dot อยู่ 35, chibi/spine ไม่มี face part (§4.3 คงเดิม)
+- **Draw window (portrait)**: `head 30 → brows 31 → eyes 32 → nose 33 → mouth 34 → face_marking 35 → eyeshadow 36–39 → hair_front 40` — eyeshadow วาดทับ brows จงใจ (อยู่ใต้ hair); `FaceSplitTests` ล็อก window ทั้ง core (31–35) และ eyeshadow (36–39) + ลำดับ resolver head< brows<eyes<nose<mouth<hair
+- **Placeholder portrait 256×384** (สัดส่วน 2:3 ของสเปก 1024×1536), invariant: head-center = (128, 262, y-up) ทุกไฟล์ — bake ผ่าน `PortraitPlaceholderBaker` (menu `Xianxia/Generate Portrait Placeholder Sheets`, output `Assets/Resources/Avatar/`, 36 PNG) ซึ่งรันจาก CLI ได้ผ่าน remote-control command `bake_portrait`; ตรวจไฟล์ด้วย `scripts/check_portrait_pngs.py` (PNG decode ล้วน stdlib, FAILURES: 0)
+- **กติกา coverage ชั้น 5 ใหม่** (`TryChangeAvatarPart`): `IsEmptyLayer` (ทุก path+spineSkin ว่าง) ผ่านเสมอ = removal intent; ส่วน non-empty ต้องมี art บน backend ที่เปิดอยู่ ≥1 ทาง — แก้ปัญหาเดิมที่ portrait-only part และ `acc_none` โดน reject เมื่อ SpriteSheetEnabled=true โดยไม่ใช้ flag portraitOnly (เลี่ยง dual source of truth ตามบทเรียน outfit §1 ของ [[sources/avatar-appearance]])
+- **Resolver**: ข้าม `IsEmptyLayer` เงียบ ๆ ทุก backend (ไม่ WarnOnce) — เตือนเฉพาะ non-empty ที่ไม่รองรับ backend จริง
+- **ยอมรับผ่าน:** ☑ EditMode 44/44 (FaceSplitTests 6 + AvatarPartCoverageTests 2 ใหม่) ☑ PNG checker 0 failures ☑ demo_verify production path pass=33 fail=0 (`Library/demo_verify_report.txt`) ☑ console 0 errors หลังรัน + warning เดิม `no def for slot 'eyes'` หาย
 
 ## 12. What NOT to touch
 - `AvatarAppearance` `[Key(0–2)]`, `DiscipleState` `[Key(0–7)]` — append-only เท่านั้น

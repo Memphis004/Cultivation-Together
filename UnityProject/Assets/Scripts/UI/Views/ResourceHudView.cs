@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Xianxia.Sect.UI
 {
@@ -33,6 +34,8 @@ namespace Xianxia.Sect.UI
         [Header("Personal Wallet (Sect Master)")]
         [SerializeField] private TMP_Text spiritStonesText;
         [SerializeField] private TMP_Text contributionText;
+        [SerializeField] private Image spiritStonesIcon;
+        [SerializeField] private Image contributionIcon;
 
         [Header("Delta colors")]
         [SerializeField] private Color deltaPositiveColor = new Color(0.45f, 0.85f, 0.45f);
@@ -96,6 +99,37 @@ namespace Xianxia.Sect.UI
         {
             if (spiritStonesText != null) spiritStonesText.text = spiritStones.ToString();
             if (contributionText != null) contributionText.text = contribution.ToString();
+        }
+
+        private void OnEnable()
+        {
+            ConfigureWalletIcon(spiritStonesIcon, spiritStonesText);
+            ConfigureWalletIcon(contributionIcon, contributionText);
+        }
+
+        private static void ConfigureWalletIcon(Image icon, TMP_Text valueText)
+        {
+            if (icon == null) return;
+
+            icon.preserveAspect = true;
+            icon.raycastTarget = false;
+            icon.SetNativeSize();
+
+            if (valueText != null)
+            {
+                var iconTransform = icon.rectTransform;
+                if (iconTransform.parent != valueText.transform)
+                    iconTransform.SetParent(valueText.transform, false);
+                iconTransform.anchorMin = new Vector2(0f, 0.5f);
+                iconTransform.anchorMax = new Vector2(0f, 0.5f);
+                iconTransform.pivot = new Vector2(0f, 0.5f);
+                iconTransform.anchoredPosition = new Vector2(0f, 0f);
+                var nativeSize = icon.sprite != null ? icon.sprite.rect.size : iconTransform.sizeDelta;
+                var scale = Mathf.Min(40f / nativeSize.y, 34f / nativeSize.x);
+                iconTransform.sizeDelta = nativeSize * scale;
+                valueText.alignment = TextAlignmentOptions.MidlineRight;
+                valueText.margin = new Vector4(42f, 0f, 6f, 0f);
+            }
         }
     }
 }

@@ -102,6 +102,8 @@ namespace Xianxia.Sect
             builder.Register<Xianxia.Sect.UI.AvatarCustomizationPresenter>(Lifetime.Transient);
             builder.Register<Xianxia.Sect.Visual.TaskActivityMapper>(Lifetime.Singleton); // Phase 4: CurrentTask→activity (data-driven)
             builder.Register<Xianxia.Sect.UI.DiscipleDetailPresenter>(Lifetime.Transient); // Phase 4: click chibi → detail
+            builder.Register<Xianxia.Sect.UI.BottomMenuPresenter>(Lifetime.Transient); // persistent bottom bar (สร้าง / ศิษย์)
+            builder.Register<Xianxia.Sect.UI.ResourcePopupPresenter>(Lifetime.Transient); // คลังสินค้า popup (read-only stockpile)
             builder.RegisterEntryPoint<Xianxia.Sect.UI.DiscipleDetailUISystem>(Lifetime.Singleton); // Phase 4: message → panel
             builder.RegisterEntryPoint<Xianxia.Sect.UI.WorldEventUISystem>(Lifetime.Singleton);
             builder.RegisterEntryPoint<Xianxia.Sect.UI.UIBootstrap>(Lifetime.Singleton);
@@ -165,11 +167,27 @@ namespace Xianxia.Sect
             // Interprocess pub/sub: broadcast avatar equipment changes to UI + MCP client
             messagePipeBuilder.RegisterTcpInterprocessMessageBroker<string, AvatarEquipmentChangedMessage>(interprocess);
 
+            // --- camera rig ports (test seams; see CameraRigPorts.cs) ---
+            // The rig talks to the bus/scene/Resources/Time only through these
+            // interfaces, so EditMode tests can drive it with fakes.
+            builder.Register<Xianxia.Sect.Visual.IRigMessageBus, Xianxia.Sect.Visual.MessagePipeRigBus>(Lifetime.Singleton);
+            builder.Register<Xianxia.Sect.Visual.ICameraRigEnvironment, Xianxia.Sect.Visual.SceneEnvironment>(Lifetime.Singleton);
+            builder.Register<Xianxia.Sect.Visual.ICellSpriteMetrics, Xianxia.Sect.Visual.ResourcesCellSpriteMetrics>(Lifetime.Singleton);
+            builder.Register<Xianxia.Sect.Visual.IMainThreadQueue, Xianxia.Sect.Visual.UniTaskMainThreadQueue>(Lifetime.Singleton);
+            builder.Register<Xianxia.Sect.Visual.IRigClock, Xianxia.Sect.Visual.UnityRigClock>(Lifetime.Singleton);
+
             // --- gameplay subsystems, started/ticked by VContainer ---
             builder.RegisterEntryPoint<TimeSystem>(Lifetime.Singleton).AsSelf();
             builder.RegisterEntryPoint<DiscipleSystem>(Lifetime.Singleton).AsSelf();
             builder.RegisterEntryPoint<ResourceCraftingSystem>(Lifetime.Singleton).AsSelf();
             builder.RegisterEntryPoint<BuildingSystem>(Lifetime.Singleton).AsSelf();
+            builder.RegisterEntryPoint<Xianxia.Sect.Visual.CameraRigController>(Lifetime.Singleton).AsSelf();
+            builder.RegisterEntryPoint<Xianxia.Sect.Visual.GridOverlayRenderer>(Lifetime.Singleton).AsSelf();
+            builder.RegisterEntryPoint<Xianxia.Sect.Visual.TerrainBackdropRenderer>(Lifetime.Singleton).AsSelf();
+
+            // Camera framing: plain-C# config (task forbids ScriptableObject
+            // here); sprite/PPU/grid values are measured at runtime.
+            builder.Register<Xianxia.Sect.Visual.CameraFramingConfig>(Lifetime.Singleton).AsSelf();
             builder.RegisterEntryPoint<DecisionLogger>(Lifetime.Singleton).AsSelf();
             builder.RegisterEntryPoint<WorldEventSystem>(Lifetime.Singleton).AsSelf();
 
