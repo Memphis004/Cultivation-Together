@@ -85,6 +85,21 @@ namespace Xianxia.Sect.UI
             _resolver = new AppearanceResolver(pool);
         }
 
+        /// <summary>
+        /// Additive setup for code-built contexts (DiscipleDetail rail items):
+        /// prefab-built panels wire layerRoot/layerPrefab through the generator's
+        /// SerializedObject, but a runtime-created renderer has no prefab asset —
+        /// it gets a plain prototype Image created in code instead. Safe to call
+        /// after AddComponent (Awake already ran with defaults).
+        /// </summary>
+        public void Configure(RectTransform layerRootRect, Image layerImagePrefab)
+        {
+            layerRoot = layerRootRect != null ? layerRootRect : (RectTransform)transform;
+            layerPrefab = layerImagePrefab;
+            if (_canvasGroup == null) _canvasGroup = GetComponent<CanvasGroup>();
+            ApplyFraming();
+        }
+
         /// <summary>เปลี่ยน framing mode แล้ว apply preset ทันที</summary>
         public void SetFraming(AvatarFraming mode)
         {

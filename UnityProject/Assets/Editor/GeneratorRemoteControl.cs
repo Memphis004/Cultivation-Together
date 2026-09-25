@@ -52,6 +52,39 @@ namespace Xianxia.EditorTools
                         WriteResult("error:" + ex.Message);
                     }
                     break;
+                case "bake_icons":
+                    try
+                    {
+                        Xianxia.Sect.EditorTools.AvatarIconBaker.GenerateAll();
+                        WriteResult("baked_icons");
+                    }
+                    catch (System.Exception ex)
+                    {
+                        WriteResult("error:" + ex.Message);
+                    }
+                    break;
+                case "gen_disciple_list":
+                    try
+                    {
+                        Xianxia.Sect.EditorTools.DiscipleListPanelGenerator.Generate();
+                        WriteResult("generated_disciple_list");
+                    }
+                    catch (System.Exception ex)
+                    {
+                        WriteResult("error:" + ex.Message);
+                    }
+                    break;
+                case "gen_disciple_detail":
+                    try
+                    {
+                        Xianxia.Sect.EditorTools.DiscipleDetailPanelGenerator.Generate();
+                        WriteResult("generated_disciple_detail");
+                    }
+                    catch (System.Exception ex)
+                    {
+                        WriteResult("error:" + ex.Message);
+                    }
+                    break;
                 case "restore":
                     // Reopen the first Build Settings scene (agent cannot pass paths through open_scene).
                     if (EditorBuildSettings.scenes.Length > 0)

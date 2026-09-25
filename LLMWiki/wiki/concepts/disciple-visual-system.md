@@ -20,8 +20,7 @@ related:
   - "[[concepts/mvp-ui]]"
   - "[[sources/task-system]]"
 created: 2026-09-22
-updated: 2026-09-25
-confidence: medium
+updated: 2026-09-25confidence: medium
 tags: [visual, avatar, chibi, spine, sprite-sheet, portrait, tier, monetization, plan]
 ---
 
@@ -402,6 +401,12 @@ Assets/Resources/Data/chibi_anim.json · visual_overrides.json
 - **กติกา coverage ชั้น 5 ใหม่** (`TryChangeAvatarPart`): `IsEmptyLayer` (ทุก path+spineSkin ว่าง) ผ่านเสมอ = removal intent; ส่วน non-empty ต้องมี art บน backend ที่เปิดอยู่ ≥1 ทาง — แก้ปัญหาเดิมที่ portrait-only part และ `acc_none` โดน reject เมื่อ SpriteSheetEnabled=true โดยไม่ใช้ flag portraitOnly (เลี่ยง dual source of truth ตามบทเรียน outfit §1 ของ [[sources/avatar-appearance]])
 - **Resolver**: ข้าม `IsEmptyLayer` เงียบ ๆ ทุก backend (ไม่ WarnOnce) — เตือนเฉพาะ non-empty ที่ไม่รองรับ backend จริง
 - **ยอมรับผ่าน:** ☑ EditMode 44/44 (FaceSplitTests 6 + AvatarPartCoverageTests 2 ใหม่) ☑ PNG checker 0 failures ☑ demo_verify production path pass=33 fail=0 (`Library/demo_verify_report.txt`) ☑ console 0 errors หลังรัน + warning เดิม `no def for slot 'eyes'` หาย
+
+### Track ขนาน — AvatarIconBaker (ไอคอนการ์ด DiscipleList) ✅ (2026-09-25)
+- **Editor baker ใหม่** `Assets/Editor/AvatarIconBaker.cs` (menu `Xianxia/Generate Disciple List Icons`, remote-control `bake_icons`): อัด portrait ของศิษย์แต่ละคน (mock roster) เป็น PNG สี่เหลี่ยมจัตุรัส 256×256 ลง `Assets/Resources/Avatar/Icons/icon_<id>.png` — C5/C2 เดียวกับ PortraitPlaceholderBaker: real .png ลง Assets, **ห้าม bake ตอน runtime**
+- **Composite ตาม resolver เท่านั้น**: layer list มาจาก `AppearanceResolver.Resolve(a, Portrait)` เรียง `ResolvedLayer.Order` (base 0 → hair_back 10 → body 20 → head 30 → face 31–39 → hair_front 40 → accessory 50) — ไม่ hardcode ลำดับ; sprite null (empty-layer) ข้ามเงียบ
+- **Crop = normalized canvas coords ใน `Visual/Core/AvatarIconCrop.cs`** (public เพื่อ EditMode เทสต์) — จงใจ **ไม่พอร์ต pivotOffset/scale ของ `AvatarFraming.Bust`** เพราะค่านั้นเป็นหน่วย local ของ `layerRoot` (ขึ้นกับขนาด rect ของ AvatarRoot ~200×370 ใน DiscipleDetail + letterbox จาก preserveAspect); crop จัตุรัส 200×200px บน canvas อ้างอิง 256×384 ขอบบน y=0.92 กึ่งกลาง head-center — invariant: head-center (128, 262 y-up) ต้องอยู่ใน crop เสมอ (baker fail-loud ถ้าไม่) และ head อยู่ ~54% ของความสูงเฟรม (head-and-shoulders)
+- ใช้โดยการ์ด `DiscipleListPresenter` (โหลด `Resources.Load<Sprite>("Avatar/Icons/icon_" + id)`); เทสต์: `AvatarIconCropTests` ล็อก square-in-pixels + head-center invariant
 
 ## 12. What NOT to touch
 - `AvatarAppearance` `[Key(0–2)]`, `DiscipleState` `[Key(0–7)]` — append-only เท่านั้น

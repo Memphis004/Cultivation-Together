@@ -51,6 +51,7 @@ namespace Xianxia.Sect.UI
             // _uiService.Open("AvatarCustomization", new AvatarCustomizationPayload("d001"));
 
             WireResourcePopup();
+            WireDiscipleList();
 
             // Subscribe to scene loads for scene-specific UI setup if needed.
             // Currently scene-specific UI (EventPopup) is handled by
@@ -144,6 +145,52 @@ namespace Xianxia.Sect.UI
         }
 
         private bool _resourcePopupOpen;
+
+        /// <summary>
+        /// Disciple list ("ศิษย์") is opened by the bottom-menu disciple button
+        /// and closed by its own close button — wire pattern identical to
+        /// WireResourcePopup: subscribe DiscipleClicked, toggle open/close, and
+        /// pass DiscipleListArgs with a CloseCallback so the panel's own close
+        /// button closes through UIService while _open stays in sync.
+        /// </summary>
+        private void WireDiscipleList()
+        {
+            var bottomMenu = _uiService.Open("BottomMenu");
+            if (bottomMenu.Presenter is BottomMenuPresenter bottomPresenter)
+            {
+                // DiscipleClicked มีอยู่แล้วใน presenter และไม่มีใครฟัง —
+                // ไม่เพิ่ม property ปุ่มใหม่ (ต่างจาก WarehouseButton ที่เป็น
+                // placeholder ยังไม่มี event คู่)
+                bottomPresenter.DiscipleClicked += ToggleDiscipleList;
+            }
+        }
+
+        private void ToggleDiscipleList()
+        {
+            // UIService.Open dedupes by panelId (re-Shows the existing
+            // instance), so toggling is: open if missing, close if present.
+            if (_discipleListOpen)
+            {
+                _uiService.Close("DiscipleList");
+                _discipleListOpen = false;
+            }
+            else
+            {
+                _uiService.Open("DiscipleList", new DiscipleListArgs
+                {
+                    CloseCallback = OnDiscipleListCloseRequested,
+                });
+                _discipleListOpen = true;
+            }
+        }
+
+        private void OnDiscipleListCloseRequested()
+        {
+            _uiService.Close("DiscipleList");
+            _discipleListOpen = false;
+        }
+
+        private bool _discipleListOpen;
 
         private void OnSceneLoaded(SceneLoadedMessage msg)
         {

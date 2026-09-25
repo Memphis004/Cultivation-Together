@@ -82,9 +82,10 @@ private static Type ResolvePresenterType(UIPresenterKind kind)
         case UIPresenterKind.ResourceHud: return typeof(WalletHudPresenter); // enum member keeps its legacy name — catalog serializes kind as int
         case UIPresenterKind.LogWindow: return typeof(LogWindowPresenter);
         case UIPresenterKind.AvatarCustomization: return typeof(AvatarCustomizationPresenter);
+        case UIPresenterKind.DiscipleList: return typeof(DiscipleListPresenter);
         case UIPresenterKind.DiscipleDetail: return typeof(DiscipleDetailPresenter);
-        case UIPresenterKind.DiscipleList:
-            throw new NotImplementedException("DiscipleListPresenter is not implemented yet.");
+        case UIPresenterKind.BottomMenu: return typeof(BottomMenuPresenter);
+        case UIPresenterKind.ResourcePopup: return typeof(ResourcePopupPresenter);
         default:
             throw new ArgumentOutOfRangeException(nameof(kind), kind, null);
     }
@@ -92,17 +93,25 @@ private static Type ResolvePresenterType(UIPresenterKind kind)
 ```
 > 📎 Source: Assets/Scripts/UI/Core/UIService.cs
 
-⏳ **TODO**: implement `DiscipleListPresenter` when the panel is added.
+## Implemented Panels (8)
 
-## Implemented Panels (5)
+> นับจาก `MainPanelCatalog.asset` + mapping ใน `UIService` จริง (2026-09-25) —
+> ครบทั้ง 8 entry ของ catalog ไม่มี kind ที่ throw ค้างแล้ว
 
-| Panel | Presenter | Subscribes to |
+| Panel | Presenter | Subscribes to / เปิดโดย |
 |---|---|---|
 | `EventPopup` | `EventPopupPresenter` | n/a (called via `OnOpen(args)`) |
 | `WalletHud` | `WalletHudPresenter` | `SectResourceChangedMessage` |
 | `LogWindow` | `LogWindowPresenter` | `DiscipleRecruitedMessage`, `WorldEventTriggeredMessage`, `DecisionExecutedMessage` |
 | `AvatarCustomization` | `AvatarCustomizationPresenter` | `AvatarEquipmentChangedMessage` (external sync) — ดู [[entities/avatar-appearance]] |
-| `DiscipleDetail` | `DiscipleDetailPresenter` | เปิดโดย `DiscipleDetailUISystem` เมื่อได้รับ `DiscipleSelectedMessage` (คลิก chibi — Phase 4) |
+| `DiscipleList` | `DiscipleListPresenter` | เปิดโดย `UIBootstrap.WireDiscipleList` (ปุ่ม "ศิษย์" → `BottomMenuPresenter.DiscipleClicked`, toggle แบบ `WireResourcePopup`); คลิกการ์ด publish `DiscipleSelectedMessage` — เส้นทางเดียวกับ chibi click |
+| `DiscipleDetail` | `DiscipleDetailPresenter` | เปิดโดย `DiscipleDetailUISystem` เมื่อได้รับ `DiscipleSelectedMessage` (คลิก chibi หรือการ์ดใน DiscipleList — Phase 4) |
+| `BottomMenu` | `BottomMenuPresenter` | persistent (เปิดโดย `UIBootstrap`); ปุ่มสร้าง/ศิษย์/คลัง wire ผ่าน `BuildClicked`/`DiscipleClicked`/`WarehouseButton` |
+| `ResourcePopup` | `ResourcePopupPresenter` | `SectResourceChangedMessage`; เปิดโดย `UIBootstrap.WireResourcePopup` (ปิดผ่าน `ResourcePopupArgs.CloseCallback` — DiscipleList ใช้แพทเทิร์นเดียวกันผ่าน `DiscipleListArgs`) |
+
+**Z-order note (§6.1):** `UIService.Open` ที่ branch "existing" (panel เปิดอยู่แล้ว) เรียก
+`SetAsLastSibling()` ก่อน `OnOpen` — panel ที่ปิดด้วย `Hide()` (เช่น DiscipleDetail)
+จะกลับมาอยู่บนสุดเมื่อ re-open ไม่งั้นจะไปอยู่หลัง panel ที่ถูกสร้างทีหลัง
 
 See [[concepts/log-window]] for the full LogWindow architecture and data flow.
 

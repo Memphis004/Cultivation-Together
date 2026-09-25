@@ -157,6 +157,24 @@ namespace Xianxia.Sect.Messages
         [Key(1)] public string ChoiceId { get; set; }
     }
 
+    // Internal-only: entering build (placement) mode. CameraRigController
+    // zooms to the Placement preset and GridOverlayRenderer shows the grid;
+    // Payload carries the ghost transform when one exists (may be null).
+    [MessagePackObject]
+    public class BuildModeStartedMessage
+    {
+        [Key(0)] public string SourceId { get; set; }
+        [Key(1)] public string GhostId { get; set; }
+    }
+
+    // Internal-only: leaving build mode (confirm, cancel, or system stop).
+    [MessagePackObject]
+    public class BuildModeEndedMessage
+    {
+        [Key(0)] public string SourceId { get; set; }
+        [Key(1)] public bool Confirmed { get; set; }
+    }
+
     // Request/response pair: a disciple buying an item from the sect
     // stockpile (CraftedGoods) with their own contribution. Request-response
     // rather than a fire-and-forget message because the bridge needs to

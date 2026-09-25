@@ -24,6 +24,12 @@ namespace Xianxia.Sect.UI
             if (_openPanels.TryGetValue(panelId, out var existing))
             {
                 existing.View.Show();
+                // Z-order fix (§6.1): Show() only flips activeSelf — without this a
+                // panel re-opened after panels created LATER sits underneath them
+                // (DiscipleDetail opened via DiscipleList hides behind the list).
+                // Hide()/Show() panels (DiscipleDetail) never re-parent, so this one
+                // line is the whole fix — no other presenter touched.
+                existing.View.GameObject.transform.SetAsLastSibling();
                 existing.Presenter.OnOpen(args);
                 return existing;
             }
@@ -81,8 +87,7 @@ namespace Xianxia.Sect.UI
                 case UIPresenterKind.DiscipleDetail: return typeof(DiscipleDetailPresenter);
                 case UIPresenterKind.BottomMenu: return typeof(BottomMenuPresenter);
                 case UIPresenterKind.ResourcePopup: return typeof(ResourcePopupPresenter);
-                case UIPresenterKind.DiscipleList:
-                    throw new NotImplementedException("DiscipleListPresenter is not implemented yet.");
+                case UIPresenterKind.DiscipleList: return typeof(DiscipleListPresenter);
                 default:
                     throw new ArgumentOutOfRangeException(nameof(kind), kind, null);
             }

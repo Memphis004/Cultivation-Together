@@ -1,5 +1,6 @@
 using MessagePipe;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using Xianxia.Sect.Messages;
 
 namespace Xianxia.Sect.Visual
@@ -33,6 +34,11 @@ namespace Xianxia.Sect.Visual
 
         private void OnMouseDown()
         {
+            // Click-through guard (§6.2): OnMouseDown ไม่ถูก UGUI block — ถ้า pointer
+            // อยู่เหนือ panel (เช่น กดการ์ดใน DiscipleList ที่ทับ chibi) อย่า publish
+            // ไม่งั้น DiscipleSelectedMessage ยิงซ้ำ 2 ครั้งต่อ 1 คลิก
+            if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject()) return;
+
             if (_publisher == null || string.IsNullOrEmpty(_discipleId)) return;
             _publisher.Publish(new DiscipleSelectedMessage { DiscipleId = _discipleId });
         }

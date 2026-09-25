@@ -116,6 +116,7 @@ namespace Xianxia.Sect
             builder.Register<Xianxia.Sect.UI.DiscipleDetailPresenter>(Lifetime.Transient); // Phase 4: click chibi → detail
             builder.Register<Xianxia.Sect.UI.BottomMenuPresenter>(Lifetime.Transient); // persistent bottom bar (สร้าง / ศิษย์)
             builder.Register<Xianxia.Sect.UI.ResourcePopupPresenter>(Lifetime.Transient); // คลังสินค้า popup (read-only stockpile)
+            builder.Register<Xianxia.Sect.UI.DiscipleListPresenter>(Lifetime.Transient); // รายชื่อศิษย์ (cards + baked icons)
             builder.RegisterEntryPoint<Xianxia.Sect.UI.DiscipleDetailUISystem>(Lifetime.Singleton); // Phase 4: message → panel
             builder.RegisterEntryPoint<Xianxia.Sect.UI.WorldEventUISystem>(Lifetime.Singleton);
             builder.RegisterEntryPoint<Xianxia.Sect.UI.UIBootstrap>(Lifetime.Singleton);
