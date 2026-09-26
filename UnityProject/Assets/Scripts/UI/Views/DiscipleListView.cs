@@ -172,12 +172,27 @@ namespace Xianxia.Sect.UI
             var cardButton = cardGo.AddComponent<Button>();
             cardButton.targetGraphic = cardImage;
 
+            // Bug fix (layout regression): เดิม child ของการ์ด (icon / text column /
+            // wallet) ถูก SetParent ลอย ๆ โดยไม่มี LayoutGroup คุมเลย → TMP ใหม่
+            // default 100×100 กองซ้อนกลางการ์ด (text ซ้อน text) และ icon ทับข้อความ
+            // ทั้งหมด — แก้ด้วย HorizontalLayoutGroup บนการ์ด (แพทเทิร์นเดียวกับ
+            // ResourcePopupView.CreateRow ที่ทำงานถูกอยู่แล้ว) + LayoutElement
+            // ระบุขนาดจริงต่อชิ้น
+            var cardHlg = cardGo.AddComponent<HorizontalLayoutGroup>();
+            cardHlg.childAlignment = TextAnchor.MiddleLeft;
+            cardHlg.spacing = 10f;
+            cardHlg.padding = new RectOffset(8, 8, 0, 0);
+            cardHlg.childControlWidth = true;
+            cardHlg.childControlHeight = true;
+            cardHlg.childForceExpandWidth = false;
+            cardHlg.childForceExpandHeight = false;
+
             // Thai-capable font inherited from the panel title (CreateText ของ
             // ResourcePopupView หยิบ titleText.font เหมือนกัน) — font default
             // (LiberationSans) ไม่มีอักษรไทย
             var font = titleText != null ? titleText.font : null;
 
-            // Icon (square, left)
+            // Icon (square, left) — ขนาดตายตัว 88×88 ผ่าน LayoutElement (ไม่ stretch ทับ text)
             var iconGo = new GameObject("Icon", typeof(RectTransform));
             var iconRect = (RectTransform)iconGo.transform;
             iconRect.SetParent(cardRect, false);
@@ -189,12 +204,11 @@ namespace Xianxia.Sect.UI
             iconImg.preserveAspect = true;
             iconImg.raycastTarget = false;
 
-            // Text column (middle)
+            // Text column (middle) — กว้างยืดหยุ่น (flexibleWidth 1) กินพื้นที่ที่เหลือ
             var textCol = new GameObject("TextColumn", typeof(RectTransform));
             var textRect = (RectTransform)textCol.transform;
             textRect.SetParent(cardRect, false);
-            textCol.AddComponent<VerticalLayoutGroup>();
-            var textVlg = textCol.GetComponent<VerticalLayoutGroup>();
+            var textVlg = textCol.AddComponent<VerticalLayoutGroup>();
             textVlg.spacing = 2f;
             textVlg.childAlignment = TextAnchor.MiddleLeft;
             textVlg.childControlWidth = true;
@@ -205,10 +219,16 @@ namespace Xianxia.Sect.UI
             textElement.flexibleWidth = 1f;
 
             var nameText = CreateText("Name", font, 30f, TextAlignmentOptions.Left, textRect);
+            var nameElement = nameText.gameObject.AddComponent<LayoutElement>();
+            nameElement.preferredHeight = 40f;
+
             var detailText = CreateText("Detail", font, 24f, TextAlignmentOptions.Left, textRect);
             detailText.color = new Color(0.7f, 0.68f, 0.6f);
+            var detailElement = detailText.gameObject.AddComponent<LayoutElement>();
+            detailElement.preferredHeight = 34f;
 
-            // Wallet (right)
+            // Wallet (right) — กว้างตายตัว 190px (เดิมไม่มี LayoutElement → TMP
+            // default 100×100 ทับ text column)
             var walletText = CreateText("Wallet", font, 24f, TextAlignmentOptions.Right, cardRect);
             var walletElement = walletText.gameObject.AddComponent<LayoutElement>();
             walletElement.preferredWidth = 190f;

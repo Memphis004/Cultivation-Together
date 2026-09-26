@@ -226,17 +226,23 @@ namespace Xianxia.Sect.EditorTools
             }
 
             // 1) Status — radar chart + 6 label (mock data ผูกใน presenter เท่านั้น)
+            // Bug fix (layout regression): เดิม radar anchor ที่ขอบซ้ายของ StatusContent
+            // (anchoredPosition x=60) แต่ label ทั้ง 6 ผูก frame กึ่งกลาง → label
+            // ลอยห่างจาก radar ~295px (เยื้องตำแหน่งตามภาพ) วันนี้ทั้ง radar และ label
+            // ใช้จุด anchor กึ่งกลางเดียวกัน → กราฟกึ่งกลางโซน และ label หมุนวงรอบกราฟจริง
             var statusContent = CreateChild(contentHost.transform, "StatusContent");
             StretchFull(statusContent.GetComponent<RectTransform>());
             var radarGo = new GameObject("RadarChart", typeof(RectTransform), typeof(RadarChartGraphic));
             var radarRt = (RectTransform)radarGo.transform;
             radarRt.SetParent(statusContent.transform, false);
-            radarRt.anchorMin = new Vector2(0f, 0.5f); radarRt.anchorMax = new Vector2(0f, 0.5f);
-            radarRt.pivot = new Vector2(0f, 0.5f);
+            radarRt.anchorMin = new Vector2(0.5f, 0.5f); radarRt.anchorMax = new Vector2(0.5f, 0.5f);
+            radarRt.pivot = new Vector2(0.5f, 0.5f);
             radarRt.sizeDelta = new Vector2(380f, 380f);
-            radarRt.anchoredPosition = new Vector2(60f, 0f);
-            var radar = radarGo.GetComponent<RadarChartGraphic>();
+            // เผื่อ mock note ล่าง (y≈36) และ header บน — ยกเงาเล็กน้อยจากกึ่งกลางพอดี
+            radarRt.anchoredPosition = new Vector2(0f, 14f);
 
+            const float RadarHalf = 190f;   // sizeDelta.x / 2
+            const float LabelHalf = 95f;    // label sizeDelta.x / 2
             for (int a = 0; a < StatusAxisLabels.Length; a++)
             {
                 float angle = Mathf.PI / 2f - 2f * Mathf.PI * a / StatusAxisLabels.Length;
@@ -244,10 +250,12 @@ namespace Xianxia.Sect.EditorTools
                 var labelGo = new GameObject("AxisLabel_" + StatusAxisLabels[a], typeof(RectTransform));
                 var labelRt = (RectTransform)labelGo.transform;
                 labelRt.SetParent(statusContent.transform, false);
+                // label ผูกจุดกึ่งกลางเดียวกับ radar — offset = ขอบ radar + ครึ่ง label
                 labelRt.anchorMin = new Vector2(0.5f, 0.5f); labelRt.anchorMax = new Vector2(0.5f, 0.5f);
                 labelRt.pivot = dir.x < -0.01f ? new Vector2(1f, 0.5f) : (dir.x > 0.01f ? new Vector2(0f, 0.5f) : new Vector2(0.5f, dir.y > 0 ? 0f : 1f));
-                labelRt.sizeDelta = new Vector2(120f, 30f);
-                labelRt.anchoredPosition = radarRt.anchoredPosition + dir * 215f;
+                // 190px ให้คำไทย 2 พยางค์ (รากกระดูก) อยู่บรรทัดเดียวสบาย — เดิม 120 ชิดเกิน
+                labelRt.sizeDelta = new Vector2(190f, 30f);
+                labelRt.anchoredPosition = dir * (RadarHalf + LabelHalf);
 
                 var label = labelGo.AddComponent<TextMeshProUGUI>();
                 if (font != null) label.font = font;
@@ -258,12 +266,16 @@ namespace Xianxia.Sect.EditorTools
                 label.raycastTarget = false;
             }
 
+            // Bug fix (layout regression): เดิม anchor จุด (0.5,0) + sizeDelta.x = -40
+            // (สูตร “ลบระยะขอบ” ซึ่งถูกต้องเฉพาะกับ anchor stretch) → ความกว้างจริง
+            // ติดลบ → TMP wrap ทีละตัวอักษรลงมา (ตัวอักษรไล่เป็นคอลัมน์ตามภาพ)
+            // แก้เป็นความกว้างบวกตายตัวบนจุด anchor เดิม
             var mockNote = CreateText(statusContent.transform, "MockNoteText",
                 "สเตตัสเป็น placeholder (mock ต่อคนแบบ deterministic) — รอ DiscipleAttributes จริง", font, 20);
             var mockNoteRt = mockNote.rectTransform;
             mockNoteRt.anchorMin = new Vector2(0.5f, 0f); mockNoteRt.anchorMax = new Vector2(0.5f, 0f);
             mockNoteRt.pivot = new Vector2(0.5f, 0f);
-            mockNoteRt.sizeDelta = new Vector2(-40f, 30f);
+            mockNoteRt.sizeDelta = new Vector2(900f, 30f);
             mockNoteRt.anchoredPosition = new Vector2(0f, 6f);
             mockNote.color = new Color(0.45f, 0.42f, 0.35f);
             mockNote.alignment = TextAlignmentOptions.Center;

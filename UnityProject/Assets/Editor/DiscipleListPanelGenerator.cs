@@ -17,6 +17,8 @@ namespace Xianxia.Sect.EditorTools
     /// serialize ครบหลัง import แต่ "ใบการ์ด" ไม่อยู่ใน prefab เลย —
     /// DiscipleListView.CreateCard สร้างที่ runtime (แพทเทิร์นเดียวกับ
     /// ResourcePopupView.CreateRow ที่เคยเจอ template หายตอน import)
+    /// โครงภายในการ์ด (HorizontalLayoutGroup คุม icon/text/wallet + LayoutElement
+    /// ต่อชิ้น) ก็ถูกสร้างใน CreateCard เช่นกัน — แก้ layout ที่นั่น ไม่ใช่ใน prefab
     ///
     /// titleText ใช้ THSarabunPSK SDF (Thai-capable) — การ์ด inherit ฟอนต์นี้ผ่าน
     /// titleText.font เหมือน ResourcePopupView.CreateText (LiberationSans ไม่มีไทย)

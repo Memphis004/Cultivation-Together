@@ -85,6 +85,17 @@ namespace Xianxia.EditorTools
                         WriteResult("error:" + ex.Message);
                     }
                     break;
+                case "bake_thai_atlas":
+                    try
+                    {
+                        Xianxia.Sect.EditorTools.ThaiFontAtlasBaker.Bake();
+                        WriteResult("baked_thai_atlas");
+                    }
+                    catch (System.Exception ex)
+                    {
+                        WriteResult("error:" + ex.Message);
+                    }
+                    break;
                 case "restore":
                     // Reopen the first Build Settings scene (agent cannot pass paths through open_scene).
                     if (EditorBuildSettings.scenes.Length > 0)
