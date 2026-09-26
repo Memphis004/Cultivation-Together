@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using MessagePipe;
 using UnityEngine;
+using Xianxia.Sect.Building;
 using Xianxia.Sect.Messages;
 using Xianxia.Sect.Visual;
 
@@ -60,6 +61,8 @@ namespace Xianxia.Sect
         private readonly IPublisher<SectResourceChangedMessage> _resourceChangedPublisher;
         private readonly IPublisher<AvatarEquipmentChangedMessage> _avatarChangedPublisher;
         private readonly IPublisher<DiscipleChibiBackendChangedMessage> _chibiBackendPublisher;
+        private readonly IPublisher<BuildingPlacedMessage> _buildingPlacedPublisher;
+        private readonly BuildingDefPool _buildingDefPool;
         private readonly AvatarPartPool _avatarPartPool;
         private readonly VisualRuntimeConfig _visualConfig;
         private readonly IVisualEntitlementProvider _entitlementProvider;
@@ -84,12 +87,16 @@ namespace Xianxia.Sect
             IPublisher<DiscipleChibiBackendChangedMessage> chibiBackendPublisher,
             AvatarPartPool avatarPartPool,
             VisualRuntimeConfig visualConfig,
-            IVisualEntitlementProvider entitlementProvider)
+            IVisualEntitlementProvider entitlementProvider,
+            BuildingDefPool buildingDefPool,
+            IPublisher<BuildingPlacedMessage> buildingPlacedPublisher)
         {
             _discipleRecruitedPublisher = discipleRecruitedPublisher;
             _resourceChangedPublisher = resourceChangedPublisher;
             _avatarChangedPublisher = avatarChangedPublisher;
             _chibiBackendPublisher = chibiBackendPublisher;
+            _buildingDefPool = buildingDefPool;
+            _buildingPlacedPublisher = buildingPlacedPublisher;
             _avatarPartPool = avatarPartPool;
             _visualConfig = visualConfig;
             _entitlementProvider = entitlementProvider;
@@ -378,6 +385,134 @@ namespace Xianxia.Sect
                 New        = backend
             });
             return true;
+        }
+
+        // ---------- Building Phase 1 (grid placement — building-system.md §3.2) ----------
+        // Player-only in Phase 1 (Q3 default): no MCP tool exposes this — the call
+        // path is PlacementController (UI) only. Validation order per §3.2:
+        // def lookup → occupancy (ขอบเขต + ซ้อนทับ) → cost. After the last check
+        // there is NO failure path — resource deduction, state append, occupancy
+        // mark, and publish all happen together (no partial mutation).
+
+        /// <summary>Ghost preview check (read-only) — occupancy อยู่ฝั่ง BuildingGrid.</summary>
+        public bool CanAffordBuilding(BuildingDef def)
+        {
+            if (def == null) return false;
+
+            var cost = def.GetCost();
+            foreach (var (resource, amount) in cost)
+            {
+                // invalid cost entry = ฟรี (ไม่หัก) — def data ผิดไม่ควรทำให้วางไม่ได้
+                if (string.IsNullOrEmpty(resource) || amount <= 0) continue;
+                if (!_state.Stockpile.RawResources.TryGetValue(resource, out var have) || have < amount)
+                    return false;
+            }
+            return true;
+        }
+
+        public bool TryPlaceBuilding(string defId, int gridX, int gridZ, int rotation,
+                                     BuildingGrid grid, out string failReason,
+                                     out PlacedBuildingState placed)
+        {
+            failReason = string.Empty;
+            placed = null;
+
+            // 1. def lookup
+            if (string.IsNullOrEmpty(defId))
+            {
+                failReason = "Building def id is empty.";
+                return false;
+            }
+            var def = _buildingDefPool != null ? _buildingDefPool.GetById(defId) : null;
+            if (def == null)
+            {
+                failReason = $"Unknown building def: '{defId}'.";
+                return false;
+            }
+            if (grid == null)
+            {
+                failReason = "BuildingGrid is not available.";
+                return false;
+            }
+
+            // 2. occupancy (ขอบเขต + ซ้อนทับ) — re-validate ที่นี่เสมอ ไม่เชื่อ caller
+            if (!grid.CanPlace(gridX, gridZ, def.GridWidth, def.GridHeight, rotation))
+            {
+                failReason = $"Cannot place '{defId}' at ({gridX},{gridZ}) rot={rotation} - " +
+                             "outside the sect grid or overlapping an existing building.";
+                return false;
+            }
+
+            // 3. cost — จ่ายได้ครบเท่านั้น (all-or-nothing, กฎเดียวกับ crafting)
+            if (!CanAffordBuilding(def))
+            {
+                var cost = def.GetCost();
+                var missing = new List<string>();
+                foreach (var (resource, amount) in cost)
+                {
+                    if (string.IsNullOrEmpty(resource) || amount <= 0) continue;
+                    _state.Stockpile.RawResources.TryGetValue(resource, out var have);
+                    if (have < amount) missing.Add($"{resource} ({have}/{amount})");
+                }
+                failReason = $"Not enough resources to build '{def.Id}': {string.Join(", ", missing)}.";
+                return false;
+            }
+
+            // --- หลังจุดนี้ไม่มี failure path: mutation เริ่ม (no partial mutation) ---
+            var instanceId = NextBuildingInstanceId();
+
+            grid.Occupy(instanceId, gridX, gridZ, def.GridWidth, def.GridHeight, rotation);
+
+            foreach (var (resource, amount) in def.GetCost())
+            {
+                // เงื่อนไข skip เดียวกับ CanAffordBuilding — หักเท่าที่เพิ่งเช็ค
+                if (string.IsNullOrEmpty(resource) || amount <= 0) continue;
+                AdjustAndNotify(_state.Stockpile.RawResources, resource, -amount);
+            }
+
+            placed = new PlacedBuildingState
+            {
+                InstanceId = instanceId,
+                DefId = def.Id,
+                GridX = gridX,
+                GridZ = gridZ,
+                Rotation = rotation,
+            };
+            _state.PlacedBuildings.Add(placed);
+
+            _buildingPlacedPublisher?.Publish(new BuildingPlacedMessage
+            {
+                InstanceId = placed.InstanceId,
+                DefId = placed.DefId,
+                GridX = gridX,
+                GridZ = gridZ,
+                Rotation = rotation,
+            });
+
+            Debug.Log($"[SectStateProvider] Placed building '{def.Id}' as {placed.InstanceId} " +
+                      $"at ({gridX},{gridZ}) rot={rotation}.");
+            return true;
+        }
+
+        /// <summary>
+        /// instanceId = "b###" — max numeric suffix + 1 (ไม่ใช้ Count เพราะจะชน
+        /// เมื่อ Phase ทุบอาคารมาถึง; scan เร็วพอที่ roster อาคารจะไม่ใหญ่).
+        /// Caller ต้องเรียกครั้งเดียวต่อการวางแล้วใช้ค่าเดิมทั้ง occupancy และ state —
+        /// occupancy id กับ state id ต้องตรงกัน ไม่งั้น rebuild ตอน Start หา cell ไม่เจอ.
+        /// </summary>
+        private string NextBuildingInstanceId()
+        {
+            int next = 1;
+            for (int i = 0; i < _state.PlacedBuildings.Count; i++)
+            {
+                var id = _state.PlacedBuildings[i]?.InstanceId;
+                if (!string.IsNullOrEmpty(id) && id.Length > 1 && id[0] == 'b' &&
+                    int.TryParse(id.Substring(1), out var n) && n >= next)
+                {
+                    next = n + 1;
+                }
+            }
+            return $"b{next:000}";
         }
 
         // Placeholder consequence rules keyed by event id - not real game

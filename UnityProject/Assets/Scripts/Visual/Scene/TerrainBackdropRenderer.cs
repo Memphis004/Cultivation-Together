@@ -22,14 +22,17 @@ namespace Xianxia.Sect.Visual
         private const string GameplaySceneName = "TestGameplayScene";
 
         private readonly ISubscriber<SceneLoadedMessage> _sceneLoadedSubscriber;
+        private readonly CameraFramingConfig _framing;
         private System.IDisposable _sceneLoadedSubscription;
 
         private Transform _backdrop;
         private bool _disposed;
 
-        public TerrainBackdropRenderer(ISubscriber<SceneLoadedMessage> sceneLoadedSubscriber)
+        public TerrainBackdropRenderer(ISubscriber<SceneLoadedMessage> sceneLoadedSubscriber,
+                                       CameraFramingConfig framing)
         {
             _sceneLoadedSubscriber = sceneLoadedSubscriber;
+            _framing = framing;
         }
 
         public void Start()
@@ -95,6 +98,11 @@ namespace Xianxia.Sect.Visual
             // on the world origin, matching the camera's overview position.
             Bounds bounds = map.bounds;
             go.transform.position = new Vector3(-bounds.center.x, -bounds.center.y, 0f);
+
+            // แจ้งกรอบจริงของแบ็คกราวให้ framing — CameraRigController ใช้ clamp
+            // การ pan ไม่ให้กล้องหลุดนอกภาพภูเขา
+            if (_framing != null)
+                _framing.SetBackdropBounds(bounds.size.x, bounds.size.y);
 
             _backdrop = go.transform;
             Debug.Log("[TerrainBackdropRenderer] Backdrop placed: " + map.name +

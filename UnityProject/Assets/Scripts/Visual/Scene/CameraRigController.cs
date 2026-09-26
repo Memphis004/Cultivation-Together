@@ -2,6 +2,7 @@ using System;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using VContainer.Unity;
 using Xianxia.Sect.Messages;
 
@@ -51,6 +52,13 @@ namespace Xianxia.Sect.Visual
         private bool _isTransitioning;
         private bool _disposed;
 
+        // ── pan ด้วยคลิกขวาค้าง+ลาก (ผู้เล่นขอ: เห็นพื้นที่รอบ ๆ) ──
+        // Input ผ่าน RigPanInput (static seam — composition root wire เฉพาะ play mode);
+        // ใช้ได้เฉพาะ overview mode — placement mode กล้องผูกกับ ghost และ grid overlay
+        // origin ถูก set ตอนเข้า build mode จึงห้าม pan ทับ (กัน overlay เหลื่อม)
+        private bool _panning;
+        private Vector3 _lastPanMouseScreen;
+
         public CameraRigController(
             IRigMessageBus bus,
             ICameraRigEnvironment environment,
@@ -87,12 +95,76 @@ namespace Xianxia.Sect.Visual
             // Lock the rotation to the scene-authored isometric framing.
             _cameraView.Rotation = _fixedRotation;
 
+            HandlePanInput();
+
+            // placement follow ชนะ pan เสมอ (กล้องอยู่กับ ghost ขณะ build)
             if (_placementRequested && !_isTransitioning && _placementGhost != null && _placementGhost.IsValid)
             {
                 Vector3 target = GetPlacementPosition();
                 float blend = 1f - Mathf.Exp(-FollowSharpness * _clock.UnscaledDeltaTime);
                 _cameraView.Position = Vector3.Lerp(_cameraView.Position, target, blend);
             }
+        }
+
+        // ── pan: คลิกขวาค้าง+ลาก — clamp ในกรอบแบ็คกราวภูเขาเสมอ (ไม่หลุดเห็นขอบดำ) ──
+        // ใช้ได้ทั้ง overview และ placement mode (เมื่อไม่มี ghost ให้ follow —
+        // UI ของเรา publish GhostId=null; ถ้ามี ghost จริง follow ชนะ pan ตาม if ด้านล่าง)
+        private void HandlePanInput()
+        {
+            if (!RigPanInput.IsWired || _cameraView == null || !_cameraView.IsValid) return;
+            // pointer บน HUD (ปุ่ม/เมนู) ไม่เริ่ม pan — กันลากปุ่มแล้วกล้องหลุด
+            if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject()) return;
+
+            bool held = RigPanInput.GetMouseButton(1);
+            if (held && !_panning)
+            {
+                _panning = true;
+                _lastPanMouseScreen = RigPanInput.MousePosition();
+            }
+            else if (!held && _panning)
+            {
+                _panning = false;
+            }
+
+            if (!_panning || !held) return;
+
+            var mouseScreen = RigPanInput.MousePosition();
+            var deltaScreen = mouseScreen - _lastPanMouseScreen;
+            _lastPanMouseScreen = mouseScreen;
+            if (deltaScreen.sqrMagnitude < 0.01f) return;
+
+            // ortho: screen px → world ด้วย orthoSize (สูงครึ่งจอ) + aspect; ทิศกลับ (ลากขวา = กล้องไปซ้าย)
+            float worldPerPixelY = 2f * _cameraView.OrthographicSize / Mathf.Max(1f, Screen.height);
+            float worldPerPixelX = worldPerPixelY / Mathf.Max(0.01f, _cameraView.Aspect);
+            var delta = new Vector3(-deltaScreen.x * worldPerPixelX, -deltaScreen.y * worldPerPixelY, 0f);
+
+            _cameraView.Position = ClampToBackdrop(_cameraView.Position + delta);
+            _overviewPosition = _cameraView.Position; // pan = overview ใหม่ (transition กลับมาที่นี่)
+        }
+
+        /// <summary>จำกัดกล้องให้เห็นแต่พื้นที่ในแบ็คกราวภูเขา (กึ่งกลาง origin) —
+        /// ถ้ากรอบมองใหญ่กว่าแบ็คกราว กล้องติดกลาง (ไม่ pan ได้) ตาม axis นั้น</summary>
+        private Vector3 ClampToBackdrop(Vector3 position)
+        {
+            if (!_framing.HasBackdropBounds) return position;
+
+            float halfW = _framing.BackdropWidthWorld * 0.5f;
+            float halfH = _framing.BackdropHeightWorld * 0.5f;
+            float halfViewH = Mathf.Max(0.01f, _cameraView.OrthographicSize);
+            float halfViewW = halfViewH * Mathf.Max(0.01f, _cameraView.Aspect);
+
+            float minX = -(halfW - halfViewW);
+            float maxX = +(halfW - halfViewW);
+            float minY = -(halfH - halfViewH);
+            float maxY = +(halfH - halfViewH);
+
+            // มุมมองใหญ่กว่าแบ็คกราว = ล็อกกึ่งกลาง (ป้องกันเห็นขอบดำ)
+            if (minX > maxX) { minX = maxX = 0f; }
+            if (minY > maxY) { minY = maxY = 0f; }
+
+            position.x = Mathf.Clamp(position.x, minX, maxX);
+            position.y = Mathf.Clamp(position.y, minY, maxY);
+            return position;
         }
 
         /// <summary>

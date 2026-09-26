@@ -37,3 +37,6 @@ MonoBehaviour:
   - PanelId: DiscipleDetail
     Prefab: {fileID: 3013095126885163442, guid: 456ddcc0f122bb04499f672456f9babe, type: 3}
     PresenterKind: 5
+  - PanelId: BuildingMenu
+    Prefab: {fileID: 2183573389196514162, guid: c655d1ea140ba414eaad590a44c932ee, type: 3}
+    PresenterKind: 8

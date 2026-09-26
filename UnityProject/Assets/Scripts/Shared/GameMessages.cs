@@ -197,6 +197,22 @@ namespace Xianxia.Sect.Messages
         [Key(2)] public long RemainingContribution { get; set; }
     }
 
+    // ---------- Building placed (Phase 1 — grid placement engine) ----------
+    // Published in-memory by SectStateProvider.TryPlaceBuilding after a
+    // successful commit. BuildingSystem listens and rebuilds grid occupancy +
+    // visuals. ⚠️ Deliberately NOT added to InterprocessTopics — building
+    // placement is player-only in Phase 1 (building-system.md §8 Q3 default),
+    // so the MCP bridge never needs it on the wire.
+    [MessagePackObject]
+    public class BuildingPlacedMessage
+    {
+        [Key(0)] public string InstanceId { get; set; } = string.Empty;
+        [Key(1)] public string DefId { get; set; } = string.Empty;
+        [Key(2)] public int GridX { get; set; }
+        [Key(3)] public int GridZ { get; set; }
+        [Key(4)] public int Rotation { get; set; }
+    }
+
     // ---------- Chibi backend entitlement change (Phase 3) ----------
     // Published in-memory by SectStateProvider.TrySetChibiBackend after mutating
     // DiscipleState.ChibiBackend. DiscipleVisualSystem respawns the visual IN PLACE

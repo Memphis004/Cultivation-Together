@@ -5,6 +5,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 using Xianxia.Sect;
+using Xianxia.Sect.Building;
 using Xianxia.Sect.Messages;
 using Xianxia.Sect.UI;
 
@@ -163,6 +164,15 @@ namespace Xianxia.Sect.Tests
             {
                 failReason = null; return false;
             }
+
+            public bool TryPlaceBuilding(string defId, int gridX, int gridZ, int rotation,
+                                         BuildingGrid grid, out string failReason,
+                                         out PlacedBuildingState placed)
+            {
+                failReason = null; placed = null; return false;
+            }
+
+            public bool CanAffordBuilding(BuildingDef def) => false;
         }
 
         private class FakePublisher : IPublisher<DiscipleSelectedMessage>

@@ -59,11 +59,28 @@ namespace Xianxia.Sect
         [Key(1)] public List<InventoryItem> CraftedGoods { get; set; } = new List<InventoryItem>();
     }
 
+    /// <summary>
+    /// อาคาร 1 หลังที่วางบน grid สำนักแล้ว (building-system.md §3.3)
+    /// GridX/GridZ = มุมบนซ้าย (cell แรก) ของ footprint; Rotation = 0/90/180/270
+    /// (90/270 ทำให้ footprint กว้าง×สูงสลับกัน — ดู BuildingGrid.ResolveFootprint)
+    /// </summary>
+    [MessagePackObject]
+    public class PlacedBuildingState
+    {
+        [Key(0)] public string InstanceId { get; set; }
+        [Key(1)] public string DefId { get; set; }
+        [Key(2)] public int GridX { get; set; }
+        [Key(3)] public int GridZ { get; set; }
+        [Key(4)] public int Rotation { get; set; }
+    }
+
     [MessagePackObject]
     public class SectEconomyState
     {
         [Key(0)] public List<DiscipleState> Disciples { get; set; } = new List<DiscipleState>();
         [Key(1)] public SectStockpile Stockpile { get; set; } = new SectStockpile();
+        /// <summary>Append-only key (building-system.md §3.3) — ห้ามแก้ [Key(0)]/[Key(1)] เดิม</summary>
+        [Key(2)] public List<PlacedBuildingState> PlacedBuildings { get; set; } = new List<PlacedBuildingState>();
 
         public byte[] ToByteArray() => MessagePackSerializer.Serialize(this);
         public static SectEconomyState FromByteArray(byte[] bytes) =>

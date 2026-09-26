@@ -76,9 +76,21 @@ it triggered (random event? betrayal arc?)
 
 ## 8. BuildingSystem
 
-**Status**: ⏳ STUB (registered as entry point, no logic)
-**Why deferred**: no game mechanic currently needs the unlock system
-**When to resume**: when sect rank/position system needs to gate content
+**Status**: ✅ Phase 1 implemented (grid placement engine) — 26 Sep 2026
+**What changed**: ตาม `sources/building-system.md` — วางอาคารลง grid ได้
+(ไม่ใช่ "คลิกสร้างอย่างเดียว" อีกต่อไป): เลือกจาก BuildingMenu (4 หมวด) →
+ghost preview บน isometric grid → ✓ ยืนยันหักทรัพยากรผ่าน `AdjustAndNotify`
+→ `PlacedBuildingState` ([Key(2)] append-only) + `BuildingGrid` occupancy +
+`BuildingPlacedMessage` (in-memory). ไม่มี movement/task-gating (Phase 2)
+**Defaults ที่ agent ตัดสินใจแทน (รอ human confirm ก่อน merge)**:
+- Q1: JSON เขียนมือ `Resources/Data/building_defs.json` (ย้าย Luban ทีหลังได้)
+- Q2: หักจาก `Stockpile.RawResources` เดิม (ไม่สร้าง currency ใหม่)
+- Q3: ผู้เล่นเท่านั้น — ไม่เพิ่ม MCP tool และไม่ register interprocess
+- Q4: ใช้ `BuildingSystem.cs` เดิมเป็น entry point (แทน stub ว่าง)
+- Q5: logical grid 40×40, cell = 1 unit; world mapping ใช้ tile size ที่กล้องวัดจริง (`CameraFramingConfig` + `IsometricCellMath` — ตาม grid overlay เดิม)
+- Q6: Landscape กิน grid เหมือนกันหมด (ไม่มี object นอก grid)
+**ยังค้าง**: grid จริงกี่ cell ขึ้นกับขนาด art (Q5 ตัวเลข placeholder),
+หมุน/ทุบ UI เต็มรูป, task gating (Phase 2)
 
 ## 9. WorldEventSystem — State-Conditional Logic
 

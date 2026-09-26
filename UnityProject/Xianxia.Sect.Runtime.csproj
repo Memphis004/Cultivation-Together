@@ -52,6 +52,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\UI\Views\LogWindowView.cs" />
+    <Compile Include="Assets\Scripts\Building\BuildingDef.cs" />
     <Compile Include="Assets\Scripts\UI\Core\UIService.cs" />
     <Compile Include="Assets\Scripts\Shared\MessageTypes.cs" />
     <Compile Include="Assets\Scripts\Core\SceneLoader.cs" />
@@ -85,6 +86,7 @@
     <Compile Include="Assets\Scripts\Visual\Scene\CameraRigPorts.cs" />
     <Compile Include="Assets\Scripts\Data\Gen\game\EventDef.cs" />
     <Compile Include="Assets\Scripts\Core\PurchaseItemHandler.cs" />
+    <Compile Include="Assets\Scripts\UI\Systems\BuildingPlacementUISystem.cs" />
     <Compile Include="Assets\Scripts\UI\Presenters\DiscipleListPresenter.cs" />
     <Compile Include="Assets\Scripts\Visual\Sprite\ChibiFrameClock.cs" />
     <Compile Include="Assets\Scripts\UI\Views\UIViewBase.cs" />
@@ -99,6 +101,7 @@
     <Compile Include="Assets\Scripts\UI\Views\AvatarOptionButton.cs" />
     <Compile Include="Assets\Scripts\Data\Gen\worldevent\TbEventChoice.cs" />
     <Compile Include="Assets\Scripts\UI\Systems\UIBootstrap.cs" />
+    <Compile Include="Assets\Scripts\Building\BuildingGrid.cs" />
     <Compile Include="Assets\Scripts\Core\DecisionExecutor.cs" />
     <Compile Include="Assets\Scripts\UI\Presenters\DiscipleDetailTabPresenters.cs" />
     <Compile Include="Assets\Scripts\UI\Views\AvatarCustomizationViewData.cs" />
@@ -107,14 +110,19 @@
     <Compile Include="Assets\Scripts\UI\Presenters\BottomMenuPresenter.cs" />
     <Compile Include="Assets\Scripts\Visual\Core\AppearanceResolver.cs" />
     <Compile Include="Assets\Scripts\UI\Presenters\EventPopupPresenter.cs" />
+    <Compile Include="Assets\Scripts\UI\Presenters\BuildingMenuPresenter.cs" />
     <Compile Include="Assets\Scripts\UI\Views\WalletHudView.cs" />
     <Compile Include="Assets\Scripts\UI\Core\IUIView.cs" />
     <Compile Include="Assets\Scripts\Core\GameLifetimeScope.cs" />
+    <Compile Include="Assets\Scripts\Building\BuildingDefPool.cs" />
     <Compile Include="Assets\Scripts\Data\Gen\Tables.cs" />
     <Compile Include="Assets\Scripts\Visual\Core\EntitlementRandom.cs" />
     <Compile Include="Assets\Scripts\Systems\WorldEventSystem.cs" />
+    <Compile Include="Assets\Scripts\UI\Views\BuildingMenuView.cs" />
     <Compile Include="Assets\Scripts\UI\Systems\WorldEventUISystem.cs" />
     <Compile Include="Assets\Scripts\Visual\Scene\CameraRigController.cs" />
+    <Compile Include="Assets\Scripts\Visual\Scene\CameraRigPanBootstrap.cs" />
+    <Compile Include="Assets\Scripts\UI\Views\BuildingPlacementView.cs" />
     <Compile Include="Assets\Scripts\Systems\SectStateProvider.cs" />
     <Compile Include="Assets\Scripts\UI\Presenters\WalletHudPresenter.cs" />
     <Compile Include="Assets\Scripts\Data\Gen\worldevent\EventChoiceRow.cs" />
@@ -129,8 +137,10 @@
     <Compile Include="Assets\Scripts\Visual\Scene\ChibiSceneRoot.cs" />
     <Compile Include="Assets\Scripts\Core\SceneMessages.cs" />
     <Compile Include="Assets\Scripts\Visual\Scene\ChibiClickTarget.cs" />
+    <Compile Include="Assets\Scripts\Visual\Scene\RigPanInput.cs" />
     <Compile Include="Assets\Scripts\Data\Gen\game\TbEventChoiceDef.cs" />
     <Compile Include="Assets\Scripts\Visual\Sprite\ChibiFrameBank.cs" />
+    <Compile Include="Assets\Scripts\Building\PlacementController.cs" />
     <Compile Include="Assets\Scripts\UI\Views\BottomMenuView.cs" />
     <Compile Include="Assets\Scripts\Systems\ResourceCraftingSystem.cs" />
     <Compile Include="Assets\Scripts\Data\LubanEventPool.cs" />

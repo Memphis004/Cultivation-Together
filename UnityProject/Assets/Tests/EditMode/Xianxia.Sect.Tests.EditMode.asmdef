@@ -4,6 +4,7 @@
     "references": [
         "Xianxia.Sect.Runtime",
         "MessagePipe",
+        "Unity.TextMeshPro",
         "UniTask",
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner"

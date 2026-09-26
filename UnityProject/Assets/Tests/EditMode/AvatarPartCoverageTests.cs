@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using MessagePipe;
 using NUnit.Framework;
+using Xianxia.Sect.Building;
 using Xianxia.Sect.Messages;
 using Xianxia.Sect.Visual;
 
@@ -60,9 +61,22 @@ namespace Xianxia.Sect.Tests
             var stateProvider = new SectStateProvider(
                 recruited.CreatePublisher(), resource.CreatePublisher(),
                 avatar.CreatePublisher(), backend.CreatePublisher(),
-                new AvatarPartPool(), VisualRuntimeConfig.Instance, provider);
+                new AvatarPartPool(), VisualRuntimeConfig.Instance, provider,
+                new BuildingDefPool(),
+                new BuildingPlacedBuffer().CreatePublisher());
 
             return (provider, stateProvider);
+        }
+
+        /// <summary>Empty buffer for BuildingPlacedMessage (no assertion needed here).</summary>
+        private sealed class BuildingPlacedBuffer
+        {
+            public IPublisher<BuildingPlacedMessage> CreatePublisher() => new NullPublisher();
+
+            private sealed class NullPublisher : IPublisher<BuildingPlacedMessage>
+            {
+                public void Publish(BuildingPlacedMessage message) { }
+            }
         }
 
         /// <summary>

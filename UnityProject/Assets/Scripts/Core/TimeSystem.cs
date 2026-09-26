@@ -4,6 +4,7 @@ using Cysharp.Threading.Tasks;
 using MessagePipe;
 using UnityEngine;
 using VContainer.Unity;
+using Xianxia.Sect.Building;
 using Xianxia.Sect.Messages;
 
 namespace Xianxia.Sect
@@ -193,5 +194,21 @@ namespace Xianxia.Sect
         /// the visual in place on that message — position/activity/facing preserved (§7).
         /// </summary>
         bool TrySetChibiBackend(string discipleId, ChibiBackend backend, out string failReason);
+
+        /// <summary>
+        /// Building Phase 1 — place a building on the sect grid (player-only, §8 Q3 default).
+        /// Validation order per building-system.md §3.2: def lookup → occupancy → cost,
+        /// then all-or-nothing resource deduction through the AdjustAndNotify choke point,
+        /// state append, and BuildingPlacedMessage publish (in-memory only).
+        /// Caller must call CanAffordBuilding / grid.CanPlace first for ghost preview;
+        /// this re-validates everything and fails closed with a reason.
+        /// </summary>
+        bool TryPlaceBuilding(string defId, int gridX, int gridZ, int rotation,
+                              BuildingGrid grid, out string failReason,
+                              out PlacedBuildingState placed);
+
+        /// <summary>Ghost preview check: can the sect pay this def's cost right now?
+        /// Read-only — no state mutation (occupied-cells check lives on BuildingGrid).</summary>
+        bool CanAffordBuilding(BuildingDef def);
     }
 }

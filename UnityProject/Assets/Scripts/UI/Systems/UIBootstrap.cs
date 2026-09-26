@@ -1,4 +1,5 @@
 using MessagePipe;
+using UnityEngine;
 using VContainer.Unity;
 using Xianxia.Sect.Messages;
 
@@ -21,20 +22,17 @@ namespace Xianxia.Sect.UI
     {
         private readonly UIService _uiService;
         private readonly ISubscriber<SceneLoadedMessage> _sceneLoadedSubscriber;
-        private readonly IPublisher<BuildModeStartedMessage> _buildStartedPublisher;
-        private readonly IPublisher<BuildModeEndedMessage> _buildEndedPublisher;
+        private readonly BuildingPlacementUISystem _placementUI;
         private System.IDisposable _subscription;
 
         public UIBootstrap(
             UIService uiService,
             ISubscriber<SceneLoadedMessage> sceneLoadedSubscriber,
-            IPublisher<BuildModeStartedMessage> buildStartedPublisher,
-            IPublisher<BuildModeEndedMessage> buildEndedPublisher)
+            BuildingPlacementUISystem placementUI)
         {
             _uiService = uiService;
             _sceneLoadedSubscriber = sceneLoadedSubscriber;
-            _buildStartedPublisher = buildStartedPublisher;
-            _buildEndedPublisher = buildEndedPublisher;
+            _placementUI = placementUI;
         }
 
         public void Start()
@@ -52,56 +50,75 @@ namespace Xianxia.Sect.UI
 
             WireResourcePopup();
             WireDiscipleList();
+            WireBuildModeToggle();
 
             // Subscribe to scene loads for scene-specific UI setup if needed.
             // Currently scene-specific UI (EventPopup) is handled by
             // WorldEventUISystem, but this hook exists for future panels
             // that should open based on which scene just loaded.
             _subscription = _sceneLoadedSubscriber.Subscribe(OnSceneLoaded);
-
-            WireBuildModeToggle();
         }
 
         /// <summary>
-        /// ปุ่ม "สร้าง" บนแถบล่าง toggle เข้า/ออก build mode ผ่าน event bus -
-        /// CameraRigController (Placement preset) และ GridOverlayRenderer
-        /// ทั้งคู่ subscribe BuildModeStarted/EndedMessage อยู่แล้ว ระบบ ghost
-        /// จริง (BuildingSystem) ยังไม่มี - เมื่อมีแล้วให้ส่ง GhostId มากับ
-        /// BuildModeStartedMessage เพื่อให้กล้องโฟกัสตาม ghost
+        /// ปุ่ม "สร้าง" บนแถบล่าง toggle เปิด/ปิด BuildingMenu (Building Phase 1) —
+        /// ใช้ event BuildClicked เดิมของ BottomMenuPresenter (ไม่สร้างปุ่มใหม่).
+        /// BuildModeStarted/EndedMessage publish จาก BuildingMenuPresenter เอง
+        /// (ครอบทุก path ที่เมนูปิด: เลือกการ์ด / ปุ่มปิดใน panel / toggle ปุ่มนี้) —
+        /// CameraRigController (Placement preset) และ GridOverlayRenderer ยัง
+        /// subscribe ข้อความเดิมเหมือนเดิม
         /// </summary>
         private void WireBuildModeToggle()
         {
             var bottomMenu = _uiService.Open("BottomMenu");
-            if (bottomMenu.Presenter is BottomMenuPresenter bottomPresenter &&
-                bottomPresenter.BuildButton != null)
+            if (bottomMenu.Presenter is BottomMenuPresenter bottomPresenter)
             {
-                bottomPresenter.BuildButton.onClick.AddListener(ToggleBuildMode);
+                bottomPresenter.BuildClicked += ToggleBuildMode;
             }
         }
 
         private void ToggleBuildMode()
         {
-            if (_buildModeActive)
+            // UIService.Open dedupes by panelId; closing runs presenter.Dispose
+            // which cancels any live ghost + publishes BuildModeEnded (presenter-owned)
+            if (_buildMenuOpen)
             {
-                _buildModeActive = false;
-                _buildEndedPublisher.Publish(new BuildModeEndedMessage
-                {
-                    SourceId = "UIBootstrap",
-                    Confirmed = false,
-                });
+                _uiService.Close("BuildingMenu");
+                _buildMenuOpen = false;
+                // toggle ปิดระหว่างวางค้าง = ยกเลิก ghost + เก็บปุ่มลอยด้วย
+                // (flow การวางอยู่กับ persistent system ไม่ใช่ presenter)
+                if (_placementUI != null) _placementUI.OnBuildModeEndedExternally();
             }
             else
             {
-                _buildModeActive = true;
-                _buildStartedPublisher.Publish(new BuildModeStartedMessage
+                try
                 {
-                    SourceId = "UIBootstrap",
-                    GhostId = null, // ghost system (BuildingSystem) not built yet
-                });
+                    _uiService.Open("BuildingMenu", new BuildingMenuArgs
+                    {
+                        CloseCallback = OnBuildingMenuCloseRequested,
+                    });
+                    _buildMenuOpen = true;
+                }
+                catch (System.Exception ex)
+                {
+                    // BuildingMenu ยังไม่อยู่ใน catalog (ครั้งแรกหลัง merge — ลืมรัน
+                    // generator) — แจ้งวิธีแก้ตรง ๆ แทน exception พังกลาง play mode
+                    Debug.LogWarning("[UIBootstrap] BuildingMenu panel is not in the catalog yet - " +
+                                     "run menu: Xianxia → Generate BuildingMenu Panel (once, in edit mode). " +
+                                     "(" + ex.Message + ")");
+                }
             }
         }
 
-        private bool _buildModeActive;
+        private void OnBuildingMenuCloseRequested()
+        {
+            // BuildingMenuPresenter ขอปิดเมนูเอง (เลือกการ์ดสำเร็จ / ปุ่มปิดใน panel) —
+            // ปิดผ่าน UIService จริงเหมือน ResourcePopup/DiscipleList (ไม่งั้นเมนูค้าง
+            // ทับ placement mode — bug ที่เคยเกิด: เลือกการ์ดแล้วเมนูยังเปิดค้าง)
+            _uiService.Close("BuildingMenu");
+            _buildMenuOpen = false;
+        }
+
+        private bool _buildMenuOpen;
 
         /// <summary>
         /// Resource popup (คลังสินค้า) is opened by the bottom-menu warehouse

@@ -20,6 +20,19 @@ namespace Xianxia.Sect.Visual
         public const string MapBackdropPath = "tilemap/map/mountain1_wx/mountain1";
         public const string GridSpritePath = "tilemap/tileassets/data/gridblock";
 
+        // --- Backdrop bounds (กัน pan หลุดกรอบภูเขา) — ตั้งโดย TerrainBackdropRenderer
+        // หลังโหลด mountain1.png (4096x3328 @ PPU100 = 40.96x33.28 world units, กึ่งกลาง origin)
+        public float BackdropWidthWorld { get; private set; }
+        public float BackdropHeightWorld { get; private set; }
+        public bool HasBackdropBounds { get; private set; }
+
+        public void SetBackdropBounds(float widthWorld, float heightWorld)
+        {
+            BackdropWidthWorld = widthWorld;
+            BackdropHeightWorld = heightWorld;
+            HasBackdropBounds = widthWorld > 0f && heightWorld > 0f;
+        }
+
         // --- Runtime-read values, populated by CameraRigController ---
         public float TileWidthWorld { get; private set; }
         public float TileHeightWorld { get; private set; }

@@ -1,0 +1,70 @@
+{
+    "buildings": [
+        {
+            "Id": "herb_plot",
+            "DisplayName": "แปลงสมุนไพร",
+            "Category": "Production",
+            "GridWidth": 2,
+            "GridHeight": 2,
+            "Cost": [ { "ResourceId": "wood", "Amount": 20 } ],
+            "Rotatable": false,
+            "SpritePath": "",
+            "ThumbnailPath": ""
+        },
+        {
+            "Id": "pill_hall",
+            "DisplayName": "หอปรุงยา",
+            "Category": "Production",
+            "GridWidth": 3,
+            "GridHeight": 3,
+            "Cost": [ { "ResourceId": "wood", "Amount": 40 }, { "ResourceId": "ore", "Amount": 30 } ],
+            "Rotatable": false,
+            "SpritePath": "",
+            "ThumbnailPath": ""
+        },
+        {
+            "Id": "rest_pavilion",
+            "DisplayName": "ศาลาพักสำราญ",
+            "Category": "Convenience",
+            "GridWidth": 2,
+            "GridHeight": 2,
+            "Cost": [ { "ResourceId": "wood", "Amount": 30 } ],
+            "Rotatable": true,
+            "SpritePath": "",
+            "ThumbnailPath": ""
+        },
+        {
+            "Id": "spirit_market",
+            "DisplayName": "ตลาดหินเซียน",
+            "Category": "Shop",
+            "GridWidth": 3,
+            "GridHeight": 2,
+            "Cost": [ { "ResourceId": "wood", "Amount": 50 }, { "ResourceId": "provisions", "Amount": 25 } ],
+            "Rotatable": true,
+            "SpritePath": "",
+            "ThumbnailPath": ""
+        },
+        {
+            "Id": "stone_lantern",
+            "DisplayName": "โคมหิน",
+            "Category": "Landscape",
+            "GridWidth": 1,
+            "GridHeight": 1,
+            "Cost": [ { "ResourceId": "ore", "Amount": 10 } ],
+            "Rotatable": false,
+            "SpritePath": "",
+            "ThumbnailPath": ""
+        },
+        {
+            "Id": "spirit_pond",
+            "DisplayName": "บ่อน้ำเซียน",
+            "Category": "Landscape",
+            "GridWidth": 2,
+            "GridHeight": 3,
+            "Cost": [ { "ResourceId": "ore", "Amount": 15 }, { "ResourceId": "provisions", "Amount": 10 } ],
+            "Rotatable": true,
+            "SpritePath": "",
+            "ThumbnailPath": ""
+        }
+    ]
+}

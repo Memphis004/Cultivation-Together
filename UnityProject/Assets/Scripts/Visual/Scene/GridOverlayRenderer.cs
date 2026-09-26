@@ -52,7 +52,9 @@ namespace Xianxia.Sect.Visual
         private bool _overlayVisible;
         private Vector2Int _lastCursorCell;
         private bool _hasCursorCell;
-        private const int GridExtent = 24; // 18x16 courtyard plus margin
+        /// <summary>ขนาด overlay จริง (cell) — BuildingSystem ใช้ const นี้เป็นขนาด
+        /// BuildingGrid ด้วย เพื่อให้ ghost/marker/โซนวางได้ ตรงกับ overlay เป๊ะ</summary>
+        public const int GridExtent = 24; // 18x16 courtyard plus margin
         private bool _disposed;
 
         public GridOverlayRenderer(
@@ -259,9 +261,10 @@ namespace Xianxia.Sect.Visual
         {
             if (_overlayRoot == null) return;
 
-            // Center the courtyard in the view: use the camera's current XY as
-            // the world position of cell (0,0).
-            _overlayOrigin = new Vector2(_camera.transform.position.x, _camera.transform.position.y);
+            // World-anchored: cell (0,0) = จุดกึ่งกลางแบ็คกราวเสมอ (ตรงกับ
+            // BuildingSystem ghost/marker/โซนวางได้ + กล้อง pan ได้โดย overlay ไม่เลื่อน) —
+            // เดิมผูกกับตำแหน่งกล้องตอนเปิด build mode ทำให้เลื่อนตาม pan และไม่ตรง grid
+            _overlayOrigin = Vector2.zero;
 
             for (int i = 0; i < _cellCoords.Count; i++)
             {

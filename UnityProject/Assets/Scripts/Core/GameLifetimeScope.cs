@@ -57,6 +57,29 @@ namespace Xianxia.Sect
             // Avatar part definitions loaded from Resources/Data/avatar_parts.json
             builder.Register<AvatarPartPool>(Lifetime.Singleton);
 
+            // --- Building Phase 1 (grid placement engine — building-system.md) ---
+            // Q1 default: defs from Resources/Data/building_defs.json (hand-written,
+            // AvatarPartPool pattern); Q3 default: player-only, no interprocess registration
+            // BuildingGrid มี ctor (int,int) ไว้ให้ test — VContainer เลือก ctor ที่มี
+            // parameters มากที่สุดเสมอ (TypeAnalyzer) แล้วพยายาม resolve System.Int32
+            // จึงต้อง pin ขนาดผ่าน factory ที่ composition root แทน:
+            // 24×24 centered origin (−12,−12) — logical cell ตรงกับ GridOverlayRenderer
+            // (cell (0,0) = กึ่งกลางแบ็คกราว, cell ติดลบได้ทั้งสองแกน)
+            builder.Register<Xianxia.Sect.Building.BuildingGrid>(
+                resolver => new Xianxia.Sect.Building.BuildingGrid(
+                    Xianxia.Sect.Visual.GridOverlayRenderer.GridExtent,
+                    Xianxia.Sect.Visual.GridOverlayRenderer.GridExtent,
+                    -Xianxia.Sect.Visual.GridOverlayRenderer.GridExtent / 2,
+                    -Xianxia.Sect.Visual.GridOverlayRenderer.GridExtent / 2),
+                Lifetime.Singleton);
+            builder.Register<Xianxia.Sect.Building.BuildingDefPool>(Lifetime.Singleton);
+            builder.Register<Xianxia.Sect.Building.PlacementController>(Lifetime.Singleton);
+            builder.Register<Xianxia.Sect.UI.BuildingMenuPresenter>(Lifetime.Transient);
+            // เจ้าของโหมดวางจริง (persistent) — ปุ่มลอย/BuildMode* message ต้องรอดจาก
+            // การปิดเมนู (presenter เป็น Transient ตายพร้อมเมนู จึงถือ flow ไม่ได้)
+            builder.RegisterEntryPoint<Xianxia.Sect.UI.BuildingPlacementUISystem>(Lifetime.Singleton).AsSelf();
+            // BuildingSystem entry point มีอยู่แล้ว (RegisterEntryPoint<BuildingSystem> ด้านล่าง) — ไม่เพิ่มซ้ำ
+
             // --- Visual system Phase 1 (foundation only — ไม่มี spawn ในฉาก) ---
             // Flags default false ทั้งคู่ (C12) — S4 license ยังไม่ตัดสิน
             builder.RegisterInstance(Xianxia.Sect.Visual.VisualRuntimeConfig.Instance);
@@ -188,6 +211,9 @@ namespace Xianxia.Sect
             builder.Register<Xianxia.Sect.Visual.ICellSpriteMetrics, Xianxia.Sect.Visual.ResourcesCellSpriteMetrics>(Lifetime.Singleton);
             builder.Register<Xianxia.Sect.Visual.IMainThreadQueue, Xianxia.Sect.Visual.UniTaskMainThreadQueue>(Lifetime.Singleton);
             builder.Register<Xianxia.Sect.Visual.IRigClock, Xianxia.Sect.Visual.UnityRigClock>(Lifetime.Singleton);
+            // pan input (คลิกขวาค้าง+ลาก) — ผูกกับ Unity Input เฉพาะ play mode ผ่าน
+            // CameraRigPanBootstrap ([RuntimeInitializeOnLoadMethod]); EditMode test
+            // ไม่มี wire → CameraRigController ข้าม input ทั้งหมด (test-safe)
 
             // --- gameplay subsystems, started/ticked by VContainer ---
             builder.RegisterEntryPoint<TimeSystem>(Lifetime.Singleton).AsSelf();

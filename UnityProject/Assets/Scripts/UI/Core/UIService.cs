@@ -87,6 +87,7 @@ namespace Xianxia.Sect.UI
                 case UIPresenterKind.DiscipleDetail: return typeof(DiscipleDetailPresenter);
                 case UIPresenterKind.BottomMenu: return typeof(BottomMenuPresenter);
                 case UIPresenterKind.ResourcePopup: return typeof(ResourcePopupPresenter);
+                case UIPresenterKind.BuildingMenu: return typeof(BuildingMenuPresenter);
                 case UIPresenterKind.DiscipleList: return typeof(DiscipleListPresenter);
                 default:
                     throw new ArgumentOutOfRangeException(nameof(kind), kind, null);

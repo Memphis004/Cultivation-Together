@@ -108,6 +108,7 @@ private static Type ResolvePresenterType(UIPresenterKind kind)
 | `DiscipleDetail` | `DiscipleDetailPresenter` | เปิดโดย `DiscipleDetailUISystem` เมื่อได้รับ `DiscipleSelectedMessage` (คลิก chibi หรือการ์ดใน DiscipleList — Phase 4) |
 | `BottomMenu` | `BottomMenuPresenter` | persistent (เปิดโดย `UIBootstrap`); ปุ่มสร้าง/ศิษย์/คลัง wire ผ่าน `BuildClicked`/`DiscipleClicked`/`WarehouseButton` |
 | `ResourcePopup` | `ResourcePopupPresenter` | `SectResourceChangedMessage`; เปิดโดย `UIBootstrap.WireResourcePopup` (ปิดผ่าน `ResourcePopupArgs.CloseCallback` — DiscipleList ใช้แพทเทิร์นเดียวกันผ่าน `DiscipleListArgs`) |
+| `BuildingMenu` | `BuildingMenuPresenter` | เปิดโดย `UIBootstrap.WireBuildModeToggle` (ปุ่ม "สร้าง" — `BuildClicked` เดิม, toggle แบบ WireResourcePopup); แท็บ 4 หมวด + กริดการ์ดอาคาร (runtime-built `CreateTab`/`CreateItem`); คลิกการ์ด → `PlacementController.BeginPlacement` + publish `BuildModeStartedMessage` แล้วสร้างปุ่มลอย ✓/⟲/✕ (`BuildingPlacementView`, code-built ใต้ UIRoot — ไม่ใช่ catalog panel ไม่มี kind ของตัวเอง) ตาม building-system.md §4–§5 |
 
 **Z-order note (§6.1):** `UIService.Open` ที่ branch "existing" (panel เปิดอยู่แล้ว) เรียก
 `SetAsLastSibling()` ก่อน `OnOpen` — panel ที่ปิดด้วย `Hide()` (เช่น DiscipleDetail)
