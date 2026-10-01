@@ -164,6 +164,109 @@ namespace Xianxia.Sect.Tests
                 () => BuildingGrid.ResolveFootprint(1, 1, 123, out _, out _));
         }
 
+        // ---- land mask ต่อ cell (ทางที่ production ใช้ — PlaceableLandMask) ----
+
+        /// <summary>สร้าง block row-major จาก ASCII ('#' = land) — index = (z) * width + (x)</summary>
+        private static bool[] MaskFrom(params string[] rows)
+        {
+            var cells = new bool[rows.Length * rows[0].Length];
+            for (int iz = 0; iz < rows.Length; iz++)
+            {
+                for (int ix = 0; ix < rows[iz].Length; ix++)
+                    cells[iz * rows[0].Length + ix] = rows[iz][ix] == '#';
+            }
+            return cells;
+        }
+
+        [Test]
+        public void SetPlaceableMask_BlocksCellsThatAreNotLand()
+        {
+            var grid = new BuildingGrid(4, 4, 0, 0);
+            // land = คอลัมน์ซ้ายสุด (z=0,1) เท่านั้น
+            grid.SetPlaceableMask(0, 0, 4, 4, MaskFrom("#...", "#...", "....", "...."));
+
+            Assert.IsTrue(grid.HasPlaceableMask);
+            Assert.IsTrue(grid.CanPlace(0, 0, 1, 1), "(0,0) is land");
+            Assert.IsTrue(grid.CanPlace(0, 1, 1, 1), "(0,1) is land");
+            Assert.IsFalse(grid.CanPlace(1, 0, 1, 1), "(1,0) is mist/rock -> not placeable");
+            Assert.IsFalse(grid.CanPlace(0, 2, 1, 1), "(0,2) is outside the land shape");
+        }
+
+        [Test]
+        public void CanPlace_FootprintStraddlingLandAndNonLand_ReturnsFalse()
+        {
+            var grid = new BuildingGrid(4, 4, 0, 0);
+            grid.SetPlaceableMask(0, 0, 4, 4, MaskFrom("#...", "#...", "....", "...."));
+
+            Assert.IsFalse(grid.CanPlace(0, 0, 2, 1),
+                "ทุก cell ของ footprint ต้องเป็น land — (1,0) ไม่ใช่");
+        }
+
+        [Test]
+        public void SetPlaceableMask_CellsOutsideMaskRect_AreNotPlaceable()
+        {
+            var grid = new BuildingGrid(10, 10, 0, 0);
+            grid.SetPlaceableMask(0, 0, 2, 2, MaskFrom("##", "##"));
+
+            Assert.IsTrue(grid.CanPlace(0, 0, 2, 2), "ใน rect = land ทั้งหมด");
+            Assert.IsFalse(grid.CanPlace(5, 5, 1, 1), "cell นอก mask rect = fail-closed");
+            Assert.IsFalse(grid.IsInPlaceableZone(-1, 0), "ติดลบก็อยู่นอก rect");
+        }
+
+        [Test]
+        public void SetPlaceableMask_OverridesZoneRects()
+        {
+            var grid = new BuildingGrid(4, 4, 0, 0);
+            grid.SetPlaceableZones(new[] { new UnityEngine.RectInt(0, 0, 4, 4) }); // ทั้ง grid
+            Assert.IsTrue(grid.CanPlace(3, 3, 1, 1), "zone บอกว่าวางได้");
+
+            grid.SetPlaceableMask(0, 0, 4, 4, MaskFrom("#...", "....", "....", "...."));
+            Assert.IsFalse(grid.CanPlace(3, 3, 1, 1), "mask เป็นผู้ตัดสินแทน zone rect");
+            Assert.IsTrue(grid.CanPlace(0, 0, 1, 1));
+        }
+
+        [Test]
+        public void ClearPlaceableMask_FallsBackToZoneRects()
+        {
+            var grid = new BuildingGrid(4, 4, 0, 0);
+            grid.SetPlaceableMask(0, 0, 4, 4, MaskFrom("#...", "....", "....", "...."));
+            Assert.IsFalse(grid.CanPlace(2, 2, 1, 1));
+
+            grid.ClearPlaceableMask();
+
+            Assert.IsFalse(grid.HasPlaceableMask);
+            Assert.IsTrue(grid.CanPlace(2, 2, 1, 1), "ไม่มี mask และไม่มี zone = ทั้ง grid วางได้");
+        }
+
+        [Test]
+        public void SetPlaceableMask_WrongBlockSize_Throws()
+        {
+            var grid = new BuildingGrid(4, 4, 0, 0);
+            Assert.Throws<System.ArgumentException>(
+                () => grid.SetPlaceableMask(0, 0, 2, 2, new[] { true, false }));
+        }
+
+        [Test]
+        public void SetPlaceableMask_NullOrEmptySize_Throws()
+        {
+            var grid = new BuildingGrid(4, 4, 0, 0);
+            Assert.Throws<System.ArgumentNullException>(() => grid.SetPlaceableMask(0, 0, 1, 1, null));
+            Assert.Throws<System.ArgumentOutOfRangeException>(
+                () => grid.SetPlaceableMask(0, 0, 0, 1, new bool[0]));
+        }
+
+        [Test]
+        public void SetPlaceableMask_IsCopied_CallerMutationDoesNotLeak()
+        {
+            var grid = new BuildingGrid(4, 4, 0, 0);
+            var cells = new[] { true, false, false, false };
+            grid.SetPlaceableMask(0, 0, 2, 2, cells);
+
+            cells[0] = false; // caller แก้ block ของตัวเอง
+
+            Assert.IsTrue(grid.CanPlace(0, 0, 1, 1), "grid ต้องถือสำเนาของตัวเอง");
+        }
+
         // ---- default size (Q5) ----
 
         [Test]

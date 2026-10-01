@@ -5,6 +5,7 @@ using Cysharp.Threading.Tasks;
 using MessagePipe;
 using UnityEngine;
 using VContainer.Unity;
+using Xianxia.Sect.Building;
 using Xianxia.Sect.Messages;
 
 namespace Xianxia.Sect.Visual
@@ -13,6 +14,11 @@ namespace Xianxia.Sect.Visual
     /// World-space isometric grid overlay for build mode.
     /// White diamond = free cell, green = cell under the cursor (placeable),
     /// occupied cells (2D collider overlap) are not drawn.
+    ///
+    /// เฉพาะ cell ที่เป็น "พื้นที่" จริงตาม PlaceableLandMask (bake จากภาพ
+    /// mountain1.png) เท่านั้นที่ถูกสร้าง/วาด — หมอก ภูเขา น้ำตก ต้นไม้ และ
+    /// cell นอกภาพ ไม่มี overlay. mask ชุดเดียวกับที่ BuildingSystem ตั้งให้
+    /// BuildingGrid → overlay กับ CanPlace ไม่มีทางหลุดกัน
     ///
     /// Does NOT depend on the scene Grid component: cell size comes from the
     /// measured gridblock sprite (CameraFramingConfig) and isometric diamond
@@ -52,9 +58,15 @@ namespace Xianxia.Sect.Visual
         private bool _overlayVisible;
         private Vector2Int _lastCursorCell;
         private bool _hasCursorCell;
-        /// <summary>ขนาด overlay จริง (cell) — BuildingSystem ใช้ const นี้เป็นขนาด
-        /// BuildingGrid ด้วย เพื่อให้ ghost/marker/โซนวางได้ ตรงกับ overlay เป๊ะ</summary>
-        public const int GridExtent = 24; // 18x16 courtyard plus margin
+        /// <summary>
+        /// ขอบเขต grid ที่เป็นไปได้ทั้งหมด (cell) — origin อยู่ที่ −GridExtent/2,
+        /// cell วิ่ง −GridExtent/2 .. +GridExtent/2−1. BuildingInstaller ใช้ const นี้
+        /// เป็นขนาด BuildingGrid และ PlaceableLandMask ใช้ rect เดียวกันเป๊ะ
+        /// (เทสต์ยืนยันว่าไม่หลุดกัน) — ขนาดนี้คือ bounding box ของ land ทั้งหมด
+        /// จากภาพ mountain1.png: ภาพเป็นสี่เหลี่ยมใน world แต่ cell เป็นสี่เหลี่ยม
+        /// หมุน 45° มุมภาพจึงไปไกลถึง cell ±41 ไม่ใช่ ±20
+        /// </summary>
+        public const int GridExtent = PlaceableLandMask.Width;
         private bool _disposed;
 
         public GridOverlayRenderer(
@@ -201,10 +213,19 @@ namespace Xianxia.Sect.Visual
             _cellRenderers.Clear();
             _cellCoords.Clear();
 
+            int skipped = 0;
             for (int y = -GridExtent / 2; y < GridExtent / 2; y++)
             {
                 for (int x = -GridExtent / 2; x < GridExtent / 2; x++)
                 {
+                    // หมอก/ภูเขา/นอกภาพ = ไม่มี grid (ไม่มี cell object เลย
+                    // → UpdateCursorCell ไม่มีทางเปิดมันกลับมา)
+                    if (!PlaceableLandMask.IsLand(x, y))
+                    {
+                        skipped++;
+                        continue;
+                    }
+
                     var cellGo = new GameObject("Cell_" + x + "_" + y);
                     cellGo.transform.SetParent(_overlayRoot, false);
 
@@ -228,6 +249,7 @@ namespace Xianxia.Sect.Visual
             }
 
             Debug.Log("[GridOverlayRenderer] overlay built: cells=" + _cellRenderers.Count +
+                      " (land only, skipped " + skipped + " non-land of " + (GridExtent * GridExtent) + ")" +
                       " cellSize=" + cellW.ToString("0.000") + "x" + cellH.ToString("0.000"));
         }
 

@@ -9,8 +9,9 @@ namespace Xianxia.Sect.Building
     /// plain C# ล้วน ไม่มี MonoBehaviour/Unity API เพื่อให้ EditMode test
     /// ครอบได้เต็ม ๆ และ logic เดียวกันใช้ได้ทั้งฝั่ง validate และ rebuild.
     /// cell ว่าง = null, ไม่ว่าง = instanceId ของ PlacedBuildingState ที่ครองอยู่.
-    /// ขนาดตายตัวตอน Phase 1 (Q5 default: 40×40 cell, cell = 1 world unit) —
-    /// ขยายพื้นที่สำนักเป็นเรื่อง Phase หลัง
+    /// ขนาดกำหนดตอน composition root (BuildingInstaller) — production ใช้ขนาด
+    /// เท่ากับ grid overlay (GridOverlayRenderer.GridExtent) พร้อม land mask
+    /// ต่อ cell จาก PlaceableLandMask; Q5 default 40×40 ยังเป็นค่าของ ctor เปล่า
     /// </summary>
     public class BuildingGrid
     {
@@ -59,10 +60,21 @@ namespace Xianxia.Sect.Building
         public int OriginX { get; }
         public int OriginY { get; }
 
-        // --- โซนวางได้ (placeable zone) ---
-        // ค่าเริ่มต้น (ไม่ตั้ง zone) = ทั้ง grid วางได้; ตั้งแล้ว = เฉพาะพื้นที่ใน zone เท่านั้น
-        // (จากภาพวาด: 4 โซนบนพื้นทราย ไม่รวมภูเขา/น้ำตก) — world→cell แปลงโดย BuildingSystem
+        // --- โซนวางได้แบบสี่เหลี่ยม (placeable zone) ---
+        // API เดิมสำหรับโดเมนที่เป็น rect ตรง ๆ (โซนจากภาพวาด 4 โซนบนพื้นทราย เฉพาะ
+        // การใช้งาน/test); production เลิกใช้เพราะรูปเกาะจริงไม่ใช่สี่เหลี่ยม — ใช้ mask
+        // ต่อ cell ด้านล่างแทนลำดับความสำคัญ: mask → zone rect → ทั้ง grid
         private readonly List<RectInt> _placeableZones = new List<RectInt>();
+
+        // --- land mask ต่อ cell (ทางหลักที่ production ใช้) ---
+        // มาจาก PlaceableLandMask (bake จากภาพ mountain1.png) — รูปเกาะจริงเป็นทรง
+        // อิสระ แทนด้วย RectInt ไม่ได้ จึงใช้ bitmask ต่อ cell. mask = ผู้ตัดสินเดียว:
+        // ตั้ง mask แล้ว zone rect จะถูกมองข้าม (ดู IsInPlaceableZone)
+        private bool[] _placeableMask;
+        private int _maskOriginX;
+        private int _maskOriginY;
+        private int _maskWidth;
+        private int _maskHeight;
 
         /// <summary>
         /// ctor ไร้พารามิเตอร์ = ขนาด Q5 default (40×40).
@@ -104,10 +116,55 @@ namespace Xianxia.Sect.Building
 
         public IReadOnlyList<RectInt> PlaceableZones => _placeableZones;
 
-        /// <summary>cell นี้อยู่ในโซนวางได้ไหม (ไม่มี zone = ทั้ง grid วางได้)
+        /// <summary>
+        /// กำหนด land mask ต่อ cell (row-major: index = (z - originZ) * width + (x - originX)).
+        /// mask ครอบ rect ใดก็ได้ — cell ของ grid ที่หลุด rect นับเป็น "วางไม่ได้" (fail-closed)
+        /// และเมื่อตั้ง mask แล้ว <see cref="IsInPlaceableZone"/> จะใช้ mask เท่านั้น
+        /// (zone rect ถูกมองข้าม) เพราะ production มีรูปเกาะเดียวเป็นแหล่งความจริง
+        /// </summary>
+        public void SetPlaceableMask(int originX, int originZ, int width, int height, IReadOnlyList<bool> cells)
+        {
+            if (cells == null)
+                throw new ArgumentNullException(nameof(cells));
+            if (width <= 0 || height <= 0)
+                throw new ArgumentOutOfRangeException(nameof(width), $"Mask must be positive, got {width}x{height}");
+            if (cells.Count != width * height)
+                throw new ArgumentException(
+                    $"Mask block must hold {width * height} cells, got {cells.Count}", nameof(cells));
+
+            var copy = new bool[cells.Count];
+            for (int i = 0; i < cells.Count; i++) copy[i] = cells[i];
+
+            _placeableMask = copy;
+            _maskOriginX = originX;
+            _maskOriginY = originZ;
+            _maskWidth = width;
+            _maskHeight = height;
+        }
+
+        /// <summary>ถอด mask ออก — กลับไปใช้ zone rect (หรือทั้ง grid ถ้าไม่มี zone)</summary>
+        public void ClearPlaceableMask()
+        {
+            _placeableMask = null;
+            _maskWidth = 0;
+            _maskHeight = 0;
+        }
+
+        /// <summary>มี land mask อยู่ไหม (mask = ผู้ตัดสินแทน zone rect)</summary>
+        public bool HasPlaceableMask => _placeableMask != null;
+
+        /// <summary>cell นี้วางได้ไหม (mask → zone rect → ทั้ง grid ตามลําดับความสําคัญ)
         /// ⚠️ RectInt เป็น 2D — cell-z map เข้า .y (yMin/yMax) ของ RectInt</summary>
         public bool IsInPlaceableZone(int x, int z)
         {
+            if (_placeableMask != null)
+            {
+                int ix = x - _maskOriginX;
+                int iz = z - _maskOriginY;
+                if (ix < 0 || iz < 0 || ix >= _maskWidth || iz >= _maskHeight) return false;
+                return _placeableMask[iz * _maskWidth + ix];
+            }
+
             if (_placeableZones.Count == 0) return true;
             for (int i = 0; i < _placeableZones.Count; i++)
             {

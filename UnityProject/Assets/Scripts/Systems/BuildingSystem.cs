@@ -21,9 +21,10 @@ namespace Xianxia.Sect
     ///  4. Tick(): อ่านตำแหน่งเมาส์ → grid cell (แปลงผ่าน IsometricCellMath เดิม
     ///     เพื่อให้ตรงกับ GridOverlayRenderer) + snap ghost ตาม footprint
     ///
-    /// Grid = logical 40×40 (Q5) แปลงเป็น world ด้วย tile size ที่กล้องวัดจริง
-    /// (CameraFramingConfig) — ไม่ hardcode ขนาด art. Landscape กิน grid
-    /// เหมือนกันหมด (Q6 default — ไม่มี object นอก grid).
+    /// Grid = logical เท่ากับ overlay (GridOverlayRenderer.GridExtent) แปลงเป็น world
+    /// ด้วย tile size ที่กล้องวัดจริง (CameraFramingConfig) — ไม่ hardcode ขนาด art.
+    /// พื้นที่ที่วางได้ = land mask จากภาพหลังเกาะ (PlaceableLandMask) ไม่ใช่ทั้ง grid.
+    /// Landscape กิน grid เหมือนกันหมด (Q6 default — ไม่มี object นอก grid).
     /// </summary>
     public class BuildingSystem : IStartable, ITickable
     {
@@ -53,7 +54,6 @@ namespace Xianxia.Sect
 
         private Camera _camera;
         private bool _placementVisualsActive;
-        private bool _zonesAppliedWithBackdrop;
 
         public BuildingSystem(
             BuildingGrid grid,
@@ -78,22 +78,10 @@ namespace Xianxia.Sect
             _framing = framing;
         }
 
-        // ── โซนวางได้ (จากภาพวาด: 4 โซนบนพื้นทราย ไม่รวมภูเขา/น้ำตก) ──
-        // พิกัด "logical isometric cell" ที่ตรงกับ overlay (cell (0,0) = กึ่งกลางแบ็คกราว,
-        // แกน x วิ่งลง-ขวา, แกน z วิ่งลง-ซ้าย ตาม IsometricCellMath) — ปรับเลขที่นี่จุดเดียว
-        // เมื่อ art/ภาพวาดเปลี่ยน; แต่ละ RectInt: xMin/zMin..xMax/zMax (z → .y ของ RectInt)
-        private static readonly RectInt[] PlaceableZoneRectsCells =
-        {
-            new RectInt(-6, -12, 8, 5),   // plateau บนซ้าย (เหนือเมือง, ซ้ายน้ำตก)
-            new RectInt(-11, -6, 5, 3),   // เกาะเล็กกลางซ้าย (วงแหวนหญ้า)
-            new RectInt(2, -6, 10, 8),    // โซนใหญ่ขวา (พื้นทรายกว้าง)
-            new RectInt(-7, 2, 9, 5),     // ถนนล่างกลาง (แถบยาว)
-        };
-
         public void Start()
         {
             RebuildGridFromState();
-            ApplyPlaceableZones();
+            ApplyPlaceableLandMask();
 
             // Process-lifetime singleton — subscriptions live forever, same as
             // WorldEventUISystem/TimeSystem patterns (no per-scene cleanup needed).
@@ -112,14 +100,6 @@ namespace Xianxia.Sect
         // Per-frame logic มีเฉพาะตอน placement mode (ghost sync) — ปกติ no-op เหมือน stub เดิม
         public void Tick()
         {
-            // โซนวางได้ควรอิงขนาดแบ็คกราวจริง — ถ้าตอน Start ยังไม่วัด (ลำดับ entry
-            // point ไม่การันตี) ลองใหม่เมื่อวัดได้แล้ว (ครั้งเดียวพอ)
-            if (!_zonesAppliedWithBackdrop && _framing.HasBackdropBounds)
-            {
-                ApplyPlaceableZones();
-                _zonesAppliedWithBackdrop = true;
-            }
-
             if (!_placement.IsActive)
             {
                 if (_placementVisualsActive) HideGhostVisuals();
@@ -186,28 +166,36 @@ namespace Xianxia.Sect
         }
 
         /// <summary>
-        /// ตั้งโซนวางได้จากภาพวาด — พื้นที่นอกโซน (ภูเขา/น้ำตก/ขอบแมพ) วางไม่ได้
-        /// (ghost แดงเมื่ออยู่นอกโซน). โซนอยู่ใน logical cell coords ตรงกับ overlay;
-        /// ตัด cell ที่หลุดขอบ grid ทิ้ง (grid = โดเมนเดียวกับ overlay 24×24 centered)
+        /// ตั้ง land mask ให้ grid — พื้นที่ที่วางได้คือ "หลังเกาะ" จริง ๆ จากภาพ
+        /// mountain1.png (PlaceableLandMask ที่ bake ไว้) ไม่ใช่โซนสี่เหลี่ยมที่วาดมือ.
+        /// หมอก/ภูเขา/น้ำตก/ต้นไม้ และ cell นอกภาพ = วางไม่ได้ (ghost แดง),
+        /// และ GridOverlayRenderer วาด overlay เฉพาะ cell ที่เป็น land ชุดเดียวกัน
+        /// → overlay กับ CanPlace ตรงกันเสมอ. mask เป็น cell-space ล้วน
+        /// (ไม่ผูกกับการวัดแบ็คกราว) จึง apply ครั้งเดียวตอน Start พอ
         /// </summary>
-        private void ApplyPlaceableZones()
+        private void ApplyPlaceableLandMask()
         {
-            var zones = new List<RectInt>(PlaceableZoneRectsCells.Length);
-            foreach (var zone in PlaceableZoneRectsCells)
-            {
-                int xMin = Mathf.Max(zone.xMin, _grid.OriginX);
-                int zMin = Mathf.Max(zone.yMin, _grid.OriginY);
-                int xMax = Mathf.Min(zone.xMax, _grid.OriginX + _grid.Width);
-                int zMax = Mathf.Min(zone.yMax, _grid.OriginY + _grid.Height);
+            var cells = PlaceableLandMask.BuildCells(
+                PlaceableLandMask.OriginX, PlaceableLandMask.OriginY,
+                PlaceableLandMask.Width, PlaceableLandMask.Height);
 
-                if (xMax <= xMin || zMax <= zMin) continue;
-                zones.Add(new RectInt(xMin, zMin, xMax - xMin, zMax - zMin));
+            _grid.SetPlaceableMask(
+                PlaceableLandMask.OriginX, PlaceableLandMask.OriginY,
+                PlaceableLandMask.Width, PlaceableLandMask.Height, cells);
+
+            int landInGrid = 0;
+            for (int z = _grid.OriginY; z < _grid.OriginY + _grid.Height; z++)
+            {
+                for (int x = _grid.OriginX; x < _grid.OriginX + _grid.Width; x++)
+                {
+                    if (_grid.IsInPlaceableZone(x, z)) landInGrid++;
+                }
             }
 
-            _grid.SetPlaceableZones(zones);
-            _zonesAppliedWithBackdrop = true; // โซนเป็น cell-space — ไม่ผูกกับการวัดแบ็คกราว
-            Debug.Log($"[BuildingSystem] Placeable zones applied: {zones.Count} zones " +
-                      $"(grid {_grid.Width}x{_grid.Height} at origin {_grid.OriginX},{_grid.OriginY})");
+            Debug.Log($"[BuildingSystem] Placeable land mask applied: {landInGrid}/" +
+                      $"{_grid.Width * _grid.Height} grid cells buildable " +
+                      $"(grid {_grid.Width}x{_grid.Height} at origin {_grid.OriginX},{_grid.OriginY}, " +
+                      $"mask {PlaceableLandMask.Width}x{PlaceableLandMask.Height})");
         }
 
         private void CopyOccupancy(BuildingGrid source)
