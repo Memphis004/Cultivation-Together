@@ -24,8 +24,19 @@ namespace Xianxia.Sect.UI
         public Button ImmortalWayButton => immortalWayButton;
         public Button WarehouseButton => warehouseButton;
 
+        // Bar height (also mirrored by the prefab's RectTransform).
+        private const float BarHeight = 120f;
+
+        // Reskin round 3: the row used to sit flush against the screen edge
+        // (bar at y=0, buttons 12 px above it, ~24 px from the right edge) and the
+        // captions baked into the button sprites were reading as "cut off by the
+        // frame". Lift the whole bar off the bottom and pull it in from the right
+        // so the row reads as floating inside the frame.
+        private const float BottomMargin = 48f;
+        private const float RightInset   = 96f;
+
         // Data-driven layout (open question #13) - moved verbatim from
-        // UIRoot.ApplyBottomMenuLayout: bottom bar hugging the right edge.
+        // UIRoot.ApplyBottomMenuLayout.
         public override void ApplyDefaultLayout()
         {
             // Bottom bar: full width, fixed height, anchored to the bottom edge.
@@ -34,16 +45,16 @@ namespace Xianxia.Sect.UI
             rt.anchorMin = new Vector2(0f, 0f);
             rt.anchorMax = new Vector2(1f, 0f);
             rt.pivot     = new Vector2(0.5f, 0f);
-            rt.sizeDelta = new Vector2(0f, 120f);
-            rt.anchoredPosition = Vector2.zero;
+            rt.sizeDelta = new Vector2(0f, BarHeight);
+            rt.anchoredPosition = new Vector2(0f, BottomMargin);
 
             var hlg = GetComponent<HorizontalLayoutGroup>();
             if (hlg != null)
             {
-                hlg.padding           = new RectOffset(24, 24, 12, 12);
+                hlg.padding           = new RectOffset(24, Mathf.RoundToInt(RightInset), 12, 12);
                 hlg.spacing           = 16f;
-                // Reskin round 2: bar hugs the right edge of the screen
-                // (reference images 1-2), ~24 px inset via padding.right.
+                // The row stays grouped at the right of the bar, now inset by
+                // RightInset instead of hugging the corner.
                 hlg.childAlignment    = TextAnchor.MiddleRight;
                 hlg.childControlWidth  = true;
                 hlg.childControlHeight = true;
