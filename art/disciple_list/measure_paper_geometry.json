@@ -1,0 +1,35 @@
+{
+  "source_png": "C:\\Users\\memph\\OneDrive\\Desktop\\New folder (3)\\Arts\\spine_extracted\\ui\\Body_dizijm.png",
+  "image_wh": [
+    1316,
+    752
+  ],
+  "paper_bbox": [
+    32,
+    72,
+    1100,
+    707
+  ],
+  "paper_wh": [
+    1068,
+    635
+  ],
+  "comp1_bbox": [
+    0,
+    0,
+    1134,
+    752
+  ],
+  "borders_px": {
+    "left": 32,
+    "right": 34,
+    "top": 72,
+    "bottom": 45
+  },
+  "borders_pct_of_comp1": {
+    "left": 0.02821869488536155,
+    "right": 0.029982363315696647,
+    "top": 0.09574468085106383,
+    "bottom": 0.0598404255319149
+  }
+}

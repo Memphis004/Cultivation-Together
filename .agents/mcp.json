@@ -3,6 +3,11 @@
     "unity-cli": {
       "command": "unity",
       "args": ["mcp"]
+    },
+    "comfy-mcp": {
+      "type": "stdio",
+      "command": "comfy-mcp",
+      "args": []
     }
   }
 }

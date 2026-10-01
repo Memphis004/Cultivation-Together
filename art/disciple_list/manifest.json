@@ -1,0 +1,787 @@
+{
+  "_schema": "disciple_list_window_kit/1",
+  "_generated_by": "Phase 0 of the DiscipleList window-kit task",
+  "_scope": "window kit only — no disciple cards, no portraits, no sort/search buttons, no grid layout",
+  "unblocked": {
+    "comfy_server": "running, probed 127.0.0.1:8188/system_stats -> HTTP 200",
+    "comfyui_version": "0.37.4",
+    "comfy_cli_version": "1.21.0",
+    "gpu": "NVIDIA GeForce RTX 5060 Ti, vram_total 17074421760 B, vram_free 15911092224 B (~15.9 GB)",
+    "torch": "2.12.1+cu130",
+    "python": "3.13.12 (ComfyUI embedded); PIL 12.3.0 / numpy 1.26.4 available on host python 3.11.9",
+    "node_classes": 994
+  },
+  "source_files": {
+    "resolution_decision": "USER answered Q1 with the path C:\\UnityProjects\\Cultivation-Together\\Artwork. That folder existed but was empty, so both source files were copied into it verbatim (sha256 verified identical).",
+    "workflow_copy": {
+      "path": "Artwork/qwen21_hanfu_atlas_edit.json",
+      "sha256": "24712ac6a5cf3a74894e9a14c95809db7efc6c64f42aee31286b693bce97caad",
+      "origin": "C:\\Users\\memph\\OneDrive\\Desktop\\New folder (3)\\spinemale\\comfy\\qwen21_hanfu_atlas_edit.json",
+      "origin_sha256": "24712ac6a5cf3a74894e9a14c95809db7efc6c64f42aee31286b693bce97caad",
+      "mutated": false
+    },
+    "reference_asset_copy": {
+      "path": "Artwork/Body_dizijm.png",
+      "sha256": "2265b65b0a2df0861f4e570b47b0fd8e8d37fe7a6bd7efc8ec29b53128a458b3",
+      "origin": "C:\\Users\\memph\\OneDrive\\Desktop\\New folder (3)\\Arts\\spine_extracted\\ui\\Body_dizijm.png",
+      "origin_sha256": "2265b65b0a2df0861f4e570b47b0fd8e8d37fe7a6bd7efc8ec29b53128a458b3",
+      "mutated": false
+    },
+    "note": "Neither file existed anywhere in this repo or in any git branch; both were unique matches on disk. Artwork/ was empty when the copy ran (verified by listing before and after).",
+    "confirm_with_user": "flagged in the Phase 1 report — correct me if Artwork/ was meant for something else"
+  },
+  "decisions_resolved_by_user": {
+    "Q1_source_paths": "RESOLVED — user gave C:\\UnityProjects\\Cultivation-Together\\Artwork; both source files copied there verbatim, comfy/qwen21_ui_asset.json is created inside this repo",
+    "Q2_scroll_paper_orientation": "RESOLVED by user — PORTRAIT matching the 460x560 window slot (0.821:1). Rolled muted-gray spine runs vertically on the tall left/right edges.",
+    "Q3_resolution_budget": "RESOLVED by user — treat the 1024 as the TextEncode pixel-budget widget value (not a cap on the output long side). Output canvas may exceed 1024 on its long side; that is accepted.",
+    "Q4_rod_separation": "CONFIRMED by the user's reference screenshot — the ref window has vertical wooden posts at left/right and NO horizontal rod across the top, so scroll_rod is the rotated post asset and scroll_paper carries no rod. scroll_paper's prompt forbids drawing one."
+  },
+  "unity_context": {
+    "canvas_prefab": "Assets/Prefabs/Canvas.prefab (guid 184d2b837443f3f408944d084d8dbea2)",
+    "canvas_scaler": {
+      "m_UiScaleMode": 1,
+      "m_ReferenceResolution": {
+        "x": 1920,
+        "y": 1080
+      },
+      "m_ScreenMatchMode": 0,
+      "m_MatchWidthOrHeight_prefab": 1,
+      "m_MatchWidthOrHeight_SampleScene_override": 0,
+      "provenance": "Canvas.prefab lines 1867-1872; SampleScene.unity line 527 is a prefab-instance override setting MatchWidthOrHeight=0 (match width). SampleScene itself has no CanvasScaler block."
+    },
+    "first_build_scene": "Assets/Scenes/SampleScene.unity",
+    "target_px_convention": "target_px is the size in canvas reference-resolution pixels (1920x1080 canvas) that the sprite is displayed at",
+    "window_slot": {
+      "rect": "Assets/Editor/DiscipleListPanelGenerator.cs -> Window RectTransform sizeDelta",
+      "size": [
+        460,
+        560
+      ],
+      "current_paper_fallback_color_rgba": [
+        0.93,
+        0.88,
+        0.78,
+        1.0
+      ],
+      "provenance": "DiscipleListPanelGenerator.cs + DiscipleListPanel.prefab (Window sizeDelta 460x560); DiscipleListView.ApplyDefaultLayout also sets 460x560"
+    },
+    "close_button_slot": {
+      "rect": [
+        110,
+        40
+      ],
+      "provenance": "DiscipleListPanelGenerator.cs CreateButton sizeDelta(110,40); prefab CloseButton sizeDelta 110x40"
+    },
+    "title_slot": {
+      "rect": [
+        320,
+        50
+      ],
+      "provenance": "DiscipleListPanelGenerator.cs titleRt.sizeDelta = (-140, 50) on a full-width anchor -> 460-140 = 320 wide"
+    },
+    "existing_ui_resource_folders": [
+      "Assets/Resources/ui/icons/manufacture",
+      "Assets/Resources/ui/icons/money",
+      "Assets/Resources/ui/windows/main"
+    ],
+    "new_resource_folder": "Assets/Resources/ui/disciple_list",
+    "no_overwrite_check": "Assets/Resources/ui/disciple_list does not exist yet; nothing under Assets/Resources/ui will be overwritten"
+  },
+  "reference_measurement": {
+    "source_png": "C:\\Users\\memph\\OneDrive\\Desktop\\New folder (3)\\Arts\\spine_extracted\\ui\\Body_dizijm.png",
+    "role": "measurement only — pixels of this file must never be sent to Qwen; guides are synthesized silhouettes",
+    "file_bytes": 400382,
+    "mode": "RGBA",
+    "image_wh": [
+      1316,
+      752
+    ],
+    "total_px": 989632,
+    "alpha_opaque_px": 826364,
+    "alpha_opaque_pct": 0.835,
+    "alpha_zero_px": 163268,
+    "alpha_zero_pct": 0.165,
+    "alpha_semi_px": 35568,
+    "alpha_semi_pct_of_opaque": 0.043,
+    "alpha_semi_note": "asset has antialiased edges (256 distinct alpha values) — useful precedent for the post-process feather band",
+    "connected_components_alpha_gt0": 15,
+    "components_meaningful": [
+      {
+        "name": "scroll_body_including_rod",
+        "px": 789933,
+        "bbox_xyxy": [
+          0,
+          0,
+          1134,
+          752
+        ],
+        "wh": [
+          1134,
+          752
+        ],
+        "aspect": 1.508,
+        "note": "the wooden rod and the paper body touch, so they are ONE component — not two"
+      },
+      {
+        "name": "cloud",
+        "px": 31831,
+        "bbox_xyxy": [
+          1134,
+          252,
+          1314,
+          748
+        ],
+        "wh": [
+          180,
+          496
+        ],
+        "aspect": 0.363
+      },
+      {
+        "name": "medallion_with_tassel",
+        "px": 4555,
+        "bbox_xyxy": [
+          1134,
+          102,
+          1251,
+          244
+        ],
+        "wh": [
+          117,
+          142
+        ],
+        "aspect": 0.824
+      }
+    ],
+    "components_noise": {
+      "count": 12,
+      "max_px_each": 13,
+      "total_px": 46,
+      "note": "antialias specks — task expected '~4 pieces'; the real count is 3 meaningful + 12 specks"
+    },
+    "paper_body": {
+      "bbox_xyxy": [
+        32,
+        72,
+        1100,
+        707
+      ],
+      "wh": [
+        1068,
+        635
+      ],
+      "aspect": 1.682,
+      "note": "task estimated ~1.75:1; measured 1.68:1 — consistent",
+      "method": "bright (max channel > 0.80) & low-saturation (sat < 0.20) & alpha>128, restricted to x<1134 to exclude the cloud",
+      "row_sample_runs": {
+        "y=150": [
+          30,
+          1101
+        ],
+        "y=300": [
+          31,
+          1100
+        ],
+        "y=600": [
+          36,
+          1095
+        ]
+      },
+      "col_samples_y": {
+        "x=100": [
+          69,
+          710
+        ],
+        "x=500": [
+          64,
+          716
+        ],
+        "x=1000": [
+          66,
+          712
+        ]
+      },
+      "median_edges": {
+        "left": 32,
+        "right": 1099,
+        "top": 72,
+        "bottom": 706,
+        "rows_used": 603,
+        "cols_used": 987
+      }
+    },
+    "nine_slice_borders_px_of_component1": {
+      "left": 32,
+      "right": 34,
+      "top": 72,
+      "bottom": 45,
+      "provenance": "component-1 bbox is 1134x752; left = paper_left-0, right = 1133-paper_right, top = paper_top-0, bottom = 751-paper_bottom, using median edges above"
+    },
+    "nine_slice_borders_pct_of_component1": {
+      "left": 0.0282,
+      "right": 0.03,
+      "top": 0.0957,
+      "bottom": 0.0598
+    },
+    "full_measurement_dump": "art/disciple_list/measure_paper_geometry.json"
+  },
+  "style_block": "hand-painted ink-and-watercolor xianxia UI ornament, warm parchment and orange lacquered wood palette, thin dark hand-inked outline, soft shading, flat front orthographic view",
+  "chroma_key": {
+    "color": "#FF00FF",
+    "rgb": [
+      255,
+      0,
+      255
+    ],
+    "note": "guide background is flat magenta so the post-process can key it out; Phase 3 uses two distance thresholds with a feather band between them",
+    "keep_in_positive_prompt": "Keep the background as flat solid magenta #FF00FF, untouched, no shadow, no glow, no gradient."
+  },
+  "generation": {
+    "workflow": "comfy/qwen21_ui_asset.json (to be created in this repo)",
+    "source_workflow": "C:\\Users\\memph\\OneDrive\\Desktop\\New folder (3)\\spinemale\\comfy\\qwen21_hanfu_atlas_edit.json",
+    "node_addressing": {
+      "guide_loadimage": "8",
+      "text_encode": "5",
+      "ksampler": "6",
+      "save_image": "10",
+      "note": "addresses verified via `comfy workflow slots` on the source file; 20 tweakable slots enumerated"
+    },
+    "slot_addresses": {
+      "guide_image": "8.image",
+      "prompt": "5.prompt",
+      "negative_prompt": "5.negative_prompt",
+      "resolution_budget": "5.resolution",
+      "seed": "6.seed",
+      "steps": "6.steps",
+      "cfg": "6.cfg",
+      "filename_prefix": "10.filename_prefix"
+    },
+    "cfg": 1,
+    "cfg_note": "At cfg=1 the negative prompt is NOT read — every prohibition must live in the positive prompt (iron rule 3). The 5.negative_prompt widget is left at its source value but is inert.",
+    "steps": 25,
+    "sampler": "euler",
+    "scheduler": "simple",
+    "denoise": 1,
+    "denoise_note": "Qwen-Image-2.1 is an instruction-edit model; edit strength comes from the prompt, not denoise. Do not use classic img2img values.",
+    "control_after_generate": "fixed",
+    "control_after_generate_note": "KSampler widgets_values[1] is the control_after_generate combo (source = 'randomize'); the runner must force it to 'fixed'. It is NOT exposed as a `comfy workflow` slot, so it needs a direct widgets_values patch.",
+    "resolution_budget_fixed": 1024,
+    "resolution_widget_semantics": {
+      "node": "TextEncodeQwenImage21",
+      "address": "5.resolution",
+      "tooltip": "Reference images are resized to about resolution x resolution pixels, at multiples of 32, preserving aspect ratio. 0 keeps each reference at its own size, rounded to a multiple of 32.",
+      "is": "a total PIXEL BUDGET, not a side length",
+      "measured_precedent": "253x142 source at budget 1024 produced 1376x768 on this machine (per the source workflow's own note)",
+      "consequence": "the generated canvas keeps the GUIDE's aspect and is snapped to /32; its long side can exceed 1024 even though the widget value is 1024",
+      "user_decision": "RESOLVED — fixed at 1024 budget for every asset; an output long side above 1024 is accepted. This is why per-asset `gen_budget` values in `assets[]` are superseded: every asset uses 1024."
+    },
+    "vram_policy": "one job at a time; weights ~15.8 GB vs 15.9 GB free VRAM; first load is slow and is not a bug",
+    "muted_node_kept": "node 9 LoadImage (optional style ref) stays muted (mode=2), as in the source",
+    "untouched_nodes": [
+      "1 UNETLoader",
+      "2 CLIPLoader",
+      "3 VAELoader",
+      "4 QwenImage21Cache",
+      "7 VAEDecode"
+    ]
+  },
+  "prompt_conventions": {
+    "guide_reference_syntax": "<image1>",
+    "guide_reference_note": "the source workflow's own note documents addressing refs as <image1>, <image2>, ... — the task draft said 'image 1'; the actual token is <image1>",
+    "all_prohibitions_in_positive": true
+  },
+  "picks_approved_by_user": {
+    "approved_at": "CHECKPOINT B",
+    "scroll_paper": 101,
+    "scroll_rod": 222,
+    "close_medallion": 454,
+    "cloud_corner": 353,
+    "title_plate": 252,
+    "note": "explicit user picks; no asset was chosen on the user's behalf"
+  },
+  "assets": [
+    {
+      "id": "scroll_paper",
+      "role": "main parchment page: thin ink edge, muted grey-brown rolled spine on the left and right, calm low-detail centre",
+      "aspect_source_measured": 1.682,
+      "aspect_task_estimate": "~1.75:1",
+      "nine_slice": true,
+      "unity_usage": "Window Image component, Image.Type = Sliced, color = white when the sprite loads",
+      "target_px": [
+        460,
+        560
+      ],
+      "target_px_provenance": "window slot 460x560 (DiscipleListPanelGenerator / prefab)",
+      "gen_budget": 1024,
+      "gen_budget_note": "1024 for EVERY asset, per the user's decision on Q3",
+      "gen_size_expected": [
+        928,
+        1120
+      ],
+      "gen_size_note": "PORTRAIT per the user's Q2 decision (window aspect 460/560 = 0.8214). budget 1024 -> w*h ~= 1048576 with w/h = 0.8214 -> h ~= 1130, w ~= 928; snapped to /32 gives 928x1120. The runner records the ACTUAL canvas size from the output PNG and writes it back here, because the /32 snap is only predictable to within 32 px.",
+      "resize_policy": "downscale only (Lanczos) — never upscale",
+      "object_aspect_rule": "The guide's OBJECT bounding box aspect MUST equal target_px's aspect. `postprocess.py` fits the trimmed object into the target box preserving aspect, so any mismatch shows up directly as a shortfall in one dimension. scroll_paper satisfies this (0.8290 vs 0.8214, 0.9% off, giving 460x558 instead of 460x560 — within 2px, so its guide was deliberately left alone rather than invalidating the round-1/round-2 comparison the user reviewed). The other four guides were corrected.",
+      "sprite_border_px_at_target": {
+        "left": 38,
+        "bottom": 0,
+        "right": 36,
+        "top": 0
+      },
+      "sprite_border_px_note": "computed from the CHOSEN seed 101 (not a median), measured on the 460x558 final sprite",
+      "orientation": "PORTRAIT 0.8214:1 (user decision — matches the window slot so the vertical rolled spine lands on the tall sides)",
+      "orientation_note": "the reference page is landscape 1.682:1; the SAME structure (vertical rolled spine left/right, calm centre) is reused at the window's aspect instead of the reference's, so nothing needs to be stretched at display time",
+      "guide": {
+        "canvas": [
+          928,
+          1120
+        ],
+        "background": [
+          255,
+          0,
+          255
+        ],
+        "outer_margin_pct": 0.02,
+        "corner_radius_px": 24,
+        "paper_grey": 128,
+        "spine_grey": 90,
+        "spine_pct": {
+          "left": 0.0282,
+          "right": 0.03
+        },
+        "supersample": 4,
+        "spine_pct_provenance": "measured from Artwork/Body_dizijm.png: left band = 32/1134 and right band = 34/1134 of the ornament bbox (see reference_measurement.nine_slice_borders_pct_of_component1). These are the one part of the reference geometry with no rod contamination, which is why they are used verbatim.",
+        "top_bottom_note": "the measured top margin (9.57%) is NOT reused: it contains the wooden rod, which this asset must not have. The guide uses a flat 2% margin on every side instead, so the paper reads as one full-height page between two rolled spines — which is the structure the reference screenshot shows.",
+        "no_source_pixels": "the guide is drawn entirely from primitives. No pixel of Body_dizijm.png is read, copied or resampled.",
+        "path": "art/disciple_list/guides/scroll_paper_guide.png"
+      },
+      "guide_note_for_phase4": "the other four assets get their `guide` blocks added in Phase 4",
+      "phase2_run": {
+        "status": "4 seeds generated and post-processed; awaiting the user's pick at CHECKPOINT A",
+        "actual_gen_size_all_seeds": [
+          928,
+          1120
+        ],
+        "gen_size_prediction_correct": true,
+        "elapsed_s": {
+          "101": 58.7,
+          "202": 31.4,
+          "303": 31.3,
+          "404": 32.4
+        },
+        "first_job_includes_weight_load": true,
+        "raw_near_magenta_pct": {
+          "101": 9.4,
+          "202": 8.7,
+          "303": 7.5,
+          "404": 8.5
+        },
+        "raw_subject_median_rgb": {
+          "101": [
+            248,
+            236,
+            207
+          ],
+          "202": [
+            245,
+            234,
+            205
+          ],
+          "303": [
+            248,
+            235,
+            201
+          ],
+          "404": [
+            247,
+            233,
+            201
+          ]
+        },
+        "final_size": {
+          "101": [
+            460,
+            552
+          ],
+          "202": [
+            460,
+            548
+          ],
+          "303": [
+            460,
+            560
+          ],
+          "404": [
+            460,
+            549
+          ]
+        },
+        "final_near_magenta_px": {
+          "101": 0,
+          "202": 0,
+          "303": 0,
+          "404": 0
+        },
+        "final_upscaled": {
+          "101": false,
+          "202": false,
+          "303": false,
+          "404": false
+        },
+        "silhouette_fidelity": {
+          "guide_object_aspect": 0.829,
+          "final_object_aspect": {
+            "101": 0.8333,
+            "202": 0.8394,
+            "303": 0.8214,
+            "404": 0.8379
+          },
+          "verdict": "outline preserved — every seed within 0.01 of the guide aspect"
+        },
+        "spine_width_deviation": {
+          "guide_pct": {
+            "left": 2.82,
+            "right": 3.0
+          },
+          "final_pct": {
+            "101": {
+              "left": 10.0,
+              "right": 9.57
+            },
+            "202": {
+              "left": 12.61,
+              "right": 12.39
+            },
+            "303": {
+              "left": 11.3,
+              "right": 8.91
+            },
+            "404": {
+              "left": 9.35,
+              "right": 10.0
+            }
+          },
+          "verdict": "DEVIATION — Qwen widened the rolled spine ~3.5-4x on every seed, in the same direction, so it is a systematic prompt/guide issue rather than seed noise. Reported to the user at Checkpoint A with two remedy options."
+        },
+        "report": "art/disciple_list/CHECKPOINT_A.md",
+        "contact_sheet": "art/disciple_list/contact/scroll_paper.png"
+      },
+      "prompt_round2_result": {
+        "what_changed": "prompt only — the guide was left untouched, and the SAME 4 seeds were reused so the prompt is the only changed variable",
+        "spine_pct_round2": {
+          "101": {
+            "left": 8.04,
+            "right": 7.83
+          },
+          "202": {
+            "left": 11.11,
+            "right": 11.11
+          },
+          "303": {
+            "left": 8.73,
+            "right": 7.64
+          },
+          "404": {
+            "left": 8.26,
+            "right": 8.7
+          }
+        },
+        "spine_median_round1": {
+          "left": 10.65,
+          "right": 9.78
+        },
+        "spine_median_round2": {
+          "left": 8.5,
+          "right": 8.27
+        },
+        "improvement": "real but insufficient — the median moved about 20% toward the target and the spread tightened (7.64-11.11 vs 8.91-12.61), yet it is still ~3x the 2.82%/3.00% the guide asks for",
+        "other_axes_improved": "the paper came out lighter and cleaner (subject median moved from ~246,234,203 to ~249,238,212) and the final frames sit closer to the 460x560 target (458-460 x 558-560 vs 460 x 548-552)",
+        "acceptance_criteria_round2": "all four still pass: RGBA, 0 near-magenta px, no upscale",
+        "diagnosis": "Two different prompt framings could not get the roll below ~7.6%. A rolled-scroll edge is a strongly learned form in this model, and it renders at roughly 3x whatever thin proportion the guide specifies. This is a model bias rather than a prompt-detail gap, so further prompt wording is unlikely to fix it.",
+        "guide_to_output_ratio": {
+          "left": 3.777,
+          "right": 3.26,
+          "mean": 3.52,
+          "computed_from": "round-1 output median / guide target, per side",
+          "implication": "if the bias is roughly proportional, a guide band of about 0.8-0.9% would be needed to land the output near 2.8-3.0%. Untested — it is an extrapolation from one data point per side."
+        },
+        "practical_impact": "LOW for the intended use. At 460 px wide the roll lands at ~36-40 px instead of ~13-14 px, so the 9-slice border becomes about (left=37, right=36) instead of (13, 14). The stretchable centre is still 460-73 = 387 px (84% of the width), so the sliced window renders correctly either way. The deviation is cosmetic, not structural.",
+        "rounds_used": "2 of 2 — no further generation was run without asking the user first",
+        "compare_sheet": "art/disciple_list/contact/scroll_paper_round1_vs_round2.png"
+      },
+      "seeds": [
+        101,
+        202,
+        303,
+        404
+      ],
+      "prompt_round1": "Redraw <image1> as a hand-painted xianxia parchment scroll page. Keep the exact silhouette, proportions and position of the shapes in <image1>. Cream aged paper with soft watercolor mottling and subtle fiber texture, a thin hand-inked dark outline at the paper edge, slightly rolled left and right edges in muted grey-brown paper, gentle warm shading. The center is calm and low-detail so UI can sit on top. Do not draw a wooden rod, do not draw a pole, do not draw any horizontal bar. Keep the background as flat solid magenta #FF00FF, untouched, no shadow, no glow, no gradient. No text, no letters, no characters, no logos, no watermark, no extra decorations.",
+      "prompt_round1_result": "FAILED the roll-width check: every seed widened the thin 2.82%/3.00% roll to 8.9-12.6%. Diagnosis: a 2.8% band is too thin for the model to read as a rolled edge, so it silently promoted it to a full border. The round-2 prompt therefore states the width numerically and forbids a wide border/frame/mat outright.",
+      "prompt": "Redraw <image1> as a hand-painted xianxia parchment scroll page, filling the frame edge to edge. Keep the exact silhouette, proportions and position of the shapes in <image1>: one tall portrait page whose left and right edges are slightly rolled inward. The page is almost entirely flat aged parchment - cream and warm off-white, soft watercolor mottling, subtle fiber texture, gentle warm shading, and a thin hand-inked dark outline running along the paper edge. Keep the center calm and low-detail so UI can sit on top. The rolled edges are THIN: each rolled edge is a narrow vertical band only about one thirty-fifth of the page width, in muted grey-brown parchment, with a soft shaded crease where it meets the flat page. Do not make the rolled edges thick, do not widen them, do not turn them into a broad border, a wide frame, a mat, or a flat grey stripe, do not add a second outline. Keep the background as flat solid magenta #FF00FF, untouched, no shadow, no glow, no gradient. Do not draw a wooden rod, do not draw a pole, do not draw any horizontal bar, do not draw end caps. No text, no letters, no characters, no calligraphy, no logos, no watermark, no extra decorations.",
+      "prompt_round2_note": "round 2 of 2 (the task allows at most one more round after Checkpoint A). Same 4 seeds as round 1 on purpose, so the ONLY changed variable is the prompt and the before/after is directly comparable. The guide was NOT changed.",
+      "unity_path": "Assets/Resources/ui/disciple_list/scroll_paper.png",
+      "chosen_seed": 101
+    },
+    {
+      "id": "scroll_rod",
+      "role": "horizontal wooden roller with a carved end cap; rotated 90 degrees in Unity to serve as the left and right posts",
+      "aspect_source_measured": null,
+      "aspect_task_estimate": "~14:1",
+      "nine_slice": false,
+      "unity_usage": "decorative Image children (2x, one rotated 90, one rotated -90)",
+      "target_px": [
+        560,
+        40
+      ],
+      "target_px_provenance": "rotated to vertical it spans the window height 560; 560/14 = 40 thick",
+      "gen_budget": 1024,
+      "gen_size_expected": [
+        3840,
+        288
+      ],
+      "gen_size_predicted_wrong": [
+        1344,
+        96
+      ],
+      "gen_size_note": "PREDICTION CORRECTED FROM MEASUREMENT. The budget is a total PIXEL BUDGET, so at aspect 13.33 it yields 3840x288 = 1.106 MP, not 1344x96 (which was only 0.129 MP — my earlier arithmetic was simply wrong). The runner records the true size from the output PNG every time; trust that over any prediction here.",
+      "resize_policy": "downscale only (Lanczos) — never upscale",
+      "seeds": [
+        111,
+        222,
+        333,
+        444
+      ],
+      "prompt": "Redraw <image1> as a hand-painted xianxia scroll roller. Keep the exact silhouette, proportions and position of the shape in <image1>. A single horizontal wooden rod in warm orange lacquered wood with visible grain, a softly rounded carved end cap at each end, a thin hand-inked dark outline, gentle warm shading, gentle highlight along the top. Isolated object on an empty background. Keep the background as flat solid magenta #FF00FF, untouched, no shadow, no glow, no gradient. No text, no letters, no characters, no logos, no watermark, no ribbons, no tassels, no paper, no extra decorations.",
+      "guide": {
+        "canvas": [
+          1344,
+          96
+        ],
+        "background": [
+          255,
+          0,
+          255
+        ],
+        "outer_margin_pct": 0.005,
+        "bar_grey": 128,
+        "end_grey": 90,
+        "bar_height_pct": 0.72,
+        "end_width_pct": 0.035,
+        "end_height_scale": 1.38,
+        "aspect_fix_note": "round-0 values were 0.55 / 1.35, which left the OBJECT bbox at 1332x72 = aspect 18.50 while target_px 560x40 is 14.00. postprocess fits the trimmed object into the target box preserving aspect, so the sprite came out 560x34. Raised so the object bbox aspect lands on 13.99.",
+        "supersample": 4,
+        "note": "one long horizontal bar with slightly taller rounded end caps, drawn from primitives only",
+        "path": "art/disciple_list/guides/scroll_rod_guide.png"
+      },
+      "unity_path": "Assets/Resources/ui/disciple_list/scroll_rod.png",
+      "chosen_seed": 222
+    },
+    {
+      "id": "close_medallion",
+      "role": "round wooden medallion with a hanging tassel, used as the close button's image",
+      "aspect_source_measured": 0.824,
+      "aspect_task_estimate": "~1:2",
+      "nine_slice": false,
+      "unity_usage": "Image sprite of the existing CloseButton, with preserveAspect to avoid distorting the disc",
+      "target_px": [
+        120,
+        240
+      ],
+      "target_px_provenance": "task-manifest aspect 1:2; the button rect is 110x40 so an aspect-preserving disc cannot fill it — see open_question_button",
+      "gen_budget": 1024,
+      "gen_size_expected": [
+        736,
+        1440
+      ],
+      "gen_size_predicted_wrong": [
+        448,
+        896
+      ],
+      "gen_size_note": "PREDICTION CORRECTED FROM MEASUREMENT: 736x1440 = 1.060 MP. The earlier 448x896 prediction is exactly half the area per axis (0.401 MP), i.e. the budget/side/snap interaction was mis-modelled.",
+      "resize_policy": "downscale only (Lanczos) — never upscale",
+      "seeds": [
+        121,
+        232,
+        343,
+        454
+      ],
+      "prompt": "Redraw <image1> as a hand-painted xianxia close-button medallion. Keep the exact silhouette, proportions and position of the shape in <image1>. A small round medallion with a warm orange lacquered wooden rim, a deeply tinted flat center, a short silk tassel with a few hanging strands below it, a thin hand-inked dark outline, soft shading. Isolated object on an empty background. Keep the background as flat solid magenta #FF00FF, untouched, no shadow, no glow, no gradient. No text, no letters, no characters, no logos, no watermark, no letters on the medallion face, no extra decorations.",
+      "guide": {
+        "canvas": [
+          448,
+          896
+        ],
+        "background": [
+          255,
+          0,
+          255
+        ],
+        "outer_margin_pct": 0.02,
+        "disc_grey": 128,
+        "inner_grey": 90,
+        "tassel_grey": 90,
+        "disc_diameter_pct": 0.98,
+        "inner_diameter_pct": 0.55,
+        "aspect_fix_note": "round-0 value was 0.78, which left the OBJECT bbox at 350x879 = aspect 0.3982 while target_px 120x240 is 0.5000. The sprite came out 97x240. Raised so the disc nearly fills the canvas width and the object bbox aspect lands on 0.4994.",
+        "tassel_width_pct": 0.14,
+        "supersample": 4,
+        "note": "round disc on top with a darker centre, plus a narrow tassel hanging below",
+        "path": "art/disciple_list/guides/close_medallion_guide.png"
+      },
+      "unity_path": "Assets/Resources/ui/disciple_list/close_medallion.png",
+      "open_question_button": "the CloseButton rect is 110x40 (a wide short bar holding the Thai label 'ปิด'). A round 1:2 medallion inside it will be either distorted (preserveAspect off) or small (preserveAspect on). Decide: keep the label and show a small medallion behind it, or move the medallion next to the label, or resize the button. Phase 5 needs a call.",
+      "chosen_seed": 454
+    },
+    {
+      "id": "cloud_corner",
+      "role": "auspicious cloud ornament for the bottom corners; mirrored left/right via scale.x = -1",
+      "aspect_source_measured": 0.363,
+      "aspect_task_estimate": "~1:1.5",
+      "nine_slice": false,
+      "unity_usage": "decorative Image children (2x, right one mirrored with localScale.x = -1)",
+      "target_px": [
+        180,
+        270
+      ],
+      "target_px_provenance": "task-manifest aspect 0.667; reference cloud bbox was 180x496 (0.363) so height is reduced relative to the reference",
+      "gen_budget": 1024,
+      "gen_size_expected": [
+        800,
+        1280
+      ],
+      "gen_size_note": "PREDICTION CORRECT: 800x1280 = 1.024 MP.",
+      "resize_policy": "downscale only (Lanczos) — never upscale",
+      "seeds": [
+        131,
+        242,
+        353,
+        464
+      ],
+      "prompt": "Redraw <image1> as a hand-painted xianxia auspicious cloud ornament. Keep the exact silhouette, proportions and position of the shape in <image1>. A soft curling ruyi style cloud in pale warm peach with gentle watercolor gradient, a thin hand-inked dark outline, a small spiral curl at the center, soft elegant strokes, slightly translucent painterly look. Isolated object on an empty background. Keep the background as flat solid magenta #FF00FF, untouched, no shadow, no glow, no gradient. No text, no letters, no characters, no logos, no watermark, no extra decorations.",
+      "guide": {
+        "canvas": [
+          800,
+          1280
+        ],
+        "background": [
+          255,
+          0,
+          255
+        ],
+        "outer_margin_pct": 0.03,
+        "cloud_grey": 128,
+        "curl_grey": 90,
+        "lobes": [
+          [
+            0.215,
+            0.86,
+            0.17
+          ],
+          [
+            0.5,
+            0.85,
+            0.21
+          ],
+          [
+            0.795,
+            0.86,
+            0.16
+          ],
+          [
+            0.6,
+            0.6,
+            0.15
+          ]
+        ],
+        "aspect_fix_note": "round-0 lobes left the OBJECT bbox at 728x775 = aspect 0.9394 while target_px 180x270 is 0.6667, and the sprite came out 180x190 (30% short). The cloud was too wide and too squat: lobes narrowed, the cloud mass pushed lower, and the curl raised, so the object bbox aspect lands near 0.667.",
+        "lobe_note": "each entry is [centre x as fraction of width, centre y as fraction of height, radius as fraction of width]",
+        "spiral": [
+          0.36,
+          0.21,
+          0.082
+        ],
+        "spiral_note": "[centre x, centre y, radius] as fractions; drawn as a ring in the darker tone",
+        "supersample": 4,
+        "note": "overlapping circles forming a ruyi cloud mass at the bottom, a tapering lobe rising from it, and a small curl above",
+        "path": "art/disciple_list/guides/cloud_corner_guide.png"
+      },
+      "unity_path": "Assets/Resources/ui/disciple_list/cloud_corner.png",
+      "chosen_seed": 353
+    },
+    {
+      "id": "title_plate",
+      "role": "letterless plaque that sits behind the panel title text",
+      "aspect_source_measured": null,
+      "aspect_task_estimate": "~6:1",
+      "nine_slice": true,
+      "nine_slice_axis": "horizontal",
+      "unity_usage": "Image behind TitleText, Image.Type = Sliced, raycastTarget = false",
+      "target_px": [
+        320,
+        54
+      ],
+      "target_px_provenance": "title slot is 320x50 (460-140 x 50); 320/54 ~= 5.93:1",
+      "gen_budget": 1024,
+      "gen_size_expected": [
+        2496,
+        416
+      ],
+      "gen_size_predicted_wrong": [
+        2464,
+        416
+      ],
+      "gen_size_note": "PREDICTION CORRECTED FROM MEASUREMENT: 2496x416 = 1.038 MP (close to the 2464x416 guess).",
+      "resize_policy": "downscale only (Lanczos) — never upscale",
+      "sprite_border_px_at_target": {
+        "left": 23,
+        "bottom": 0,
+        "right": 21,
+        "top": 0
+      },
+      "sprite_border_px_note": "computed from the CHOSEN seed 252 (not a median), measured on the 320x54 final sprite",
+      "seeds": [
+        141,
+        252,
+        363,
+        474
+      ],
+      "prompt": "Redraw <image1> as a hand-painted xianxia title plaque. Keep the exact silhouette, proportions and position of the shape in <image1>. A long horizontal aged parchment plate with softly rounded corners and rolled wooden end caps left and right, a thin hand-inked dark outline, subtle warm watercolor shading, calm and almost empty in the middle so the panel title can sit on top. Keep the background as flat solid magenta #FF00FF, untouched, no shadow, no glow, no gradient. No text, no letters, no characters, no calligraphy, no logos, no watermark, no extra decorations.",
+      "guide": {
+        "canvas": [
+          2464,
+          416
+        ],
+        "background": [
+          255,
+          0,
+          255
+        ],
+        "outer_margin_pct": 0.012,
+        "plate_grey": 128,
+        "cap_grey": 90,
+        "plate_height_pct": 0.72,
+        "cap_width_pct": 0.03,
+        "cap_height_scale": 1.353,
+        "aspect_fix_note": "round-0 values were 0.56 / 1.30, which left the OBJECT bbox at 2406x304 = aspect 7.9145 while target_px 320x54 is 5.9259. The sprite came out 320x41. Raised so the object bbox aspect lands near 5.92.",
+        "supersample": 4,
+        "note": "one long horizontal plate with rounded ends and slightly taller end caps; the middle stays flat so the title text can sit on it",
+        "path": "art/disciple_list/guides/title_plate_guide.png"
+      },
+      "unity_path": "Assets/Resources/ui/disciple_list/title_plate.png",
+      "chosen_seed": 252
+    }
+  ],
+  "run_totals": {
+    "jobs_generated": 36,
+    "note": "4 (scroll_paper r1) + 4 (scroll_paper r2) + 16 (phase 4 round-0) + 16 (phase 4 after the guide aspect fix) = 40 invocations; 36 of them are the current artifact set. All jobs were run one at a time, 25 steps, cfg 1, budget 1024, control_after_generate=fixed.",
+    "artifacts_superseded": {
+      "art/disciple_list/final_round1": "scroll_paper round-1 finals, kept for the before/after review only",
+      "art/disciple_list/raw_round1": "scroll_paper round-1 raws, kept for the before/after review only",
+      "art/disciple_list/contact/scroll_paper_round1.png": "round-1 contact sheet",
+      "art/disciple_list/contact/scroll_paper_round1_vs_round2.png": "8-cell round-1 vs round-2 comparison",
+      "scroll_rod / close_medallion / cloud_corner / title_plate (round-0 raws)": "overwritten in place by the run after the guide aspect fix; the round-0 FINALS are gone but their measurements are recorded in this manifest under each asset's guide.aspect_fix_note"
+    }
+  },
+  "checkpoint_b_pending": {
+    "note": "Phase 4 has generated 4 seeds for each of the 5 assets. The work now STOPS for the user to name asset_id -> seed for scroll_paper, scroll_rod, close_medallion, cloud_corner and title_plate. Unity is still untouched."
+  }
+}

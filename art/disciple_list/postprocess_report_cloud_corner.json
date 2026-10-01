@@ -1,0 +1,134 @@
+[
+  {
+    "asset_id": "cloud_corner_seed131",
+    "raw": "art\\disciple_list\\raw\\cloud_corner\\seed131.png",
+    "raw_size": [
+      800,
+      1280
+    ],
+    "trimmed_size": [
+      735,
+      618
+    ],
+    "final_size": [
+      180,
+      151
+    ],
+    "target_px": [
+      180,
+      270
+    ],
+    "upscale_needed": false,
+    "has_alpha": true,
+    "alpha_zero_pct": 45.77,
+    "alpha_full_pct": 46.96,
+    "alpha_semi_pct": 7.27,
+    "semi_pct_of_opaque": 13.41,
+    "px_near_key_color": 0,
+    "px_near_key_color_visible": 0,
+    "bleed_passes": 1,
+    "bleed_left_over": 0,
+    "post_resize_safety_fixed": 13,
+    "bytes": 33710,
+    "out": "art\\disciple_list\\final\\cloud_corner_seed131.png"
+  },
+  {
+    "asset_id": "cloud_corner_seed242",
+    "raw": "art\\disciple_list\\raw\\cloud_corner\\seed242.png",
+    "raw_size": [
+      800,
+      1280
+    ],
+    "trimmed_size": [
+      737,
+      1100
+    ],
+    "final_size": [
+      180,
+      269
+    ],
+    "target_px": [
+      180,
+      270
+    ],
+    "upscale_needed": false,
+    "has_alpha": true,
+    "alpha_zero_pct": 66.8,
+    "alpha_full_pct": 28.25,
+    "alpha_semi_pct": 4.95,
+    "semi_pct_of_opaque": 14.9,
+    "px_near_key_color": 0,
+    "px_near_key_color_visible": 0,
+    "bleed_passes": 1,
+    "bleed_left_over": 0,
+    "post_resize_safety_fixed": 17,
+    "bytes": 37884,
+    "out": "art\\disciple_list\\final\\cloud_corner_seed242.png"
+  },
+  {
+    "asset_id": "cloud_corner_seed353",
+    "raw": "art\\disciple_list\\raw\\cloud_corner\\seed353.png",
+    "raw_size": [
+      800,
+      1280
+    ],
+    "trimmed_size": [
+      736,
+      1102
+    ],
+    "final_size": [
+      180,
+      270
+    ],
+    "target_px": [
+      180,
+      270
+    ],
+    "upscale_needed": false,
+    "has_alpha": true,
+    "alpha_zero_pct": 66.16,
+    "alpha_full_pct": 28.87,
+    "alpha_semi_pct": 4.97,
+    "semi_pct_of_opaque": 14.7,
+    "px_near_key_color": 0,
+    "px_near_key_color_visible": 0,
+    "bleed_passes": 1,
+    "bleed_left_over": 0,
+    "post_resize_safety_fixed": 17,
+    "bytes": 37313,
+    "out": "art\\disciple_list\\final\\cloud_corner_seed353.png"
+  },
+  {
+    "asset_id": "cloud_corner_seed464",
+    "raw": "art\\disciple_list\\raw\\cloud_corner\\seed464.png",
+    "raw_size": [
+      800,
+      1280
+    ],
+    "trimmed_size": [
+      738,
+      1101
+    ],
+    "final_size": [
+      180,
+      269
+    ],
+    "target_px": [
+      180,
+      270
+    ],
+    "upscale_needed": false,
+    "has_alpha": true,
+    "alpha_zero_pct": 64.66,
+    "alpha_full_pct": 29.52,
+    "alpha_semi_pct": 5.83,
+    "semi_pct_of_opaque": 16.48,
+    "px_near_key_color": 0,
+    "px_near_key_color_visible": 0,
+    "bleed_passes": 1,
+    "bleed_left_over": 0,
+    "post_resize_safety_fixed": 9,
+    "bytes": 40466,
+    "out": "art\\disciple_list\\final\\cloud_corner_seed464.png"
+  }
+]

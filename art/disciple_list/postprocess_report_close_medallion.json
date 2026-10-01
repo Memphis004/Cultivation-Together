@@ -1,0 +1,134 @@
+[
+  {
+    "asset_id": "close_medallion_seed121",
+    "raw": "art\\disciple_list\\raw\\close_medallion\\seed121.png",
+    "raw_size": [
+      736,
+      1440
+    ],
+    "trimmed_size": [
+      687,
+      1393
+    ],
+    "final_size": [
+      118,
+      240
+    ],
+    "target_px": [
+      120,
+      240
+    ],
+    "upscale_needed": false,
+    "has_alpha": true,
+    "alpha_zero_pct": 49.66,
+    "alpha_full_pct": 42.25,
+    "alpha_semi_pct": 8.09,
+    "semi_pct_of_opaque": 16.07,
+    "px_near_key_color": 0,
+    "px_near_key_color_visible": 0,
+    "bleed_passes": 1,
+    "bleed_left_over": 0,
+    "post_resize_safety_fixed": 2,
+    "bytes": 33020,
+    "out": "art\\disciple_list\\final\\close_medallion_seed121.png"
+  },
+  {
+    "asset_id": "close_medallion_seed232",
+    "raw": "art\\disciple_list\\raw\\close_medallion\\seed232.png",
+    "raw_size": [
+      736,
+      1440
+    ],
+    "trimmed_size": [
+      662,
+      1294
+    ],
+    "final_size": [
+      120,
+      235
+    ],
+    "target_px": [
+      120,
+      240
+    ],
+    "upscale_needed": false,
+    "has_alpha": true,
+    "alpha_zero_pct": 47.36,
+    "alpha_full_pct": 44.3,
+    "alpha_semi_pct": 8.34,
+    "semi_pct_of_opaque": 15.84,
+    "px_near_key_color": 0,
+    "px_near_key_color_visible": 0,
+    "bleed_passes": 1,
+    "bleed_left_over": 0,
+    "post_resize_safety_fixed": 22,
+    "bytes": 35534,
+    "out": "art\\disciple_list\\final\\close_medallion_seed232.png"
+  },
+  {
+    "asset_id": "close_medallion_seed343",
+    "raw": "art\\disciple_list\\raw\\close_medallion\\seed343.png",
+    "raw_size": [
+      736,
+      1440
+    ],
+    "trimmed_size": [
+      713,
+      1339
+    ],
+    "final_size": [
+      120,
+      225
+    ],
+    "target_px": [
+      120,
+      240
+    ],
+    "upscale_needed": false,
+    "has_alpha": true,
+    "alpha_zero_pct": 46.97,
+    "alpha_full_pct": 43.47,
+    "alpha_semi_pct": 9.56,
+    "semi_pct_of_opaque": 18.03,
+    "px_near_key_color": 0,
+    "px_near_key_color_visible": 0,
+    "bleed_passes": 1,
+    "bleed_left_over": 0,
+    "post_resize_safety_fixed": 13,
+    "bytes": 34776,
+    "out": "art\\disciple_list\\final\\close_medallion_seed343.png"
+  },
+  {
+    "asset_id": "close_medallion_seed454",
+    "raw": "art\\disciple_list\\raw\\close_medallion\\seed454.png",
+    "raw_size": [
+      736,
+      1440
+    ],
+    "trimmed_size": [
+      659,
+      1314
+    ],
+    "final_size": [
+      120,
+      239
+    ],
+    "target_px": [
+      120,
+      240
+    ],
+    "upscale_needed": false,
+    "has_alpha": true,
+    "alpha_zero_pct": 49.03,
+    "alpha_full_pct": 43.55,
+    "alpha_semi_pct": 7.42,
+    "semi_pct_of_opaque": 14.55,
+    "px_near_key_color": 0,
+    "px_near_key_color_visible": 0,
+    "bleed_passes": 1,
+    "bleed_left_over": 0,
+    "post_resize_safety_fixed": 11,
+    "bytes": 31931,
+    "out": "art\\disciple_list\\final\\close_medallion_seed454.png"
+  }
+]

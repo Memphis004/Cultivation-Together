@@ -6,16 +6,20 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using Xianxia.Sect.Messages;
+using VContainer.Unity;
 
 namespace Xianxia.Sect
 {
     /// <summary>
     /// Singleton scene loader for additive scene architecture.
-    /// Registered in GameLifetimeScope.Configure() as Singleton.
+    /// Registered in GameLifetimeScope.Configure() as Singleton entry point.
     /// CoreScene loads single (persistent), GameplayScenes load additive.
     /// </summary>
-    public class SceneLoader
+    public class SceneLoader : IStartable
     {
+        /// <summary>ฉากเกมเพลย์ที่โหลดอัตโนมัติตอนเริ่มเกม (additive บน CoreScene) —
+        /// เดิมต้องกดปุ่ม "Load A (additive)" ใน AdditiveSceneTest เองจึงจะเห็นฉาก</summary>
+        public const string DefaultGameplayScene = "TestGameplayScene";
         private readonly IPublisher<SceneLoadedMessage> _sceneLoadedPublisher;
         private readonly IPublisher<SceneUnloadedMessage> _sceneUnloadedPublisher;
         private string _currentGameplayScene;
@@ -25,6 +29,21 @@ namespace Xianxia.Sect
         {
             _sceneLoadedPublisher = sceneLoadedPublisher;
             _sceneUnloadedPublisher = sceneUnloadedPublisher;
+        }
+
+        /// <summary>IStartable — โหลดฉากเกมเพลย์เริ่มต้นทันทีที่ composition root พร้อม
+        /// (publish SceneLoadedMessage หลังโหลดจบ ระบบกล้อง/วิชวลจึง bind ตามปกติ)
+        /// ถ้ามีคนเปิดฉากนี้ค้างไว้แล้ว (เช่นเซฟจาก editor) ให้ข้าม</summary>
+        public void Start()
+        {
+            if (SceneManager.GetSceneByName(DefaultGameplayScene).isLoaded)
+            {
+                Debug.Log($"[SceneLoader] '{DefaultGameplayScene}' already loaded — skip auto-load");
+                return;
+            }
+
+            Debug.Log($"[SceneLoader] auto-loading '{DefaultGameplayScene}' at game start...");
+            LoadGameplayScene(DefaultGameplayScene).Forget();
         }
 
         /// <summary>

@@ -1,0 +1,134 @@
+[
+  {
+    "asset_id": "scroll_rod_seed111",
+    "raw": "art\\disciple_list\\raw\\scroll_rod\\seed111.png",
+    "raw_size": [
+      3840,
+      288
+    ],
+    "trimmed_size": [
+      3309,
+      286
+    ],
+    "final_size": [
+      463,
+      40
+    ],
+    "target_px": [
+      560,
+      40
+    ],
+    "upscale_needed": false,
+    "has_alpha": true,
+    "alpha_zero_pct": 26.38,
+    "alpha_full_pct": 57.34,
+    "alpha_semi_pct": 16.28,
+    "semi_pct_of_opaque": 22.11,
+    "px_near_key_color": 0,
+    "px_near_key_color_visible": 0,
+    "bleed_passes": 1,
+    "bleed_left_over": 0,
+    "post_resize_safety_fixed": 17,
+    "bytes": 21986,
+    "out": "art\\disciple_list\\final\\scroll_rod_seed111.png"
+  },
+  {
+    "asset_id": "scroll_rod_seed222",
+    "raw": "art\\disciple_list\\raw\\scroll_rod\\seed222.png",
+    "raw_size": [
+      3840,
+      288
+    ],
+    "trimmed_size": [
+      3825,
+      280
+    ],
+    "final_size": [
+      546,
+      40
+    ],
+    "target_px": [
+      560,
+      40
+    ],
+    "upscale_needed": false,
+    "has_alpha": true,
+    "alpha_zero_pct": 23.85,
+    "alpha_full_pct": 59.69,
+    "alpha_semi_pct": 16.46,
+    "semi_pct_of_opaque": 21.61,
+    "px_near_key_color": 0,
+    "px_near_key_color_visible": 0,
+    "bleed_passes": 1,
+    "bleed_left_over": 0,
+    "post_resize_safety_fixed": 8,
+    "bytes": 24449,
+    "out": "art\\disciple_list\\final\\scroll_rod_seed222.png"
+  },
+  {
+    "asset_id": "scroll_rod_seed333",
+    "raw": "art\\disciple_list\\raw\\scroll_rod\\seed333.png",
+    "raw_size": [
+      3840,
+      288
+    ],
+    "trimmed_size": [
+      3840,
+      288
+    ],
+    "final_size": [
+      533,
+      40
+    ],
+    "target_px": [
+      560,
+      40
+    ],
+    "upscale_needed": false,
+    "has_alpha": true,
+    "alpha_zero_pct": 28.64,
+    "alpha_full_pct": 54.93,
+    "alpha_semi_pct": 16.43,
+    "semi_pct_of_opaque": 23.02,
+    "px_near_key_color": 0,
+    "px_near_key_color_visible": 0,
+    "bleed_passes": 1,
+    "bleed_left_over": 0,
+    "post_resize_safety_fixed": 0,
+    "bytes": 23728,
+    "out": "art\\disciple_list\\final\\scroll_rod_seed333.png"
+  },
+  {
+    "asset_id": "scroll_rod_seed444",
+    "raw": "art\\disciple_list\\raw\\scroll_rod\\seed444.png",
+    "raw_size": [
+      3840,
+      288
+    ],
+    "trimmed_size": [
+      3819,
+      288
+    ],
+    "final_size": [
+      530,
+      40
+    ],
+    "target_px": [
+      560,
+      40
+    ],
+    "upscale_needed": false,
+    "has_alpha": true,
+    "alpha_zero_pct": 19.19,
+    "alpha_full_pct": 65.4,
+    "alpha_semi_pct": 15.41,
+    "semi_pct_of_opaque": 19.06,
+    "px_near_key_color": 0,
+    "px_near_key_color_visible": 0,
+    "bleed_passes": 1,
+    "bleed_left_over": 0,
+    "post_resize_safety_fixed": 0,
+    "bytes": 22855,
+    "out": "art\\disciple_list\\final\\scroll_rod_seed444.png"
+  }
+]

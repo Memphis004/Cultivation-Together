@@ -30,6 +30,18 @@ namespace Xianxia.Sect.Visual
         private const float TransitionDurationSeconds = 0.35f;
         private const float FollowSharpness = 12f;
 
+        // ── mouse-wheel zoom (continuous, ไม่ snap) ──
+        // ความเร็ว: orthoSize หด/ขยายต่อ scroll tick 1 หน่วย (exponential feel แบบ
+        // editor — ใกล้ซูมละเอียด ไกลซูมหยาบ); smoothing ผ่าน exponential blend
+        // เดียวกับ follow (ไม่กระตุกเมื่อ scroll เร็ว ๆ)
+        // 0.25 = หนึ่ง notch เปลี่ยนขนาด ~20% (range เต็ม 2.5→8 ใช้ ~5-6 notch);
+        // ลด/เพิ่มที่ค่าค่านี้ค่าเดียว
+        internal const float ZoomSpeedOrthoPerTick = 0.25f;
+        internal const float ZoomSharpness = 10f;
+        // ช่วง zoom: แคบสุด = placement preset (เห็น 10 ไทล์), กว้างสุด =
+        // ขนาดที่ ClampToBackdrop ยังพอมีที่ pan (backdrop หัก margin 3 ไทล์)
+        internal const int ZoomMaxVisibleTiles = 25;
+
         private readonly IRigMessageBus _bus;
         private readonly ICameraRigEnvironment _environment;
         private readonly ICellSpriteMetrics _spriteMetrics;
@@ -58,6 +70,10 @@ namespace Xianxia.Sect.Visual
         // origin ถูก set ตอนเข้า build mode จึงห้าม pan ทับ (กัน overlay เหลื่อม)
         private bool _panning;
         private Vector3 _lastPanMouseScreen;
+
+        // ── zoom state: target ถูกปรับต่อ scroll, ค่าจริง lerp ตาม (เนียน) ──
+        private float _zoomTargetSize;
+        private bool _zoomTargetInitialized;
 
         public CameraRigController(
             IRigMessageBus bus,
@@ -96,6 +112,7 @@ namespace Xianxia.Sect.Visual
             _cameraView.Rotation = _fixedRotation;
 
             HandlePanInput();
+            HandleZoomInput();
 
             // placement follow ชนะ pan เสมอ (กล้องอยู่กับ ghost ขณะ build)
             if (_placementRequested && !_isTransitioning && _placementGhost != null && _placementGhost.IsValid)
@@ -140,6 +157,67 @@ namespace Xianxia.Sect.Visual
 
             _cameraView.Position = ClampToBackdrop(_cameraView.Position + delta);
             _overviewPosition = _cameraView.Position; // pan = overview ใหม่ (transition กลับมาที่นี่)
+        }
+
+        /// <summary>Mouse-wheel zoom — continuous (scroll ปรับ target ทีละน้อย ค่าจริง
+        /// lerp ตามด้วย ZoomSharpness จึงลื่นไม่กระตุก) ใช้ได้เฉพาะ overview mode:
+        /// ระหว่าง placement ล็อกที่ preset เดียว (ตัดสินใจตาม task — กันผู้เล่นซูม
+        /// จนเห็น ghost ผิดสัดส่วนกับกริด) guard เดียวกับ pan: เมาส์บน UI = ไม่ zoom
+        /// และ transition ของ preset ยังคงชนะ zoom เสมอ</summary>
+        private void HandleZoomInput()
+        {
+            if (!RigZoomInput.IsWired || _cameraView == null || !_cameraView.IsValid) return;
+
+            // preset owns the size ระหว่าง transition/placement — ทิ้ง target เก่า
+            // ให้ sync ใหม่กับ preset ล่าสุดเมื่อกลับมา zoom ได้
+            if (_isTransitioning || _placementRequested)
+            {
+                _zoomTargetInitialized = false;
+                return;
+            }
+
+            // ตำแหน่งจริงเดินตาม target ทุกเฟรม (แม้เฟรมนี้ไม่มี scroll — กลืนที่ค้าง)
+            if (!_zoomTargetInitialized)
+            {
+                _zoomTargetSize = _cameraView.OrthographicSize;
+                _zoomTargetInitialized = true;
+            }
+
+            float scroll = RigZoomInput.GetScrollDelta();
+            if (Mathf.Abs(scroll) >= 0.01f)
+            {
+                // exponential: orthoSize *= (1 + speed)^(−ticks) — scroll บวก = เข้า (หด)
+                float minSize = GetPlacementSize();       // ซูมเข้าสุด = PlacementVisibleTiles
+                float maxSize = ComputeMaxZoomOutSize();  // ซูมออกสุด = พอดี backdrop
+                float factor = Mathf.Pow(1f + ZoomSpeedOrthoPerTick, -Mathf.Clamp(scroll, -3f, 3f));
+                _zoomTargetSize = Mathf.Clamp(_zoomTargetSize * factor, minSize, maxSize);
+            }
+
+            float current = _cameraView.OrthographicSize;
+            if (Mathf.Abs(current - _zoomTargetSize) <= 0.0005f) return;
+
+            float blend = 1f - Mathf.Exp(-ZoomSharpness * _clock.UnscaledDeltaTime);
+            _cameraView.OrthographicSize = Mathf.Lerp(current, _zoomTargetSize, blend);
+
+            // re-clamp position หลัง size เปลี่ยน (กันขอบดำพร้อมกันทั้งสองแกน)
+            _cameraView.Position = ClampToBackdrop(_cameraView.Position);
+            _overviewPosition = _cameraView.Position;
+        }
+
+        /// <summary>ซูมออกสุดที่ยังไม่เห็นขอบดำ: ใช้ขอบเขต backdrop ที่ ClampToBackdrop
+        /// ใช้อยู่เป็นฐาน — หา orthoSize ที่กรอบมองพอดี backdrop (กว้างนั้น pan ล็อกกลาง
+        /// พอดี ไม่เหลือขอบดำ)</summary>
+        private float ComputeMaxZoomOutSize()
+        {
+            if (_framing.HasBackdropBounds)
+            {
+                float fitH = _framing.BackdropHeightWorld * 0.5f;
+                float fitW = _framing.BackdropWidthWorld * 0.5f / Mathf.Max(0.01f, _cameraView.Aspect);
+                return Mathf.Max(GetPlacementSize(), Mathf.Min(fitH, fitW));
+            }
+            // ไม่มีขอบเขต (ยังวัดไม่ได้) — fallback เป็น preset กว้างสุดที่รู้จัก
+            return _framing.ComputeOrthoSize(ZoomMaxVisibleTiles,
+                _cameraView != null ? _cameraView.Aspect : 16f / 9f);
         }
 
         /// <summary>จำกัดกล้องให้เห็นแต่พื้นที่ในแบ็คกราวภูเขา (กึ่งกลาง origin) —

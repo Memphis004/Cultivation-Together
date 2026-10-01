@@ -1,0 +1,134 @@
+[
+  {
+    "asset_id": "title_plate_seed141",
+    "raw": "art\\disciple_list\\raw\\title_plate\\seed141.png",
+    "raw_size": [
+      2496,
+      416
+    ],
+    "trimmed_size": [
+      2450,
+      415
+    ],
+    "final_size": [
+      319,
+      54
+    ],
+    "target_px": [
+      320,
+      54
+    ],
+    "upscale_needed": false,
+    "has_alpha": true,
+    "alpha_zero_pct": 18.63,
+    "alpha_full_pct": 68.86,
+    "alpha_semi_pct": 12.51,
+    "semi_pct_of_opaque": 15.37,
+    "px_near_key_color": 0,
+    "px_near_key_color_visible": 0,
+    "bleed_passes": 1,
+    "bleed_left_over": 0,
+    "post_resize_safety_fixed": 1,
+    "bytes": 22943,
+    "out": "art\\disciple_list\\final\\title_plate_seed141.png"
+  },
+  {
+    "asset_id": "title_plate_seed252",
+    "raw": "art\\disciple_list\\raw\\title_plate\\seed252.png",
+    "raw_size": [
+      2496,
+      416
+    ],
+    "trimmed_size": [
+      2412,
+      404
+    ],
+    "final_size": [
+      320,
+      54
+    ],
+    "target_px": [
+      320,
+      54
+    ],
+    "upscale_needed": false,
+    "has_alpha": true,
+    "alpha_zero_pct": 18.75,
+    "alpha_full_pct": 67.69,
+    "alpha_semi_pct": 13.56,
+    "semi_pct_of_opaque": 16.69,
+    "px_near_key_color": 0,
+    "px_near_key_color_visible": 0,
+    "bleed_passes": 1,
+    "bleed_left_over": 0,
+    "post_resize_safety_fixed": 12,
+    "bytes": 24700,
+    "out": "art\\disciple_list\\final\\title_plate_seed252.png"
+  },
+  {
+    "asset_id": "title_plate_seed363",
+    "raw": "art\\disciple_list\\raw\\title_plate\\seed363.png",
+    "raw_size": [
+      2496,
+      416
+    ],
+    "trimmed_size": [
+      2448,
+      415
+    ],
+    "final_size": [
+      319,
+      54
+    ],
+    "target_px": [
+      320,
+      54
+    ],
+    "upscale_needed": false,
+    "has_alpha": true,
+    "alpha_zero_pct": 19.02,
+    "alpha_full_pct": 66.89,
+    "alpha_semi_pct": 14.09,
+    "semi_pct_of_opaque": 17.4,
+    "px_near_key_color": 0,
+    "px_near_key_color_visible": 0,
+    "bleed_passes": 1,
+    "bleed_left_over": 0,
+    "post_resize_safety_fixed": 0,
+    "bytes": 21167,
+    "out": "art\\disciple_list\\final\\title_plate_seed363.png"
+  },
+  {
+    "asset_id": "title_plate_seed474",
+    "raw": "art\\disciple_list\\raw\\title_plate\\seed474.png",
+    "raw_size": [
+      2496,
+      416
+    ],
+    "trimmed_size": [
+      2450,
+      413
+    ],
+    "final_size": [
+      320,
+      54
+    ],
+    "target_px": [
+      320,
+      54
+    ],
+    "upscale_needed": false,
+    "has_alpha": true,
+    "alpha_zero_pct": 18.1,
+    "alpha_full_pct": 68.51,
+    "alpha_semi_pct": 13.4,
+    "semi_pct_of_opaque": 16.36,
+    "px_near_key_color": 0,
+    "px_near_key_color_visible": 0,
+    "bleed_passes": 1,
+    "bleed_left_over": 0,
+    "post_resize_safety_fixed": 0,
+    "bytes": 20933,
+    "out": "art\\disciple_list\\final\\title_plate_seed474.png"
+  }
+]

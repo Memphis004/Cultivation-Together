@@ -46,7 +46,9 @@ namespace Xianxia.Sect
         {
 
             // Scene management
-            builder.Register<SceneLoader>(Lifetime.Singleton);
+            // Entry point = โหลดฉากเกมเพลย์เริ่มต้น (TestGameplayScene) อัตโนมัติ
+            // ทันทีที่ composition root พร้อม — .AsSelf() ให้ยัง inject เป็น concrete ได้
+            builder.RegisterEntryPoint<SceneLoader>(Lifetime.Singleton).AsSelf();
             builder.RegisterComponentInHierarchy<AdditiveSceneTest>();
             // Design-time data now sourced from Luban (see DataTables/ at
             // the workspace root and Assets/Scripts/Data/LubanEventPool.cs),

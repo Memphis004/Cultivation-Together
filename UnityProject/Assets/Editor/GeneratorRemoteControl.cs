@@ -74,6 +74,17 @@ namespace Xianxia.EditorTools
                         WriteResult("error:" + ex.Message);
                     }
                     break;
+                case "import_disciple_list_art":
+                    try
+                    {
+                        Xianxia.Sect.EditorTools.UiSpriteImporter.Import();
+                        WriteResult("imported_disciple_list_art");
+                    }
+                    catch (System.Exception ex)
+                    {
+                        WriteResult("error:" + ex.Message);
+                    }
+                    break;
                 case "gen_disciple_detail":
                     try
                     {

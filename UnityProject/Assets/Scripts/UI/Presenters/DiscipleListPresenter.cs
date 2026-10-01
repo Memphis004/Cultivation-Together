@@ -61,6 +61,7 @@ namespace Xianxia.Sect.UI
             var disciples = _stateProvider.BuildSectEconomyState()?.Disciples;
             if (disciples == null) return;
 
+            int order = 0; // 1-based roster number for the Task C corner badge
             foreach (var d in disciples)
             {
                 if (d == null) continue;
@@ -75,6 +76,8 @@ namespace Xianxia.Sect.UI
                     d.Rank + (string.IsNullOrEmpty(d.CurrentTask) ? "" : " · " + d.CurrentTask),
                     (d.Wallet?.SpiritStones ?? 0).ToString(),
                     LoadIcon(d.DiscipleId));
+                card.ApplyTier(d.Rank);          // Task C: frame/badge colour per tier
+                card.SetBadge(++order);          // Task C: roster order on the dot
 
                 _cards.Add(card);
             }

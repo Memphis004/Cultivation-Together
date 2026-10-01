@@ -1,0 +1,683 @@
+{
+  "id": "9c1f2a44-6b1e-4d70-9f83-2ab5c7e0d901",
+  "revision": 0,
+  "last_node_id": 12,
+  "last_link_id": 12,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "UNETLoader",
+      "pos": [
+        40,
+        120
+      ],
+      "size": [
+        520,
+        90
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "MODEL",
+          "type": "MODEL",
+          "links": [
+            1
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "UNETLoader",
+        "models": [
+          {
+            "name": "qwen_image_2.1_int8_convrot.safetensors",
+            "url": "https://huggingface.co/Comfy-Org/Qwen-Image-2.1/resolve/main/diffusion_models/qwen_image_2.1_int8_convrot.safetensors",
+            "directory": "diffusion_models"
+          }
+        ]
+      },
+      "widgets_values": [
+        "qwen_image_2.1_int8_convrot.safetensors",
+        "default"
+      ],
+      "widgets_values_named": {
+        "unet_name": "qwen_image_2.1_int8_convrot.safetensors",
+        "weight_dtype": "default"
+      }
+    },
+    {
+      "id": 2,
+      "type": "CLIPLoader",
+      "pos": [
+        40,
+        260
+      ],
+      "size": [
+        520,
+        120
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "CLIP",
+          "type": "CLIP",
+          "links": [
+            3
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "CLIPLoader",
+        "models": [
+          {
+            "name": "qwen3vl_8b_int8_convrot.safetensors",
+            "url": "https://huggingface.co/Comfy-Org/Qwen-Image-2.1/resolve/main/text_encoders/qwen3vl_8b_int8_convrot.safetensors",
+            "directory": "text_encoders"
+          }
+        ]
+      },
+      "widgets_values": [
+        "qwen3vl_8b_int8_convrot.safetensors",
+        "qwen_image",
+        "default"
+      ],
+      "widgets_values_named": {
+        "clip_name": "qwen3vl_8b_int8_convrot.safetensors",
+        "type": "qwen_image",
+        "device": "default"
+      }
+    },
+    {
+      "id": 3,
+      "type": "VAELoader",
+      "pos": [
+        40,
+        430
+      ],
+      "size": [
+        520,
+        70
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "VAE",
+          "type": "VAE",
+          "links": [
+            6,
+            7
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VAELoader",
+        "models": [
+          {
+            "name": "qwen_image_2.1_vae_bf16.safetensors",
+            "url": "https://huggingface.co/Comfy-Org/Qwen-Image-2.1/resolve/main/vae/qwen_image_2.1_vae_bf16.safetensors",
+            "directory": "vae"
+          }
+        ]
+      },
+      "widgets_values": [
+        "qwen_image_2.1_vae_bf16.safetensors"
+      ],
+      "widgets_values_named": {
+        "vae_name": "qwen_image_2.1_vae_bf16.safetensors"
+      }
+    },
+    {
+      "id": 4,
+      "type": "QwenImage21Cache",
+      "pos": [
+        640,
+        120
+      ],
+      "size": [
+        340,
+        90
+      ],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "model",
+          "type": "MODEL",
+          "link": 1
+        }
+      ],
+      "outputs": [
+        {
+          "name": "MODEL",
+          "type": "MODEL",
+          "links": [
+            2
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "QwenImage21Cache"
+      },
+      "widgets_values": [
+        "auto",
+        "default"
+      ],
+      "widgets_values_named": {
+        "device": "auto",
+        "dtype": "default"
+      }
+    },
+    {
+      "id": 8,
+      "type": "LoadImage",
+      "pos": [
+        40,
+        560
+      ],
+      "size": [
+        340,
+        320
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            4
+          ]
+        },
+        {
+          "name": "MASK",
+          "type": "MASK",
+          "links": null
+        }
+      ],
+      "title": "LoadImage (guide silhouette = ui_<id>_guide.png)",
+      "properties": {
+        "Node name for S&R": "LoadImage"
+      },
+      "widgets_values": [
+        "ui_scroll_paper_guide.png",
+        "image"
+      ],
+      "widgets_values_named": {
+        "image": "ui_scroll_paper_guide.png",
+        "upload": "image"
+      }
+    },
+    {
+      "id": 9,
+      "type": "LoadImage",
+      "pos": [
+        40,
+        930
+      ],
+      "size": [
+        340,
+        320
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 2,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            5
+          ]
+        },
+        {
+          "name": "MASK",
+          "type": "MASK",
+          "links": null
+        }
+      ],
+      "title": "LoadImage (optional style ref) - MUTED",
+      "properties": {
+        "Node name for S&R": "LoadImage"
+      },
+      "widgets_values": [
+        "hanfu_ref.png",
+        "image"
+      ],
+      "widgets_values_named": {
+        "image": "hanfu_ref.png",
+        "upload": "image"
+      }
+    },
+    {
+      "id": 5,
+      "type": "TextEncodeQwenImage21",
+      "pos": [
+        1020,
+        120
+      ],
+      "size": [
+        560,
+        620
+      ],
+      "flags": {},
+      "order": 6,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "clip",
+          "type": "CLIP",
+          "link": 3
+        },
+        {
+          "name": "images.image_1",
+          "type": "IMAGE",
+          "link": 4
+        },
+        {
+          "name": "images.image_2",
+          "type": "IMAGE",
+          "link": 5
+        },
+        {
+          "name": "vae",
+          "type": "VAE",
+          "link": 6
+        }
+      ],
+      "outputs": [
+        {
+          "name": "positive",
+          "type": "CONDITIONING",
+          "links": [
+            8
+          ]
+        },
+        {
+          "name": "negative",
+          "type": "CONDITIONING",
+          "links": [
+            9
+          ]
+        },
+        {
+          "name": "latent",
+          "type": "LATENT",
+          "links": [
+            10
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "TextEncodeQwenImage21"
+      },
+      "widgets_values": [
+        "Redraw <image1> as a hand-painted xianxia parchment scroll page, filling the frame edge to edge. Keep the exact silhouette, proportions and position of the shapes in <image1>: one tall portrait page whose left and right edges are slightly rolled inward. The page is almost entirely flat aged parchment - cream and warm off-white, soft watercolor mottling, subtle fiber texture, gentle warm shading, and a thin hand-inked dark outline running along the paper edge. Keep the center calm and low-detail so UI can sit on top. The rolled edges are THIN: each rolled edge is a narrow vertical band only about one thirty-fifth of the page width, in muted grey-brown parchment, with a soft shaded crease where it meets the flat page. Do not make the rolled edges thick, do not widen them, do not turn them into a broad border, a wide frame, a mat, or a flat grey stripe, do not add a second outline. Keep the background as flat solid magenta #FF00FF, untouched, no shadow, no glow, no gradient. Do not draw a wooden rod, do not draw a pole, do not draw any horizontal bar, do not draw end caps. No text, no letters, no characters, no calligraphy, no logos, no watermark, no extra decorations.",
+        "merged pieces, single connected silhouette, arms attached to body, background, ground shadow, text, watermark, UI, border, frame, extra pieces, missing pieces, duplicated limbs, blurry, low quality, jpeg artifacts, changed canvas size, rearranged layout, realistic photo,        3D render",
+        1024
+      ],
+      "widgets_values_named": {
+        "prompt": "Redraw <image1> as a hand-painted xianxia parchment scroll page, filling the frame edge to edge. Keep the exact silhouette, proportions and position of the shapes in <image1>: one tall portrait page whose left and right edges are slightly rolled inward. The page is almost entirely flat aged parchment - cream and warm off-white, soft watercolor mottling, subtle fiber texture, gentle warm shading, and a thin hand-inked dark outline running along the paper edge. Keep the center calm and low-detail so UI can sit on top. The rolled edges are THIN: each rolled edge is a narrow vertical band only about one thirty-fifth of the page width, in muted grey-brown parchment, with a soft shaded crease where it meets the flat page. Do not make the rolled edges thick, do not widen them, do not turn them into a broad border, a wide frame, a mat, or a flat grey stripe, do not add a second outline. Keep the background as flat solid magenta #FF00FF, untouched, no shadow, no glow, no gradient. Do not draw a wooden rod, do not draw a pole, do not draw any horizontal bar, do not draw end caps. No text, no letters, no characters, no calligraphy, no logos, no watermark, no extra decorations.",
+        "negative_prompt": "merged pieces, single connected silhouette, arms attached to body, background, ground shadow, text, watermark, UI, border, frame, extra pieces, missing pieces, duplicated limbs, blurry, low quality, jpeg artifacts, changed canvas size, rearranged layout, realistic photo, 3D render",
+        "resolution": 1024
+      }
+    },
+    {
+      "id": 6,
+      "type": "KSampler",
+      "pos": [
+        1660,
+        120
+      ],
+      "size": [
+        300,
+        280
+      ],
+      "flags": {},
+      "order": 7,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "model",
+          "type": "MODEL",
+          "link": 2
+        },
+        {
+          "name": "positive",
+          "type": "CONDITIONING",
+          "link": 8
+        },
+        {
+          "name": "negative",
+          "type": "CONDITIONING",
+          "link": 9
+        },
+        {
+          "name": "latent_image",
+          "type": "LATENT",
+          "link": 10
+        }
+      ],
+      "outputs": [
+        {
+          "name": "LATENT",
+          "type": "LATENT",
+          "links": [
+            11
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "KSampler"
+      },
+      "widgets_values": [
+        101,
+        "fixed",
+        25,
+        1,
+        "euler",
+        "simple",
+        1
+      ],
+      "widgets_values_named": {
+        "seed": 101,
+        "control_after_generate": "fixed",
+        "steps": 25,
+        "cfg": 1,
+        "sampler_name": "euler",
+        "scheduler": "simple",
+        "denoise": 1
+      }
+    },
+    {
+      "id": 7,
+      "type": "VAEDecode",
+      "pos": [
+        2020,
+        120
+      ],
+      "size": [
+        240,
+        60
+      ],
+      "flags": {},
+      "order": 8,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "samples",
+          "type": "LATENT",
+          "link": 11
+        },
+        {
+          "name": "vae",
+          "type": "VAE",
+          "link": 7
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            12
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VAEDecode"
+      }
+    },
+    {
+      "id": 10,
+      "type": "SaveImage",
+      "pos": [
+        2020,
+        240
+      ],
+      "size": [
+        480,
+        560
+      ],
+      "flags": {},
+      "order": 9,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 12
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "SaveImage"
+      },
+      "widgets_values": [
+        "ui_scroll_paper_"
+      ],
+      "widgets_values_named": {
+        "filename_prefix": "ui_scroll_paper_"
+      }
+    },
+    {
+      "id": 11,
+      "type": "MarkdownNote",
+      "pos": [
+        640,
+        380
+      ],
+      "size": [
+        340,
+        500
+      ],
+      "flags": {},
+      "order": 10,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "title": "Note: settings (do not change)",
+      "properties": {},
+      "widgets_values": [
+        "## Qwen-Image-2.1 edit — DiscipleList window kit\n\n**Sampler** (do NOT use classic img2img values here)\n- denoise: 1 — instruction-edit model. Edit strength comes from the\n  *prompt*, not from denoise.\n- cfg: 1 — keep it. **The negative prompt is ONLY read when cfg > 1.**\n  At cfg=1 every prohibition must live in the POSITIVE prompt.\n- euler / simple / 25 steps.\n- control_after_generate: **fixed** — every seed is explicit so a job\n  can be reproduced exactly.\n\n**resolution** (widget on node 5, TextEncodeQwenImage21)\n- a total PIXEL BUDGET, not a side length.\n- the canvas keeps image_1's aspect ratio and is snapped to a\n  multiple of 32, so the long side can EXCEED the widget value.\n  Measured precedent on this machine: a 253x142 source at budget\n  1024 produced 1376x768 (~1.06 MP).\n- 0 = keep the reference's own size.\n- This machine has 15.9 GB VRAM and the weights alone are ~15.8 GB.\n  Do NOT raise the budget. Run ONE job at a time.\n\n**image_1** = the guide silhouette (flat magenta background).\n**image_2** = optional style reference; its LoadImage stays MUTED\nnode 9 / mode=2). Unmute it, upload a file, and it is read from\n<image2> in the prompt. Reference images are addressed as\n<image1>, <image2>, ... — note the angle brackets and no space.\n\n**Pixels of Body_dizijm.png must never be fed to this graph.**\nThat asset is for measuring structure and proportions only; the\nguide is a synthesized flat silhouette.\n"
+      ],
+      "color": "#222",
+      "bgcolor": "#000"
+    },
+    {
+      "id": 12,
+      "type": "MarkdownNote",
+      "pos": [
+        1020,
+        790
+      ],
+      "size": [
+        560,
+        440
+      ],
+      "flags": {},
+      "order": 11,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "title": "Note: this kit's paths + how to run",
+      "properties": {},
+      "widgets_values": [
+        "## DiscipleList window kit\n\nBuilt by `tools/art/make_ui_workflow.py` from\n`Artwork/qwen21_hanfu_atlas_edit.json`, which is an unmodified copy\nof the source workflow. Do not edit this file by hand — re-run the\nbuilder instead.\n\n## Model files\ndiffusion_models/qwen_image_2.1_int8_convrot.safetensors\ntext_encoders/qwen3vl_8b_int8_convrot.safetensors\nvae/qwen_image_2.1_vae_bf16.safetensors\nhuggingface.co/Comfy-Org/Qwen-Image-2.1\n\n## Pipeline\n1. `python tools/art/make_guide.py <asset_id>`\n2. `comfy workflow validate comfy/qwen21_ui_asset.json`\n3. `python tools/art/run_job.py <asset_id>`\n   raw output lands in `art/disciple_list/raw/<id>/seed<N>.png`\n4. use `comfy/workflow set-slot ... --stdout` to preview a tweak\n   without writing the baseline.\n\n## Assets in this kit\nscroll_paper, scroll_rod, close_medallion, cloud_corner,\ntitle_plate — see `art/disciple_list/manifest.json`.\n"
+      ],
+      "color": "#222",
+      "bgcolor": "#000"
+    }
+  ],
+  "links": [
+    [
+      1,
+      1,
+      0,
+      4,
+      0,
+      "MODEL"
+    ],
+    [
+      2,
+      4,
+      0,
+      6,
+      0,
+      "MODEL"
+    ],
+    [
+      3,
+      2,
+      0,
+      5,
+      0,
+      "CLIP"
+    ],
+    [
+      4,
+      8,
+      0,
+      5,
+      1,
+      "IMAGE"
+    ],
+    [
+      5,
+      9,
+      0,
+      5,
+      2,
+      "IMAGE"
+    ],
+    [
+      6,
+      3,
+      0,
+      5,
+      3,
+      "VAE"
+    ],
+    [
+      7,
+      3,
+      0,
+      7,
+      1,
+      "VAE"
+    ],
+    [
+      8,
+      5,
+      0,
+      6,
+      1,
+      "CONDITIONING"
+    ],
+    [
+      9,
+      5,
+      1,
+      6,
+      2,
+      "CONDITIONING"
+    ],
+    [
+      10,
+      5,
+      2,
+      6,
+      3,
+      "LATENT"
+    ],
+    [
+      11,
+      6,
+      0,
+      7,
+      0,
+      "LATENT"
+    ],
+    [
+      12,
+      7,
+      0,
+      10,
+      0,
+      "IMAGE"
+    ]
+  ],
+  "groups": [
+    {
+      "id": 1,
+      "title": "Models",
+      "bounding": [
+        30,
+        110,
+        540,
+        400
+      ],
+      "color": "#3f789e",
+      "flags": {}
+    },
+    {
+      "id": 2,
+      "title": "Input",
+      "bounding": [
+        30,
+        550,
+        540,
+        710
+      ],
+      "color": "#3f789e",
+      "flags": {}
+    },
+    {
+      "id": 3,
+      "title": "Conditioning",
+      "bounding": [
+        1010,
+        110,
+        580,
+        640
+      ],
+      "color": "#3f789e",
+      "flags": {}
+    },
+    {
+      "id": 4,
+      "title": "Sampling",
+      "bounding": [
+        1650,
+        110,
+        350,
+        700
+      ],
+      "color": "#3f789e",
+      "flags": {}
+    }
+  ],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 0.65,
+      "offset": [
+        300,
+        60
+      ]
+    },
+    "frontendVersion": "1.53.6"
+  },
+  "version": 0.4
+}

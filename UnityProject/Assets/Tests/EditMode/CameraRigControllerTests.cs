@@ -9,6 +9,14 @@ using Xianxia.Sect.Visual;
 
 namespace Xianxia.Sect.Tests
 {
+    // Access to internal zoom constants from the test assembly (InternalsVisible
+    // ไม่มีในโปรเจกต์นี้ — mirror ค่าเดียวกับ CameraRigController.ZoomMaxVisibleTiles
+    // และ test ZoomOut_WithoutBackdropBounds จะ pin พฤติกรรม fallback ไว้)
+    internal static class CameraFramingConfigAccessor
+    {
+        public const int MaxZoomOutTiles = 25; // == CameraRigController.ZoomMaxVisibleTiles
+    }
+
     // Fakes for the CameraRigController ports (CameraRigPorts.cs). Everything
     // is synchronous: the fake bus dispatches handlers inline, the fake main
     // thread queue completes immediately, and the fake clock completes
@@ -179,6 +187,10 @@ namespace Xianxia.Sect.Tests
         {
             CameraRigLogger.Info = message => Debug.Log(message);
             CameraRigLogger.Warn = message => Debug.LogWarning(message);
+            // Static input seams: unwire so a zoom/pan test never leaks its
+            // delegates into unrelated tests (RigZoomInput/RigPanInput are static).
+            RigZoomInput.Unwire();
+            RigPanInput.Unwire();
             _rig?.Dispose();
         }
 
@@ -475,6 +487,107 @@ namespace Xianxia.Sect.Tests
             Vector3 pos = _environment.Camera.Position;
             Assert.AreEqual(10f, pos.x, 0.05f);  // converged to ghost X
             Assert.AreEqual(-10f, pos.z, 1e-4f); // Z stays with the camera
+        }
+
+        // -------------------------------------------------------------
+        // Mouse-wheel zoom (continuous, overview only)
+        // -------------------------------------------------------------
+
+        [Test]
+        public void ZoomIn_ScrollPositive_SmoothlyConvergesTowardPlacementMin()
+        {
+            RigZoomInput.Wire(() => 1f); // one wheel tick in, every frame
+            _rig.Start();
+            LoadGameplaySceneWithCamera(3.048f);
+
+            float overview = _environment.Camera.OrthographicSize;
+            _rig.Tick(); // first tick: target set, size only PARTWAY there (smooth)
+
+            float afterOne = _environment.Camera.OrthographicSize;
+            Assert.Less(afterOne, overview, "one tick must already shrink the size (not snap)");
+
+            float min = _framing.ComputeOrthoSize(CameraFramingConfig.PlacementVisibleTiles, 3.048f);
+            Assert.Greater(afterOne, min, "one tick must not slam into the clamp (smooth, not instant)");
+
+            for (int i = 0; i < 400; i++) _rig.Tick();
+            Assert.AreEqual(min, _environment.Camera.OrthographicSize, 0.01f);
+        }
+
+        [Test]
+        public void ZoomOut_ClampsAtBackdropFit_NeverSeesBlackEdge()
+        {
+            RigZoomInput.Wire(() => -1f); // wheel out, every frame
+            _rig.Start();
+            LoadGameplaySceneWithCamera(3.048f);
+            _framing.SetBackdropBounds(40.96f, 33.28f); // mountain1.png @ PPU100
+
+            for (int i = 0; i < 400; i++) _rig.Tick();
+
+            float fitH = 33.28f * 0.5f;                       // 16.64
+            float fitW = 40.96f * 0.5f / 3.048f;              // 6.72 (width-bound)
+            float expected = Mathf.Min(fitH, fitW);
+            Assert.AreEqual(expected, _environment.Camera.OrthographicSize, 0.01f);
+            Assert.LessOrEqual(_environment.Camera.OrthographicSize, expected + 1e-4f);
+        }
+
+        [Test]
+        public void ZoomOut_WithoutBackdropBounds_FallsBackToMaxTilesPreset()
+        {
+            RigZoomInput.Wire(() => -1f);
+            _rig.Start();
+            LoadGameplaySceneWithCamera(3.048f);
+            // no SetBackdropBounds → fallback = ZoomMaxVisibleTiles preset
+
+            for (int i = 0; i < 400; i++) _rig.Tick();
+
+            float expected = _framing.ComputeOrthoSize(CameraFramingConfigAccessor.MaxZoomOutTiles, 3.048f);
+            Assert.AreEqual(expected, _environment.Camera.OrthographicSize, 0.01f);
+        }
+
+        [Test]
+        public void Zoom_LockedDuringPlacementMode_PresetWins()
+        {
+            RigZoomInput.Wire(() => 1f);
+            _rig.Start();
+            LoadGameplaySceneWithCamera(3.048f);
+
+            _bus.DispatchBuildStarted(new BuildModeStartedMessage { SourceId = "test" });
+            float placementSize = _environment.Camera.OrthographicSize;
+            for (int i = 0; i < 60; i++) _rig.Tick(); // scrolling the whole time
+
+            Assert.AreEqual(placementSize, _environment.Camera.OrthographicSize, 1e-5f);
+        }
+
+        [Test]
+        public void Zoom_NotWired_IsNoOp()
+        {
+            _rig.Start();
+            LoadGameplaySceneWithCamera(3.048f);
+            float before = _environment.Camera.OrthographicSize;
+
+            Assert.DoesNotThrow(() => _rig.Tick());
+            Assert.AreEqual(before, _environment.Camera.OrthographicSize, 1e-6f);
+        }
+
+        [Test]
+        public void Zoom_ResumesFromPresetSize_AfterPlacementEnds()
+        {
+            RigZoomInput.Wire(() => 1f);
+            _rig.Start();
+            LoadGameplaySceneWithCamera(3.048f);
+
+            // enter + leave placement → camera back at the overview preset
+            _bus.DispatchBuildStarted(new BuildModeStartedMessage { SourceId = "test" });
+            _bus.DispatchBuildEnded(new BuildModeEndedMessage { SourceId = "test", Confirmed = true });
+            float overview = _environment.Camera.OrthographicSize;
+
+            // first zoom tick after placement must start FROM the preset size
+            // (stale target discarded), moving inward, not jumping to the min
+            _rig.Tick();
+            float afterOne = _environment.Camera.OrthographicSize;
+            float min = _framing.ComputeOrthoSize(CameraFramingConfig.PlacementVisibleTiles, 3.048f);
+            Assert.Less(afterOne, overview);
+            Assert.Greater(afterOne, min);
         }
     }
 }

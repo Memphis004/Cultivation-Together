@@ -1,0 +1,134 @@
+[
+  {
+    "asset_id": "scroll_paper_seed101",
+    "raw": "art\\disciple_list\\raw\\scroll_paper\\seed101.png",
+    "raw_size": [
+      928,
+      1120
+    ],
+    "trimmed_size": [
+      906,
+      1099
+    ],
+    "final_size": [
+      460,
+      558
+    ],
+    "target_px": [
+      460,
+      560
+    ],
+    "upscale_needed": false,
+    "has_alpha": true,
+    "alpha_zero_pct": 2.92,
+    "alpha_full_pct": 94.65,
+    "alpha_semi_pct": 2.43,
+    "semi_pct_of_opaque": 2.5,
+    "px_near_key_color": 0,
+    "px_near_key_color_visible": 0,
+    "bleed_passes": 1,
+    "bleed_left_over": 0,
+    "post_resize_safety_fixed": 27,
+    "bytes": 322909,
+    "out": "art\\disciple_list\\final\\scroll_paper_seed101.png"
+  },
+  {
+    "asset_id": "scroll_paper_seed202",
+    "raw": "art\\disciple_list\\raw\\scroll_paper\\seed202.png",
+    "raw_size": [
+      928,
+      1120
+    ],
+    "trimmed_size": [
+      916,
+      1117
+    ],
+    "final_size": [
+      459,
+      560
+    ],
+    "target_px": [
+      460,
+      560
+    ],
+    "upscale_needed": false,
+    "has_alpha": true,
+    "alpha_zero_pct": 3.74,
+    "alpha_full_pct": 93.65,
+    "alpha_semi_pct": 2.6,
+    "semi_pct_of_opaque": 2.71,
+    "px_near_key_color": 0,
+    "px_near_key_color_visible": 0,
+    "bleed_passes": 1,
+    "bleed_left_over": 0,
+    "post_resize_safety_fixed": 62,
+    "bytes": 313488,
+    "out": "art\\disciple_list\\final\\scroll_paper_seed202.png"
+  },
+  {
+    "asset_id": "scroll_paper_seed303",
+    "raw": "art\\disciple_list\\raw\\scroll_paper\\seed303.png",
+    "raw_size": [
+      928,
+      1120
+    ],
+    "trimmed_size": [
+      905,
+      1107
+    ],
+    "final_size": [
+      458,
+      560
+    ],
+    "target_px": [
+      460,
+      560
+    ],
+    "upscale_needed": false,
+    "has_alpha": true,
+    "alpha_zero_pct": 2.21,
+    "alpha_full_pct": 95.25,
+    "alpha_semi_pct": 2.55,
+    "semi_pct_of_opaque": 2.6,
+    "px_near_key_color": 0,
+    "px_near_key_color_visible": 0,
+    "bleed_passes": 1,
+    "bleed_left_over": 0,
+    "post_resize_safety_fixed": 20,
+    "bytes": 333857,
+    "out": "art\\disciple_list\\final\\scroll_paper_seed303.png"
+  },
+  {
+    "asset_id": "scroll_paper_seed404",
+    "raw": "art\\disciple_list\\raw\\scroll_paper\\seed404.png",
+    "raw_size": [
+      928,
+      1120
+    ],
+    "trimmed_size": [
+      910,
+      1104
+    ],
+    "final_size": [
+      460,
+      558
+    ],
+    "target_px": [
+      460,
+      560
+    ],
+    "upscale_needed": false,
+    "has_alpha": true,
+    "alpha_zero_pct": 2.55,
+    "alpha_full_pct": 94.96,
+    "alpha_semi_pct": 2.49,
+    "semi_pct_of_opaque": 2.56,
+    "px_near_key_color": 0,
+    "px_near_key_color_visible": 0,
+    "bleed_passes": 1,
+    "bleed_left_over": 0,
+    "post_resize_safety_fixed": 56,
+    "bytes": 312634,
+    "out": "art\\disciple_list\\final\\scroll_paper_seed404.png"
+  }
+]

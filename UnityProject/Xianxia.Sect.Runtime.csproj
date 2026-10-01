@@ -43,7 +43,7 @@
     <UnityVersion>6000.3.9f1</UnityVersion>
   </PropertyGroup>
   <ItemGroup>
-    <Analyzer Include="C:\Users\memph\.vscode\extensions\visualstudiotoolsforunity.vstuc-1.3.1\Analyzers\Microsoft.Unity.Analyzers.dll" />
+    <Analyzer Include="C:\Users\memph\.vscode\extensions\visualstudiotoolsforunity.vstuc-1.3.2\Analyzers\Microsoft.Unity.Analyzers.dll" />
     <Analyzer Include="C:\UnityProjects\Cultivation-Together\UnityProject\Assets\Packages\MessagePackAnalyzer.3.1.8\analyzers\roslyn4.3\cs\MessagePack.SourceGenerator.dll" />
     <Analyzer Include="C:\UnityProjects\Cultivation-Together\UnityProject\Assets\Packages\MessagePackAnalyzer.3.1.8\analyzers\roslyn4.3\cs\MessagePack.Analyzers.CodeFixes.dll" />
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\6000.3.9f1\Editor\Data\Tools\BuildPipeline\Unity.SourceGenerators\Unity.SourceGenerators.dll" />
@@ -73,6 +73,7 @@
     <Compile Include="Assets\Scripts\Visual\Core\IVisualEntitlementProvider.cs" />
     <Compile Include="Assets\Scripts\Shared\GameMessages.cs" />
     <Compile Include="Assets\Scripts\Core\DecisionLogger.cs" />
+    <Compile Include="Assets\Scripts\UI\Views\FitWidthGridLayoutGroup.cs" />
     <Compile Include="Assets\Scripts\Systems\DiscipleSystem.cs" />
     <Compile Include="Assets\Scripts\Tests\AdditiveSceneTest.cs" />
     <Compile Include="Assets\Scripts\Visual\Scene\CameraFramingConfig.cs" />
@@ -118,6 +119,7 @@
     <Compile Include="Assets\Scripts\Data\Gen\Tables.cs" />
     <Compile Include="Assets\Scripts\Visual\Core\EntitlementRandom.cs" />
     <Compile Include="Assets\Scripts\Systems\WorldEventSystem.cs" />
+    <Compile Include="Assets\Scripts\Visual\Scene\RigZoomInput.cs" />
     <Compile Include="Assets\Scripts\UI\Views\BuildingMenuView.cs" />
     <Compile Include="Assets\Scripts\UI\Systems\WorldEventUISystem.cs" />
     <Compile Include="Assets\Scripts\Visual\Scene\CameraRigController.cs" />
