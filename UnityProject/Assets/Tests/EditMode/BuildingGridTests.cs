@@ -133,9 +133,11 @@ namespace Xianxia.Sect.Tests
         [Test]
         public void CanPlace_Rotated90_SwapsFootprint()
         {
-            // 2x3 at (8,0): unrotated overflows right (8+2=10 fits, but height 3 -> rows 0-2 fine) -
-            // use a clearly asymmetric case: 1x3 rotated 90 becomes 3x1.
-            Assert.IsTrue(_grid.CanPlace(8, 0, 1, 3, 90), "1x3 rot90 = 3x1, fits at (8,0)");
+            // พิสูจน์การสลับ footprint ด้วยขอบกริด 10 ช่อง: 1x3 ไม่หมุน = กว้าง 1 → x=8 พอดี;
+            // หมุน 90 สลับเป็น 3x1 → x=8..10 ล้นกริด (เดิม test คาดผิดว่าวางที่ x=8 ได้)
+            Assert.IsTrue(_grid.CanPlace(8, 0, 1, 3), "1x3 unrotated fits at (8,0) — 1 wide");
+            Assert.IsFalse(_grid.CanPlace(8, 0, 1, 3, 90), "rot90 swaps to 3x1 → x=8..10 overflows a 10-wide grid");
+            Assert.IsTrue(_grid.CanPlace(7, 0, 1, 3, 90), "3x1 rot90 fits at (7,0) — x=7..9");
             Assert.IsFalse(_grid.CanPlace(9, 0, 1, 3, 90), "3-wide rot90 at x=9 overflows");
         }
 

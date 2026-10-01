@@ -54,6 +54,10 @@ namespace Xianxia.Sect.Tests
         [SetUp]
         public void SetUp()
         {
+            // Unity Test Framework ใช้ fixture instance เดิมต่อข้าม test ในคลาส — เคาเตอร์
+            // จึงสะสมจาก test ก่อนหน้า (เคยทำให้ Confirm_PlacesBuilding เห็น 4 แทน 1)
+            _closeRequested = 0;
+
             _resourceBuffer = new BufferPublisher<SectResourceChangedMessage>();
             _placedBuffer = new BufferPublisher<BuildingPlacedMessage>();
             _buildStartedBuffer = new BufferPublisher<BuildModeStartedMessage>();

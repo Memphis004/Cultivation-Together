@@ -34,9 +34,9 @@ namespace Xianxia.Sect.Visual
         // ความเร็ว: orthoSize หด/ขยายต่อ scroll tick 1 หน่วย (exponential feel แบบ
         // editor — ใกล้ซูมละเอียด ไกลซูมหยาบ); smoothing ผ่าน exponential blend
         // เดียวกับ follow (ไม่กระตุกเมื่อ scroll เร็ว ๆ)
-        // 0.25 = หนึ่ง notch เปลี่ยนขนาด ~20% (range เต็ม 2.5→8 ใช้ ~5-6 notch);
-        // ลด/เพิ่มที่ค่าค่านี้ค่าเดียว
-        internal const float ZoomSpeedOrthoPerTick = 0.25f;
+        // 0.15 = หนึ่ง notch เปลี่ยนขนาด ~14% (range เต็ม 2.5→8 ใช้ ~8-9 notch);
+        // ลด/เพิ่มที่ค่าค่านี้ค่าเดียว (เดิม 0.6 → 0.25 ตามผลวัด live แล้วผู้ใช้เลือก 0.15)
+        internal const float ZoomSpeedOrthoPerTick = 0.15f;
         internal const float ZoomSharpness = 10f;
         // ช่วง zoom: แคบสุด = placement preset (เห็น 10 ไทล์), กว้างสุด =
         // ขนาดที่ ClampToBackdrop ยังพอมีที่ pan (backdrop หัก margin 3 ไทล์)
