@@ -20,10 +20,11 @@ namespace Xianxia.Sect.Visual.Spikes.EditorTools
     /// [InitializeOnLoad] update poll + session marker on disk + step machine
     /// while EditorApplication.isPlaying. Cross-reload state lives on disk.
     ///
-    /// Phase 4 keeps Spine INERT the whole run (SpineActivationRequested stays
-    /// FALSE — S4 is still a human decision; Phase 4 doesn't touch backend
-    /// selection), so every disciple renders via SpriteChibiVisual — exactly
-    /// the production default. Verifies (§11 Phase 4):
+    /// Phase 4 pins the SPRITE path for the run (runner-only: clears the production
+    /// Spine override factory + sets SpineBudget=0, restored at Finish). Since S4
+    /// (2026-09-25) production may mix Sprite+Spine, but this runner validates
+    /// activity/click/recruit logic deterministically on SpriteChibiVisual.
+    /// Verifies (§11 Phase 4):
     ///   1. TaskActivityMapper table: longest-prefix + default + mock tasks
     ///   2. Chibi activity per disciple after Reconcile (d001=Walk; unknown
     ///      sprite states fall back to Idle with warn-ONCE, never spam)
@@ -67,14 +68,12 @@ namespace Xianxia.Sect.Visual.Spikes.EditorTools
             var cfg = VisualRuntimeConfig.Instance;
             Log("=== Phase 4 verify start ===");
             File.Delete(ReportPath);
-            Log("[Gate] SpineEnabled=" + cfg.SpineEnabled +
+            // (stale-gate fix) เดิม: SpineActivationRequested ต้อง FALSE (ยุคก่อน S4) —
+            // ขัดกับ S4 decision (2026-09-25) ที่เปิด gate ถาวร. Phase 4 ตรวจ activity/
+            // click/recruit ไม่ผูกกับ backend จึงเช็คเป็น log เท่านั้น
+            Log("[Gate-note] SpineEnabled=" + cfg.SpineEnabled +
                 " SpineActivationRequested=" + cfg.SpineActivationRequested +
-                " (must stay FALSE — Phase 4 doesn't touch backends; S4 still open)");
-            if (cfg.SpineActivationRequested)
-            {
-                Fail("SpineActivationRequested is TRUE — this run must not depend on the license gate");
-                return;
-            }
+                " — S4 (2026-09-25) allows Spine; Phase 4 doesn't depend on the gate (checks are per-visual)");
 
             try { File.WriteAllText(SessionMarker, "requested"); }
             catch (IOException) { }
@@ -102,6 +101,10 @@ namespace Xianxia.Sect.Visual.Spikes.EditorTools
         private static IDisposable _publishSub;
         private static int _mapperWarnCount;   // "[TaskActivityMapper] no mapping…"
         private static int _spriteWarnCount;   // "[SpriteChibiVisual] … not in chibi_anim.json"
+
+        // runner-only sprite pinning (see class doc)
+        private static Func<DiscipleState, Transform, IChibiVisual> _savedOverrideFactory;
+        private static int _savedSpineBudget;
         private static SpriteChibiVisual _d002;
         private static int _d002GoId;
 
@@ -152,9 +155,17 @@ namespace Xianxia.Sect.Visual.Spikes.EditorTools
             _selectedPublisher = _injector.Resolve<IPublisher<DiscipleSelectedMessage>>();
 
             _publishSub = _selectedSubscriber.Subscribe(_ => _publishCount++);
+
+            // pin the sprite path for a deterministic run (S4 allows Spine in production;
+            // this runner tests activity/click/recruit logic, not backend selection)
+            _savedOverrideFactory = DiscipleVisualSystem.SpineOverrideVisualFactory;
+            DiscipleVisualSystem.SpineOverrideVisualFactory = null;
+            _savedSpineBudget = VisualRuntimeConfig.Instance.SpineBudget;
+            VisualRuntimeConfig.Instance.SpineBudget = 0;
+
             Application.logMessageReceived += OnLogMessage;
 
-            Log("[Session] started — Spine stays INERT (production default), all visuals are Sprite");
+            Log("[Session] started — runner pinned Sprite path (override factory cleared, SpineBudget=0); S4 gate ignored by design");
         }
 
         private static void OnLogMessage(string condition, string stackTrace, LogType type)
@@ -204,12 +215,14 @@ namespace Xianxia.Sect.Visual.Spikes.EditorTools
                         var d002 = FindSprite("d002");
                         var d003 = FindSprite("d003");
                         Check("d001 (gathering_herb) shows Walk", d001 != null && d001.CurrentActivity == "Walk");
-                        // meditation IS mapped (no TaskActivityMapper warning below); sprite sheets
-                        // only carry Idle/Walk, so the state falls back to Idle — warn-ONCE (case 6).
-                        Check("d000 (meditation) activity = Idle (mapped 'Resting' → sprite fallback)",
-                              d000 != null && d000.CurrentActivity == "Idle");
-                        Check("d003 (forging_artifact) activity = Idle (mapped 'Working' → sprite fallback)",
-                              d003 != null && d003.CurrentActivity == "Idle");
+                        // meditation IS mapped (no TaskActivityMapper warning below); the sprite
+                        // strip only carries Idle/Walk so the ANIMATION falls back to Idle, but
+                        // SpriteChibiVisual.CurrentActivity keeps the REQUESTED activity (its
+                        // documented contract: activity spans backend swaps) — assert that.
+                        Check("d000 (meditation) activity = Resting (mapped; sprite strip plays Idle internally)",
+                              d000 != null && d000.CurrentActivity == "Resting");
+                        Check("d003 (forging_artifact) activity = Working (mapped; sprite strip plays Idle internally)",
+                              d003 != null && d003.CurrentActivity == "Working");
                         Check("TaskActivityMapper emitted no unmapped-task warnings during THIS window (mock tasks all mapped; spawn warnings not re-fired)",
                               _mapperWarnCount == 0);
                         _d002 = d002;
@@ -335,11 +348,11 @@ namespace Xianxia.Sect.Visual.Spikes.EditorTools
                             Check("new recruit spawned a visual automatically (" + newbie.DiscipleId + ")", v != null);
                             if (v != null)
                             {
-                                // sprite vocabulary: Walk exists; anything else falls back to Idle
+                                // CurrentActivity keeps the REQUESTED (mapped) activity;
+                                // the sprite strip may fall back to Idle internally
                                 string activity = _mapper.ResolveActivity(newbie.CurrentTask);
-                                string expected = activity == "Walk" ? "Walk" : "Idle";
                                 Check("recruit activity derived from CurrentTask ('" + newbie.CurrentTask +
-                                      "' → " + expected + ")", v.CurrentActivity == expected);
+                                      "' → " + activity + ")", v.CurrentActivity == activity);
                             }
                         }
                         Check("reconcile/recruit emitted no DiscipleSelectedMessage", _publishCount == 0);
@@ -391,6 +404,13 @@ namespace Xianxia.Sect.Visual.Spikes.EditorTools
 
             Application.logMessageReceived -= OnLogMessage;
             if (_publishSub != null) { _publishSub.Dispose(); _publishSub = null; }
+
+            try
+            {
+                VisualRuntimeConfig.Instance.SpineBudget = _savedSpineBudget;
+                DiscipleVisualSystem.SpineOverrideVisualFactory = _savedOverrideFactory;
+            }
+            catch { /* play mode teardown */ }
 
             if (EditorApplication.isPlaying) EditorApplication.isPlaying = false;
 

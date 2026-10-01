@@ -25,6 +25,18 @@ namespace Xianxia.Sect
     {
         protected override void Configure(IContainerBuilder builder)
         {
+            RegisterSceneBoundServices(builder);
+        }
+
+        /// <summary>
+        /// Registration ของ "ของที่ผูกกับฉาก" ทั้งหมด — แยกออกมาเป็น internal static
+        /// เพื่อให้ EditMode test (ดู AssemblyInfo.cs: InternalsVisibleTo) ตรวจ
+        /// registration ที่นี่ได้จริงผ่าน ContainerBuilder โดยไม่ต้องเปิด scope/เล่นเกม
+        /// (CompositionRootContainerTests). Configure() เรียกตัวนี้ตรง ๆ → ไม่มีทางที่
+        /// เนื้อ registration จะต่างจากที่เทสต์ตรวจ
+        /// </summary>
+        internal static void RegisterSceneBoundServices(IContainerBuilder builder)
+        {
             // --- camera rig ports (test seams; see CameraRigPorts.cs) ---
             // The rig talks to the bus/scene/Resources/Time only through these
             // interfaces, so EditMode tests can drive it with fakes.

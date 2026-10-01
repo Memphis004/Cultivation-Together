@@ -4,18 +4,23 @@ using System.IO;
 using System.Text.RegularExpressions;
 using NUnit.Framework;
 using UnityEditor;
+using UnityEditor.SceneManagement;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Xianxia.Sect.Tests
 {
     /// <summary>
     /// Composition-root layout guard (Phase 1–2 refactor).
     ///
-    /// ทำไมทดสอบที่ระดับ source/asset ไม่ใช่ build container จริง:
-    ///   - test asmdef ไม่ใช้ InternalsVisibleTo (ดู ChibiFrameBank) → installer
-    ///     extensions ที่เป็น internal static เอื้อมไม่ถึงจาก assembly นี้
-    ///   - build GameLifetimeScope จริงจะเปิด MessagePipe TCP interprocess listener
-    ///     (port 3215) ซึ่งไม่ควรเกิดใน EditMode test
+    /// ตรวจ "กฎการวางของ" 2 ระดับ:
+    ///   - ระดับซอร์ส (regex) ที่นี่ — กันชื่อ type หลุดไปอยู่ไฟล์ผิด
+    ///   - ระดับ registration จริง: CompositionRootContainerTests (เรียก installer
+    ///     ตัวจริงบน ContainerBuilder + Exists) และเทสต์ฉากด้านล่างเปิดฉากจริง
+    ///     ผ่าน EditorSceneManager แล้วหา component
+    ///
+    /// build GameLifetimeScope จริงจะเปิด MessagePipe TCP interprocess listener
+    /// (port 3215) ซึ่งไม่ควรเกิดใน EditMode test — จึงไม่ Build ที่นี่
     ///
     /// สิ่งที่ต้องไม่มีวัน regress คือ "กฎการวางของ" ซึ่งเขียนตรวจได้ตรง ๆ:
     /// บริการที่ผูกกับฉาก (rig ports + กล้อง/overlay/backdrop) ต้องถูก register
@@ -28,7 +33,6 @@ namespace Xianxia.Sect.Tests
         private const string ChildScopePath = "Scripts/Scenes/SectScene/SectSceneLifetimeScope.cs";
         private const string InstallersDir = "Scripts/Core/Installers";
         private const string GameLifetimeScopePath = "Scripts/Core/GameLifetimeScope.cs";
-        private const string ChildScopeScriptPath = "Assets/Scripts/Scenes/SectScene/SectSceneLifetimeScope.cs";
 
         /// <summary>บริการที่ผูกกับฉากเกมเพลย์ — child scope เท่านั้น</summary>
         private static readonly string[] SceneBoundTypes =
@@ -106,15 +110,32 @@ namespace Xianxia.Sect.Tests
         [Test]
         public void GameplaySceneAsset_ContainsTheChildScopeComponent()
         {
-            string guid = AssetDatabase.AssetPathToGUID(ChildScopeScriptPath);
-            Assert.IsFalse(string.IsNullOrEmpty(guid),
-                "SectSceneLifetimeScope.cs ต้องมี .meta/GUID (ไม่งั้นฉากอ้างอิงไม่ได้)");
+            // เปิดฉากจริงแล้วตรวจ component จริง — ไม่ใช่แค่ grep GUID ในไฟล์ .unity
+            // (เคสที่ GUID ยังอยู่แต่ component ถูกถอดออก จะไม่มีวันรอดเทสต์นี้)
+            SceneSetup[] previous = EditorSceneManager.GetSceneManagerSetup();
+            try
+            {
+                Scene scene = EditorSceneManager.OpenScene(SceneNames.SectAssetPath, OpenSceneMode.Single);
 
-            string sceneText = File.ReadAllText(SceneFileFullPath(SceneNames.SectAssetPath));
+                Assert.IsTrue(scene.IsValid(), "เปิดฉากไม่ได้: " + SceneNames.SectAssetPath);
+                Assert.AreEqual(SceneNames.Sect, scene.name,
+                    "ชื่อฉากต้องเป็น SectScene");
 
-            StringAssert.Contains(guid, sceneText,
-                SceneNames.SectAssetPath + " ต้องมี component SectSceneLifetimeScope — " +
-                "ไม่มี = rig ports/กล้อง/overlay/backdrop ไม่ถูกสร้างตอนเล่นฉากนี้");
+                List<SectSceneLifetimeScope> scopes = ChildScopesIn(scene);
+                Assert.AreEqual(1, scopes.Count,
+                    SceneNames.SectAssetPath + " ต้องมี component SectSceneLifetimeScope อยู่ " +
+                    "1 ตัวบน object ที่ root ของฉาก — ไม่มี = rig ports/กล้อง/overlay/backdrop " +
+                    "ไม่ถูกสร้างตอนเล่นฉากนี้");
+            }
+            finally
+            {
+                // setup ว่างได้ในบริบท test runner — Restore ด้วยอาร์เรย์ว่างจะโยน
+                // ArgumentException ("No loaded scene found")
+                if (previous != null && previous.Length > 0)
+                {
+                    EditorSceneManager.RestoreSceneManagerSetup(previous);
+                }
+            }
         }
 
         [Test]
@@ -169,12 +190,16 @@ namespace Xianxia.Sect.Tests
             return Regex.Replace(source, @"//[^\n]*", string.Empty);
         }
 
-        private static string SceneFileFullPath(string assetPath)
+        /// <summary>หา SectSceneLifetimeScope ทุกตัวบน object ที่ root ของฉาก (รวม inactive)</summary>
+        private static List<SectSceneLifetimeScope> ChildScopesIn(Scene scene)
         {
-            string projectRoot = Directory.GetParent(Application.dataPath).FullName;
-            string full = Path.Combine(projectRoot, assetPath.Replace('/', Path.DirectorySeparatorChar));
-            Assert.IsTrue(File.Exists(full), "missing scene asset: " + assetPath);
-            return full;
+            var found = new List<SectSceneLifetimeScope>();
+            foreach (GameObject root in scene.GetRootGameObjects())
+            {
+                found.AddRange(root.GetComponentsInChildren<SectSceneLifetimeScope>(true));
+            }
+
+            return found;
         }
     }
 }

@@ -297,6 +297,9 @@ namespace Xianxia.Sect.Visual.Spikes.EditorTools
             EditorApplication.update += Poll;
         }
 
+        private static double _waitStart = -1.0;
+        private const double AutoLoadWaitSeconds = 15.0;
+
         private static void Poll()
         {
             if (!File.Exists(LoaderMarker)) return;
@@ -305,6 +308,28 @@ namespace Xianxia.Sect.Visual.Spikes.EditorTools
 
             var injector = GameLifetimeScope.Injector;
             if (injector == null) return; // container not built yet — retry next tick
+
+            var loader = injector.Resolve<SceneLoader>();
+            if (loader == null) return;
+
+            // WAIT FOR THE BOOT AUTO-LOAD FIRST (S4 fix). SceneLoader.Start() auto-loads the
+            // default gameplay scene (SectScene). LoadGameplayScene unloads the CURRENT
+            // gameplay scene before loading the next one, so driving the demo load while
+            // that auto-load is still in flight makes BOTH land: two ChibiSceneRoots stay
+            // live, "last scene wins" binds SectScene's root, and the demo scene gets the
+            // production roster instead of its own DevSpineOverride roster. Waiting until
+            // the auto-load has settled routes the demo through the normal unload path —
+            // exactly one gameplay scene remains (the demo scene).
+            bool autoLoadSettled = !string.IsNullOrEmpty(loader.GetCurrentGameplayScene()) ||
+                                   SceneManager.GetSceneByName(SceneNames.Sect).isLoaded;
+            if (!autoLoadSettled)
+            {
+                if (_waitStart < 0.0) _waitStart = EditorApplication.timeSinceStartup;
+                if (EditorApplication.timeSinceStartup - _waitStart < AutoLoadWaitSeconds) return;
+                Debug.LogWarning("[VisualDemo] boot gameplay scene never settled after " +
+                                 AutoLoadWaitSeconds + "s — driving the demo load anyway");
+            }
+            _waitStart = -1.0;
 
             string sceneName;
             try { sceneName = File.ReadAllText(LoaderMarker).Trim(); }
@@ -318,7 +343,6 @@ namespace Xianxia.Sect.Visual.Spikes.EditorTools
                 return;
             }
 
-            var loader = injector.Resolve<SceneLoader>();
             Debug.Log("[VisualDemo] driving SceneLoader.LoadGameplayScene('VisualDemoScene') — production additive path");
             _ = loader.LoadGameplayScene("VisualDemoScene");
         }

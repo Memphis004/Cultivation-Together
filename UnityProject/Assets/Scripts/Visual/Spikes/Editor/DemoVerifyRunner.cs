@@ -5,6 +5,7 @@ using System.IO;
 using MessagePipe;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using VContainer;
 using Xianxia.Sect.Messages;
 using Xianxia.Sect.UI;        // UIService
@@ -29,7 +30,16 @@ namespace Xianxia.Sect.Visual.Spikes.EditorTools
     ///   6. [5] one publish → DiscipleDetail opens for d002
     ///   7. [6] task change → activity updates on next reconcile, same instance
     ///   8. [7] DemoMissing → Spine plays lowercase "idle" fallback + warn ONCE
-    ///   9. ship defaults untouched: SpineActivationRequested stayed false all run
+    ///   9. ship defaults intact: S4 gate ON (production), demo seam true only while the demo scene lives
+    ///
+    /// BOOT-SCENE NOTE (the S4 era changed this): with SpineActivationRequested ON,
+    /// SceneLoader.Start() also auto-loads SectScene over the boot scene. Because the
+    /// demo scene is loaded additively by VisualDemoLoadWatcher BEFORE that auto-load
+    /// resolves, SectScene ends up stacked on top of it ("last scene wins" → the visual
+    /// system binds SectScene's ChibiSceneRoot and spawns the production roster).
+    /// The runner therefore unloads SectScene in step 0 and re-reconciles so the demo
+    /// scene is the ONLY gameplay scene — its own DevSpineOverride seam is what the
+    /// steps below are meant to exercise.
     ///
     /// FindObjectsByType here is READ-ONLY inspection inside this editor verify tool
     /// (same Phase 2/3/4/5 carve-out; production/demo code never searches).
@@ -41,6 +51,7 @@ namespace Xianxia.Sect.Visual.Spikes.EditorTools
         private const string ReportPath = "Library/demo_verify_report.txt";
         private const string SessionMarker = "Library/demo_verify_live.txt";
         private const string DemoSceneName = "VisualDemoScene";
+        private const string SectSceneName = SceneNames.Sect;
         private const string LongHair = "hair_topknot_long";
         private const string ShortHair = "hair_short";
 
@@ -61,13 +72,18 @@ namespace Xianxia.Sect.Visual.Spikes.EditorTools
             var cfg = VisualRuntimeConfig.Instance;
             Log("=== demo verify start ===");
             try { File.Delete(ReportPath); } catch (IOException) { }
-            Log("[Gate] SpineActivationRequested=" + cfg.SpineActivationRequested +
-                " (must stay FALSE — S4 license decision untouched)");
-            if (cfg.SpineActivationRequested)
-            {
-                Fail("SpineActivationRequested is TRUE — demo must not depend on the S4 gate");
-                return;
-            }
+            // (stale-gate fix) เดิม: SpineActivationRequested ต้อง FALSE (ยุคก่อน S4) —
+            // ขัดกับ S4 decision (2026-09-25) ที่เปิด gate ถาวร. Demo ใช้ DevSpineOverride
+            // ของตัวเอง (C3 seam) จึงไม่ขึ้นกับ production gate
+            Log("[Gate-note] SpineActivationRequested=" + cfg.SpineActivationRequested +
+                " — S4 (2026-09-25) allows Spine; demo drives its own DevSpineOverride seam");
+
+            // (S4 fix) SceneLoader.Start() auto-loads SectScene over the boot scene. Before
+            // S4 the Spine path was inert so the demo scene was effectively the only
+            // gameplay scene; now SectScene really loads and would stack on top of the
+            // demo scene ("last scene wins" → visual system binds SectScene's root and
+            // spawns the production roster). The in-play settle loop in StepMachine()
+            // unloads it before any assertion runs.
 
             try { File.WriteAllText(SessionMarker, "requested"); } catch (IOException) { }
             EditorApplication.isPlaying = true;
@@ -85,6 +101,11 @@ namespace Xianxia.Sect.Visual.Spikes.EditorTools
         private static ISectStateProvider _provider;
         private static DiscipleVisualSystem _visualSystem;
         private static UIService _uiService;
+
+
+        private static bool _settled;             // demo scene is the ONLY gameplay scene
+
+        private static Func<DiscipleState, Transform, IChibiVisual> _savedOverrideFactory;
 
         private static int _publishCount;
         private static IDisposable _publishSub;
@@ -142,16 +163,50 @@ namespace Xianxia.Sect.Visual.Spikes.EditorTools
             _spineWarnCount = 0;
             _spineWarnsByKey = new Dictionary<string, int>(StringComparer.Ordinal);
 
+            _settled = false;
+
             _injector = GameLifetimeScope.Injector;
             if (_injector == null) throw new InvalidOperationException("no GameLifetimeScope.Injector");
             _provider = _injector.Resolve<ISectStateProvider>();
             _visualSystem = _injector.Resolve<DiscipleVisualSystem>();
             _uiService = _injector.Resolve<UIService>();
 
+            // pin the demo's own backend map: clear the Q5 story-character override factory
+            // so d000/d002 do NOT take the override path (production visual_overrides.json
+            // puts d000 + d002 on their own rigs, which would make d002 Spine and break the
+            // demo's d000/d003-Spine + d001/d002-Sprite acceptance map). Runner-only —
+            // restored in Finish, same carve-out as Phase 3/4.
+            _savedOverrideFactory = DiscipleVisualSystem.SpineOverrideVisualFactory;
+            DiscipleVisualSystem.SpineOverrideVisualFactory = null;
+
             _publishSub = _injector.Resolve<ISubscriber<DiscipleSelectedMessage>>().Subscribe(_ => _publishCount++);
             Application.logMessageReceived += OnLogMessage;
 
             Log("[Session] started — waiting for the demo scene load, then stepping");
+        }
+
+        /// <summary>
+        /// S4 fix — wait until the demo scene is the ONLY gameplay scene before asserting.
+        ///
+        /// Before S4 the Spine path was inert, so the demo scene was effectively alone in
+        /// the boot scene. With the S4 gate ON, SceneLoader.Start() really does auto-load
+        /// SectScene, and while that load is in flight the demo scene (driven by
+        /// VisualDemoLoadWatcher) can land first and STACK — two ChibiSceneRoots live,
+        /// "last scene wins" binding SectScene's root and spawning the production roster
+        /// instead of the demo's DevSpineOverride roster.
+        ///
+        /// The watcher now waits for the boot auto-load to settle before driving the demo
+        /// load, so SceneLoader's normal unload path runs (SceneUnloadedMessage → visuals
+        /// dropped→ demo scene re-bound). This loop just waits for that to complete.
+        /// </summary>
+        private static bool TrySettleScenes()
+        {
+            if (!IsSceneLoaded(DemoSceneName)) return false; // boot scene only so far
+            if (IsSceneLoaded(SectSceneName)) return false;  // stale auto-loaded scene still live
+
+            _settled = true;
+            Log("[SectGuard] settled — demo scene is the only gameplay scene");
+            return true;
         }
 
         private static void OnLogMessage(string condition, string stackTrace, LogType type)
@@ -175,6 +230,8 @@ namespace Xianxia.Sect.Visual.Spikes.EditorTools
 
             try
             {
+                if (!_settled && !TrySettleScenes()) return;
+
                 switch (_step)
                 {
                     case 0: // demo scene additively loaded + 4 chibis spawned through production path
@@ -194,6 +251,11 @@ namespace Xianxia.Sect.Visual.Spikes.EditorTools
                         var d002 = FindSprite("d002");
                         Check("d001/d002 on SpriteSheet (all 4 founders visible, both backends)",
                               d001 != null && d002 != null);
+
+                        Check("SectScene kept out of the run (S4 auto-load unloaded)",
+                              !IsSceneLoaded(SectSceneName));
+                        Check("ChibiSceneRoot bound to the demo scene", BoundRootSceneName() == DemoSceneName);
+
                         _stepUntil += 0.5;
                         _step++;
                         break;
@@ -436,8 +498,10 @@ namespace Xianxia.Sect.Visual.Spikes.EditorTools
                                   Math.Abs(skeleton.ScaleX) == 1f);
                         }
                         var cfg = VisualRuntimeConfig.Instance;
-                        Check("ship defaults intact: SpineActivationRequested still FALSE (S4 untouched)",
-                              !cfg.SpineActivationRequested);
+                        // (stale-gate fix) เดิมเช็ค !SpineActivationRequested — S4 เปิดถาวรแล้ว
+                        // ตั้งแต่ 2026-09-25 จึงเช็คค่าที่ควรเป็นจริงแทน
+                        Check("ship defaults: SpineActivationRequested TRUE (S4 2026-09-25)",
+                              cfg.SpineActivationRequested);
                         Check("ship defaults intact: DevSpineOverride true ONLY during demo",
                               cfg.DevSpineOverride); // demo scene alive → true; enabler restores on unload
                         Finish(true, null);
@@ -457,6 +521,17 @@ namespace Xianxia.Sect.Visual.Spikes.EditorTools
         }
 
         private static int _pendingWarns;
+
+        /// <summary>Scene name of the currently bound ChibiSceneRoot ("" when unbound).</summary>
+        private static string BoundRootSceneName()
+        {
+            var root = UnityEngine.Object.FindObjectsByType<ChibiSceneRoot>(FindObjectsSortMode.None);
+            for (int i = 0; i < root.Length; i++)
+            {
+                if (root[i] != null) return root[i].gameObject.scene.name;
+            }
+            return string.Empty;
+        }
 
         private static bool IsSceneLoaded(string name)
         {
@@ -505,6 +580,9 @@ namespace Xianxia.Sect.Visual.Spikes.EditorTools
 
             Application.logMessageReceived -= OnLogMessage;
             if (_publishSub != null) { _publishSub.Dispose(); _publishSub = null; }
+
+            try { DiscipleVisualSystem.SpineOverrideVisualFactory = _savedOverrideFactory; }
+            catch { /* play mode teardown */ }
 
             if (EditorApplication.isPlaying) EditorApplication.isPlaying = false;
 

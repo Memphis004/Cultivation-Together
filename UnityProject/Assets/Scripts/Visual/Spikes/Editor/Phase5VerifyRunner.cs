@@ -71,13 +71,11 @@ namespace Xianxia.Sect.Visual.Spikes.EditorTools
             var cfg = VisualRuntimeConfig.Instance;
             Log("=== Phase 5 verify start ===");
             File.Delete(ReportPath);
-            Log("[Gate] SpineActivationRequested=" + cfg.SpineActivationRequested +
-                " (must stay FALSE — Phase 5 doesn't touch backends)");
-            if (cfg.SpineActivationRequested)
-            {
-                Fail("SpineActivationRequested is TRUE — must not depend on the license gate");
-                return;
-            }
+            // (stale-gate fix) เดิม: SpineActivationRequested ต้อง FALSE (ยุคก่อน S4) —
+            // ขัดกับ S4 decision (2026-09-25) ที่เปิด gate ถาวร. Phase 5 ตรวจ entitlement/
+            // avatar part ผ่าน state + container ไม่ผูกกับ backend
+            Log("[Gate-note] SpineActivationRequested=" + cfg.SpineActivationRequested +
+                " — S4 (2026-09-25) allows Spine; Phase 5 doesn't depend on the gate (checks are state/container-level)");
 
             try { File.WriteAllText(SessionMarker, "requested"); }
             catch (System.IO.IOException) { }
