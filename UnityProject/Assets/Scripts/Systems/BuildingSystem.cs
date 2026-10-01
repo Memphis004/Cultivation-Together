@@ -27,7 +27,7 @@ namespace Xianxia.Sect
     /// </summary>
     public class BuildingSystem : IStartable, ITickable
     {
-        private const string GameplaySceneName = "TestGameplayScene";
+        private const string GameplaySceneName = SceneNames.Sect;
         private const string GhostRootName = "BuildingGhostRoot";
         private const string PlacedRootName = "BuildingPlacedRoot";
         private const int PlaceholderPpu = 100;

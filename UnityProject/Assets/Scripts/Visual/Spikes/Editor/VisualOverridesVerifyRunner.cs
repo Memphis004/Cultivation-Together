@@ -48,7 +48,7 @@ namespace Xianxia.Sect.Visual.Spikes.EditorTools
         private const string MaleRigPath = "Avatar/Spine/male/1113103_1";
         private const string FemaleRigPath = "Avatar/Spine/female/1123102_1_SkeletonData";
         private const string BrokenRigPath = "Avatar/Spine/does_not_exist";
-        private const string SceneA = "Assets/Scenes/TestGameplayScene.unity";
+        private const string SceneA = SceneNames.SectAssetPath;
 
         static VisualOverridesVerifyRunner()
         {

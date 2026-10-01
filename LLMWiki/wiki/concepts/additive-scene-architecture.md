@@ -3,6 +3,7 @@ title: Additive Scene Architecture
 type: concept
 status: draft
 created: 2026-09-02
+updated: 2026-10-02
 related:
   - "[[architecture]]"
   - "[[vcontainer-composition]]"
@@ -14,8 +15,14 @@ tags: [scene-management, additive-loading, core-scene, architecture]
 
 ## Overview
 เปลี่ยนจาก Single Scene เป็น Additive Scene pattern:
-- **CoreScene**: โหลดตลอด (persistent systems + UI)
-- **GameplayScene(s)**: โหลด additive, เปลี่ยนได้โดยไม่กระทบ CoreScene
+- **CoreScene** = `SampleScene.unity` — โหลดตลอด (persistent systems + UI)
+- **GameplayScene** = `SectScene.unity` (เดิมชื่อ `TestGameplayScene`, rename 2026-10-02
+  ผ่าน `AssetDatabase.RenameAsset` จึงคง GUID เดิม) — โหลด additive, เปลี่ยนได้โดยไม่กระทบ CoreScene
+- `TestGameplayScene2.unity` = ฉากทดสอบสำหรับ verify การสลับฉากเท่านั้น (คงชื่อเดิม)
+
+ชื่อ/พาธของฉากที่โค้ดอ้างอิงรวมที่ `Assets/Scripts/Core/SceneNames.cs`
+(`SceneNames.Sect` = "SectScene", `SceneNames.SectAssetPath`) — ห้าม hardcode
+string ชื่อฉากที่ใหม่
 
 ## Motivation
 - UI persistent ข้าม scene (ไม่ต้อง recreate ทุกรอบ)
@@ -44,15 +51,18 @@ tags: [scene-management, additive-loading, core-scene, architecture]
 - AudioListener (ต้องมีแค่ 1 ตัว)
 - MainCamera (ถ้ามี)
 
-### GameplayScene (โหลดแบบ Additive, unload/reload ได้)
+### GameplayScene = SectScene (โหลดแบบ Additive, unload/reload ได้)
 **Scene Content:**
-- Environment / Terrain
-- NPCs / Disciples (3D/2D objects)
-- Buildings
+- Environment / Terrain (backdrop ภูเขาสร้าง runtime จาก Resources)
+- NPCs / Disciples (3D/2D objects) — `ChibiSceneRoot` อยู่ในฉากนี้
+- GameplayCamera (orthographic isometric) + Directional Light
+- **`SectSceneLifetimeScope`** — child `LifetimeScope` ของฉาก (Phase 2, 2026-10)
 
-**Scene-specific Systems:**
-- BuildingSystem (ถ้า scene-dependent)
-- Scene-specific triggers / events
+**Scene-specific Systems (อยู่ใน child scope ไม่ใช่ root):**
+- CameraRigController + GridOverlayRenderer + TerrainBackdropRenderer (entry points)
+- camera rig ports 5 ตัว (IRigMessageBus/ICameraRigEnvironment/ICellSpriteMetrics/
+  IMainThreadQueue/IRigClock)
+- ดู [[concepts/vcontainer-composition|VContainer Composition Root]] สำหรับวิธีผูก parent
 
 **Scene-specific UI:**
 - EventPopup (เปิดเมื่อมี event ใน scene นี้)
@@ -78,16 +88,18 @@ public class SceneLoader
 ```
 
 ### VContainer Strategy
-**Option A: Single Root Scope (แนะนำสำหรับตอนนี้)**
-- CoreScene มี GameLifetimeScope เดียว
-- ทุก system/UI register ที่เดียว
+**Option A: Single Root Scope (แบบเดิม)**
+- CoreScene มี GameLifetimeScope เดียว, ทุก system register ที่เดียว
 - GameplayScene ไม่มี LifetimeScope ของตัวเอง
-- ง่ายที่สุด, ไม่ต้องจัดการ parent-child scope
 
-**Option B: Parent-Child Scope (สำหรับอนาคต)**
-- CoreScene = Parent scope (persistent services)
-- GameplayScene = Child scope (scene-specific services)
-- ซับซ้อนกว่า แต่แยก concerns ชัดเจนกว่า
+**Option B: Parent-Child Scope** — ✅ **ใช้งานจริงแล้ว (Phase 2, 2026-10)**
+- CoreScene = Parent scope (`GameLifetimeScope` — persistent services ที่แตกเป็น
+  installer 5 ตัว)
+- GameplayScene = Child scope (`SectSceneLifetimeScope` — เฉพาะของที่ผูกฉาก)
+- ผูก parent ด้วย `LifetimeScope.EnqueueParent(root)` ใน `SceneLoader` (ไม่ตั้งที่ Inspector)
+- บทเรียน: การ "ย้าย" ของจาก root ลง child ต้อง **ลบ registration ฝั่ง root ด้วย**
+  ไม่งั้น entry point เกิด 2 instance (log/action ซ้ำ) — รายละเอียดใน
+  [[concepts/vcontainer-composition|VContainer Composition Root]]
 
 ### UI Persistence
 **Persistent Panels (อยู่ใน CoreScene):**
@@ -159,7 +171,7 @@ _worldEventSub.Subscribe(msg => {
 - Mitigation: SceneLoader publish `SceneLoadedMessage`, UI subscribe แล้วเปิด panel ที่เหมาะสม
 
 ## Open Questions
-- [ ] GameplayScene ควรมี child LifetimeScope ไหม?
+- [x] GameplayScene ควรมี child LifetimeScope ไหม? → ✅ มีแล้ว (`SectSceneLifetimeScope`, Phase 2)
 - [ ] Scene transition แบบ fade/transition effect?
 - [ ] วิธี handle scene-specific data (เช่น building positions)?
 

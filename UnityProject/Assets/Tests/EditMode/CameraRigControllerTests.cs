@@ -141,7 +141,7 @@ namespace Xianxia.Sect.Tests
         public float OrthographicSize { get; set; }
         public Vector3 Position { get; set; } = new Vector3(4f, 3f, -10f);
         public Quaternion Rotation { get; set; } = Quaternion.identity;
-        public string SceneName { get; set; } = "TestGameplayScene";
+        public string SceneName { get; set; } = SceneNames.Sect;
         public bool IsValid { get; set; } = true;
     }
 
@@ -205,7 +205,7 @@ namespace Xianxia.Sect.Tests
         {
             _environment.SceneLoaded = true;
             _environment.Camera = new FakeCameraView { Aspect = aspect };
-            _bus.DispatchSceneLoaded(new SceneLoadedMessage { SceneName = "TestGameplayScene" });
+            _bus.DispatchSceneLoaded(new SceneLoadedMessage { SceneName = SceneNames.Sect });
         }
 
         // -------------------------------------------------------------
@@ -270,7 +270,7 @@ namespace Xianxia.Sect.Tests
             var rotation = Quaternion.Euler(30f, 45f, 0f);
             _environment.SceneLoaded = true;
             _environment.Camera = new FakeCameraView { Rotation = rotation };
-            _bus.DispatchSceneLoaded(new SceneLoadedMessage { SceneName = "TestGameplayScene" });
+            _bus.DispatchSceneLoaded(new SceneLoadedMessage { SceneName = SceneNames.Sect });
 
             Assert.IsTrue(_environment.Camera.Orthographic);
 
@@ -298,7 +298,7 @@ namespace Xianxia.Sect.Tests
             _rig.Start();
 
             Assert.DoesNotThrow(() =>
-                _bus.DispatchSceneLoaded(new SceneLoadedMessage { SceneName = "TestGameplayScene" }));
+                _bus.DispatchSceneLoaded(new SceneLoadedMessage { SceneName = SceneNames.Sect }));
 
             Assert.AreEqual(1, warnings.Count);
             StringAssert.Contains("No enabled Camera", warnings[0]);
@@ -440,7 +440,7 @@ namespace Xianxia.Sect.Tests
 
             var camera = (FakeCameraView)_environment.Camera;
             camera.IsValid = false; // destroyed with the scene
-            _bus.DispatchSceneUnloaded(new SceneUnloadedMessage { SceneName = "TestGameplayScene" });
+            _bus.DispatchSceneUnloaded(new SceneUnloadedMessage { SceneName = SceneNames.Sect });
 
             // The controller dropped its camera: Tick and build-mode messages
             // are safe no-ops on the camera path.
@@ -479,7 +479,7 @@ namespace Xianxia.Sect.Tests
             _environment.Camera = new FakeCameraView { Position = new Vector3(0f, 0f, -10f), Aspect = 3.048f };
             var ghost = new FakeGhost { Name = "g", Position = new Vector3(10f, 0f, 0f) };
             _environment.Ghosts["g"] = ghost;
-            _bus.DispatchSceneLoaded(new SceneLoadedMessage { SceneName = "TestGameplayScene" });
+            _bus.DispatchSceneLoaded(new SceneLoadedMessage { SceneName = SceneNames.Sect });
 
             _bus.DispatchBuildStarted(new BuildModeStartedMessage { SourceId = "test", GhostId = "g" });
             for (int i = 0; i < 200; i++) _rig.Tick();

@@ -25,7 +25,7 @@ namespace Xianxia.Sect.Visual
     public sealed class GridOverlayRenderer : IStartable, ITickable, IDisposable
     {
         private const string OverlayLayerName = "GridOverlay";
-        private const string GameplaySceneName = "TestGameplayScene";
+        private const string GameplaySceneName = SceneNames.Sect;
         private const float CursorPollHz = 30f;
         private const int OccupancyProbeCount = 3;
 

@@ -26,7 +26,7 @@ namespace Xianxia.Sect.Visual
     /// </summary>
     public sealed class CameraRigController : IStartable, ITickable, IDisposable
     {
-        private const string GameplaySceneName = "TestGameplayScene";
+        private const string GameplaySceneName = SceneNames.Sect;
         private const float TransitionDurationSeconds = 0.35f;
         private const float FollowSharpness = 12f;
 
@@ -365,6 +365,15 @@ namespace Xianxia.Sect.Visual
             // SceneLoaded can be forwarded from an interprocess-driven flow.
             await _mainThread.SwitchToMainThread();
             if (_disposed || string.IsNullOrEmpty(sceneName) || sceneName != GameplaySceneName) return;
+
+            // Idempotent guard: Start()'s already-loaded fallback and the
+            // SceneLoaded message can both reach this method for the same
+            // scene — bind/measure/log exactly once per load.
+            if (_cameraView != null && _cameraView.IsValid &&
+                string.Equals(_cameraView.SceneName, sceneName, StringComparison.Ordinal))
+            {
+                return;
+            }
 
             if (!_environment.TryGetSceneCamera(sceneName, out ICameraRigCameraView cameraView, out RigGridSnapshot grid))
             {

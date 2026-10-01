@@ -19,7 +19,7 @@ namespace Xianxia.Sect.Visual
     /// </summary>
     public sealed class TerrainBackdropRenderer : IStartable, IDisposable
     {
-        private const string GameplaySceneName = "TestGameplayScene";
+        private const string GameplaySceneName = SceneNames.Sect;
 
         private readonly ISubscriber<SceneLoadedMessage> _sceneLoadedSubscriber;
         private readonly CameraFramingConfig _framing;

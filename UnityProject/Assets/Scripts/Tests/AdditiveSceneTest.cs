@@ -12,7 +12,7 @@ namespace Xianxia.Sect.Tests
     /// Usage:
     ///   1. Enter Play mode with SampleScene (CoreScene) loaded.
     ///   2. Select this GameObject — you'll see Test buttons in the Inspector.
-    ///   3. Click Load A (TestGameplayScene), then Load B (TestGameplayScene2)
+    ///   3. Click Load A (SectScene), then Load B (TestGameplayScene2)
     ///      to verify the A→B swap (B unloads A, CoreScene UI persists).
     ///   4. Watch the Console for SceneLoader output + duplicate detection.
     ///   5. Click Unload to remove the gameplay scene.
@@ -24,7 +24,7 @@ namespace Xianxia.Sect.Tests
     {
         [Header("Gameplay scenes (must be in Build Settings)")]
         [Tooltip("Scene A — the first gameplay scene to load additively.")]
-        [SerializeField] private string testSceneName = "TestGameplayScene";
+        [SerializeField] private string testSceneName = SceneNames.Sect;
         [Tooltip("Scene B — loading this while A is active swaps A→B.")]
         [SerializeField] private string testSceneBName = "TestGameplayScene2";
 

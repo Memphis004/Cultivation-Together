@@ -163,7 +163,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bfa1637f1a376bd48bd77ef9489b022e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Xianxia.Sect.Runtime::Xianxia.Sect.Tests.AdditiveSceneTest
-  testSceneName: TestGameplayScene
+  testSceneName: SectScene
   testSceneBName: TestGameplayScene2
   currentScene: (none)
   isLoading: 0

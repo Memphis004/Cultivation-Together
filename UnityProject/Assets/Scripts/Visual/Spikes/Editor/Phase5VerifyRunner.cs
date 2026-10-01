@@ -49,7 +49,7 @@ namespace Xianxia.Sect.Visual.Spikes.EditorTools
     {
         private const string ReportPath = "Library/phase5_verify_report.txt";
         private const string SessionMarker = "Library/phase5_verify_live.txt";
-        private const string SceneA = "Assets/Scenes/TestGameplayScene.unity";
+        private const string SceneA = SceneNames.SectAssetPath;
         private const string LockedPartId = "acc_jade_crown";
 
         static Phase5VerifyRunner()

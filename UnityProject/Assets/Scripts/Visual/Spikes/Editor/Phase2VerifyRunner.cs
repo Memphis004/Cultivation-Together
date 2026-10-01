@@ -61,14 +61,19 @@ namespace Xianxia.Sect.Visual.Spikes.EditorTools
             Log("[Gate] SpriteSheetEnabled=" + cfg.SpriteSheetEnabled +
                 " SpineEnabled=" + cfg.SpineEnabled + " SpineBudget=" + cfg.SpineBudget);
             if (!cfg.SpriteSheetEnabled) { Fail("SpriteSheetEnabled is false"); return; }
-            if (cfg.SpineEnabled) { Fail("SpineEnabled must stay false in Phase 2 (C1)"); return; }
+            // (stale-gate fix) เดิม: SpineEnabled ต้อง false (C1) — ขัดกับ S4 license
+            // decision (2026-09-25) ที่เปิด SpineActivationRequested ที่ composition root
+            // แล้ว VisualSpineBootstrap เปิด SpineEnabled ตอน play จริง จึงเช็คเป็นแค่ log
+            // (baseline ก่อน refactor ของงานแบ่ง scope ก็ FAIL ที่ precheck นี้อยู่แล้ว)
+            Log("[Gate-note] SpineEnabled=" + cfg.SpineEnabled +
+                " — S4 (2026-09-25) allows Spine; roster may mix Sprite+Spine backends");
 
             string dir = Path.Combine("Assets", "Resources", "Data", "Arts", "Avatar", "Chibi");
             int sheets = Directory.Exists(dir) ? Directory.GetFiles(dir, "*.png").Length : 0;
             Log("[Art] chibi sheets on disk: " + sheets);
             if (sheets == 0) { Fail("no chibi sheets — run bake_chibi first"); return; }
 
-            EnsureChibiSceneRoot("Assets/Scenes/TestGameplayScene.unity");
+            EnsureChibiSceneRoot(SceneNames.SectAssetPath);
             EnsureChibiSceneRoot("Assets/Scenes/TestGameplayScene2.unity");
             EditorSceneManager.OpenScene("Assets/Scenes/SampleScene.unity", OpenSceneMode.Single);
 
@@ -180,8 +185,8 @@ namespace Xianxia.Sect.Visual.Spikes.EditorTools
                         _rosterCount0 = _provider.BuildSectEconomyState().Disciples.Count;
                         Log("[Step1] provider=" + (_provider != null) + " loader=" + (_sceneLoader != null) +
                             " roster=" + _rosterCount0);
-                        _sceneLoader.LoadGameplayScene("TestGameplayScene"); // UniTask fire-and-forget
-                        Log("[Step1] loading TestGameplayScene…");
+                        _sceneLoader.LoadGameplayScene(SceneNames.Sect); // UniTask fire-and-forget
+                        Log("[Step1] loading " + SceneNames.Sect + "…");
                         Next(4.0);
                         break;
                     }
@@ -235,7 +240,7 @@ namespace Xianxia.Sect.Visual.Spikes.EditorTools
                 case 6:
                     {
                         _countBeforeSwap = CountChibis();
-                        Log("[Step6] swap TestGameplayScene → TestGameplayScene2 (chibis before=" + _countBeforeSwap + ")");
+                        Log("[Step6] swap " + SceneNames.Sect + " → TestGameplayScene2 (chibis before=" + _countBeforeSwap + ")");
                         _sceneLoader.LoadGameplayScene("TestGameplayScene2"); // UniTask fire-and-forget
                         Next(4.0);
                         break;
@@ -344,7 +349,11 @@ namespace Xianxia.Sect.Visual.Spikes.EditorTools
 
         private static int CountChibis()
         {
-            return Object.FindObjectsByType<SpriteChibiVisual>(FindObjectsSortMode.None).Length;
+            // (stale-count fix) เดิมนับเฉพาะ SpriteChibiVisual — ตั้งแต่ S4 เปิด Spine,
+            // roster ส่วนใหญ่เป็น SpineChibiVisual (นับผ่าน static Active registry)
+            int count = Object.FindObjectsByType<SpriteChibiVisual>(FindObjectsSortMode.None).Length;
+            count += SpineChibiVisual.Active.Count;
+            return count;
         }
 
         private static string PickOtherHair(string discipleId)

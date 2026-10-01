@@ -11,7 +11,7 @@ namespace Xianxia.Sect.Visual.Spikes.EditorTools
 {
     /// <summary>
     /// DEV-ONLY spot-check (marker-file remote control: "visual_overrides_shot" in
-    /// Library/visual_spike_command.txt): plays, loads TestGameplayScene with the Q5
+    /// Library/visual_spike_command.txt): plays, loads SectScene with the Q5
     /// override hooks live (mirrors VisualSpineBootstrap minus the gate — the S4
     /// license gate itself stays untouched), then renders the game camera to a
     /// RenderTexture and saves:
@@ -27,7 +27,7 @@ namespace Xianxia.Sect.Visual.Spikes.EditorTools
     {
         private const string InfoPath = "Library/visual_overrides_shot_info.txt";
         private const string SessionMarker = "Library/visual_overrides_shot_live.txt";
-        private const string SceneA = "Assets/Scenes/TestGameplayScene.unity";
+        private const string SceneA = SceneNames.SectAssetPath;
         private const int W = 2560, H = 1440;
 
         static VisualOverridesShotRunner() { EditorApplication.update += SessionUpdate; }

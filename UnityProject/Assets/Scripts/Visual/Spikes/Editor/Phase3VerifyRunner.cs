@@ -46,7 +46,7 @@ namespace Xianxia.Sect.Visual.Spikes.EditorTools
             "Spine Examples/Spine Skeletons/mix-and-match/mix-and-match-pro_SkeletonData";
 
         private static UnityEngine.Object _logSubscriptionOwner;
-        private const string SceneA = "Assets/Scenes/TestGameplayScene.unity";
+        private const string SceneA = SceneNames.SectAssetPath;
         private const string UnknownActivity = "totally_unknown_activity";
 
         static Phase3VerifyRunner()

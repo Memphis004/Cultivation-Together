@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using Xianxia.Sect.Messages;
+using VContainer;
 using VContainer.Unity;
 
 namespace Xianxia.Sect
@@ -19,16 +20,23 @@ namespace Xianxia.Sect
     {
         /// <summary>ฉากเกมเพลย์ที่โหลดอัตโนมัติตอนเริ่มเกม (additive บน CoreScene) —
         /// เดิมต้องกดปุ่ม "Load A (additive)" ใน AdditiveSceneTest เองจึงจะเห็นฉาก</summary>
-        public const string DefaultGameplayScene = "TestGameplayScene";
+        public const string DefaultGameplayScene = SceneNames.Sect;
         private readonly IPublisher<SceneLoadedMessage> _sceneLoadedPublisher;
         private readonly IPublisher<SceneUnloadedMessage> _sceneUnloadedPublisher;
+        // root scope = LifetimeScope base type — VContainer.InstallTo ลงทะเบียนให้ตัว
+        // scope เองอยู่แล้ว (RegisterInstance<LifetimeScope>(this).AsSelf()) ห้าม
+        // RegisterInstance(GameLifetimeScope) ซ้ำใน Configure (VContainerException
+        // Conflict implementation type — เคยทำให้ container build fail ทั้งเกม)
+        private readonly LifetimeScope _rootScope;
         private string _currentGameplayScene;
 
         public SceneLoader(IPublisher<SceneLoadedMessage> sceneLoadedPublisher,
-                           IPublisher<SceneUnloadedMessage> sceneUnloadedPublisher)
+                           IPublisher<SceneUnloadedMessage> sceneUnloadedPublisher,
+                           LifetimeScope rootScope)
         {
             _sceneLoadedPublisher = sceneLoadedPublisher;
             _sceneUnloadedPublisher = sceneUnloadedPublisher;
+            _rootScope = rootScope;
         }
 
         /// <summary>IStartable — โหลดฉากเกมเพลย์เริ่มต้นทันทีที่ composition root พร้อม
@@ -74,9 +82,16 @@ namespace Xianxia.Sect
                 // plain LoadSceneAsync is refused by the Unity 6 build profile). Same
                 // downstream flow as the normal path below. Editor-only — compiled out
                 // of player builds, and the demo scene never ships (see guards).
-                var editorOp = UnityEditor.SceneManagement.EditorSceneManager.LoadSceneAsyncInPlayMode(
-                    sceneAssetPath, new LoadSceneParameters(LoadSceneMode.Additive));
-                await editorOp.ToUniTask();
+                //
+                // PHASE 2: EnqueueParent(root) ครอบทั้ง load → child LifetimeScope ในฉาก
+                // (SectSceneLifetimeScope) เชื้อกับ root ผ่าน GlobalOverrideParents ตอน
+                // Awake ที่ fire ระหว่าง async load — unwrap ใน finally เสมอ
+                using (EnqueueRootAsParent())
+                {
+                    var editorOp = UnityEditor.SceneManagement.EditorSceneManager.LoadSceneAsyncInPlayMode(
+                        sceneAssetPath, new LoadSceneParameters(LoadSceneMode.Additive));
+                    await editorOp.ToUniTask();
+                }
                 _currentGameplayScene = sceneName;
                 RemoveDuplicateSingletons(sceneName);
                 _sceneLoadedPublisher.Publish(new SceneLoadedMessage { SceneName = sceneName });
@@ -85,8 +100,14 @@ namespace Xianxia.Sect
                 return;
             }
 #endif
-            var asyncOp = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
-            await asyncOp.ToUniTask();
+            // PHASE 2: EnqueueParent(root) ครอบทั้ง load — child LifetimeScope ในฉาก
+            // (SectSceneLifetimeScope) จะเชื้อกับ root ทันทีที่ Awake ระหว่าง async load
+            // (build + entry points Start หลัง await จบ) — unwrap ใน finally เสมอ
+            using (EnqueueRootAsParent())
+            {
+                var asyncOp = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
+                await asyncOp.ToUniTask();
+            }
 
             _currentGameplayScene = sceneName;
 
@@ -128,6 +149,29 @@ namespace Xianxia.Sect
         /// Get the name of the currently loaded gameplay scene.
         /// </summary>
         public string GetCurrentGameplayScene() => _currentGameplayScene ?? "";
+
+        /// <summary>
+        /// PHASE 2: ครอบช่วงโหลดฉากด้วย LifetimeScope.EnqueueParent(root) — child
+        /// LifetimeScope ที่มาพร้อมฉาก (SectSceneLifetimeScope) จะได้ root เป็น parent
+        /// ผ่าน GlobalOverrideParents ตอน Awake (ซึ่ง fire ระหว่าง async load ก่อน
+        /// await จบ) — unwrap ใน finally เสมอ (using) กัน stack ค้างกระทบโหลดครั้งถัดไป
+        /// ถ้า root หาไม่ได้ (เช่น test harness) คืน no-op disposable แทน — ฉากยังโหลดได้
+        /// เพียงแต่ child scope จะไม่มี parent (ข้อจำกัดบันทึกไว้ที่หัวคลาส SectSceneLifetimeScope)
+        /// </summary>
+        private System.IDisposable EnqueueRootAsParent()
+        {
+            if (_rootScope == null)
+            {
+                Debug.LogWarning("[SceneLoader] root scope unavailable — scene child scope will have no parent");
+                return new NoopDisposable();
+            }
+            return LifetimeScope.EnqueueParent(_rootScope);
+        }
+
+        private sealed class NoopDisposable : System.IDisposable
+        {
+            public void Dispose() { }
+        }
 
 #if UNITY_EDITOR
         /// <summary>Editor-only: locate a scene asset path by its file name (dev/demo loading).</summary>
