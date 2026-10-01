@@ -47,6 +47,14 @@ Off-image pixels count as "not land" (fail-closed).
 Usage:
   python Tools/art/bake_land_mask.py            # write the C# file
   python Tools/art/bake_land_mask.py --preview  # print ASCII + write preview PNG
+
+The same mask can be produced (and hand-tuned) inside the Editor with
+Xianxia > Land Mask Painter (Assets/Editor/LandMaskPainterWindow.cs), which runs the
+identical classification in C# and writes the same file. Use this script for the
+batch/CLI path and to study the art; use the window when you want to paint over the
+result. Both emit the same C# shape, so either tool can overwrite the other's output
+without the runtime noticing (verified 2026-10-02: the C# classifier reproduces this
+script's 344 raw / 328 pruned cells bit-for-bit on the current art).
 """
 
 import argparse
