@@ -214,7 +214,8 @@ namespace Xianxia.Sect.Tests
                 avatar.CreatePublisher(), backend.CreatePublisher(),
                 new AvatarPartPool(), VisualRuntimeConfig.Instance, provider,
                 new BuildingDefPool(),
-                new BuildingPlacedBuffer().CreatePublisher());
+                new BuildingPlacedBuffer().CreatePublisher(),
+                new MessagePipeBuffer<DiscipleTaskChangedMessage>().CreatePublisher());
 
             return (provider, stateProvider);
         }

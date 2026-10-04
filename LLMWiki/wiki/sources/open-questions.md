@@ -138,6 +138,19 @@ left in UIRoot.
 (MessagePack), write to `Application.persistentDataPath`
 **No work on this until** the rest of the gameplay is stable
 
+## 15. Task Id: `cultivation` vs `meditation`
+
+**Status**: ⏳ default chosen, not confirmed
+**Context**: task-system-v2.md's example uses `"cultivation"`, but the live
+roster (`MockSectData` d000) already uses `"meditation"`, and `TaskActivityMapper`
+resolves `"meditation"` today.
+**Default picked (agent, did not wait)**: the known task set for
+`TryAssignTask` = keys of `GatheringRates` + `CraftingRecipes` + `"meditation"`.
+So `"cultivation"` is currently **rejected as unknown** until a human decides.
+**Question**: is `cultivation` the intended id (rename everywhere), or is
+`meditation` canonical and the spec example stale?
+**When asked**: treat as a rename decision, not a data-pipeline task.
+
 ## When In Doubt
 
 - **Don't assume** — these are deliberately unresolved

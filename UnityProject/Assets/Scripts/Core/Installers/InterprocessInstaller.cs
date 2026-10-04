@@ -75,6 +75,13 @@ namespace Xianxia.Sect.Installers
             messagePipeBuilder.RegisterTcpRemoteRequestHandler<ChangeAvatarPartRequest, ChangeAvatarPartResponse>(interprocess);
             builder.RegisterAsyncRequestHandler<ChangeAvatarPartRequest, ChangeAvatarPartResponse, ChangeAvatarPartHandler>(options);
 
+            // Request/response: assigning a task to a disciple (permission-checked).
+            // Both calls are required — RegisterTcpRemoteRequestHandler wires the TCP
+            // worker to the handler, RegisterAsyncRequestHandler registers the handler
+            // itself; missing either fails silently at runtime (same as PurchaseItem).
+            messagePipeBuilder.RegisterTcpRemoteRequestHandler<AssignTaskRequest, AssignTaskResponse>(interprocess);
+            builder.RegisterAsyncRequestHandler<AssignTaskRequest, AssignTaskResponse, AssignTaskHandler>(options);
+
             // Interprocess pub/sub: broadcast avatar equipment changes to UI + MCP client
             messagePipeBuilder.RegisterTcpInterprocessMessageBroker<string, AvatarEquipmentChangedMessage>(interprocess);
 

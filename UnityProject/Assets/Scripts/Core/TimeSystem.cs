@@ -189,6 +189,15 @@ namespace Xianxia.Sect
                                 out string failReason, out AvatarAppearance result);
 
         /// <summary>
+        /// Task System v2 (§6) — assign a task to a disciple after a permission
+        /// and validity check. "SECT_MASTER" may assign anyone; any other requester
+        /// only their own disciple (DiscipleState.OwnerId == requesterId). Unknown
+        /// disciple or task fails closed with a reason. On success sets
+        /// CurrentTask and publishes DiscipleTaskChangedMessage (in-memory only).
+        /// </summary>
+        bool TryAssignTask(string requesterId, string discipleId, string taskId, out string failReason);
+
+        /// <summary>
         /// Mutate DiscipleState.ChibiBackend (entitlement) + publish
         /// DiscipleChibiBackendChangedMessage (in-memory). DiscipleVisualSystem respawns
         /// the visual in place on that message — position/activity/facing preserved (§7).

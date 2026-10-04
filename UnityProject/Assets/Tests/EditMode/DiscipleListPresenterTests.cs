@@ -165,6 +165,11 @@ namespace Xianxia.Sect.Tests
                 failReason = null; return false;
             }
 
+            public bool TryAssignTask(string requesterId, string discipleId, string taskId, out string failReason)
+            {
+                failReason = null; return false;
+            }
+
             public bool TryPlaceBuilding(string defId, int gridX, int gridZ, int rotation,
                                          BuildingGrid grid, out string failReason,
                                          out PlacedBuildingState placed)

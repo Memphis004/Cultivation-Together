@@ -270,6 +270,38 @@ namespace Xianxia.Sect.Messages
         [Key(2)] public AvatarAppearance ResultAvatar { get; set; }
     }
 
+    // ---------- Task assignment (task-system-v2.md §6) ----------
+    // Request/response pair: the MCP bridge (or AI GM) asks Unity to assign a
+    // task to a disciple. Request-response because the caller needs the
+    // permission/validity verdict immediately - same reasoning as
+    // PurchaseItemRequest. RequesterId drives the ownership check
+    // ("SECT_MASTER" may assign anyone; others only their own disciples).
+    [MessagePackObject]
+    public class AssignTaskRequest
+    {
+        [Key(0)] public string RequesterId { get; set; } = string.Empty;
+        [Key(1)] public string DiscipleId { get; set; } = string.Empty;
+        [Key(2)] public string TaskId { get; set; } = string.Empty;
+    }
+
+    [MessagePackObject]
+    public class AssignTaskResponse
+    {
+        [Key(0)] public bool Success { get; set; }
+        [Key(1)] public string FailReason { get; set; } = string.Empty;
+    }
+
+    // Published in-memory by SectStateProvider.TryAssignTask after a successful
+    // commit. TaskActivityMapper / visual systems react to the new task.
+    // ⚠️ Deliberately NOT added to InterprocessTopics — same in-memory-only
+    // rule as DecisionExecutedMessage / BuildingPlacedMessage.
+    [MessagePackObject]
+    public class DiscipleTaskChangedMessage
+    {
+        [Key(0)] public string DiscipleId { get; set; } = string.Empty;
+        [Key(1)] public string TaskId { get; set; } = string.Empty;
+    }
+
     // Topic keys for the keyed (IDistributedPublisher<TKey,TMessage>) channels.
     public static class InterprocessTopics
     {

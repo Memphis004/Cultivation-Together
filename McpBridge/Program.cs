@@ -128,4 +128,22 @@ public static class SectActionTools
 
         return response.Message;
     }
+
+    [McpServerTool, Description("Assign a task to a disciple. Always sent as SECT_MASTER (the AI GM acts as the sect master, so it may assign any disciple).")]
+    public static async Task<string> AssignTask(
+        IRemoteRequestHandler<AssignTaskRequest, AssignTaskResponse> requestHandler,
+        [Description("Disciple id, e.g. from get_sect_state")] string discipleId,
+        [Description("Task id: a gathering or crafting task id, or \"meditation\"")] string taskId)
+    {
+        var response = await requestHandler.InvokeAsync(new AssignTaskRequest
+        {
+            RequesterId = "SECT_MASTER",
+            DiscipleId = discipleId,
+            TaskId = taskId,
+        });
+
+        return response.Success
+            ? $"Task '{taskId}' assigned to {discipleId}."
+            : response.FailReason;
+    }
 }

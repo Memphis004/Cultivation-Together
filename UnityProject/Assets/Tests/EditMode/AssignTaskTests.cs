@@ -1,0 +1,139 @@
+using System.Collections.Generic;
+using MessagePipe;
+using NUnit.Framework;
+using Xianxia.Sect.Building;
+using Xianxia.Sect.Messages;
+
+namespace Xianxia.Sect.Tests
+{
+    /// <summary>
+    /// Task System v2 (§6) acceptance — SectStateProvider.TryAssignTask:
+    ///   - SECT_MASTER can assign anyone
+    ///   - a viewer can assign their own disciple
+    ///   - a viewer is rejected on someone else's disciple
+    ///   - unknown task rejected
+    ///   - unknown disciple rejected
+    ///   - DiscipleTaskChangedMessage published on success only
+    ///
+    /// No Stockpile writes happen on this path, so the AdjustAndNotify choke
+    /// point is untouched by design. No interprocess registration — the
+    /// message is in-memory only.
+    /// </summary>
+    public class AssignTaskTests
+    {
+        private SectStateProvider _provider;
+        private BufferPublisher<DiscipleTaskChangedMessage> _taskChanged;
+
+        [SetUp]
+        public void SetUp()
+        {
+            _taskChanged = new BufferPublisher<DiscipleTaskChangedMessage>();
+
+            _provider = new SectStateProvider(
+                new BufferPublisher<DiscipleRecruitedMessage>(),
+                new BufferPublisher<SectResourceChangedMessage>(),
+                new BufferPublisher<AvatarEquipmentChangedMessage>(),
+                new BufferPublisher<DiscipleChibiBackendChangedMessage>(),
+                new AvatarPartPool(),
+                Visual.VisualRuntimeConfig.Instance,
+                new Visual.DefaultEntitlementProvider(),
+                new BuildingDefPool(),
+                new BufferPublisher<BuildingPlacedMessage>(),
+                _taskChanged);
+        }
+
+        private DiscipleState Find(string id)
+        {
+            foreach (var d in _provider.BuildSectEconomyState().Disciples)
+            {
+                if (d.DiscipleId == id) return d;
+            }
+            return null;
+        }
+
+        [Test]
+        public void SectMaster_CanAssignAnyone()
+        {
+            string reason;
+            Assert.IsTrue(_provider.TryAssignTask("SECT_MASTER", "d000", "gathering_herb", out reason), reason);
+            Assert.AreEqual("gathering_herb", Find("d000").CurrentTask);
+            Assert.AreEqual(1, _taskChanged.Messages.Count);
+        }
+
+        [Test]
+        public void Viewer_CanAssignOwnDisciple()
+        {
+            Find("d001").OwnerId = "viewer1";
+            Find("d001").OwnerType = DiscipleOwnerType.Viewer;
+
+            string reason;
+            Assert.IsTrue(_provider.TryAssignTask("viewer1", "d001", "gathering_wood", out reason), reason);
+            Assert.AreEqual("gathering_wood", Find("d001").CurrentTask);
+            Assert.AreEqual(1, _taskChanged.Messages.Count);
+            Assert.AreEqual("d001", _taskChanged.Messages[0].DiscipleId);
+            Assert.AreEqual("gathering_wood", _taskChanged.Messages[0].TaskId);
+        }
+
+        [Test]
+        public void Viewer_RejectedOnAnothersDisciple()
+        {
+            Find("d001").OwnerId = "viewer1";
+            Find("d001").OwnerType = DiscipleOwnerType.Viewer;
+            var before = Find("d001").CurrentTask;
+
+            string reason;
+            Assert.IsFalse(_provider.TryAssignTask("viewer2", "d001", "gathering_ore", out reason));
+            Assert.IsFalse(string.IsNullOrEmpty(reason), "rejection must explain why");
+            Assert.AreEqual(before, Find("d001").CurrentTask, "state must not change on rejection");
+            Assert.AreEqual(0, _taskChanged.Messages.Count, "no message on rejection");
+        }
+
+        [Test]
+        public void UnknownTask_Rejected()
+        {
+            // d000 has no OwnerId → default Npc-owned; SECT_MASTER bypasses ownership.
+            var before = Find("d000").CurrentTask;
+
+            string reason;
+            Assert.IsFalse(_provider.TryAssignTask("SECT_MASTER", "d000", "not_a_real_task", out reason));
+            Assert.IsFalse(string.IsNullOrEmpty(reason));
+            Assert.AreEqual(before, Find("d000").CurrentTask);
+            Assert.AreEqual(0, _taskChanged.Messages.Count);
+        }
+
+        [Test]
+        public void UnknownDisciple_Rejected()
+        {
+            string reason;
+            Assert.IsFalse(_provider.TryAssignTask("SECT_MASTER", "nope", "meditation", out reason));
+            Assert.IsFalse(string.IsNullOrEmpty(reason));
+            Assert.AreEqual(0, _taskChanged.Messages.Count);
+        }
+
+        [Test]
+        public void Message_PublishedOnSuccessOnly()
+        {
+            string reason;
+
+            // failure first (unknown task) → nothing published
+            Assert.IsFalse(_provider.TryAssignTask("SECT_MASTER", "d002", "bogus_task", out reason));
+            Assert.AreEqual(0, _taskChanged.Messages.Count);
+
+            // then a success → exactly one
+            Assert.IsTrue(_provider.TryAssignTask("SECT_MASTER", "d002", "meditation", out reason), reason);
+            Assert.AreEqual(1, _taskChanged.Messages.Count);
+            Assert.AreEqual("d002", _taskChanged.Messages[0].DiscipleId);
+            Assert.AreEqual("meditation", _taskChanged.Messages[0].TaskId);
+        }
+
+        /// <summary>
+        /// Minimal IPublisher&lt;T&gt; over a list — same pattern as
+        /// BuildingPlacementTests; the real MessagePipe broker needs a full container.
+        /// </summary>
+        private sealed class BufferPublisher<T> : IPublisher<T>
+        {
+            public readonly List<T> Messages = new List<T>();
+            public void Publish(T message) => Messages.Add(message);
+        }
+    }
+}

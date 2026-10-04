@@ -41,7 +41,8 @@ namespace Xianxia.Sect.Tests
                 Visual.VisualRuntimeConfig.Instance,
                 new Visual.DefaultEntitlementProvider(),
                 _defPool,
-                _placedBuffer);
+                _placedBuffer,
+                new BufferPublisher<DiscipleTaskChangedMessage>());
 
             _grid = new BuildingGrid(10, 10);
             _controller = new PlacementController(_defPool, _provider);

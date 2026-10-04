@@ -47,6 +47,21 @@ namespace Xianxia.Sect
                 new Dictionary<string, int> { ["ore"] = 15, ["wood"] = 10 }),
         };
 
+        // Task System v2 (§6) — the known task set is the keys of the existing
+        // gathering + crafting dictionaries, plus "meditation". No new data
+        // pipeline: the dictionaries ARE the source of truth for what a disciple
+        // can be assigned. See open-questions.md §15 for the cultivation/meditation id question.
+        private static readonly HashSet<string> KnownTasks = BuildKnownTasks();
+
+        private static HashSet<string> BuildKnownTasks()
+        {
+            var set = new HashSet<string>();
+            foreach (var task in GatheringRates.Keys) set.Add(task);
+            foreach (var task in CraftingRecipes.Keys) set.Add(task);
+            set.Add("meditation");
+            return set;
+        }
+
         // Placeholder name pool - swap for a real generator once there's a
         // reason to (naming conventions, avoiding repeats at scale, etc.).
         private static readonly string[] RecruitNamePool =
@@ -62,6 +77,7 @@ namespace Xianxia.Sect
         private readonly IPublisher<AvatarEquipmentChangedMessage> _avatarChangedPublisher;
         private readonly IPublisher<DiscipleChibiBackendChangedMessage> _chibiBackendPublisher;
         private readonly IPublisher<BuildingPlacedMessage> _buildingPlacedPublisher;
+        private readonly IPublisher<DiscipleTaskChangedMessage> _discipleTaskChangedPublisher;
         private readonly BuildingDefPool _buildingDefPool;
         private readonly AvatarPartPool _avatarPartPool;
         private readonly VisualRuntimeConfig _visualConfig;
@@ -89,7 +105,8 @@ namespace Xianxia.Sect
             VisualRuntimeConfig visualConfig,
             IVisualEntitlementProvider entitlementProvider,
             BuildingDefPool buildingDefPool,
-            IPublisher<BuildingPlacedMessage> buildingPlacedPublisher)
+            IPublisher<BuildingPlacedMessage> buildingPlacedPublisher,
+            IPublisher<DiscipleTaskChangedMessage> discipleTaskChangedPublisher)
         {
             _discipleRecruitedPublisher = discipleRecruitedPublisher;
             _resourceChangedPublisher = resourceChangedPublisher;
@@ -97,6 +114,7 @@ namespace Xianxia.Sect
             _chibiBackendPublisher = chibiBackendPublisher;
             _buildingDefPool = buildingDefPool;
             _buildingPlacedPublisher = buildingPlacedPublisher;
+            _discipleTaskChangedPublisher = discipleTaskChangedPublisher;
             _avatarPartPool = avatarPartPool;
             _visualConfig = visualConfig;
             _entitlementProvider = entitlementProvider;
@@ -357,6 +375,49 @@ namespace Xianxia.Sect
             });
 
             result = disciple.Avatar.Clone();   // return copy, not reference to live state
+            return true;
+        }
+
+        // ---------- Task System v2 (§6 — permission-checked assignment) ----------
+        // Validation order: disciple lookup → ownership/permission → known task.
+        // Nothing mutates until all three pass (no partial mutation), then the
+        // assignment is committed and DiscipleTaskChangedMessage published once.
+        // This method never touches Stockpile.RawResources.
+        private const string SectMasterRequesterId = "SECT_MASTER";
+
+        public bool TryAssignTask(string requesterId, string discipleId, string taskId, out string failReason)
+        {
+            failReason = string.Empty;
+
+            var disciple = FindDisciple(discipleId);
+            if (disciple == null)
+            {
+                failReason = $"No disciple with id: {discipleId}";
+                return false;
+            }
+
+            // "SECT_MASTER" may assign anyone; every other requester only their
+            // own disciple. Fail closed (no OwnerId, OwnerType=Npc → nobody owns it).
+            if (requesterId != SectMasterRequesterId && disciple.OwnerId != requesterId)
+            {
+                failReason = $"'{requesterId}' is not allowed to assign tasks to '{discipleId}'.";
+                return false;
+            }
+
+            if (string.IsNullOrEmpty(taskId) || !KnownTasks.Contains(taskId))
+            {
+                failReason = $"Unknown task: '{taskId}'.";
+                return false;
+            }
+
+            disciple.CurrentTask = taskId;
+            _discipleTaskChangedPublisher.Publish(new DiscipleTaskChangedMessage
+            {
+                DiscipleId = discipleId,
+                TaskId = taskId,
+            });
+
+            Debug.Log($"[SectStateProvider] {requesterId} assigned task '{taskId}' to {discipleId}.");
             return true;
         }
 
