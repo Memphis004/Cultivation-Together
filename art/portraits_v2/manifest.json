@@ -1,0 +1,175 @@
+{
+  "task": "portrait_v2",
+  "canvas": [
+    1024,
+    1536
+  ],
+  "chroma_key_rgb": [
+    255,
+    0,
+    255
+  ],
+  "chroma_thresholds": {
+    "low": 60.0,
+    "high": 160.0
+  },
+  "target_head_height_px": 240.0,
+  "target_head_center_px": [
+    512.0,
+    488.0
+  ],
+  "head_center_invariant": "50% x / 31.7708% from top (256x384 x4)",
+  "head_height_spread_px": 0.0,
+  "icon_crop_px_topleft": [
+    112,
+    124,
+    912,
+    924
+  ],
+  "icon_crop_source": "AvatarIconCrop.NormalizedRect() values x4 (locked consts)",
+  "images": {
+    "d000": {
+      "magenta_cast": {
+        "solid_px": 645691,
+        "solid_cast_px": 0,
+        "edge_px": 18858,
+        "edge_cast_px": 0
+      },
+      "src": "art/portraits_v2/anchor/1cf13e0c_000.png",
+      "seed": 420103,
+      "prompt_id": "1cf13e0c-816c-4337-a990-bc19f0ef09bb",
+      "measured_head_box_src_px": {
+        "hair_top": 118,
+        "chin": 290,
+        "face_cx": 528,
+        "method": "visual estimate from labelled 25px grid view of each head (hair-mass top, topknot excluded, -> chin; face_cx at eye level); +-5px"
+      },
+      "head_height_src_px": 172.0,
+      "scale_uniform": 1.395349,
+      "paste_offset_px": [
+        -225,
+        203
+      ],
+      "achieved_head_center_px": [
+        511.74,
+        487.65
+      ],
+      "target_head_center_px": [
+        512.0,
+        488.0
+      ],
+      "achieved_head_height_px": 240.0,
+      "frame_bottom_src_y_px": 955.1,
+      "output": "art/portraits_v2/final/portrait_d000.png",
+      "checks": {
+        "size_1024x1536": true,
+        "mode_rgba": true,
+        "near_magenta_solid_is_zero": true,
+        "alpha_coverage_in_range": true,
+        "file_size_over_100kb": true
+      },
+      "near_magenta_pixels": {
+        "alpha_ge_64": 0,
+        "alpha_1_to_63": 0
+      },
+      "alpha_coverage": 0.4225,
+      "file_size_bytes": 1247151
+    },
+    "d002": {
+      "magenta_cast": {
+        "solid_px": 640686,
+        "solid_cast_px": 0,
+        "edge_px": 17928,
+        "edge_cast_px": 0
+      },
+      "src": "art/portraits_v2/phase3/d002/430202/acda02e0_000.png",
+      "seed": 430202,
+      "prompt_id": "acda02e0-7961-4a20-8421-2261f30a92de",
+      "measured_head_box_src_px": {
+        "hair_top": 122,
+        "chin": 292,
+        "face_cx": 530,
+        "method": "visual estimate from labelled 25px grid view of each head (hair-mass top, topknot excluded, -> chin; face_cx at eye level); +-5px"
+      },
+      "head_height_src_px": 170.0,
+      "scale_uniform": 1.411765,
+      "paste_offset_px": [
+        -236,
+        196
+      ],
+      "achieved_head_center_px": [
+        512.24,
+        488.24
+      ],
+      "target_head_center_px": [
+        512.0,
+        488.0
+      ],
+      "achieved_head_height_px": 240.0,
+      "frame_bottom_src_y_px": 949.3,
+      "output": "art/portraits_v2/final/portrait_d002.png",
+      "checks": {
+        "size_1024x1536": true,
+        "mode_rgba": true,
+        "near_magenta_solid_is_zero": true,
+        "alpha_coverage_in_range": true,
+        "file_size_over_100kb": true
+      },
+      "near_magenta_pixels": {
+        "alpha_ge_64": 0,
+        "alpha_1_to_63": 0
+      },
+      "alpha_coverage": 0.4187,
+      "file_size_bytes": 1214996
+    },
+    "d003": {
+      "magenta_cast": {
+        "solid_px": 645636,
+        "solid_cast_px": 0,
+        "edge_px": 16838,
+        "edge_cast_px": 0
+      },
+      "src": "art/portraits_v2/phase3/d003/430302/7560e302_000.png",
+      "seed": 430302,
+      "prompt_id": "7560e302-ae90-4474-9ad5-ebf9a130164a",
+      "measured_head_box_src_px": {
+        "hair_top": 132,
+        "chin": 298,
+        "face_cx": 528,
+        "method": "visual estimate from labelled 25px grid view of each head (hair-mass top, topknot excluded, -> chin; face_cx at eye level); +-5px"
+      },
+      "head_height_src_px": 166.0,
+      "scale_uniform": 1.445783,
+      "paste_offset_px": [
+        -251,
+        177
+      ],
+      "achieved_head_center_px": [
+        512.37,
+        487.84
+      ],
+      "target_head_center_px": [
+        512.0,
+        488.0
+      ],
+      "achieved_head_height_px": 240.0,
+      "frame_bottom_src_y_px": 939.9,
+      "output": "art/portraits_v2/final/portrait_d003.png",
+      "checks": {
+        "size_1024x1536": true,
+        "mode_rgba": true,
+        "near_magenta_solid_is_zero": true,
+        "alpha_coverage_in_range": true,
+        "file_size_over_100kb": true
+      },
+      "near_magenta_pixels": {
+        "alpha_ge_64": 0,
+        "alpha_1_to_63": 0
+      },
+      "alpha_coverage": 0.4212,
+      "file_size_bytes": 1299681
+    }
+  },
+  "all_checks_passed": true,
+  "estimates_note": "visual estimate from labelled 25px grid view of each head (hair-mass top, topknot excluded, -> chin; face_cx at eye level); +-5px"
+}

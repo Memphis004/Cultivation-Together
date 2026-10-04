@@ -1,0 +1,16 @@
+{
+  "overrides": [
+    {
+      "discipleId": "d000",
+      "portraitResourcePath": "Avatar/Portraits/portrait_d000"
+    },
+    {
+      "discipleId": "d002",
+      "portraitResourcePath": "Avatar/Portraits/portrait_d002"
+    },
+    {
+      "discipleId": "d003",
+      "portraitResourcePath": "Avatar/Portraits/portrait_d003"
+    }
+  ]
+}

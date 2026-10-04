@@ -266,6 +266,9 @@ namespace Xianxia.Sect.UI
 
                 _renderer.Initialize(PartPool());
                 _renderer.SetFraming(AvatarFraming.HeadIcon);
+                // Portrait v2: binding บอก renderer ว่าเป็นศิษย์คนไหน (rail reuse — id เปลี่ยนได้ทุก Bind)
+                var binding = _renderer.GetComponent<PortraitOverrideBinding>();
+                if (binding != null) binding.SetDiscipleId(id);
                 _renderer.SetAppearance(avatar != null ? avatar.Clone() : new AvatarAppearance());
                 SetSelected(false);
                 _ = sex; // Phase 1: ยังไม่ filter rail ตามเพศ (ทุกคนโชว์)
@@ -317,6 +320,7 @@ namespace Xianxia.Sect.UI
                 proto.SetActive(false);
                 proto.transform.SetParent(avatarGo.transform, false);
                 renderer.Configure(avatarRt, proto.GetComponent<Image>());
+                avatarGo.AddComponent<PortraitOverrideBinding>(); // Portrait v2: context สำหรับ override lookup
 
                 var item = go.AddComponent<RailItem>();
                 item._renderer = renderer;

@@ -121,6 +121,10 @@ namespace Xianxia.Sect.UI
             {
                 renderer.Initialize(_partPool);
                 renderer.SetFraming(AvatarFraming.FullBody);
+                // Portrait v2: binding บอก renderer ว่าเป็นศิษย์คนไหน — override หรือ layered fallback
+                var binding = renderer.GetComponent<PortraitOverrideBinding>();
+                if (binding == null) binding = renderer.gameObject.AddComponent<PortraitOverrideBinding>();
+                binding.SetDiscipleId(discipleId);
                 renderer.SetAppearance(d.Avatar != null ? d.Avatar.Clone() : new AvatarAppearance());
             }
             View.SetRailSelection(discipleId);

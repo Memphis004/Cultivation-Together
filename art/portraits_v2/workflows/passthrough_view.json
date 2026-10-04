@@ -1,0 +1,15 @@
+{
+  "1": {
+    "class_type": "LoadImage",
+    "inputs": {
+      "image": "final_icons.png"
+    }
+  },
+  "2": {
+    "class_type": "SaveImage",
+    "inputs": {
+      "images": ["1", 0],
+      "filename_prefix": "portrait_v2_icons"
+    }
+  }
+}

@@ -1,0 +1,311 @@
+{
+  "checkpoint_0": "approved by user: plan, icon/meta whitelist, ComfyUI",
+  "model": "qwen_image_2.1_int8_convrot.safetensors",
+  "text_encoder": "qwen3vl_8b_int8_convrot.safetensors",
+  "vae": "qwen_image_2.1_vae_bf16.safetensors",
+  "execution": "local ComfyUI 127.0.0.1:8188; no paid API; no model download or update",
+  "canvas": [
+    1024,
+    1536
+  ],
+  "head_center_top_left": [
+    512,
+    488
+  ],
+  "quota_max": 14,
+  "generation_requests_submitted": 10,
+  "jobs": [
+    {
+      "phase": 1,
+      "seed": 410001,
+      "prompt_id": "85c6d999-ce21-4066-9361-e848f935b6d5",
+      "status": "completed",
+      "file": "phase1/85c6d999_000.png",
+      "notes": "Tool works; composition reproduces reference pose/costume and is near full-length. Not selected as style anchor."
+    },
+    {
+      "phase": 2,
+      "seed": 420101,
+      "prompt_id": "77978674-ba07-4d89-b550-039dead7ba4a",
+      "workflow": "workflows/anchor_d000_seed420101.json",
+      "status": "completed",
+      "file": "anchor/77978674_000.png"
+    },
+    {
+      "phase": 2,
+      "seed": 420102,
+      "prompt_id": "23377792-ebb7-421b-8982-9d874e182751",
+      "workflow": "workflows/anchor_d000_seed420102.json",
+      "status": "completed",
+      "file": "anchor/23377792_000.png"
+    },
+    {
+      "phase": 2,
+      "seed": 420103,
+      "prompt_id": "1cf13e0c-816c-4337-a990-bc19f0ef09bb",
+      "workflow": "workflows/anchor_d000_seed420103.json",
+      "status": "completed",
+      "file": "anchor/1cf13e0c_000.png"
+    },
+    {
+      "phase": 3,
+      "disciple_id": "d001",
+      "seed": 430101,
+      "prompt_id": "c4764f27-f1fd-4da3-8886-4c83694e032b",
+      "workflow": "workflows/d001_seed430101.json",
+      "status": "completed",
+      "file": "phase3/d001/430101/c4764f27_000.png"
+    },
+    {
+      "phase": 3,
+      "disciple_id": "d001",
+      "seed": 430102,
+      "prompt_id": "c66e0cf6-25df-4a50-b6c2-b90cde562043",
+      "workflow": "workflows/d001_seed430102.json",
+      "status": "completed",
+      "file": "phase3/d001/430102/c66e0cf6_000.png"
+    },
+    {
+      "phase": 3,
+      "disciple_id": "d002",
+      "seed": 430201,
+      "prompt_id": "a67917e6-8ffd-4310-8aed-63477fc17f00",
+      "workflow": "workflows/d002_seed430201.json",
+      "status": "completed",
+      "file": "phase3/d002/430201/a67917e6_000.png"
+    },
+    {
+      "phase": 3,
+      "disciple_id": "d002",
+      "seed": 430202,
+      "prompt_id": "acda02e0-7961-4a20-8421-2261f30a92de",
+      "workflow": "workflows/d002_seed430202.json",
+      "status": "completed",
+      "file": "phase3/d002/430202/acda02e0_000.png"
+    },
+    {
+      "phase": 3,
+      "disciple_id": "d003",
+      "seed": 430301,
+      "prompt_id": "94e53f08-9488-4490-9602-8a9cddc83f5e",
+      "workflow": "workflows/d003_seed430301.json",
+      "status": "completed",
+      "file": "phase3/d003/430301/94e53f08_000.png"
+    },
+    {
+      "phase": 3,
+      "disciple_id": "d003",
+      "seed": 430302,
+      "prompt_id": "7560e302-ae90-4474-9ad5-ebf9a130164a",
+      "workflow": "workflows/d003_seed430302.json",
+      "status": "completed",
+      "file": "phase3/d003/430302/7560e302_000.png"
+    }
+  ],
+  "anchor_selected_by_user": {
+    "disciple_id": "d000",
+    "seed": 420103,
+    "file": "anchor/1cf13e0c_000.png"
+  },
+  "images_completed": 10,
+  "checkpoint_a": "approved: user selected 420103",
+  "checkpoint_b": {
+    "status": "answered by user",
+    "selections": {
+      "d001": "rejected (ไม่เลือก) - no portrait chosen; candidates 430101/430102 kept as rejected",
+      "d002": {
+        "seed": 430202,
+        "file": "phase3/d002/430202/acda02e0_000.png"
+      },
+      "d003": {
+        "seed": 430302,
+        "file": "phase3/d003/430302/7560e302_000.png"
+      }
+    },
+    "notes": "d001 needs regeneration decision from user (quota remaining 4) or layered fallback. 4 game-UI screenshots received with no instruction text - purpose unconfirmed by user."
+  },
+  "phase4_postprocess": {
+    "status": "completed",
+    "tool": "tools/art/portrait_postprocess.py (deterministic, re-runnable, --check mode)",
+    "pipeline": "chroma key #FF00FF (LOW 60 / HIGH 160 feather) -> despill -> color bleed (scipy EDT) -> uniform scale so head heights equal 240px -> translate head-center to (512,488) -> 1024x1536 RGBA on transparent",
+    "head_boxes_measured_visual_estimate_px": {
+      "d000": "hair_top 118, chin 290, face_cx 528",
+      "d002": "hair_top 122, chin 292, face_cx 530",
+      "d003": "hair_top 132, chin 298, face_cx 528"
+    },
+    "results": {
+      "head_height_px_all": 240.0,
+      "head_height_spread_px": 0.0,
+      "achieved_head_center_deviation_px": "<=0.37 (integer paste rounding only)",
+      "frame_bottom_src_y_px": "d000 955, d002 949, d003 940 (mid-thigh crop)",
+      "near_magenta_pixels_alpha_ge_64": 0,
+      "alpha_coverage": "0.4225 / 0.4187 / 0.4212",
+      "output_bytes": "1261706 / 1230816 / 1308241"
+    },
+    "magenta_cast_remaining": {
+      "note": "residual purple tint pixels (R>G+25 and B>G+25) - model-painted ink, not key residue",
+      "d000": "7177 solid / 3551 edge",
+      "d002": "6808 solid / 3777 edge",
+      "d003": "6230 solid / 2017 edge"
+    },
+    "manifest": "art/portraits_v2/manifest.json"
+  },
+  "phase5_unity_integration": {
+    "status": "completed and verified in the live Editor (Unity 6000.3.9f1 via MCP)",
+    "new_files": [
+      "Scripts/Visual/Core/PortraitOverrideMap.cs (lazy L4 loader, test seam LoadFromJson)",
+      "Scripts/UI/Views/PortraitOverrideBinding.cs (context: discipleId per renderer)",
+      "Editor/PortraitOverrideImporter.cs (idempotent TextureImporter tool)",
+      "Tests/EditMode/PortraitOverrideTests.cs (8 additive tests)",
+      "Resources/Data/portrait_overrides.json (d000/d002/d003 only - d001 absent on purpose)",
+      "Resources/Avatar/Portraits/portrait_d000|d002|d003.png (+ .meta)"
+    ],
+    "modified_files": [
+      "UI/Views/AvatarRenderer.cs - signature includes override path; Rebuild draws 1 override sprite or falls back to layered (sprite missing or no entry). public API unchanged",
+      "UI/Views/DiscipleDetailView.cs - RailItem.Create adds binding; RailItem.Bind passes discipleId",
+      "UI/Presenters/DiscipleDetailPresenter.cs - SwitchDisciple sets binding before SetAppearance",
+      "UI/Presenters/AvatarCustomizationPresenter.cs - note via existing View API when disciple has override; preview stays layered",
+      "Editor/AvatarIconBaker.cs - override-aware GenerateAll + BakeIconFromSprite + CPU compositing (see bugfix)",
+      "Editor/GeneratorRemoteControl.cs - command import_portrait_overrides"
+    ],
+    "bugfix_found": "AvatarIconBaker used Graphics.DrawTexture into a RenderTexture; in this Editor session that produced solid white bars (the icons committed at git HEAD were already bars). Replaced with CPU composite: read source PNG bytes -> Texture2D.LoadImage -> AvatarIconCrop crop -> bilinear downscale to 256 -> alpha-over. Also had to stop flipping Y: GetPixels32 rows are bottom-up, matching AvatarIconCrop's y-up coords",
+    "verification": {
+      "compile": "clean (0 errors) after every change",
+      "editmode_tests": "182/182 pass (includes the 8 new PortraitOverrideTests); no pre-existing test weakened",
+      "runtime_override_path": "eval probe through AvatarRenderer.Rebuild: d000 -> 1 layer [portrait_d000], d002 -> [portrait_d002], d001 -> 4 layered parts, d999 (unknown/new recruit) -> 4 layered parts",
+      "icons_vs_python_reference": "d000/d002/d003 meanAbsDiff 6.62/6.50/6.52 (bilinear vs Lanczos only), alpha coverage within 0.005, bbox matches crop rect; d001 stays layered chibi",
+      "icons_size": "256x256 RGBA all four"
+    }
+  },
+  "phase4_defringe_rerun": {
+    "reason": "user request: reduce purple fringe on portrait edges",
+    "root_cause": "original despill only touched pixels with alpha 0-1; the model's own purple ink on fully/opaque pixels survived the chroma key",
+    "change": "tools/art/portrait_postprocess.py: despill rewritten to hue-neutralise any visible pixel where R>G+tol AND B>G+tol (tol 8, edge tol 4; skin has B<G and B/W ink is untouched); added neutralize_canvas() applied AFTER resize/paste because Lanczos reintroduces edge hue; magenta_cast_pixels() metric helper added",
+    "before_magenta_cast": {
+      "d000": [
+        7177,
+        3551
+      ],
+      "d002": [
+        6808,
+        3777
+      ],
+      "d003": [
+        6230,
+        2017
+      ]
+    },
+    "after_magenta_cast": {
+      "d000": {
+        "solid_cast_px": 0,
+        "edge_cast_px": 0,
+        "solid_px": 645691,
+        "edge_px": 18858
+      },
+      "d002": {
+        "solid_cast_px": 0,
+        "edge_cast_px": 0,
+        "solid_px": 640686,
+        "edge_px": 17928
+      },
+      "d003": {
+        "solid_cast_px": 0,
+        "edge_cast_px": 0,
+        "solid_px": 645636,
+        "edge_px": 16838
+      }
+    },
+    "format": "after = {solid_cast_px, edge_cast_px, solid_px, edge_px}",
+    "impact": {
+      "visible_pixels_touched_pct": [
+        0.38,
+        0.52,
+        0.57
+      ],
+      "mean_channel_drop_per_255": [
+        8.5,
+        9.4,
+        10.5
+      ],
+      "note": "mostly edge pixels"
+    },
+    "geometry_unchanged": {
+      "head_height_px": 240.0,
+      "head_height_spread_px": 0.0
+    },
+    "rerun": "python tools/art/portrait_postprocess.py -> exit 0 ; --check -> exit 0",
+    "shipped_to_unity": true,
+    "md5": {
+      "d000": "1e0e04e0c1904cb72289bd636f041f3f",
+      "d002": "d427d453950f5c0a55aea08ac2aacdaa",
+      "d003": "8ab96cd129d34a635d43648835c7f306"
+    },
+    "unity_icons_rebaked": true,
+    "icon_vs_python_preview_mean_abs_diff": {
+      "d000": 6.48,
+      "d002": 6.35,
+      "d003": 6.49
+    },
+    "quota_used_after": "10 of ~14 (4 left, unused)",
+    "icon_cast_independent_check": {
+      "note": "AvatarIconBaker reported cast_px=0 for all four, but an independent re-measurement on the shipped PNGs with the same rule used for the portraits (R>G+8 AND B>G+8, any alpha>=1) finds the counts below. Correcting the earlier 'all zero' claim.",
+      "rule": "R>G+8 AND B>G+8 on any pixel with alpha>=1",
+      "per_icon": {
+        "d000": {
+          "pixels_matching_R_G8_and_B_G8": 3,
+          "max_channel_values": [
+            55,
+            15,
+            83
+          ],
+          "max_hsv_saturation_pct": 60.0
+        },
+        "d001": {
+          "pixels_matching_R_G8_and_B_G8": 0,
+          "max_channel_values": [],
+          "max_hsv_saturation_pct": 0.0
+        },
+        "d002": {
+          "pixels_matching_R_G8_and_B_G8": 1,
+          "max_channel_values": [
+            116
+          ],
+          "max_hsv_saturation_pct": 7.8
+        },
+        "d003": {
+          "pixels_matching_R_G8_and_B_G8": 1,
+          "max_channel_values": [
+            100
+          ],
+          "max_hsv_saturation_pct": 9.0
+        }
+      },
+      "assessment": "not visible purple fringing. All flagged pixels are near-black ink: max channel value 15-116 out of 255. d002/d003 flag at <=9% HSV saturation (imperceptible). d000's single 60%-saturation pixel is (15,6,15) - 6% brightness, invisible on screen. For contrast, the magenta removed from the portraits covered thousands of pixels at mid/high brightness. The de-fringe pass is not re-run on icons because the baker composites them at 256px directly from the already-neutralised portraits.",
+      "action": "none - documented, not suppressed"
+    }
+  },
+  "phase5_live_verification": {
+    "when": "after de-fringe re-run and icon re-bake",
+    "unity": "6000.3.9f1, MCP, SampleScene",
+    "how": "editor_play, then resolve UIService from GameLifetimeScope.Container via reflection (Resolve(Type, object)) and ui.Open(\"DiscipleDetail\", id); capture_game_view source=screen",
+    "shots": {
+      "d000": "art/portraits_v2/_view/game_01_d000.png",
+      "d001": "art/portraits_v2/_view/game_03_d001.png",
+      "d002": "art/portraits_v2/_view/game_02_d002.png",
+      "d003": "art/portraits_v2/_view/game_04_d003.png"
+    },
+    "observed": {
+      "d000": "painted portrait shown in big panel + left rail, no purple fringe",
+      "d002": "painted portrait shown in big panel + left rail, no purple fringe",
+      "d003": "painted portrait shown in big panel + left rail (Elder Zhao), no purple fringe",
+      "d001": "layered placeholder as designed (no override entry)"
+    },
+    "tests_after_code_change": "EditMode 182/182 pass (no code changed afterwards; only the python tool changed, which Unity does not compile)",
+    "editor_state_after": "stopped out of play mode; stray Assets/art capture folder removed",
+    "user_review_items": [
+      "d002 face/robe as generated",
+      "head placement +-5px (MEASUREMENTS in tools/art/portrait_postprocess.py)",
+      "head size inside the DiscipleList icon vs old placeholder (TARGET_HEAD_HEIGHT)"
+    ]
+  }
+}

@@ -96,6 +96,17 @@ namespace Xianxia.EditorTools
                         WriteResult("error:" + ex.Message);
                     }
                     break;
+                case "import_portrait_overrides":
+                    try
+                    {
+                        Xianxia.Sect.EditorTools.PortraitOverrideImporter.Import();
+                        WriteResult("imported_portrait_overrides");
+                    }
+                    catch (System.Exception ex)
+                    {
+                        WriteResult("error:" + ex.Message);
+                    }
+                    break;
                 case "bake_thai_atlas":
                     try
                     {

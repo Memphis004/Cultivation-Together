@@ -1,0 +1,38 @@
+[
+  {
+    "seed": 420101,
+    "file": "anchor/77978674_000.png",
+    "size": [
+      1024,
+      1536
+    ],
+    "mode": "RGBA",
+    "bytes": 2086668,
+    "near_magenta_fraction_tolerance_20": 0.5773022969563802,
+    "border_near_magenta_fraction_tolerance_20": 0.9510498046875
+  },
+  {
+    "seed": 420102,
+    "file": "anchor/23377792_000.png",
+    "size": [
+      1024,
+      1536
+    ],
+    "mode": "RGBA",
+    "bytes": 2079925,
+    "near_magenta_fraction_tolerance_20": 0.6941204071044922,
+    "border_near_magenta_fraction_tolerance_20": 0.995501708984375
+  },
+  {
+    "seed": 420103,
+    "file": "anchor/1cf13e0c_000.png",
+    "size": [
+      1024,
+      1536
+    ],
+    "mode": "RGBA",
+    "bytes": 2236636,
+    "near_magenta_fraction_tolerance_20": 0.6481132507324219,
+    "border_near_magenta_fraction_tolerance_20": 0.99481201171875
+  }
+]

@@ -104,7 +104,13 @@ namespace Xianxia.Sect.UI
             _subscription = _avatarChangedSub.Subscribe(OnAvatarChangedExternally);
 
             View.SetHeader("ปรับแต่งรูปลักษณ์", disciple.DisplayName);
-            View.ShowError(null);
+            // Portrait v2: ศิษย์ที่มี portrait override ไม่เปลี่ยนหน้าตาตาม part — บอกผู้ใช้
+            // ผ่าน View API เดิม (ShowError = พื้นที่ข้อความ footer) ว่าหน้านี้แสดง
+            // layered preview เสมอ (customization ยังทำงานปกติ ไม่ปิดฟังก์ชัน)
+            var portraitOverrides = new PortraitOverrideMap();
+            View.ShowError(portraitOverrides.HasOverride(_discipleId)
+                ? "ภาพ portrait เฉพาะตัวไม่เปลี่ยนตามการปรับแต่ง part; หน้านี้แสดง layered preview"
+                : null);
             RefreshAll();
         }
 

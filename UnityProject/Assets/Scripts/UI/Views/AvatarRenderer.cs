@@ -60,6 +60,7 @@ namespace Xianxia.Sect.UI
         private AppearanceResolver _resolver;                 // Phase 1: resolve ผ่าน resolver เดียว (D4/L2)
         private VisualBackend _backend = VisualBackend.Portrait;
         private CanvasGroup _canvasGroup;
+        private PortraitOverrideMap _portraitOverrides;       // Portrait v2: lazy, per-renderer (L4 loader)
 
         private readonly List<Image> _activeLayers = new List<Image>();
         private readonly Stack<Image> _layerPool = new Stack<Image>();      // pooling to avoid GC
@@ -155,7 +156,21 @@ namespace Xianxia.Sect.UI
         }        private string BuildSignature(AvatarAppearance a)
         {
             // Phase 1: signature มาจาก resolver (รวม backend) — ครอบคลุมเท่าเดิม
-            return _resolver.Signature(a, _backend);
+            // Portrait v2: override path เข้า signature ด้วย — สลับศิษย์ (binding เปลี่ยน)
+            // ต้อง trigger rebuild ครั้งเดียวเสมอ
+            return "ov:" + ResolvePortraitOverridePath() + "|" + _resolver.Signature(a, _backend);
+        }
+
+        /// <summary>
+        /// Portrait v2: Resources path ของ portrait override สำหรับศิษย์ที่ binding ชี้อยู่
+        /// — empty เมื่อไม่มี binding / ไม่มี discipleId / ไม่มีในตาราง (fallback layered เดิม)
+        /// </summary>
+        private string ResolvePortraitOverridePath()
+        {
+            var binding = GetComponent<PortraitOverrideBinding>();
+            if (binding == null || string.IsNullOrEmpty(binding.DiscipleId)) return string.Empty;
+            if (_portraitOverrides == null) _portraitOverrides = new PortraitOverrideMap();
+            return _portraitOverrides.ResolveOverride(binding.DiscipleId);
         }
 
         /// <summary>
@@ -175,6 +190,23 @@ namespace Xianxia.Sect.UI
         private void Rebuild()
         {
             ReleaseAllLayers();
+
+            // Portrait v2: ศิษย์ที่มี portrait override วาดภาพเดี่ยวเต็ม canvas ผ่าน layer
+            // pool เดิม (canvas convention เดียวกัน — framing preset ใช้ได้ทุกตัว)
+            // ศิษย์ที่ไม่มีในตาราง (รวม recruit ใหม่) = layered path ด้านล่าง 100%
+            var overridePath = ResolvePortraitOverridePath();
+            if (overridePath.Length > 0)
+            {
+                var overrideSprite = LoadSprite(overridePath);
+                if (overrideSprite != null)
+                {
+                    var overrideLayer = RentLayer();
+                    overrideLayer.sprite = overrideSprite;
+                    overrideLayer.enabled = true;
+                    return;
+                }
+                // sprite หาย → ตกไป layered (ไม่ปล่อยให้การ์ดว่าง)
+            }
 
             // Phase 1 (D4/L2): resolve ผ่าน AppearanceResolver เดียว — layer list ต้องเหมือนเดิมเป๊ะ
             // (base 0 → hair_back 10 → body 20 → head 30 → face_marking 34 → hair_front 40 → accessory 50)

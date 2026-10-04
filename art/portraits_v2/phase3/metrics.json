@@ -1,0 +1,80 @@
+[
+  {
+    "disciple_id": "d001",
+    "seed": 430101,
+    "file": "phase3/d001/430101/c4764f27_000.png",
+    "size": [
+      1024,
+      1536
+    ],
+    "mode": "RGBA",
+    "bytes": 2273280,
+    "near_magenta_fraction_tolerance_20": 0.6717491149902344,
+    "border_near_magenta_fraction_tolerance_20": 0.99888916015625
+  },
+  {
+    "disciple_id": "d001",
+    "seed": 430102,
+    "file": "phase3/d001/430102/c66e0cf6_000.png",
+    "size": [
+      1024,
+      1536
+    ],
+    "mode": "RGBA",
+    "bytes": 2262513,
+    "near_magenta_fraction_tolerance_20": 0.6528975168863932,
+    "border_near_magenta_fraction_tolerance_20": 0.999554443359375
+  },
+  {
+    "disciple_id": "d002",
+    "seed": 430201,
+    "file": "phase3/d002/430201/a67917e6_000.png",
+    "size": [
+      1024,
+      1536
+    ],
+    "mode": "RGBA",
+    "bytes": 2052889,
+    "near_magenta_fraction_tolerance_20": 0.6778036753336588,
+    "border_near_magenta_fraction_tolerance_20": 0.999932861328125
+  },
+  {
+    "disciple_id": "d002",
+    "seed": 430202,
+    "file": "phase3/d002/430202/acda02e0_000.png",
+    "size": [
+      1024,
+      1536
+    ],
+    "mode": "RGBA",
+    "bytes": 2116987,
+    "near_magenta_fraction_tolerance_20": 0.6673310597737631,
+    "border_near_magenta_fraction_tolerance_20": 0.999945068359375
+  },
+  {
+    "disciple_id": "d003",
+    "seed": 430301,
+    "file": "phase3/d003/430301/94e53f08_000.png",
+    "size": [
+      1024,
+      1536
+    ],
+    "mode": "RGBA",
+    "bytes": 2187352,
+    "near_magenta_fraction_tolerance_20": 0.6789709726969401,
+    "border_near_magenta_fraction_tolerance_20": 0.998876953125
+  },
+  {
+    "disciple_id": "d003",
+    "seed": 430302,
+    "file": "phase3/d003/430302/7560e302_000.png",
+    "size": [
+      1024,
+      1536
+    ],
+    "mode": "RGBA",
+    "bytes": 2245366,
+    "near_magenta_fraction_tolerance_20": 0.6741193135579427,
+    "border_near_magenta_fraction_tolerance_20": 0.99935302734375
+  }
+]

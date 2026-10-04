@@ -1,0 +1,120 @@
+{
+  "1": {
+    "class_type": "UNETLoader",
+    "inputs": {
+      "unet_name": "qwen_image_2.1_int8_convrot.safetensors",
+      "weight_dtype": "default"
+    }
+  },
+  "2": {
+    "class_type": "CLIPLoader",
+    "inputs": {
+      "clip_name": "qwen3vl_8b_int8_convrot.safetensors",
+      "type": "qwen_image",
+      "device": "default"
+    }
+  },
+  "3": {
+    "class_type": "VAELoader",
+    "inputs": {
+      "vae_name": "qwen_image_2.1_vae_bf16.safetensors"
+    }
+  },
+  "4": {
+    "class_type": "LoadImage",
+    "inputs": {
+      "image": "magenta_canvas_1024x1536.png"
+    }
+  },
+  "5": {
+    "class_type": "LoadImage",
+    "inputs": {
+      "image": "portrait_style_ref-2.png"
+    }
+  },
+  "6": {
+    "class_type": "TextEncodeQwenImage21",
+    "inputs": {
+      "clip": [
+        "2",
+        0
+      ],
+      "vae": [
+        "3",
+        0
+      ],
+      "resolution": 0,
+      "images.image_1": [
+        "4",
+        0
+      ],
+      "images.image_2": [
+        "5",
+        0
+      ],
+      "prompt": "Create an entirely NEW character illustration on the blank magenta canvas in image 1. Image 2 supplies ONLY the monochrome ink-wash painting medium and brush texture: do NOT preserve or reproduce its person, face, hair silhouette, pose, sword, outfit design, scenery, layout, lettering, icons or pixels. Draw an ORIGINAL dignified Chinese male sect founder aged 38 with a mature angular face, calm thoughtful eyes and subtly strong jaw. Long black hair in a compact high knot with a small jade hairpin, loose side strands, NOT the hairstyle of image 2. His original white scholarly robe has a crossed soft collar, plain wide sleeves, narrow black waist sash, subtle grey dry-brush folds, exactly one SMALL jade-green accent at the hairpin. No armor, no black gauntlets, no sword, no weapon, no jade waist medallion. Pose: body angled slightly right, face toward viewer, right hand held calmly near chest in a relaxed open gesture, left hand resting at the waist; both hands visible. He is NOT spreading both arms. Composition: a three-quarter-length portrait cropped at MID-THIGH, above the knees; no knees, shins, feet, or full-length robe hem visible. Center the figure with generous empty side margins. Head center at 50 percent from left and 31.7708 percent from top of the 2:3 vertical canvas. Bold confident black brush outlines, dry-brush texture INSIDE the figure, soft semi-realistic manga face, flowing wispy sleeves and sashes. Keep image 1 background uniformly solid magenta #FF00FF throughout all empty areas. No shadows, no gradient, no floor, no ground, no ink splashes outside the figure. No text, letters, numbers, logos, watermark, signature, frame, borders or UI. This must be a new portrait, not a cutout of image 2.",
+      "negative_prompt": "copy of reference character, identical reference pose, copied clothing, sword, weapon, black armored gloves, jade waist medallion, extended arms, full-length figure, knees, legs below thigh, feet, floor, ground, shadow, scenery, background gradient, text, letters, numbers, logo, watermark, frame, UI, ink splashes outside the figure"
+    }
+  },
+  "7": {
+    "class_type": "QwenImage21Cache",
+    "inputs": {
+      "model": [
+        "1",
+        0
+      ],
+      "device": "auto",
+      "dtype": "default"
+    }
+  },
+  "8": {
+    "class_type": "KSampler",
+    "inputs": {
+      "model": [
+        "7",
+        0
+      ],
+      "positive": [
+        "6",
+        0
+      ],
+      "negative": [
+        "6",
+        1
+      ],
+      "latent_image": [
+        "6",
+        2
+      ],
+      "seed": 420103,
+      "steps": 25,
+      "cfg": 1,
+      "sampler_name": "euler",
+      "scheduler": "simple",
+      "denoise": 1
+    }
+  },
+  "9": {
+    "class_type": "VAEDecode",
+    "inputs": {
+      "samples": [
+        "8",
+        0
+      ],
+      "vae": [
+        "3",
+        0
+      ]
+    }
+  },
+  "10": {
+    "class_type": "SaveImage",
+    "inputs": {
+      "images": [
+        "9",
+        0
+      ],
+      "filename_prefix": "portrait_v2_anchor_d000_seed420103"
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "path": "art\\portraits_v2\\phase1\\85c6d999_000.png",
+  "size": [
+    1024,
+    1536
+  ],
+  "mode": "RGBA",
+  "bytes": 1915956,
+  "near_magenta_fraction_tolerance_20": 0.7952022552490234,
+  "border_near_magenta_fraction_tolerance_20": 0.996685791015625,
+  "border_max_rgb_deviation": 39,
+  "seed": 410001,
+  "model": "qwen_image_2.1_int8_convrot.safetensors",
+  "status": "generation/reference pipeline works; rejected as anchor candidate due to copying and full-length crop"
+}

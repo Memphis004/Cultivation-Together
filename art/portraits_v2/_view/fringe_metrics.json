@@ -1,0 +1,20 @@
+{
+  "d000": {
+    "solid_px": 645691,
+    "solid_cast_px": 7177,
+    "edge_px": 18858,
+    "edge_cast_px": 3551
+  },
+  "d002": {
+    "solid_px": 640686,
+    "solid_cast_px": 6808,
+    "edge_px": 17928,
+    "edge_cast_px": 3777
+  },
+  "d003": {
+    "solid_px": 645636,
+    "solid_cast_px": 6230,
+    "edge_px": 16838,
+    "edge_cast_px": 2017
+  }
+}
