@@ -81,12 +81,14 @@ MEASUREMENTS = {
         "face_cx": 528,
     },
     "d002": {
-        "src": "art/portraits_v2/phase3/d002/430202/acda02e0_000.png",
-        "seed": 430202,
-        "prompt_id": "acda02e0-7961-4a20-8421-2261f30a92de",
-        "hair_top": 122,
-        "chin": 292,
-        "face_cx": 530,
+        # Round 7 seed 500201, approved by the user at CHECKPOINT A. Replaces the
+        # round-3 phase3 image; the old output is kept in final/_backup_r3_d002/.
+        "src": "art/portraits_v2/female_round7/raw/d002/500201/95c560bf_000.png",
+        "seed": 500201,
+        "prompt_id": "95c560bf-f403-4cb1-9a8d-3ff472060949",
+        "hair_top": 76,
+        "chin": 300,
+        "face_cx": 532,
     },
     "d003": {
         "src": "art/portraits_v2/phase3/d003/430302/7560e302_000.png",

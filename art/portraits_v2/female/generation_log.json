@@ -1,0 +1,135 @@
+{
+  "checkpoint_0": "approved by user in current session",
+  "checkpoint_a": "awaiting user choice per disciple; no postprocess/import",
+  "quota_max": 8,
+  "generation_requests_submitted": 6,
+  "images_completed": 6,
+  "execution": "local 127.0.0.1:8188, sequential, no paid nodes",
+  "anchor": {
+    "seed": 420103,
+    "file": "art/portraits_v2/anchor/1cf13e0c_000.png"
+  },
+  "style_reference": "art/reference/portrait_style_ref-2.png",
+  "jobs": [
+    {
+      "disciple_id": "d001",
+      "seed": 440101,
+      "workflow": "art/portraits_v2/female/workflows/d001_seed440101.json",
+      "prompt": "Create an entirely NEW original xianxia character illustration on the blank magenta canvas in image 1. Image 2 is the user-selected STYLE ANCHOR: match its black ink brush outlines, monochrome dry-brush cloth texture and softly shaded semi-realistic manga painting medium ONLY. Image 3 supplies additional ink-wash painting-style reference ONLY. Do NOT copy any reference person, face, hairstyle, pose, clothing design, weapons, UI, background, composition or pixels. Draw this new subject: Lin Feng, a young adult Chinese female outer disciple, gentle youthful face, black hair in two clearly visible braids, simple pale white robe with restrained grey folds and a plain dark waist sash, relaxed hands held together near the waist. Clearly feminine facial features and adult female anatomy, not an androgynous or masculine face. Long flowing sleeves in the same ink medium as the style anchor. No sword, no gourd, no male features, no topknot. Exactly one SMALL accent color: light blue; all other costume areas are white, grey and black, with natural skin tones. Composition: a three-quarter-length standing portrait cropped at MID-THIGH, above the knees, no knees, shins, feet, or full-length robe hem visible. Body slightly angled, relaxed pose, centered figure with generous empty margins left and right. The head center must be at 50 percent from the left and 31.7708 percent from the top on this 2:3 vertical canvas, not near the top edge. Bold confident black ink brush strokes and dry-brush texture INSIDE the character silhouette, flowing wispy sleeves and sashes, calm expression and soft semi-realistic manga proportions. Keep every empty area of image 1 uniformly flat solid magenta #FF00FF. No shadows, no gradient, no floor, no ground, no ink splashes outside the figure. No text, letters, numbers, logos, watermark, signature, frame, border or UI. Only one character, never a collage or a copy of a reference.",
+      "status": "completed",
+      "prompt_id": "32abdd2e-9a6c-41ed-9517-18dee6a53ed5",
+      "metrics": {
+        "size": [
+          1024,
+          1536
+        ],
+        "mode": "RGBA",
+        "bytes": 2223871,
+        "sha256": "345ca685eb05f8bc8623dbe2dc9f870705ed3e24f86879f863d19655c2cc71c4",
+        "near_magenta_fraction_tolerance_20": 0.6634616851806641,
+        "border_near_magenta_fraction_tolerance_20": 0.9999267578125
+      },
+      "file": "art/portraits_v2/female/raw/d001/440101/32abdd2e_000.png"
+    },
+    {
+      "disciple_id": "d001",
+      "seed": 440102,
+      "workflow": "art/portraits_v2/female/workflows/d001_seed440102.json",
+      "prompt": "Create an entirely NEW original xianxia character illustration on the blank magenta canvas in image 1. Image 2 is the user-selected STYLE ANCHOR: match its black ink brush outlines, monochrome dry-brush cloth texture and softly shaded semi-realistic manga painting medium ONLY. Image 3 supplies additional ink-wash painting-style reference ONLY. Do NOT copy any reference person, face, hairstyle, pose, clothing design, weapons, UI, background, composition or pixels. Draw this new subject: Lin Feng, a young adult Chinese female outer disciple, gentle youthful face, black hair in two clearly visible braids, simple pale white robe with restrained grey folds and a plain dark waist sash, relaxed hands held together near the waist. Clearly feminine facial features and adult female anatomy, not an androgynous or masculine face. Long flowing sleeves in the same ink medium as the style anchor. No sword, no gourd, no male features, no topknot. Exactly one SMALL accent color: light blue; all other costume areas are white, grey and black, with natural skin tones. Composition: a three-quarter-length standing portrait cropped at MID-THIGH, above the knees, no knees, shins, feet, or full-length robe hem visible. Body slightly angled, relaxed pose, centered figure with generous empty margins left and right. The head center must be at 50 percent from the left and 31.7708 percent from the top on this 2:3 vertical canvas, not near the top edge. Bold confident black ink brush strokes and dry-brush texture INSIDE the character silhouette, flowing wispy sleeves and sashes, calm expression and soft semi-realistic manga proportions. Keep every empty area of image 1 uniformly flat solid magenta #FF00FF. No shadows, no gradient, no floor, no ground, no ink splashes outside the figure. No text, letters, numbers, logos, watermark, signature, frame, border or UI. Only one character, never a collage or a copy of a reference.",
+      "status": "completed",
+      "prompt_id": "5c3a3269-318f-40ce-87ad-d9428128fc56",
+      "metrics": {
+        "size": [
+          1024,
+          1536
+        ],
+        "mode": "RGBA",
+        "bytes": 2215669,
+        "sha256": "3cb47fcaa54205bb5b1a1b256837011fad235a750d51a162da1bb51c9b03ed8c",
+        "near_magenta_fraction_tolerance_20": 0.6833000183105469,
+        "border_near_magenta_fraction_tolerance_20": 0.998468017578125
+      },
+      "file": "art/portraits_v2/female/raw/d001/440102/5c3a3269_000.png"
+    },
+    {
+      "disciple_id": "d001",
+      "seed": 440103,
+      "workflow": "art/portraits_v2/female/workflows/d001_seed440103.json",
+      "prompt": "Create an entirely NEW original xianxia character illustration on the blank magenta canvas in image 1. Image 2 is the user-selected STYLE ANCHOR: match its black ink brush outlines, monochrome dry-brush cloth texture and softly shaded semi-realistic manga painting medium ONLY. Image 3 supplies additional ink-wash painting-style reference ONLY. Do NOT copy any reference person, face, hairstyle, pose, clothing design, weapons, UI, background, composition or pixels. Draw this new subject: Lin Feng, a young adult Chinese female outer disciple, gentle youthful face, black hair in two clearly visible braids, simple pale white robe with restrained grey folds and a plain dark waist sash, relaxed hands held together near the waist. Clearly feminine facial features and adult female anatomy, not an androgynous or masculine face. Long flowing sleeves in the same ink medium as the style anchor. No sword, no gourd, no male features, no topknot. Exactly one SMALL accent color: light blue; all other costume areas are white, grey and black, with natural skin tones. Composition: a three-quarter-length standing portrait cropped at MID-THIGH, above the knees, no knees, shins, feet, or full-length robe hem visible. Body slightly angled, relaxed pose, centered figure with generous empty margins left and right. The head center must be at 50 percent from the left and 31.7708 percent from the top on this 2:3 vertical canvas, not near the top edge. Bold confident black ink brush strokes and dry-brush texture INSIDE the character silhouette, flowing wispy sleeves and sashes, calm expression and soft semi-realistic manga proportions. Keep every empty area of image 1 uniformly flat solid magenta #FF00FF. No shadows, no gradient, no floor, no ground, no ink splashes outside the figure. No text, letters, numbers, logos, watermark, signature, frame, border or UI. Only one character, never a collage or a copy of a reference.",
+      "status": "completed",
+      "prompt_id": "c367a7b3-280b-4a02-adf4-eeed311ff86a",
+      "metrics": {
+        "size": [
+          1024,
+          1536
+        ],
+        "mode": "RGBA",
+        "bytes": 2073845,
+        "sha256": "cf0013e48bb62ce6490498c950657b846dbd89d6246c1e8023378aa61f749c5c",
+        "near_magenta_fraction_tolerance_20": 0.6721884409586588,
+        "border_near_magenta_fraction_tolerance_20": 0.99989013671875
+      },
+      "file": "art/portraits_v2/female/raw/d001/440103/c367a7b3_000.png"
+    },
+    {
+      "disciple_id": "d002",
+      "seed": 440201,
+      "workflow": "art/portraits_v2/female/workflows/d002_seed440201.json",
+      "prompt": "Create an entirely NEW original xianxia character illustration on the blank magenta canvas in image 1. Image 2 is the user-selected STYLE ANCHOR: match its black ink brush outlines, monochrome dry-brush cloth texture and softly shaded semi-realistic manga painting medium ONLY. Image 3 supplies additional ink-wash painting-style reference ONLY. Do NOT copy any reference person, face, hairstyle, pose, clothing design, weapons, UI, background, composition or pixels. Draw this new subject: Su Yan, an adult Chinese female inner disciple and calm alchemist, composed thoughtful face, black hair gathered into a low bun, simple white and grey alchemist robe with a black sash, holding one SMALL plain gourd near the waist. Clearly feminine facial features and adult female anatomy, not an androgynous or masculine face. Long flowing sleeves in the same ink medium as the style anchor. No sword, no male features, no twin braids or high topknot. Exactly one SMALL accent color: vermilion orange-red; all other costume areas are white, grey and black, with natural skin tones. Composition: a three-quarter-length standing portrait cropped at MID-THIGH, above the knees, no knees, shins, feet, or full-length robe hem visible. Body slightly angled, relaxed pose, centered figure with generous empty margins left and right. The head center must be at 50 percent from the left and 31.7708 percent from the top on this 2:3 vertical canvas, not near the top edge. Bold confident black ink brush strokes and dry-brush texture INSIDE the character silhouette, flowing wispy sleeves and sashes, calm expression and soft semi-realistic manga proportions. Keep every empty area of image 1 uniformly flat solid magenta #FF00FF. No shadows, no gradient, no floor, no ground, no ink splashes outside the figure. No text, letters, numbers, logos, watermark, signature, frame, border or UI. Only one character, never a collage or a copy of a reference.",
+      "status": "completed",
+      "prompt_id": "3c6e7c9e-7113-4d2a-8a72-4d641524c7c1",
+      "metrics": {
+        "size": [
+          1024,
+          1536
+        ],
+        "mode": "RGBA",
+        "bytes": 1974162,
+        "sha256": "bb7d1b283295002bdfe34d2cf888ddff71a2bdad3feea5dd76992ec663a03420",
+        "near_magenta_fraction_tolerance_20": 0.7246952056884766,
+        "border_near_magenta_fraction_tolerance_20": 0.9999267578125
+      },
+      "file": "art/portraits_v2/female/raw/d002/440201/3c6e7c9e_000.png"
+    },
+    {
+      "disciple_id": "d002",
+      "seed": 440202,
+      "workflow": "art/portraits_v2/female/workflows/d002_seed440202.json",
+      "prompt": "Create an entirely NEW original xianxia character illustration on the blank magenta canvas in image 1. Image 2 is the user-selected STYLE ANCHOR: match its black ink brush outlines, monochrome dry-brush cloth texture and softly shaded semi-realistic manga painting medium ONLY. Image 3 supplies additional ink-wash painting-style reference ONLY. Do NOT copy any reference person, face, hairstyle, pose, clothing design, weapons, UI, background, composition or pixels. Draw this new subject: Su Yan, an adult Chinese female inner disciple and calm alchemist, composed thoughtful face, black hair gathered into a low bun, simple white and grey alchemist robe with a black sash, holding one SMALL plain gourd near the waist. Clearly feminine facial features and adult female anatomy, not an androgynous or masculine face. Long flowing sleeves in the same ink medium as the style anchor. No sword, no male features, no twin braids or high topknot. Exactly one SMALL accent color: vermilion orange-red; all other costume areas are white, grey and black, with natural skin tones. Composition: a three-quarter-length standing portrait cropped at MID-THIGH, above the knees, no knees, shins, feet, or full-length robe hem visible. Body slightly angled, relaxed pose, centered figure with generous empty margins left and right. The head center must be at 50 percent from the left and 31.7708 percent from the top on this 2:3 vertical canvas, not near the top edge. Bold confident black ink brush strokes and dry-brush texture INSIDE the character silhouette, flowing wispy sleeves and sashes, calm expression and soft semi-realistic manga proportions. Keep every empty area of image 1 uniformly flat solid magenta #FF00FF. No shadows, no gradient, no floor, no ground, no ink splashes outside the figure. No text, letters, numbers, logos, watermark, signature, frame, border or UI. Only one character, never a collage or a copy of a reference.",
+      "status": "completed",
+      "prompt_id": "e725b77e-93aa-429c-8fcf-3e571357f151",
+      "metrics": {
+        "size": [
+          1024,
+          1536
+        ],
+        "mode": "RGBA",
+        "bytes": 2166807,
+        "sha256": "7cd0914f171612488d93cd62334e9bc653b26844834ccc59d1e740b44e101f6e",
+        "near_magenta_fraction_tolerance_20": 0.6576162974039713,
+        "border_near_magenta_fraction_tolerance_20": 0.995556640625
+      },
+      "file": "art/portraits_v2/female/raw/d002/440202/e725b77e_000.png"
+    },
+    {
+      "disciple_id": "d002",
+      "seed": 440203,
+      "workflow": "art/portraits_v2/female/workflows/d002_seed440203.json",
+      "prompt": "Create an entirely NEW original xianxia character illustration on the blank magenta canvas in image 1. Image 2 is the user-selected STYLE ANCHOR: match its black ink brush outlines, monochrome dry-brush cloth texture and softly shaded semi-realistic manga painting medium ONLY. Image 3 supplies additional ink-wash painting-style reference ONLY. Do NOT copy any reference person, face, hairstyle, pose, clothing design, weapons, UI, background, composition or pixels. Draw this new subject: Su Yan, an adult Chinese female inner disciple and calm alchemist, composed thoughtful face, black hair gathered into a low bun, simple white and grey alchemist robe with a black sash, holding one SMALL plain gourd near the waist. Clearly feminine facial features and adult female anatomy, not an androgynous or masculine face. Long flowing sleeves in the same ink medium as the style anchor. No sword, no male features, no twin braids or high topknot. Exactly one SMALL accent color: vermilion orange-red; all other costume areas are white, grey and black, with natural skin tones. Composition: a three-quarter-length standing portrait cropped at MID-THIGH, above the knees, no knees, shins, feet, or full-length robe hem visible. Body slightly angled, relaxed pose, centered figure with generous empty margins left and right. The head center must be at 50 percent from the left and 31.7708 percent from the top on this 2:3 vertical canvas, not near the top edge. Bold confident black ink brush strokes and dry-brush texture INSIDE the character silhouette, flowing wispy sleeves and sashes, calm expression and soft semi-realistic manga proportions. Keep every empty area of image 1 uniformly flat solid magenta #FF00FF. No shadows, no gradient, no floor, no ground, no ink splashes outside the figure. No text, letters, numbers, logos, watermark, signature, frame, border or UI. Only one character, never a collage or a copy of a reference.",
+      "status": "completed",
+      "prompt_id": "018fbff8-3fe7-4a52-ac57-66edd4eae279",
+      "metrics": {
+        "size": [
+          1024,
+          1536
+        ],
+        "mode": "RGBA",
+        "bytes": 2238960,
+        "sha256": "6c17861ec265d6c6077dea2cd120fd8766865260152d03ac731680c291a0a763",
+        "near_magenta_fraction_tolerance_20": 0.6599445343017578,
+        "border_near_magenta_fraction_tolerance_20": 0.99349365234375
+      },
+      "file": "art/portraits_v2/female/raw/d002/440203/018fbff8_000.png"
+    }
+  ]
+}

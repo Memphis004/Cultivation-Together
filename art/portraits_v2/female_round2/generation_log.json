@@ -1,0 +1,138 @@
+{
+  "checkpoint_0": "approved by user in current session",
+  "checkpoint_a": "awaiting user choice per disciple; no postprocess/import",
+  "round": 2,
+  "quota_max": 12,
+  "previous_round_images": 6,
+  "quota_authorization": "user approved six new images and expanded quota",
+  "generation_requests_submitted": 6,
+  "images_completed": 6,
+  "execution": "local 127.0.0.1:8188, sequential, no paid nodes",
+  "anchor": {
+    "seed": 420103,
+    "file": "art/portraits_v2/anchor/1cf13e0c_000.png"
+  },
+  "style_reference": "art/reference/portrait_style_ref-3.png",
+  "jobs": [
+    {
+      "disciple_id": "d001",
+      "seed": 450101,
+      "workflow": "art/portraits_v2/female_round2/workflows/d001_seed450101.json",
+      "prompt": "Create an entirely NEW original xianxia character illustration on the blank magenta canvas in image 1. Image 2 is the user-selected STYLE ANCHOR: match its black ink brush outlines, monochrome dry-brush cloth texture and softly shaded semi-realistic manga painting medium ONLY. Image 3 is the user-requested female hanfu reference: use its clearly feminine adult silhouette, shaped bodice, layered skirt and expressive flowing cloth as design guidance ONLY. Keep the ink painting medium of image 2. Do not reproduce its white hair, weapon, pose, exact costume, background or UI. Do NOT copy any reference person, face, hairstyle, pose, clothing design, weapons, UI, background, composition or pixels. Draw this new subject: Lin Feng, a clearly adult Chinese woman aged 22, an outer disciple, gentle youthful face, black hair in two clearly visible braids, an elegant modest pale white female hanfu, tailored overlapping crossed collar and fitted opaque inner bodice, a defined high waist tied with a plain dark sash, softly layered skirt and long wide flowing sleeves, restrained grey ink folds, relaxed hands held together near the waist. Clearly feminine adult face and visibly womanly proportions: a naturally full bust with distinct rounded breast volume readable beneath the fully opaque fitted hanfu bodice, a defined waist and softly curved hips. Cloth folds follow the bust rather than hiding it beneath a straight rectangular unisex robe. Tasteful fully clothed adult character design, no nudity or transparent fabric. Not a flat-chested, masculine or androgynous torso. Long flowing sleeves in the same ink medium as the style anchor. No sword, no gourd, no male features, no topknot. Exactly one SMALL accent color: light blue; all other costume areas are white, grey and black, with natural skin tones. Composition: a three-quarter-length standing portrait cropped at MID-THIGH, above the knees, no knees, shins, feet, or full-length robe hem visible. Body slightly angled, relaxed pose, centered figure with generous empty margins left and right. The head center must be at 50 percent from the left and 31.7708 percent from the top on this 2:3 vertical canvas, not near the top edge. Bold confident black ink brush strokes and dry-brush texture INSIDE the character silhouette, flowing wispy sleeves and sashes, calm expression and soft semi-realistic manga proportions. Keep every empty area of image 1 uniformly flat solid magenta #FF00FF. No shadows, no gradient, no floor, no ground, no ink splashes outside the figure. No text, letters, numbers, logos, watermark, signature, frame, border or UI. Only one character, never a collage or a copy of a reference.",
+      "status": "completed",
+      "prompt_id": "d153f1a7-2b1b-425d-b7dd-dd3e5a4a8f45",
+      "metrics": {
+        "size": [
+          1024,
+          1536
+        ],
+        "mode": "RGBA",
+        "bytes": 2235236,
+        "sha256": "31830d4eb1df53e107f86e5fbda07a7ef4ad74239edfa5f104b888e37e3cf37a",
+        "near_magenta_fraction_tolerance_20": 0.6824283599853516,
+        "border_near_magenta_fraction_tolerance_20": 0.9995849609375
+      },
+      "file": "art/portraits_v2/female_round2/raw/d001/450101/d153f1a7_000.png"
+    },
+    {
+      "disciple_id": "d001",
+      "seed": 450102,
+      "workflow": "art/portraits_v2/female_round2/workflows/d001_seed450102.json",
+      "prompt": "Create an entirely NEW original xianxia character illustration on the blank magenta canvas in image 1. Image 2 is the user-selected STYLE ANCHOR: match its black ink brush outlines, monochrome dry-brush cloth texture and softly shaded semi-realistic manga painting medium ONLY. Image 3 is the user-requested female hanfu reference: use its clearly feminine adult silhouette, shaped bodice, layered skirt and expressive flowing cloth as design guidance ONLY. Keep the ink painting medium of image 2. Do not reproduce its white hair, weapon, pose, exact costume, background or UI. Do NOT copy any reference person, face, hairstyle, pose, clothing design, weapons, UI, background, composition or pixels. Draw this new subject: Lin Feng, a clearly adult Chinese woman aged 22, an outer disciple, gentle youthful face, black hair in two clearly visible braids, an elegant modest pale white female hanfu, tailored overlapping crossed collar and fitted opaque inner bodice, a defined high waist tied with a plain dark sash, softly layered skirt and long wide flowing sleeves, restrained grey ink folds, relaxed hands held together near the waist. Clearly feminine adult face and visibly womanly proportions: a naturally full bust with distinct rounded breast volume readable beneath the fully opaque fitted hanfu bodice, a defined waist and softly curved hips. Cloth folds follow the bust rather than hiding it beneath a straight rectangular unisex robe. Tasteful fully clothed adult character design, no nudity or transparent fabric. Not a flat-chested, masculine or androgynous torso. Long flowing sleeves in the same ink medium as the style anchor. No sword, no gourd, no male features, no topknot. Exactly one SMALL accent color: light blue; all other costume areas are white, grey and black, with natural skin tones. Composition: a three-quarter-length standing portrait cropped at MID-THIGH, above the knees, no knees, shins, feet, or full-length robe hem visible. Body slightly angled, relaxed pose, centered figure with generous empty margins left and right. The head center must be at 50 percent from the left and 31.7708 percent from the top on this 2:3 vertical canvas, not near the top edge. Bold confident black ink brush strokes and dry-brush texture INSIDE the character silhouette, flowing wispy sleeves and sashes, calm expression and soft semi-realistic manga proportions. Keep every empty area of image 1 uniformly flat solid magenta #FF00FF. No shadows, no gradient, no floor, no ground, no ink splashes outside the figure. No text, letters, numbers, logos, watermark, signature, frame, border or UI. Only one character, never a collage or a copy of a reference.",
+      "status": "completed",
+      "prompt_id": "b2f68166-49d0-4cd2-8944-fb5604963fb0",
+      "metrics": {
+        "size": [
+          1024,
+          1536
+        ],
+        "mode": "RGBA",
+        "bytes": 2345378,
+        "sha256": "9a9bad40e4e0502eee65306971d7caeccd650c1e2b67cae75de3873b54247fb0",
+        "near_magenta_fraction_tolerance_20": 0.6165008544921875,
+        "border_near_magenta_fraction_tolerance_20": 0.9971435546875
+      },
+      "file": "art/portraits_v2/female_round2/raw/d001/450102/b2f68166_000.png"
+    },
+    {
+      "disciple_id": "d001",
+      "seed": 450103,
+      "workflow": "art/portraits_v2/female_round2/workflows/d001_seed450103.json",
+      "prompt": "Create an entirely NEW original xianxia character illustration on the blank magenta canvas in image 1. Image 2 is the user-selected STYLE ANCHOR: match its black ink brush outlines, monochrome dry-brush cloth texture and softly shaded semi-realistic manga painting medium ONLY. Image 3 is the user-requested female hanfu reference: use its clearly feminine adult silhouette, shaped bodice, layered skirt and expressive flowing cloth as design guidance ONLY. Keep the ink painting medium of image 2. Do not reproduce its white hair, weapon, pose, exact costume, background or UI. Do NOT copy any reference person, face, hairstyle, pose, clothing design, weapons, UI, background, composition or pixels. Draw this new subject: Lin Feng, a clearly adult Chinese woman aged 22, an outer disciple, gentle youthful face, black hair in two clearly visible braids, an elegant modest pale white female hanfu, tailored overlapping crossed collar and fitted opaque inner bodice, a defined high waist tied with a plain dark sash, softly layered skirt and long wide flowing sleeves, restrained grey ink folds, relaxed hands held together near the waist. Clearly feminine adult face and visibly womanly proportions: a naturally full bust with distinct rounded breast volume readable beneath the fully opaque fitted hanfu bodice, a defined waist and softly curved hips. Cloth folds follow the bust rather than hiding it beneath a straight rectangular unisex robe. Tasteful fully clothed adult character design, no nudity or transparent fabric. Not a flat-chested, masculine or androgynous torso. Long flowing sleeves in the same ink medium as the style anchor. No sword, no gourd, no male features, no topknot. Exactly one SMALL accent color: light blue; all other costume areas are white, grey and black, with natural skin tones. Composition: a three-quarter-length standing portrait cropped at MID-THIGH, above the knees, no knees, shins, feet, or full-length robe hem visible. Body slightly angled, relaxed pose, centered figure with generous empty margins left and right. The head center must be at 50 percent from the left and 31.7708 percent from the top on this 2:3 vertical canvas, not near the top edge. Bold confident black ink brush strokes and dry-brush texture INSIDE the character silhouette, flowing wispy sleeves and sashes, calm expression and soft semi-realistic manga proportions. Keep every empty area of image 1 uniformly flat solid magenta #FF00FF. No shadows, no gradient, no floor, no ground, no ink splashes outside the figure. No text, letters, numbers, logos, watermark, signature, frame, border or UI. Only one character, never a collage or a copy of a reference.",
+      "status": "completed",
+      "prompt_id": "a648f7f4-3a75-4cab-9f13-da8b74d3dd23",
+      "metrics": {
+        "size": [
+          1024,
+          1536
+        ],
+        "mode": "RGBA",
+        "bytes": 2181344,
+        "sha256": "f3f2bd6b61c96c6128fd447a86c1fa0b3045a8d6eff03a494b5b34a01af9191b",
+        "near_magenta_fraction_tolerance_20": 0.6772836049397787,
+        "border_near_magenta_fraction_tolerance_20": 0.995355224609375
+      },
+      "file": "art/portraits_v2/female_round2/raw/d001/450103/a648f7f4_000.png"
+    },
+    {
+      "disciple_id": "d002",
+      "seed": 450201,
+      "workflow": "art/portraits_v2/female_round2/workflows/d002_seed450201.json",
+      "prompt": "Create an entirely NEW original xianxia character illustration on the blank magenta canvas in image 1. Image 2 is the user-selected STYLE ANCHOR: match its black ink brush outlines, monochrome dry-brush cloth texture and softly shaded semi-realistic manga painting medium ONLY. Image 3 is the user-requested female hanfu reference: use its clearly feminine adult silhouette, shaped bodice, layered skirt and expressive flowing cloth as design guidance ONLY. Keep the ink painting medium of image 2. Do not reproduce its white hair, weapon, pose, exact costume, background or UI. Do NOT copy any reference person, face, hairstyle, pose, clothing design, weapons, UI, background, composition or pixels. Draw this new subject: Su Yan, a clearly adult Chinese woman aged 28, an inner disciple and calm alchemist, composed thoughtful face, black hair gathered into a low bun, an elegant white and grey female alchemist hanfu, tailored overlapping crossed collar and fitted opaque inner bodice, a defined high waist tied with a black sash, softly layered skirt and long wide flowing sleeves, holding one SMALL plain gourd near the waist. Clearly feminine adult face and visibly womanly proportions: a naturally full bust with distinct rounded breast volume readable beneath the fully opaque fitted hanfu bodice, a defined waist and softly curved hips. Cloth folds follow the bust rather than hiding it beneath a straight rectangular unisex robe. Tasteful fully clothed adult character design, no nudity or transparent fabric. Not a flat-chested, masculine or androgynous torso. Long flowing sleeves in the same ink medium as the style anchor. No sword, no male features, no twin braids or high topknot. Exactly one SMALL accent color: vermilion orange-red; all other costume areas are white, grey and black, with natural skin tones. Composition: a three-quarter-length standing portrait cropped at MID-THIGH, above the knees, no knees, shins, feet, or full-length robe hem visible. Body slightly angled, relaxed pose, centered figure with generous empty margins left and right. The head center must be at 50 percent from the left and 31.7708 percent from the top on this 2:3 vertical canvas, not near the top edge. Bold confident black ink brush strokes and dry-brush texture INSIDE the character silhouette, flowing wispy sleeves and sashes, calm expression and soft semi-realistic manga proportions. Keep every empty area of image 1 uniformly flat solid magenta #FF00FF. No shadows, no gradient, no floor, no ground, no ink splashes outside the figure. No text, letters, numbers, logos, watermark, signature, frame, border or UI. Only one character, never a collage or a copy of a reference.",
+      "status": "completed",
+      "prompt_id": "58958f87-f31e-4941-8f04-f18c46422fc5",
+      "metrics": {
+        "size": [
+          1024,
+          1536
+        ],
+        "mode": "RGBA",
+        "bytes": 2296149,
+        "sha256": "b9ee00a4d419e914a0f628add78ef8189499354a8a2fb2050abd7c645b44538d",
+        "near_magenta_fraction_tolerance_20": 0.683587392171224,
+        "border_near_magenta_fraction_tolerance_20": 0.994635009765625
+      },
+      "file": "art/portraits_v2/female_round2/raw/d002/450201/58958f87_000.png"
+    },
+    {
+      "disciple_id": "d002",
+      "seed": 450202,
+      "workflow": "art/portraits_v2/female_round2/workflows/d002_seed450202.json",
+      "prompt": "Create an entirely NEW original xianxia character illustration on the blank magenta canvas in image 1. Image 2 is the user-selected STYLE ANCHOR: match its black ink brush outlines, monochrome dry-brush cloth texture and softly shaded semi-realistic manga painting medium ONLY. Image 3 is the user-requested female hanfu reference: use its clearly feminine adult silhouette, shaped bodice, layered skirt and expressive flowing cloth as design guidance ONLY. Keep the ink painting medium of image 2. Do not reproduce its white hair, weapon, pose, exact costume, background or UI. Do NOT copy any reference person, face, hairstyle, pose, clothing design, weapons, UI, background, composition or pixels. Draw this new subject: Su Yan, a clearly adult Chinese woman aged 28, an inner disciple and calm alchemist, composed thoughtful face, black hair gathered into a low bun, an elegant white and grey female alchemist hanfu, tailored overlapping crossed collar and fitted opaque inner bodice, a defined high waist tied with a black sash, softly layered skirt and long wide flowing sleeves, holding one SMALL plain gourd near the waist. Clearly feminine adult face and visibly womanly proportions: a naturally full bust with distinct rounded breast volume readable beneath the fully opaque fitted hanfu bodice, a defined waist and softly curved hips. Cloth folds follow the bust rather than hiding it beneath a straight rectangular unisex robe. Tasteful fully clothed adult character design, no nudity or transparent fabric. Not a flat-chested, masculine or androgynous torso. Long flowing sleeves in the same ink medium as the style anchor. No sword, no male features, no twin braids or high topknot. Exactly one SMALL accent color: vermilion orange-red; all other costume areas are white, grey and black, with natural skin tones. Composition: a three-quarter-length standing portrait cropped at MID-THIGH, above the knees, no knees, shins, feet, or full-length robe hem visible. Body slightly angled, relaxed pose, centered figure with generous empty margins left and right. The head center must be at 50 percent from the left and 31.7708 percent from the top on this 2:3 vertical canvas, not near the top edge. Bold confident black ink brush strokes and dry-brush texture INSIDE the character silhouette, flowing wispy sleeves and sashes, calm expression and soft semi-realistic manga proportions. Keep every empty area of image 1 uniformly flat solid magenta #FF00FF. No shadows, no gradient, no floor, no ground, no ink splashes outside the figure. No text, letters, numbers, logos, watermark, signature, frame, border or UI. Only one character, never a collage or a copy of a reference.",
+      "status": "completed",
+      "prompt_id": "7a2f327c-f1a6-4be5-bcb3-0377a7fd52e4",
+      "metrics": {
+        "size": [
+          1024,
+          1536
+        ],
+        "mode": "RGBA",
+        "bytes": 2268690,
+        "sha256": "0be5e76186f8a913d0802391afebe89d43b6c810beb78eb8913240bb0dfe6a51",
+        "near_magenta_fraction_tolerance_20": 0.6731713612874349,
+        "border_near_magenta_fraction_tolerance_20": 0.999951171875
+      },
+      "file": "art/portraits_v2/female_round2/raw/d002/450202/7a2f327c_000.png"
+    },
+    {
+      "disciple_id": "d002",
+      "seed": 450203,
+      "workflow": "art/portraits_v2/female_round2/workflows/d002_seed450203.json",
+      "prompt": "Create an entirely NEW original xianxia character illustration on the blank magenta canvas in image 1. Image 2 is the user-selected STYLE ANCHOR: match its black ink brush outlines, monochrome dry-brush cloth texture and softly shaded semi-realistic manga painting medium ONLY. Image 3 is the user-requested female hanfu reference: use its clearly feminine adult silhouette, shaped bodice, layered skirt and expressive flowing cloth as design guidance ONLY. Keep the ink painting medium of image 2. Do not reproduce its white hair, weapon, pose, exact costume, background or UI. Do NOT copy any reference person, face, hairstyle, pose, clothing design, weapons, UI, background, composition or pixels. Draw this new subject: Su Yan, a clearly adult Chinese woman aged 28, an inner disciple and calm alchemist, composed thoughtful face, black hair gathered into a low bun, an elegant white and grey female alchemist hanfu, tailored overlapping crossed collar and fitted opaque inner bodice, a defined high waist tied with a black sash, softly layered skirt and long wide flowing sleeves, holding one SMALL plain gourd near the waist. Clearly feminine adult face and visibly womanly proportions: a naturally full bust with distinct rounded breast volume readable beneath the fully opaque fitted hanfu bodice, a defined waist and softly curved hips. Cloth folds follow the bust rather than hiding it beneath a straight rectangular unisex robe. Tasteful fully clothed adult character design, no nudity or transparent fabric. Not a flat-chested, masculine or androgynous torso. Long flowing sleeves in the same ink medium as the style anchor. No sword, no male features, no twin braids or high topknot. Exactly one SMALL accent color: vermilion orange-red; all other costume areas are white, grey and black, with natural skin tones. Composition: a three-quarter-length standing portrait cropped at MID-THIGH, above the knees, no knees, shins, feet, or full-length robe hem visible. Body slightly angled, relaxed pose, centered figure with generous empty margins left and right. The head center must be at 50 percent from the left and 31.7708 percent from the top on this 2:3 vertical canvas, not near the top edge. Bold confident black ink brush strokes and dry-brush texture INSIDE the character silhouette, flowing wispy sleeves and sashes, calm expression and soft semi-realistic manga proportions. Keep every empty area of image 1 uniformly flat solid magenta #FF00FF. No shadows, no gradient, no floor, no ground, no ink splashes outside the figure. No text, letters, numbers, logos, watermark, signature, frame, border or UI. Only one character, never a collage or a copy of a reference.",
+      "status": "completed",
+      "prompt_id": "63d7e383-b1b0-4656-b1a9-8043221f7181",
+      "metrics": {
+        "size": [
+          1024,
+          1536
+        ],
+        "mode": "RGBA",
+        "bytes": 2316234,
+        "sha256": "29993cb9ca205306109ef22f28733ee54199dcc22cf1b73cb88d6c4e282cce2c",
+        "near_magenta_fraction_tolerance_20": 0.6496073404947916,
+        "border_near_magenta_fraction_tolerance_20": 0.994647216796875
+      },
+      "file": "art/portraits_v2/female_round2/raw/d002/450203/63d7e383_000.png"
+    }
+  ]
+}

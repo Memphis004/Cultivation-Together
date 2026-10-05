@@ -77,36 +77,36 @@
     },
     "d002": {
       "magenta_cast": {
-        "solid_px": 640686,
+        "solid_px": 507766,
         "solid_cast_px": 0,
-        "edge_px": 17928,
+        "edge_px": 19248,
         "edge_cast_px": 0
       },
-      "src": "art/portraits_v2/phase3/d002/430202/acda02e0_000.png",
-      "seed": 430202,
-      "prompt_id": "acda02e0-7961-4a20-8421-2261f30a92de",
+      "src": "art/portraits_v2/female_round7/raw/d002/500201/95c560bf_000.png",
+      "seed": 500201,
+      "prompt_id": "95c560bf-f403-4cb1-9a8d-3ff472060949",
       "measured_head_box_src_px": {
-        "hair_top": 122,
-        "chin": 292,
-        "face_cx": 530,
+        "hair_top": 76,
+        "chin": 300,
+        "face_cx": 532,
         "method": "visual estimate from labelled 25px grid view of each head (hair-mass top, topknot excluded, -> chin; face_cx at eye level); +-5px"
       },
-      "head_height_src_px": 170.0,
-      "scale_uniform": 1.411765,
+      "head_height_src_px": 224.0,
+      "scale_uniform": 1.071429,
       "paste_offset_px": [
-        -236,
-        196
+        -58,
+        287
       ],
       "achieved_head_center_px": [
-        512.24,
-        488.24
+        512.0,
+        488.43
       ],
       "target_head_center_px": [
         512.0,
         488.0
       ],
       "achieved_head_height_px": 240.0,
-      "frame_bottom_src_y_px": 949.3,
+      "frame_bottom_src_y_px": 1166.1,
       "output": "art/portraits_v2/final/portrait_d002.png",
       "checks": {
         "size_1024x1536": true,
@@ -119,8 +119,8 @@
         "alpha_ge_64": 0,
         "alpha_1_to_63": 0
       },
-      "alpha_coverage": 0.4187,
-      "file_size_bytes": 1214996
+      "alpha_coverage": 0.3351,
+      "file_size_bytes": 1183750
     },
     "d003": {
       "magenta_cast": {
