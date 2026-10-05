@@ -54,6 +54,7 @@
     <Compile Include="Assets\Scripts\UI\Views\LogWindowView.cs" />
     <Compile Include="Assets\Scripts\Building\BuildingDef.cs" />
     <Compile Include="Assets\Scripts\UI\Core\UIService.cs" />
+    <Compile Include="Assets\Scripts\Core\AssignTaskHandler.cs" />
     <Compile Include="Assets\Scripts\Shared\MessageTypes.cs" />
     <Compile Include="Assets\Scripts\Core\SceneLoader.cs" />
     <Compile Include="Assets\Scripts\Shared\SectEconomyState.cs" />
@@ -84,16 +85,20 @@
     <Compile Include="Assets\Scripts\Visual\Core\IChibiVisual.cs" />
     <Compile Include="Assets\Scripts\Visual\Scene\IsometricCellMath.cs" />
     <Compile Include="Assets\Scripts\Visual\Scene\GridOverlayRenderer.cs" />
+    <Compile Include="Assets\Scripts\Core\SceneNames.cs" />
+    <Compile Include="Assets\Scripts\AssemblyInfo.cs" />
     <Compile Include="Assets\Scripts\Visual\Scene\CameraRigPorts.cs" />
     <Compile Include="Assets\Scripts\Data\Gen\game\EventDef.cs" />
     <Compile Include="Assets\Scripts\Core\PurchaseItemHandler.cs" />
     <Compile Include="Assets\Scripts\UI\Systems\BuildingPlacementUISystem.cs" />
+    <Compile Include="Assets\Scripts\Core\Installers\BuildingInstaller.cs" />
     <Compile Include="Assets\Scripts\UI\Presenters\DiscipleListPresenter.cs" />
     <Compile Include="Assets\Scripts\Visual\Sprite\ChibiFrameClock.cs" />
     <Compile Include="Assets\Scripts\UI\Views\UIViewBase.cs" />
     <Compile Include="Assets\Scripts\UI\Views\DiscipleListView.cs" />
     <Compile Include="Assets\Scripts\Systems\BuildingSystem.cs" />
     <Compile Include="Assets\Scripts\Visual\Core\IPortraitVisual.cs" />
+    <Compile Include="Assets\Scripts\UI\Views\PortraitOverrideBinding.cs" />
     <Compile Include="Assets\Scripts\Visual\Sprite\SpriteChibiVisual.cs" />
     <Compile Include="Assets\Scripts\Core\ChangeAvatarPartHandler.cs" />
     <Compile Include="Assets\Scripts\Visual\Core\DefaultEntitlementProvider.cs" />
@@ -106,6 +111,7 @@
     <Compile Include="Assets\Scripts\Core\DecisionExecutor.cs" />
     <Compile Include="Assets\Scripts\UI\Presenters\DiscipleDetailTabPresenters.cs" />
     <Compile Include="Assets\Scripts\UI\Views\AvatarCustomizationViewData.cs" />
+    <Compile Include="Assets\Scripts\Scenes\SectScene\SectSceneLifetimeScope.cs" />
     <Compile Include="Assets\Scripts\UI\Views\EventPopupView.cs" />
     <Compile Include="Assets\Scripts\UI\Core\UIPresenterKind.cs" />
     <Compile Include="Assets\Scripts\UI\Presenters\BottomMenuPresenter.cs" />
@@ -118,10 +124,13 @@
     <Compile Include="Assets\Scripts\Building\BuildingDefPool.cs" />
     <Compile Include="Assets\Scripts\Data\Gen\Tables.cs" />
     <Compile Include="Assets\Scripts\Visual\Core\EntitlementRandom.cs" />
+    <Compile Include="Assets\Scripts\Visual\Core\PortraitOverrideMap.cs" />
     <Compile Include="Assets\Scripts\Systems\WorldEventSystem.cs" />
+    <Compile Include="Assets\Scripts\Core\Installers\VisualInstaller.cs" />
     <Compile Include="Assets\Scripts\Visual\Scene\RigZoomInput.cs" />
     <Compile Include="Assets\Scripts\UI\Views\BuildingMenuView.cs" />
     <Compile Include="Assets\Scripts\UI\Systems\WorldEventUISystem.cs" />
+    <Compile Include="Assets\Scripts\Core\Installers\UIInstaller.cs" />
     <Compile Include="Assets\Scripts\Visual\Scene\CameraRigController.cs" />
     <Compile Include="Assets\Scripts\Visual\Scene\CameraRigPanBootstrap.cs" />
     <Compile Include="Assets\Scripts\UI\Views\BuildingPlacementView.cs" />
@@ -130,7 +139,9 @@
     <Compile Include="Assets\Scripts\Data\Gen\worldevent\EventChoiceRow.cs" />
     <Compile Include="Assets\Scripts\UI\Presenters\LogWindowPresenter.cs" />
     <Compile Include="Assets\Scripts\UI\Views\AvatarCustomizationView.cs" />
+    <Compile Include="Assets\Scripts\Core\Installers\GameplayInstaller.cs" />
     <Compile Include="Assets\Scripts\Data\AvatarPartPool.cs" />
+    <Compile Include="Assets\Scripts\Building\PlaceableLandMask.cs" />
     <Compile Include="Assets\Scripts\Data\Gen\game\TbEventDef.cs" />
     <Compile Include="Assets\Scripts\UI\Presenters\DiscipleDetailPresenter.cs" />
     <Compile Include="Assets\Scripts\UI\Widgets\RadarChartGraphic.cs" />
@@ -147,6 +158,7 @@
     <Compile Include="Assets\Scripts\Systems\ResourceCraftingSystem.cs" />
     <Compile Include="Assets\Scripts\Data\LubanEventPool.cs" />
     <Compile Include="Assets\Scripts\Visual\Core\VisualTierPolicy.cs" />
+    <Compile Include="Assets\Scripts\Core\Installers\InterprocessInstaller.cs" />
     <Compile Include="Assets\Scripts\UI\Presenters\AvatarCustomizationPresenter.cs" />
   </ItemGroup>
   <ItemGroup>
