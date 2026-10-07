@@ -58,11 +58,13 @@
     <Compile Include="Assets\Scripts\Shared\MessageTypes.cs" />
     <Compile Include="Assets\Scripts\Core\SceneLoader.cs" />
     <Compile Include="Assets\Scripts\Shared\SectEconomyState.cs" />
+    <Compile Include="Assets\Scripts\UI\Widgets\UiPalette.cs" />
     <Compile Include="Assets\Scripts\UI\Core\UIPanelCatalog.cs" />
     <Compile Include="Assets\Scripts\UI\Core\UIRoot.cs" />
     <Compile Include="Assets\Scripts\Shared\MockSectData.cs" />
     <Compile Include="Assets\Scripts\Visual\Core\AvatarIconCrop.cs" />
     <Compile Include="Assets\Scripts\UI\Views\ResourcePopupView.cs" />
+    <Compile Include="Assets\Scripts\UI\Widgets\InkTooltip.cs" />
     <Compile Include="Assets\Scripts\UI\Views\DiscipleDetailView.cs" />
     <Compile Include="Assets\Scripts\UI\Core\UIPanelHandle.cs" />
     <Compile Include="Assets\Scripts\UI\Core\UIPresenter.cs" />
@@ -86,6 +88,7 @@
     <Compile Include="Assets\Scripts\Visual\Scene\IsometricCellMath.cs" />
     <Compile Include="Assets\Scripts\Visual\Scene\GridOverlayRenderer.cs" />
     <Compile Include="Assets\Scripts\Core\SceneNames.cs" />
+    <Compile Include="Assets\Scripts\UI\Widgets\InkWidgets.cs" />
     <Compile Include="Assets\Scripts\AssemblyInfo.cs" />
     <Compile Include="Assets\Scripts\Visual\Scene\CameraRigPorts.cs" />
     <Compile Include="Assets\Scripts\Data\Gen\game\EventDef.cs" />
@@ -139,6 +142,7 @@
     <Compile Include="Assets\Scripts\Data\Gen\worldevent\EventChoiceRow.cs" />
     <Compile Include="Assets\Scripts\UI\Presenters\LogWindowPresenter.cs" />
     <Compile Include="Assets\Scripts\UI\Views\AvatarCustomizationView.cs" />
+    <Compile Include="Assets\Scripts\UI\Widgets\DiscipleModalScope.cs" />
     <Compile Include="Assets\Scripts\Core\Installers\GameplayInstaller.cs" />
     <Compile Include="Assets\Scripts\Data\AvatarPartPool.cs" />
     <Compile Include="Assets\Scripts\Building\PlaceableLandMask.cs" />

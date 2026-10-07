@@ -61,7 +61,7 @@ namespace Xianxia.Sect.UI
             var disciples = _stateProvider.BuildSectEconomyState()?.Disciples;
             if (disciples == null) return;
 
-            int order = 0; // 1-based roster number for the Task C corner badge
+            int order = 0, idle = 0;
             foreach (var d in disciples)
             {
                 if (d == null) continue;
@@ -73,20 +73,23 @@ namespace Xianxia.Sect.UI
                 card.Set(
                     d.DiscipleId,
                     d.DisplayName,
-                    d.Rank + (string.IsNullOrEmpty(d.CurrentTask) ? "" : " · " + d.CurrentTask),
+                    string.IsNullOrEmpty(d.CurrentTask) ? "ไม่มีงาน" : d.CurrentTask,
                     (d.Wallet?.SpiritStones ?? 0).ToString(),
                     LoadIcon(d.DiscipleId));
-                card.ApplyTier(d.Rank);          // Task C: frame/badge colour per tier
+                card.BindPortrait(d);
+                if (string.IsNullOrEmpty(d.CurrentTask)) idle++;
+                card.ApplyTier(d.Rank);
                 card.SetBadge(++order);          // Task C: roster order on the dot
 
                 _cards.Add(card);
             }
+            View.SetSummary(order, idle);
         }
 
         private static Sprite LoadIcon(string discipleId)
         {
             // Bake ผ่าน AvatarIconBaker (Editor) → real PNG ใต้ Resources — C5/C2
-            return Resources.Load<Sprite>("Avatar/Icons/icon_" + discipleId);
+            return InkWidgets.Load("Avatar/Icons/icon_" + discipleId);
         }
 
         private void OnCardClicked(string discipleId)

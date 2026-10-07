@@ -159,6 +159,10 @@ namespace Xianxia.Sect.UI
 
         private void OnEnable()
         {
+            var canvas = GetComponent<Canvas>();
+            if (canvas == null) canvas = gameObject.AddComponent<Canvas>();
+            canvas.overrideSorting = true;
+            canvas.sortingOrder = 20;
             ConfigureWalletIcon(spiritStonesIcon, spiritStonesText);
             ConfigureWalletIcon(contributionIcon, contributionText);
         }

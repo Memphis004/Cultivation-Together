@@ -10,7 +10,7 @@ namespace Xianxia.Sect.UI
         public static readonly Color Portrait = Hex("#1E1C1A");
         public static readonly Color Ink = Hex("#232020");
         public static readonly Color Text = Hex("#2A2622");
-        // 4.96:1 on PaperDark; the original #6B655C fails the requested contrast.
+        // Contrast-safe on PaperDark; the original #6B655C fails the requested contrast.
         public static readonly Color Secondary = Hex("#4C473F");
         public static readonly Color LightText = Hex("#E8E4DA");
         public static readonly Color Vermilion = Hex("#B7642C");

@@ -36,10 +36,10 @@ namespace Xianxia.Sect.UI
             if (d == null) return;
             _view.SetInfo(
                 d.DisplayName,
-                d.Rank.ToString(),
+                UiPalette.RankLabel(d.Rank),
                 string.IsNullOrEmpty(d.CurrentTask) ? "—" : d.CurrentTask,
-                "Spirit Stones: " + (d.Wallet?.SpiritStones ?? 0) +
-                " · Contribution: " + (d.Wallet?.Contribution ?? 0));
+                "หินวิญญาณ " + (d.Wallet?.SpiritStones ?? 0) +
+                " · อุทิศ " + (d.Wallet?.Contribution ?? 0));
             // TODO(backlog): คู่แทร็กบำเพ็ญ (CultivationTrack) เมื่อมี data model จริง
         }
 
@@ -83,10 +83,17 @@ namespace Xianxia.Sect.UI
             {
                 for (int i = 0; i < _labels.Length && i < AxisLabels.Length; i++)
                 {
-                    if (_labels[i] != null) _labels[i].text = AxisLabels[i];
+                    if (_labels[i] != null && _labels[i].name.StartsWith("AxisLabel_")) _labels[i].text = AxisLabels[i];
                 }
             }
-            // TODO(backlog): DiscipleAttributes จริงเมื่อมี field ใน state
+            if (_labels != null)
+                foreach (var text in _labels)
+                    if (text != null && text.name == "Value" && text.transform.parent.name.StartsWith("Stat_"))
+                    {
+                        int index = int.Parse(text.transform.parent.name.Substring(5));
+                        text.text = values[index].ToString();
+                    }
+            // These values are explicitly labelled examples, never saved as real attributes.
         }
 
         public void Hide() { }
@@ -102,7 +109,7 @@ namespace Xianxia.Sect.UI
         private readonly TMP_Text _note;
         private readonly string _message;
 
-        public PlaceholderTabPresenter(TMP_Text note, string message = "ยังไม่พร้อมใช้งาน")
+        public PlaceholderTabPresenter(TMP_Text note, string message = "ยังไม่เปิดใช้งาน")
         {
             _note = note;
             _message = message;

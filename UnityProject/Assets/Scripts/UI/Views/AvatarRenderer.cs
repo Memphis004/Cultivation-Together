@@ -82,6 +82,7 @@ namespace Xianxia.Sect.UI
         /// <summary>Called from the Presenter that owns this card (passes the pool resolved from VContainer)</summary>
         public void Initialize(AvatarPartPool pool)
         {
+            if (_pool == pool && _resolver != null) return;
             _pool = pool;
             _resolver = new AppearanceResolver(pool);
         }
@@ -233,6 +234,8 @@ namespace Xianxia.Sect.UI
             if (def != null) target.Add(def);
         }
 
+        private static readonly HashSet<string> WarnedMissingSprites = new HashSet<string>();
+
         private Sprite LoadSprite(string path)
         {
             if (string.IsNullOrEmpty(path)) return null;
@@ -241,7 +244,7 @@ namespace Xianxia.Sect.UI
             if (_spriteCache.TryGetValue(path, out cached)) return cached;
 
             var sprite = Resources.Load<Sprite>(path);
-            if (sprite == null)
+            if (sprite == null && WarnedMissingSprites.Add(path))
                 Debug.LogWarning($"[AvatarRenderer] Sprite not found: Resources/{path}");
 
             _spriteCache[path] = sprite;    // cache even null to avoid Load every 0.1s

@@ -70,11 +70,21 @@ namespace Xianxia.Sect.UI
             if (!enabled)
             {
                 image.color = UiPalette.Disabled;
-                var tip = Text(rt, "Tooltip", "ยังไม่เปิดใช้งาน", font, 26, 0, -36, w, 34, UiPalette.LightText, TextAlignmentOptions.Center);
-                Fill(tip.rectTransform, UiPalette.Ink);
+                var tip = Rect(rt, "Tooltip", 0, 0, w, h);
+                Fill(tip, UiPalette.Ink);
+                Text(tip, "Label", "ยังไม่เปิดใช้งาน", font, 26, 0, 0, w, h, UiPalette.LightText, TextAlignmentOptions.Center);
                 tip.gameObject.SetActive(false);
                 rt.gameObject.AddComponent<InkTooltip>().Configure(tip.gameObject);
             }
+            return button;
+        }
+        public static Button CloseButton(Transform parent, TMP_FontAsset font, float x, float y)
+        {
+            var rt = Rect(parent, "CloseButton", x, y, 48, 48);
+            var ring = Fill(rt, UiPalette.Ink, true); ring.sprite = Circle;
+            var inner = Rect(rt, "Paper", 2, 2, 44, 44); var image = Fill(inner, UiPalette.Paper); image.sprite = Circle;
+            Text(rt, "Label", "X", font, 28, 0, 0, 48, 48, UiPalette.Text, TextAlignmentOptions.Center);
+            var button = rt.gameObject.AddComponent<Button>(); button.targetGraphic = ring; button.transition = Selectable.Transition.None;
             return button;
         }
         public static void Select(Button button, bool selected)
@@ -95,7 +105,7 @@ namespace Xianxia.Sect.UI
         public static Image Seal(Transform parent, string name, float x, float y, Color accent)
         {
             var rt = Rect(parent, name, x, y, 22, 22);
-            var image = Fill(rt, accent); image.sprite = Circle; return image;
+            var image = Fill(rt, accent); image.sprite = Resources.Load<Sprite>("ui/ink/seal"); return image;
         }
         public static Sprite Load(string path)
         {
@@ -111,6 +121,8 @@ namespace Xianxia.Sect.UI
         {
             get
             {
+                if (circle != null) return circle;
+                circle = Resources.Load<Sprite>("ui/ink/circle");
                 if (circle != null) return circle;
                 const int size = 64;
                 var tex = new Texture2D(size, size, TextureFormat.RGBA32, false) { hideFlags = HideFlags.HideAndDontSave };

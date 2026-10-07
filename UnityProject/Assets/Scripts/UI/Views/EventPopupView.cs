@@ -54,6 +54,20 @@ namespace Xianxia.Sect.UI
             }
         }
 
+        private CanvasGroup modalVisibility;
+        private void LateUpdate()
+        {
+            if (modalVisibility == null)
+            {
+                modalVisibility = GetComponent<CanvasGroup>();
+                if (modalVisibility == null) modalVisibility = gameObject.AddComponent<CanvasGroup>();
+            }
+            bool visible = !DiscipleModalScope.IsOpen;
+            modalVisibility.alpha = visible ? 1 : 0;
+            modalVisibility.blocksRaycasts = visible;
+            modalVisibility.interactable = visible;
+        }
+
         public event Action<string> ChoiceClicked;
 
         private readonly List<GameObject> _spawnedButtons = new List<GameObject>();

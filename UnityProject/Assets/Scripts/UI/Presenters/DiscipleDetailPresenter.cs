@@ -114,8 +114,8 @@ namespace Xianxia.Sect.UI
             _currentDiscipleId = discipleId;
 
             // header + portrait (FullBody ตาม reference — ไม่ใช่ Bust แบบเดิม)
-            View.SetHeader(d.DisplayName, "Rank: " + d.Rank); // TODO(backlog): class tag เมื่อมี job/class field
-            View.SetInfo(d.DisplayName, d.Rank.ToString(), d.CurrentTask, "");
+            View.SetHeader(d.DisplayName, UiPalette.RankLabel(d.Rank)); // TODO(backlog): class tag เมื่อมี job/class field
+            View.SetInfo(d.DisplayName, UiPalette.RankLabel(d.Rank), d.CurrentTask, "");
             var renderer = View.PortraitRenderer;
             if (renderer != null)
             {
