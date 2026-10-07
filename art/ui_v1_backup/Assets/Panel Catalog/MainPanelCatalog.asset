@@ -1,0 +1,42 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e5e363526f2d854caec88a29bac2d91, type: 3}
+  m_Name: MainPanelCatalog
+  m_EditorClassIdentifier: Xianxia.Sect.Runtime::Xianxia.Sect.UI.UIPanelCatalog
+  panels:
+  - PanelId: EventPopup
+    Prefab: {fileID: 2283175409436536035, guid: b829aa7043c31db498f9e8086c254ec0, type: 3}
+    PresenterKind: 0
+  - PanelId: WalletHud
+    Prefab: {fileID: 2144103126168093755, guid: b65514388194efa4899e1b87d81cd5d5, type: 3}
+    PresenterKind: 1
+  - PanelId: LogWindow
+    Prefab: {fileID: 1751331259475953239, guid: c0ddadf62c479dd4a95e362433d6a947, type: 3}
+    PresenterKind: 2
+  - PanelId: AvatarCustomization
+    Prefab: {fileID: 3672726505200475846, guid: 5e7e2a35015cec84d9de1bacc98bb4b5, type: 3}
+    PresenterKind: 3
+  - PanelId: BottomMenu
+    Prefab: {fileID: 810000000000000001, guid: e3f6cdf1aca5df24fbf2ac4946add9e5, type: 3}
+    PresenterKind: 6
+  - PanelId: ResourcePopup
+    Prefab: {fileID: 920000000000000001, guid: c7a15e8b2d9f40c39e64f1a8b5d27c94, type: 3}
+    PresenterKind: 7
+  - PanelId: DiscipleDetail
+    Prefab: {fileID: 3013095126885163442, guid: 456ddcc0f122bb04499f672456f9babe, type: 3}
+    PresenterKind: 5
+  - PanelId: BuildingMenu
+    Prefab: {fileID: 2183573389196514162, guid: c655d1ea140ba414eaad590a44c932ee, type: 3}
+    PresenterKind: 8
+  - PanelId: DiscipleList
+    Prefab: {fileID: 8951444491150631645, guid: 223fa99a1332864408120958a1dec92d, type: 3}
+    PresenterKind: 4
