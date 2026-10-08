@@ -23,6 +23,21 @@ namespace Xianxia.Sect
                 OwnerScope = OwnerScope.SectStockpile
             });
 
+            // --- Placed buildings (start state for the task building-requirement
+            // gate — gathering_herb must be available without extra setup) ---
+            // b001 herb_plot at top-left (-11,-8): verified against
+            // PlaceableLandMask — all 4 cells (-11,-8),(-10,-8),(-11,-7),(-10,-7)
+            // are land on the production grid (50x50, origin -25,-25), and the
+            // block does not overlap the survey's 3x3 candidate (-10,-2).
+            state.PlacedBuildings.Add(new PlacedBuildingState
+            {
+                InstanceId = "b001",
+                DefId = "herb_plot",
+                GridX = -11,
+                GridZ = -8,
+                Rotation = 0
+            });
+
             // --- Disciples (Updated for New Avatar System with SlotPart struct) ---
             
             // d000: Sect Master
@@ -71,7 +86,7 @@ namespace Xianxia.Sect
                 ChibiBackend = ChibiBackend.SpriteSheet, // Inner = SpriteSheet (แผน §4.1)
                 Rank = DiscipleRank.InnerDisciple,
                 Wallet = new CurrencyWallet { SpiritStones = 45, Contribution = 1120 },
-                CurrentTask = "refining_elixir",
+                CurrentTask = "meditation", // was refining_elixir — pill_hall not in start state, gate would block it anyway
                 PersonalInventory = new List<InventoryItem>(),
                 Avatar = AvatarAppearance.FromSlots(
                     new SlotPart(AvatarSlots.Body, "body_robe_white"),
@@ -91,7 +106,7 @@ namespace Xianxia.Sect
                 ChibiBackend = ChibiBackend.Spine, // Elder = Spine tier (แผน §4.1)
                 Rank = DiscipleRank.Elder,
                 Wallet = new CurrencyWallet { SpiritStones = 210, Contribution = 4300 },
-                CurrentTask = "forging_artifact",
+                CurrentTask = "meditation", // was forging_artifact — forge not in start state, gate would block it anyway
                 PersonalInventory = new List<InventoryItem>
                 {
                     new InventoryItem

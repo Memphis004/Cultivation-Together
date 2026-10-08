@@ -243,7 +243,9 @@ namespace Xianxia.Sect.Tests
             Assert.AreEqual(90, b.Rotation);
 
             // "reload": grid ใหม่เปล่า + rebuild จาก state.PlacedBuildings เท่านั้น
-            var freshGrid = new BuildingGrid(10, 10);
+            // origin ติดลบได้ (production convention) — mock start b001 herb_plot
+            // อยู่ที่ (-11,-8) บน grid 50x50 origin -25,-25 ต้องคลุมด้วย
+            var freshGrid = new BuildingGrid(30, 30, -15, -15);
             var pool = _defPool;
             foreach (var pb in State.PlacedBuildings)
             {

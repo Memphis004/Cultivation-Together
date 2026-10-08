@@ -8,8 +8,9 @@ namespace Xianxia.Sect.Tests
 {
     /// <summary>
     /// Task System v2 (§6) acceptance — SectStateProvider.TryAssignTask:
-    ///   - SECT_MASTER can assign anyone
-    ///   - a viewer can assign their own disciple
+    ///   - SECT_MASTER can assign an unowned NPC (P5B: Viewer disciples need the
+    ///     owner to be inactive past the protection window — see HybridPermissionTests)
+    ///   - a viewer with an active membership can assign their own disciple
     ///   - a viewer is rejected on someone else's disciple
     ///   - unknown task rejected
     ///   - unknown disciple rejected
@@ -63,10 +64,12 @@ namespace Xianxia.Sect.Tests
         [Test]
         public void Viewer_CanAssignOwnDisciple()
         {
-            Find("d001").OwnerId = "viewer1";
-            Find("d001").OwnerType = DiscipleOwnerType.Viewer;
-
+            // P5B: viewer control now requires a valid ACTIVE membership record, so
+            // the fixture binds through the real ownership path instead of writing
+            // OwnerType/OwnerId directly (which would be a consistency error).
             string reason;
+            Assert.IsTrue(_provider.TrySetDiscipleOwner("d001", DiscipleOwnerType.Viewer, "viewer1", out reason), reason);
+
             Assert.IsTrue(_provider.TryAssignTask("viewer1", "d001", "gathering_wood", out reason), reason);
             Assert.AreEqual("gathering_wood", Find("d001").CurrentTask);
             Assert.AreEqual(1, _taskChanged.Messages.Count);
@@ -77,11 +80,10 @@ namespace Xianxia.Sect.Tests
         [Test]
         public void Viewer_RejectedOnAnothersDisciple()
         {
-            Find("d001").OwnerId = "viewer1";
-            Find("d001").OwnerType = DiscipleOwnerType.Viewer;
+            string reason;
+            Assert.IsTrue(_provider.TrySetDiscipleOwner("d001", DiscipleOwnerType.Viewer, "viewer1", out reason), reason);
             var before = Find("d001").CurrentTask;
 
-            string reason;
             Assert.IsFalse(_provider.TryAssignTask("viewer2", "d001", "gathering_ore", out reason));
             Assert.IsFalse(string.IsNullOrEmpty(reason), "rejection must explain why");
             Assert.AreEqual(before, Find("d001").CurrentTask, "state must not change on rejection");
@@ -119,11 +121,13 @@ namespace Xianxia.Sect.Tests
             Assert.IsFalse(_provider.TryAssignTask("SECT_MASTER", "d002", "bogus_task", out reason));
             Assert.AreEqual(0, _taskChanged.Messages.Count);
 
-            // then a success → exactly one
-            Assert.IsTrue(_provider.TryAssignTask("SECT_MASTER", "d002", "meditation", out reason), reason);
+            // then a real change → exactly one publish. (P5B: assigning the task a
+            // disciple already holds is a no-op and publishes NOTHING — so the
+            // success case here must actually change the task.)
+            Assert.IsTrue(_provider.TryAssignTask("SECT_MASTER", "d002", "gathering_wood", out reason), reason);
             Assert.AreEqual(1, _taskChanged.Messages.Count);
             Assert.AreEqual("d002", _taskChanged.Messages[0].DiscipleId);
-            Assert.AreEqual("meditation", _taskChanged.Messages[0].TaskId);
+            Assert.AreEqual("gathering_wood", _taskChanged.Messages[0].TaskId);
         }
 
         /// <summary>

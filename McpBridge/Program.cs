@@ -89,6 +89,36 @@ public static class SectQueryTools
         // content now instead of it being hardcoded/absent.
         return JsonSerializer.Serialize(response);
     }
+
+    [McpServerTool, Description("Read the sect's ownership-change log (P4 observability: one entry per real disciple ownership change, oldest first). STRICTLY read-only - there is deliberately no tool that assigns ownership; assignment stays a local dev-harness operation.")]
+    public static async Task<string> GetOwnershipLog(
+        IRemoteRequestHandler<OwnershipObservabilityQuery, OwnershipObservabilitySnapshot> requestHandler)
+    {
+        var response = await requestHandler.InvokeAsync(
+            new OwnershipObservabilityQuery { RequestId = Guid.NewGuid().ToString() });
+
+        return JsonSerializer.Serialize(response);
+    }
+
+    [McpServerTool, Description("Read the sect's task-change log (P5B observability: one entry per real disciple task change, oldest first; no-ops and rejections are not logged). STRICTLY read-only.")]
+    public static async Task<string> GetTaskChangeLog(
+        IRemoteRequestHandler<TaskChangeObservabilityQuery, TaskChangeObservabilitySnapshot> requestHandler)
+    {
+        var response = await requestHandler.InvokeAsync(
+            new TaskChangeObservabilityQuery { RequestId = Guid.NewGuid().ToString() });
+
+        return JsonSerializer.Serialize(response);
+    }
+
+    [McpServerTool, Description("Read the current viewer-protection state (P5B, STRICTLY read-only): one entry per viewer-owned disciple with whether the owner is still protected, the remaining protection time, whether the membership data is consistent, and whether the sect master / the owner may change its task right now (with the authority's reason).")]
+    public static async Task<string> GetTaskProtection(
+        IRemoteRequestHandler<TaskProtectionQuery, TaskProtectionSnapshot> requestHandler)
+    {
+        var response = await requestHandler.InvokeAsync(
+            new TaskProtectionQuery { RequestId = Guid.NewGuid().ToString() });
+
+        return JsonSerializer.Serialize(response);
+    }
 }
 
 // Write (execute) tools go in a separate type on purpose - keeps the

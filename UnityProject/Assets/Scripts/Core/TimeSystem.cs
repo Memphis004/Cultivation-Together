@@ -174,6 +174,61 @@ namespace Xianxia.Sect
         }
     }
 
+    // ---------- P5B (Hybrid Permissions) — read-only permission contract ----------
+    // The UI must never infer permission from OwnerType != Npc on its own; it asks
+    // the authority (SectStateProvider) and renders the answer. Same evaluation the
+    // mutation path revalidates, so display and commit can never disagree.
+
+    /// <summary>Three-way outcome of a task permission evaluation.</summary>
+    public enum TaskPermissionOutcome
+    {
+        /// <summary>Requester may control this disciple right now.</summary>
+        Allowed = 0,
+        /// <summary>Requester is a known identity that simply does not have permission.</summary>
+        Denied = 1,
+        /// <summary>Membership/ownership data is missing or contradictory — fail closed, NEVER permission.</summary>
+        ConsistencyError = 2,
+    }
+
+    /// <summary>
+    /// P5B — read-only result of a task permission evaluation. Never mutates state;
+    /// the mutation path (TryAssignTask) revalidates the same rules before writing.
+    /// </summary>
+    public sealed class TaskPermissionResult
+    {
+        public TaskPermissionOutcome Outcome { get; private set; }
+        public string Reason { get; private set; } = string.Empty;
+
+        /// <summary>True when the requested task already is the disciple's current task (a valid no-op).</summary>
+        public bool IsNoOp { get; private set; }
+
+        /// <summary>True when a viewer owner is inside the protection window (SectMaster override not yet allowed).</summary>
+        public bool OwnerProtected { get; private set; }
+
+        /// <summary>Seconds left in the owner protection window (0 unless OwnerProtected).</summary>
+        public float OwnerProtectionRemainingSeconds { get; private set; }
+
+        public bool Allowed => Outcome == TaskPermissionOutcome.Allowed;
+
+        public static TaskPermissionResult Allow()
+            => new TaskPermissionResult { Outcome = TaskPermissionOutcome.Allowed };
+
+        public static TaskPermissionResult Denied(string reason)
+            => new TaskPermissionResult { Outcome = TaskPermissionOutcome.Denied, Reason = reason ?? string.Empty };
+
+        public static TaskPermissionResult ConsistencyError(string reason)
+            => new TaskPermissionResult { Outcome = TaskPermissionOutcome.ConsistencyError, Reason = reason ?? string.Empty };
+
+        internal TaskPermissionResult WithNoOp(bool isNoOp) { IsNoOp = isNoOp; return this; }
+
+        internal TaskPermissionResult WithProtection(float remainingSeconds)
+        {
+            OwnerProtected = true;
+            OwnerProtectionRemainingSeconds = remainingSeconds < 0f ? 0f : remainingSeconds;
+            return this;
+        }
+    }
+
     // Thin seam so SectStateQueryHandler doesn't need to know about every
     // subsystem directly - implement this on a small aggregator class that
     // does hold references (it's allowed to, it's not part of the bus).
@@ -189,13 +244,48 @@ namespace Xianxia.Sect
                                 out string failReason, out AvatarAppearance result);
 
         /// <summary>
-        /// Task System v2 (§6) — assign a task to a disciple after a permission
-        /// and validity check. "SECT_MASTER" may assign anyone; any other requester
-        /// only their own disciple (DiscipleState.OwnerId == requesterId). Unknown
-        /// disciple or task fails closed with a reason. On success sets
-        /// CurrentTask and publishes DiscipleTaskChangedMessage (in-memory only).
+        /// Task System v2 (§6) + P5B — assign a task to a disciple after a permission
+        /// and validity check. Permission follows CheckTaskPermission (revalidated
+        /// here): "SECT_MASTER" may control unowned NPCs and player-controlled
+        /// disciples, and may override a Viewer disciple only when the owner has been
+        /// inactive for strictly more than 10 real-time minutes; any other requester
+        /// only their own valid active membership. Empty/invalid requesters and
+        /// missing/conflicting membership data fail closed. A request for the task
+        /// already assigned is a no-op — no event, no progress reset (it may refresh
+        /// the requester's own activity). Actual task changes honour the configurable
+        /// cooldown. Unknown disciple or task fails closed with a reason. On success
+        /// sets CurrentTask and publishes DiscipleTaskChangedMessage (in-memory only).
         /// </summary>
         bool TryAssignTask(string requesterId, string discipleId, string taskId, out string failReason);
+
+        /// <summary>
+        /// P5B (Hybrid Permissions) — read-only permission query for UI. Evaluates the
+        /// SAME rules TryAssignTask revalidates on mutation, and never mutates state:
+        /// a valid requester may control its own active membership; "SECT_MASTER" may
+        /// control unowned NPCs and player-controlled disciples, and may override a
+        /// Viewer disciple only when the owner has been inactive for STRICTLY more than
+        /// 10 real-time minutes (injected clock). Empty/invalid requesters fail closed;
+        /// missing or conflicting membership data returns a ConsistencyError — never
+        /// automatic permission.
+        /// </summary>
+        TaskPermissionResult CheckTaskPermission(string requesterId, string discipleId, string taskId);
+
+        /// <summary>
+        /// P5B persistence — the membership slice worth surviving a session: the
+        /// viewer registry (status / binding / LastActiveAtUtc) TOGETHER with each
+        /// disciple's ownership, so the registry ⇄ ownership invariants hold after a
+        /// load. Read-only — the live state is not modified by exporting.
+        /// </summary>
+        Xianxia.Sect.Messages.SectViewerMembershipSave ExportViewerMembership();
+
+        /// <summary>
+        /// P5B persistence — restore a previously exported slice. Fully validated
+        /// BEFORE any mutation (version, unknown disciples, registry internal
+        /// consistency, and registry ⇄ ownership agreement); anything invalid fails
+        /// closed with the mock start state still in place. Ownership and registry are
+        /// applied together, so a half-restored state can never exist.
+        /// </summary>
+        bool TryImportViewerMembership(Xianxia.Sect.Messages.SectViewerMembershipSave save, out string failReason);
 
         /// <summary>
         /// Task building-requirement gate (§6 addendum). Reads the live
@@ -204,6 +294,30 @@ namespace Xianxia.Sect
         /// Unknown task fails with its usual reason; failClosed — never mutates.
         /// </summary>
         bool IsTaskAvailable(string taskId, out string failReason);
+
+        /// <summary>
+        /// P3 (Task Assignment UI) — the known-task set TryAssignTask validates
+        /// against, in stable order (gathering, crafting, meditation). The SAME
+        /// source of truth as the assignment gate — the UI lists these directly,
+        /// so no second task list can drift from what assignment accepts.
+        /// Read-only; never mutates.
+        /// </summary>
+        System.Collections.Generic.IReadOnlyList<string> GetKnownTaskIds();
+
+        /// <summary>
+        /// P4 (local ownership test harness) — dev-only ownership assignment.
+        /// NOT exposed as a public viewer command or MCP tool; the intended caller
+        /// is the Editor debug harness / test fixtures. Validates fully before any
+        /// mutation (fail-closed): disciple exists, enum value defined, Npc
+        /// normalizes OwnerId to empty, non-Npc identities satisfy the identity
+        /// convention, and a Viewer identity cannot bind to two disciples.
+        /// Publishes DiscipleOwnerChangedMessage (in-memory) only on a real change.
+        /// P5B: bind/release keeps SectViewerRegistry in lock-step with the disciple
+        /// row (active viewer ⇔ matching active record, invariant #1/#2/#3) and
+        /// refreshes the owner's LastActiveAtUtc on a successful bind/reclaim.
+        /// </summary>
+        bool TrySetDiscipleOwner(string discipleId, Xianxia.Sect.DiscipleOwnerType ownerType,
+                                 string ownerId, out string failReason);
 
         /// <summary>
         /// Mutate DiscipleState.ChibiBackend (entitlement) + publish

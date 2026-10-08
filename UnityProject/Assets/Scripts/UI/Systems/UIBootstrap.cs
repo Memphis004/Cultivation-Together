@@ -51,6 +51,7 @@ namespace Xianxia.Sect.UI
             WireResourcePopup();
             WireDiscipleList();
             WireBuildModeToggle();
+            WireTaskAssignment();
 
             // Subscribe to scene loads for scene-specific UI setup if needed.
             // Currently scene-specific UI (EventPopup) is handled by
@@ -208,6 +209,56 @@ namespace Xianxia.Sect.UI
         }
 
         private bool _discipleListOpen;
+
+        /// <summary>
+        /// P3: TaskAssignment panel (มอบหมายงาน) — opened by the bottom-menu
+        /// "วิถีเซียน" placeholder button (TaskAssignmentButton), closed by its
+        /// own close button. Same open/close callback pattern as ResourcePopup.
+        /// </summary>
+        private void WireTaskAssignment()
+        {
+            var bottomMenu = _uiService.Open("BottomMenu");
+            if (bottomMenu.Presenter is BottomMenuPresenter bottomPresenter &&
+                bottomPresenter.TaskAssignmentButton != null)
+            {
+                bottomPresenter.TaskAssignmentButton.onClick.AddListener(ToggleTaskAssignment);
+            }
+        }
+
+        private void ToggleTaskAssignment()
+        {
+            if (_taskAssignmentOpen)
+            {
+                _uiService.Close("TaskAssignment");
+                _taskAssignmentOpen = false;
+            }
+            else
+            {
+                try
+                {
+                    _uiService.Open("TaskAssignment", new TaskAssignmentArgs
+                    {
+                        CloseCallback = OnTaskAssignmentCloseRequested,
+                    });
+                    _taskAssignmentOpen = true;
+                }
+                catch (System.Exception ex)
+                {
+                    // Panel ยังไม่อยู่ใน catalog — ลืมรัน generator (ครั้งแรกหลัง merge)
+                    Debug.LogWarning("[UIBootstrap] TaskAssignment panel is not in the catalog yet - " +
+                                     "run menu: Xianxia → Generate TaskAssignment Panel (once, in edit mode). " +
+                                     "(" + ex.Message + ")");
+                }
+            }
+        }
+
+        private void OnTaskAssignmentCloseRequested()
+        {
+            _uiService.Close("TaskAssignment");
+            _taskAssignmentOpen = false;
+        }
+
+        private bool _taskAssignmentOpen;
 
         private void OnSceneLoaded(SceneLoadedMessage msg)
         {

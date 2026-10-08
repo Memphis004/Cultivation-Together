@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using MessagePipe;
 using NUnit.Framework;
 using Xianxia.Sect.Building;
@@ -133,6 +134,135 @@ namespace Xianxia.Sect.Tests
             Assert.AreEqual(0, _resourceBuffer.Messages.Count, "no SectResourceChangedMessage while gated");
             Assert.AreEqual("refining_elixir", d001.CurrentTask,
                             "gate must skip — never rewrite CurrentTask");
+        }
+
+        // ---- item 5c: blocked window preserves the fractional gather accumulator ----
+        // Herb_plot removed mid-run → gated ticks produce nothing AND the held
+        // remainder survives; re-placing it must resume from that remainder.
+        // (If the gate reset the accumulator, 3.75s post-unblock = 0.75 < 1 → no herb.)
+        [Test]
+        public void TickGathering_BlockedWindow_PreservesFractionalAccumulator()
+        {
+            Assert.AreEqual("gathering_herb", Find("d001").CurrentTask, "mock start d001 task");
+
+            int herbBefore = Raw("herb");
+
+            // build a 0.25 remainder (0.2/s * 1.25s)
+            _provider.TickGathering(1.25f);
+            Assert.AreEqual(herbBefore, Raw("herb"), "remainder only — no whole unit yet");
+
+            // block: remove herb_plot b001 from live state (gathering_herb gated)
+            var herbPlot = State.PlacedBuildings.Find(p => p.InstanceId == "b001");
+            Assert.IsNotNull(herbPlot, "mock start must contain herb_plot b001");
+            State.PlacedBuildings.Remove(herbPlot);
+
+            _provider.TickGathering(10f);
+            _provider.TickGathering(100f);
+            Assert.AreEqual(herbBefore, Raw("herb"), "gated ticks produce nothing");
+            Assert.AreEqual("gathering_herb", Find("d001").CurrentTask,
+                            "gate must skip — never rewrite CurrentTask");
+
+            // unblock: remainder 0.25 must still be there. 0.25 + 0.2/s*3.75 = 1.0 → +1
+            State.PlacedBuildings.Add(herbPlot);
+            _provider.TickGathering(3.75f);
+            Assert.AreEqual(herbBefore + 1, Raw("herb"),
+                            "held remainder must survive the blocked window");
+        }
+
+        // ---- item 5d: blocked window preserves craft progress (held, never reset/advanced) ----
+        // d001 on refining_elixir: 15s progress → pill_hall removed → 9999s gated tick
+        // must leave progress at 15. Re-placing then ticking 4s (19 < 20) must produce
+        // nothing (progress was not advanced), and one more second must complete it
+        // (progress was not reset).
+        [Test]
+        public void TickCrafting_BlockedWindow_PreservesCraftProgress()
+        {
+            var d001 = Find("d001");
+            d001.CurrentTask = "refining_elixir";
+
+            // place pill_hall on a plain grid (occupancy irrelevant — the gate reads state)
+            var grid = new BuildingGrid(10, 10);
+            string reason;
+            PlacedBuildingState pillHall;
+            Assert.IsTrue(_provider.TryPlaceBuilding("pill_hall", 0, 0, 0, grid, out reason, out pillHall), reason);
+
+            // 15s of progress toward the 20s craft — below threshold, nothing happens
+            int herbBefore = Raw("herb");
+            _provider.TickCrafting(15f);
+            Assert.AreEqual(herbBefore, Raw("herb"), "sub-craftTime tick produces nothing");
+
+            // block: remove pill_hall → gated, far-past-craftTime tick must not advance
+            State.PlacedBuildings.Remove(pillHall);
+            _provider.TickCrafting(9999f);
+            Assert.AreEqual(herbBefore, Raw("herb"), "gated tick consumes/produces nothing");
+            Assert.AreEqual("refining_elixir", d001.CurrentTask,
+                            "gate must skip — never rewrite CurrentTask");
+
+            // unblock: if progress had advanced to 20 during the blocked window,
+            // this 4s tick would already complete the craft
+            State.PlacedBuildings.Add(pillHall);
+            _provider.TickCrafting(4f);
+            Assert.AreEqual(herbBefore, Raw("herb"), "progress was held at 15, not advanced to 20");
+
+            // if progress had been reset to 0, 5s total would still be short of 20s
+            _provider.TickCrafting(1f);
+            Assert.AreEqual(herbBefore - 10, Raw("herb"), "held 15s + 5s completes the craft (cost 10 herb)");
+            Assert.AreEqual("refining_elixir", d001.CurrentTask, "craft completes without rewriting CurrentTask");
+        }
+
+        // ---- P2: sequential validate→occupy on ONE shared grid ----
+        // Checking each building on a separate empty grid would miss overlaps;
+        // here every placement is validated against the occupancy left by the
+        // ones before it — the exact order BuildingSystem.RebuildGridFromState
+        // performs at Start (AC #6).
+        [Test]
+        public void StarterBuildings_SequentialValidateThenOccupy_NoOverlap()
+        {
+            var grid = new BuildingGrid(PlaceableLandMask.Width, PlaceableLandMask.Height,
+                                        PlaceableLandMask.OriginX, PlaceableLandMask.OriginY);
+            grid.SetPlaceableMask(PlaceableLandMask.OriginX, PlaceableLandMask.OriginY,
+                                  PlaceableLandMask.Width, PlaceableLandMask.Height,
+                                  PlaceableLandMask.BuildCells(PlaceableLandMask.OriginX, PlaceableLandMask.OriginY,
+                                                               PlaceableLandMask.Width, PlaceableLandMask.Height));
+
+            var pool = new BuildingDefPool();
+            var placed = State.PlacedBuildings;
+            Assert.GreaterOrEqual(placed.Count, 1, "mock start state must carry at least one placed building");
+
+            var ids = new HashSet<string>();
+            foreach (var pb in placed)
+            {
+                Assert.IsTrue(ids.Add(pb.InstanceId),
+                              $"InstanceId must be unique: '{pb.InstanceId}' appears twice");
+
+                var def = pool.GetById(pb.DefId);
+                Assert.IsNotNull(def, "mock placed building must reference a known def: " + pb.DefId);
+
+                // validate against everything already occupied, THEN occupy
+                Assert.IsTrue(grid.CanPlace(pb.GridX, pb.GridZ, def.GridWidth, def.GridHeight, pb.Rotation),
+                              $"'{pb.InstanceId}' ({pb.DefId}) at ({pb.GridX},{pb.GridZ}) rot={pb.Rotation} " +
+                              "must not overlap earlier starter buildings and must sit on land");
+                grid.Occupy(pb.InstanceId, pb.GridX, pb.GridZ,
+                            def.GridWidth, def.GridHeight, pb.Rotation);
+            }
+
+            Assert.AreEqual(1, placed.Count(p => p.DefId == "herb_plot"),
+                            "starter configuration carries exactly one herb_plot");
+        }
+
+        // ---- P2: every initial disciple task is available in the starter state ----
+        // Fresh Play must not have any disciple on a task whose required building
+        // is missing (refining_elixir/forging_artifact need pill_hall/forge — the
+        // mock routes those disciples to meditation instead).
+        [Test]
+        public void InitialTasks_AllAvailable_InStarterState()
+        {
+            foreach (var d in State.Disciples)
+            {
+                string reason;
+                Assert.IsTrue(_provider.IsTaskAvailable(d.CurrentTask, out reason),
+                              $"{d.DiscipleId} starts on '{d.CurrentTask}' which is unavailable: {reason}");
+            }
         }
 
         /// <summary>

@@ -11,5 +11,6 @@ namespace Xianxia.Sect.UI
         BottomMenu, // persistent bottom bar (สร้าง / ศิษย์) — appended last to keep existing int values stable
         ResourcePopup, // คลังสินค้า popup (read-only stockpile) — appended last to keep existing int values stable
         BuildingMenu, // เมนูสร้างอาคาร (4 หมวด + กริดการ์ด) — appended last to keep existing int values stable
+        TaskAssignment, // P3: มอบหมายงานศิษย์ (draft/confirm) — appended last to keep existing int values stable
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using MessagePack;
 using Xianxia.Sect;
@@ -300,6 +301,134 @@ namespace Xianxia.Sect.Messages
     {
         [Key(0)] public string DiscipleId { get; set; } = string.Empty;
         [Key(1)] public string TaskId { get; set; } = string.Empty;
+    }
+
+    // ---------- Disciple ownership change (P4 — local ownership test harness) ----------
+    // Published in-memory by SectStateProvider.TrySetDiscipleOwner after a real
+    // successful change (no-op when the values are already identical). The local
+    // dev harness is the only intended caller — there is no public viewer command.
+    // ⚠️ Deliberately NOT added to InterprocessTopics — ownership assignment is a
+    // development/debug concern until real account linking exists (P5B+).
+    // Observability: the MCP bridge can READ the change log via the
+    // OwnershipObservabilityQuery/Snapshot request-response pair below (same
+    // mechanism as SectStateQuery — IDistributedSubscriber is unusable from the
+    // bridge, see AwaitWorldEventRequest). The bridge can never WRITE ownership:
+    // no assignment request/response or tool exists on the wire.
+    [MessagePackObject]
+    public class DiscipleOwnerChangedMessage
+    {
+        [Key(0)] public string DiscipleId { get; set; } = string.Empty;
+        [Key(1)] public DiscipleOwnerType OldType { get; set; }
+        [Key(2)] public string OldOwnerId { get; set; } = string.Empty;
+        [Key(3)] public DiscipleOwnerType NewType { get; set; }
+        [Key(4)] public string NewOwnerId { get; set; } = string.Empty;
+    }
+
+    // Request/response pair: the MCP bridge reads the disciples' ownership-change
+    // log (filled by OwnershipObservabilityBuffer, one entry per real change).
+    // Observability ONLY — deliberately no request/response pair or MCP tool that
+    // assigns ownership: the only writer stays the local dev harness / fixtures.
+    [MessagePackObject]
+    public class OwnershipObservabilityQuery
+    {
+        [Key(0)] public string RequestId { get; set; }
+    }
+
+    [MessagePackObject]
+    public class OwnershipObservabilitySnapshot
+    {
+        [Key(0)] public string RequestId { get; set; }
+        [Key(1)] public List<DiscipleOwnerChangedMessage> Events { get; set; } = new List<DiscipleOwnerChangedMessage>();
+    }
+
+    // ---------- P5B observability: task-change log + protection state (READ-ONLY) ----------
+    // Both pairs are pulled on demand by the MCP bridge (request-response, same
+    // mechanism as OwnershipObservabilityQuery — the bridge cannot
+    // IDistributedSubscriber over the TCP transport). Neither pair has a write
+    // path: task assignment keeps its own AssignTaskRequest/Response, and these
+    // are observation only. DiscipleTaskChangedMessage stays in-memory-only; the
+    // bridge pulls the buffered log instead.
+    [MessagePackObject]
+    public class TaskChangeObservabilityQuery
+    {
+        [Key(0)] public string RequestId { get; set; }
+    }
+
+    [MessagePackObject]
+    public class TaskChangeObservabilitySnapshot
+    {
+        [Key(0)] public string RequestId { get; set; }
+        [Key(1)] public List<DiscipleTaskChangedMessage> Events { get; set; } = new List<DiscipleTaskChangedMessage>();
+    }
+
+    [MessagePackObject]
+    public class TaskProtectionQuery
+    {
+        [Key(0)] public string RequestId { get; set; }
+    }
+
+    /// <summary>
+    /// One Viewer-owned disciple (the set the hybrid protection policy governs),
+    /// with the read-only answers the bridge needs: is the owner still protected,
+    /// how long is left, is the membership data consistent, and may the SectMaster
+    /// / the owner change its task right now (with the authority's reason).
+    /// Computed from ISectStateProvider.CheckTaskPermission — the same authority
+    /// TryAssignTask revalidates, so this view can never disagree with a commit.
+    /// </summary>
+    [MessagePackObject]
+    public class TaskProtectionEntry
+    {
+        [Key(0)] public string DiscipleId { get; set; } = string.Empty;
+        [Key(1)] public string CurrentTask { get; set; } = string.Empty;
+        [Key(2)] public DiscipleOwnerType OwnerType { get; set; }
+        [Key(3)] public string OwnerId { get; set; } = string.Empty;
+        [Key(4)] public bool OwnerProtected { get; set; }
+        [Key(5)] public float OwnerProtectionRemainingSeconds { get; set; }
+        [Key(6)] public DateTime LastActiveAtUtc { get; set; }
+        [Key(7)] public bool MembershipConsistent { get; set; }
+        [Key(8)] public bool SectMasterMayChange { get; set; }
+        [Key(9)] public string SectMasterReason { get; set; } = string.Empty;
+        [Key(10)] public bool OwnerMayChange { get; set; }
+        [Key(11)] public string OwnerReason { get; set; } = string.Empty;
+    }
+
+    [MessagePackObject]
+    public class TaskProtectionSnapshot
+    {
+        [Key(0)] public string RequestId { get; set; }
+        [Key(1)] public List<TaskProtectionEntry> Entries { get; set; } = new List<TaskProtectionEntry>();
+    }
+
+    // ---------- P5B persistence: viewer membership slice (local disk, not on the wire) ----------
+    // Persisted together so the registry ⇄ disciple ownership pair can never be
+    // restored half-way (invariants #1/#2/#3 hold across sessions). Deliberately
+    // a SLICE, not the whole SectEconomyState: only membership + ownership +
+    // activity survive; economy/roster still come from MockSectData.
+    [MessagePackObject]
+    public class SectViewerMembershipSave
+    {
+        /// <summary>Only this shape is accepted; anything else is ignored on load (fail-closed to mock start).</summary>
+        public const int CurrentVersion = 1;
+
+        /// <summary>Bumped only if the shape changes incompatibly; a mismatch is ignored on load (fail-closed to mock start).</summary>
+        [Key(0)] public int Version { get; set; } = CurrentVersion;
+
+        /// <summary>When the file was written (UTC) — informational.</summary>
+        [Key(1)] public DateTime SavedAtUtc { get; set; }
+
+        [Key(2)] public List<ViewerRecord> Records { get; set; } = new List<ViewerRecord>();
+        [Key(3)] public List<PendingViewerApplication> PendingApplications { get; set; } = new List<PendingViewerApplication>();
+
+        /// <summary>discipleId → owner, captured in the SAME snapshot so ownership and registry agree on load.</summary>
+        [Key(4)] public List<SectSavedOwnership> OwnerByDisciple { get; set; } = new List<SectSavedOwnership>();
+    }
+
+    [MessagePackObject]
+    public class SectSavedOwnership
+    {
+        [Key(0)] public string DiscipleId { get; set; } = string.Empty;
+        [Key(1)] public DiscipleOwnerType OwnerType { get; set; }
+        [Key(2)] public string OwnerId { get; set; } = string.Empty;
     }
 
     // Topic keys for the keyed (IDistributedPublisher<TKey,TMessage>) channels.

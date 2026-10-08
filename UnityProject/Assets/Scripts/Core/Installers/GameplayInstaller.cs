@@ -30,9 +30,37 @@ namespace Xianxia.Sect.Installers
             builder.RegisterEntryPoint<DecisionLogger>(Lifetime.Singleton).AsSelf();
             builder.RegisterEntryPoint<WorldEventSystem>(Lifetime.Singleton).AsSelf();
 
+            // P5B: real-time clock for the viewer inactivity/activity rule. Registered
+            // explicitly (rather than relying on the ctor's default) so production and
+            // tests both get a deterministic answer for what "now" means.
+            builder.Register<Xianxia.Sect.IClock, Xianxia.Sect.UtcClock>(Lifetime.Singleton);
+
             // Aggregates the subsystems above into one SectEconomyState for
             // SectStateQueryHandler to serve. See ISectStateProvider.
+            // P4: DiscipleOwnerChangedMessage publisher (in-memory only — ownership
+            // assignment is a dev-harness concern until real account linking, P5B+).
             builder.Register<ISectStateProvider, Xianxia.Sect.SectStateProvider>(Lifetime.Singleton);
+
+            // P4 observability: records DiscipleOwnerChangedMessage into a ring
+            // buffer for the bridge's read-only get_ownership_log tool. ENTRY POINT
+            // (not plain Register) so it is activated + subscribed at container
+            // build — a lazy singleton would miss every change before the first
+            // query. Singleton at ROOT (in-memory bus is root-scoped too).
+            // Read-only — no write path.
+            builder.RegisterEntryPoint<OwnershipObservabilityBuffer>(Lifetime.Singleton).AsSelf();
+
+            // P5B observability: records DiscipleTaskChangedMessage into a ring
+            // buffer for the bridge's read-only get_task_change_log tool. ENTRY
+            // POINT for the same reason as the ownership buffer (a lazy singleton
+            // would miss every change before the first query). Read-only.
+            builder.RegisterEntryPoint<TaskChangeObservabilityBuffer>(Lifetime.Singleton).AsSelf();
+
+            // P5B persistence: restores the viewer-membership slice on Start and
+            // re-saves it periodically + on scope dispose, so membership status and
+            // LastActiveAtUtc survive a session. ENTRY POINT so the load happens at
+            // container build (before anything can query protection). Local file
+            // only — no MCP tool, nothing on the interprocess wire.
+            builder.RegisterEntryPoint<ViewerMembershipPersistenceSystem>(Lifetime.Singleton).AsSelf();
         }
     }
 }

@@ -92,6 +92,13 @@ namespace Xianxia.Sect
         [Key(1)] public SectStockpile Stockpile { get; set; } = new SectStockpile();
         /// <summary>Append-only key (building-system.md §3.3) — ห้ามแก้ [Key(0)]/[Key(1)] เดิม</summary>
         [Key(2)] public List<PlacedBuildingState> PlacedBuildings { get; set; } = new List<PlacedBuildingState>();
+        /// <summary>
+        /// P5A append-only key — สมุดทะเบียนสมาชิกผู้ชม + คำขอรออนุมัติ (แยก list ตาม P5A §4).
+        /// Old saves without [Key(3)] deserialize as empty registry (fail-closed: ไม่มีสมาชิกจนกว่าจะมี mutation).
+        /// ⚠️ ยังไม่มี save/load mechanism ใน repo (open-questions §14) — contract เท่านั้น,
+        /// cross-session reclaim ยังใช้ไม่ได้จนกว่าจะมี persistence จริง
+        /// </summary>
+        [Key(3)] public SectViewerRegistry ViewerRegistry { get; set; } = new SectViewerRegistry();
 
         public byte[] ToByteArray() => MessagePackSerializer.Serialize(this);
         public static SectEconomyState FromByteArray(byte[] bytes) =>

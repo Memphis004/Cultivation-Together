@@ -5,9 +5,9 @@
   <Project Path="spine-unity-editor.csproj" />
   <Project Path="spine-unity.csproj" />
   <Project Path="Xianxia.Sect.Visual.Spine.Spikes.csproj" />
-  <Project Path="Xianxia.Sect.Visual.Core.Spikes.csproj" />
-  <Project Path="Xianxia.Sect.Tests.EditMode.csproj" />
   <Project Path="Assembly-CSharp-Editor.csproj" />
+  <Project Path="Xianxia.Sect.Tests.EditMode.csproj" />
+  <Project Path="Xianxia.Sect.Visual.Core.Spikes.csproj" />
   <Project Path="Xianxia.Sect.Visual.Spine.csproj" />
   <Project Path="Xianxia.Sect.Visual.Spikes.Editor.csproj" />
   <Project Path="spine-unity-examples-editor.csproj" />

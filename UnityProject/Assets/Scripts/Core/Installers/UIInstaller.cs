@@ -34,6 +34,7 @@ namespace Xianxia.Sect.Installers
             builder.Register<BottomMenuPresenter>(Lifetime.Transient); // persistent bottom bar (สร้าง / ศิษย์)
             builder.Register<ResourcePopupPresenter>(Lifetime.Transient); // คลังสินค้า popup (read-only stockpile)
             builder.Register<DiscipleListPresenter>(Lifetime.Transient); // รายชื่อศิษย์ (cards + baked icons)
+            builder.Register<TaskAssignmentPresenter>(Lifetime.Transient); // P3: มอบหมายงาน (draft/confirm)
             builder.RegisterEntryPoint<DiscipleDetailUISystem>(Lifetime.Singleton); // Phase 4: message → panel
             builder.RegisterEntryPoint<WorldEventUISystem>(Lifetime.Singleton);
             builder.RegisterEntryPoint<UIBootstrap>(Lifetime.Singleton);

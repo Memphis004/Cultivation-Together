@@ -45,13 +45,18 @@ namespace Xianxia.Sect
             ["forging_artifact"] = new CraftingRecipe(
                 "sword_azure_flame", 5, 30f,
                 new Dictionary<string, int> { ["ore"] = 15, ["wood"] = 10 }),
-        };
-
-        // Task System v2 (§6) — the known task set is the keys of the existing
+        };        // Task System v2 (§6) — the known task set is the keys of the existing
         // gathering + crafting dictionaries, plus "meditation". No new data
         // pipeline: the dictionaries ARE the source of truth for what a disciple
         // can be assigned. See open-questions.md §15 for the cultivation/meditation id question.
         private static readonly HashSet<string> KnownTasks = BuildKnownTasks();
+
+        // P3 (Task Assignment UI) — stable ordered list of the same known tasks
+        // (gathering, crafting, meditation). Kept beside the HashSet so the UI
+        // query and the assignment gate can never drift apart; both are built
+        // from the same dictionaries.
+        private static readonly string[] KnownTaskOrder =
+            GatheringRates.Keys.Concat(CraftingRecipes.Keys).Concat(new[] { "meditation" }).ToArray();
 
         private static HashSet<string> BuildKnownTasks()
         {
@@ -60,7 +65,7 @@ namespace Xianxia.Sect
             foreach (var task in CraftingRecipes.Keys) set.Add(task);
             set.Add("meditation");
             return set;
-        }
+ }
 
         // Task building-requirements — static design data, not runtime state:
         // task id -> building def id that must be in SectEconomyState.PlacedBuildings
@@ -129,12 +134,23 @@ namespace Xianxia.Sect
         private readonly IPublisher<DiscipleChibiBackendChangedMessage> _chibiBackendPublisher;
         private readonly IPublisher<BuildingPlacedMessage> _buildingPlacedPublisher;
         private readonly IPublisher<DiscipleTaskChangedMessage> _discipleTaskChangedPublisher;
+        private readonly IPublisher<DiscipleOwnerChangedMessage> _ownershipChangedPublisher;
         private readonly BuildingDefPool _buildingDefPool;
         private readonly AvatarPartPool _avatarPartPool;
         private readonly VisualRuntimeConfig _visualConfig;
         private readonly IVisualEntitlementProvider _entitlementProvider;
         /// <summary>Concrete ref to the injected provider (null when a test/substitute implements the interface directly) — used only for bind-late wiring, not for resolution.</summary>
         private readonly DefaultEntitlementProvider _defaultEntitlementProvider;
+
+        // P5B — real-time clock for the viewer inactivity/activity rule. Injected so
+        // tests can drive it deterministically; NEVER scaled game time (game time can
+        // be paused/speed-changed, which would silently extend or shrink protection).
+        private readonly IClock _clock;
+
+        // P5B — real-time cooldown on ACTUAL task changes, keyed per disciple.
+        // Prototype balance value (see DefaultTaskChangeCooldownSeconds). A no-op
+        // request never consumes or checks it.
+        private readonly Dictionary<string, DateTime> _taskChangeLastAtUtc = new();
 
         // Fractional resource accumulated per task since the last whole
         // unit was added to the stockpile - avoids losing sub-1 production
@@ -157,7 +173,9 @@ namespace Xianxia.Sect
             IVisualEntitlementProvider entitlementProvider,
             BuildingDefPool buildingDefPool,
             IPublisher<BuildingPlacedMessage> buildingPlacedPublisher,
-            IPublisher<DiscipleTaskChangedMessage> discipleTaskChangedPublisher)
+            IPublisher<DiscipleTaskChangedMessage> discipleTaskChangedPublisher,
+            IPublisher<DiscipleOwnerChangedMessage> ownershipChangedPublisher = null,
+            IClock clock = null)
         {
             _discipleRecruitedPublisher = discipleRecruitedPublisher;
             _resourceChangedPublisher = resourceChangedPublisher;
@@ -166,10 +184,17 @@ namespace Xianxia.Sect
             _buildingDefPool = buildingDefPool;
             _buildingPlacedPublisher = buildingPlacedPublisher;
             _discipleTaskChangedPublisher = discipleTaskChangedPublisher;
+            // P4: optional (default null) so every existing test construction site
+            // stays valid; production wires it via VContainer in UIInstaller/GameLifetimeScope.
+            _ownershipChangedPublisher = ownershipChangedPublisher;
             _avatarPartPool = avatarPartPool;
             _visualConfig = visualConfig;
             _entitlementProvider = entitlementProvider;
             _defaultEntitlementProvider = entitlementProvider as DefaultEntitlementProvider;
+            // P5B: production registers UtcClock via DI; every existing test construction
+            // site omits it and keeps working (real UTC clock, which those tests never
+            // depend on because they never cross the 10-minute protection window).
+            _clock = clock ?? new UtcClock();
 
             // Phase 5 — bind the provider's rank source HERE instead of injecting
             // ISectStateProvider into the provider itself: that direction would be a
@@ -438,12 +463,169 @@ namespace Xianxia.Sect
             return true;
         }
 
-        // ---------- Task System v2 (§6 — permission-checked assignment) ----------
-        // Validation order: disciple lookup → ownership/permission → known task.
-        // Nothing mutates until all three pass (no partial mutation), then the
-        // assignment is committed and DiscipleTaskChangedMessage published once.
-        // This method never touches Stockpile.RawResources.
-        private const string SectMasterRequesterId = "SECT_MASTER";
+        // ---------- P4 (local ownership test harness) — validated ownership assignment ----------
+        // Non-Npc OwnerId convention: a real Twitch user id is numeric, so the
+        // synthetic local-identity convention is "viewer_*" / "player_*" (alpha
+        // prefix + underscore, no whitespace) — clearly fake, never shaped like a
+        // real Twitch id. Real authentication (P5B+) replaces this entirely.
+        private const string OwnerIdPattern = "^[A-Za-z][A-Za-z0-9]*(_[A-Za-z0-9]+)*$";
+
+        public bool TrySetDiscipleOwner(string discipleId, DiscipleOwnerType ownerType,
+                                        string ownerId, out string failReason)
+        {
+            failReason = string.Empty;
+
+            // 1. disciple must exist
+            var disciple = FindDisciple(discipleId);
+            if (disciple == null)
+            {
+                failReason = $"No disciple with id: {discipleId}";
+                return false;
+            }
+
+            // 2. enum value must be defined (fail-closed on out-of-range casts)
+            if (!Enum.IsDefined(typeof(DiscipleOwnerType), ownerType))
+            {
+                failReason = $"Undefined DiscipleOwnerType value: {ownerType}";
+                return false;
+            }
+
+            var trimmedOwnerId = (ownerId ?? string.Empty).Trim();
+
+            // 3. Npc normalizes OwnerId to empty (no orphaned ids on Npc rows)
+            if (ownerType == DiscipleOwnerType.Npc)
+            {
+                if (!string.IsNullOrEmpty(trimmedOwnerId))
+                {
+                    failReason = "Npc ownership must carry an empty OwnerId.";
+                    return false;
+                }
+                trimmedOwnerId = string.Empty;
+            }
+            else
+            {
+                // 4. non-Npc identities satisfy the identity convention
+                if (string.IsNullOrEmpty(trimmedOwnerId) ||
+                    !System.Text.RegularExpressions.Regex.IsMatch(trimmedOwnerId, OwnerIdPattern))
+                {
+                    failReason = $"OwnerId '{trimmedOwnerId}' does not satisfy the identity convention " +
+                                 "(alpha prefix, [A-Za-z0-9_], no whitespace).";
+                    return false;
+                }
+            }
+
+            // 5. a Viewer identity must not control a different active disciple
+            if (ownerType == DiscipleOwnerType.Viewer && !string.IsNullOrEmpty(trimmedOwnerId))
+            {
+                for (int i = 0; i < _state.Disciples.Count; i++)
+                {
+                    var other = _state.Disciples[i];
+                    if (other == null || other.DiscipleId == discipleId) continue;
+                    if (other.OwnerType == DiscipleOwnerType.Viewer && other.OwnerId == trimmedOwnerId)
+                    {
+                        failReason = $"Viewer '{trimmedOwnerId}' already controls '{other.DiscipleId}'.";
+                        return false;
+                    }
+                }
+            }
+
+            // 6. no-op → no mutation, no message. A re-bind/reclaim of the SAME
+            // owner (P5B) still refreshes that owner's activity — it is a valid
+            // owner command, and it keeps an active player outside the override window.
+            if (disciple.OwnerType == ownerType && disciple.OwnerId == trimmedOwnerId)
+            {
+                if (ownerType == DiscipleOwnerType.Viewer)
+                    SyncViewerRegistryForBind(disciple, trimmedOwnerId);
+                return true;
+            }
+
+            // --- validation complete: single mutation block (no partial writes) ---
+            var oldType = disciple.OwnerType;
+            var oldOwnerId = disciple.OwnerId;
+            disciple.OwnerType = ownerType;
+            disciple.OwnerId = trimmedOwnerId;
+
+            // P5B: registry travels with the disciple row — release the previous
+            // viewer record (if any), then activate/bind the new one, so invariant
+            // #1/#2/#3 (active ⇔ bound; non-active ⇒ unbound) always holds.
+            if (oldType == DiscipleOwnerType.Viewer && !string.IsNullOrEmpty(oldOwnerId))
+                SyncViewerRegistryForRelease(oldOwnerId);
+            if (ownerType == DiscipleOwnerType.Viewer)
+                SyncViewerRegistryForBind(disciple, trimmedOwnerId);
+
+            _ownershipChangedPublisher?.Publish(new DiscipleOwnerChangedMessage
+            {
+                DiscipleId = discipleId,
+                OldType = oldType,
+                OldOwnerId = oldOwnerId,
+                NewType = ownerType,
+                NewOwnerId = trimmedOwnerId,
+            });
+            return true;
+        }
+
+        // ---------- P5B — SectViewerRegistry ⇄ disciple ownership sync ----------
+        // These are the ONLY writers of membership records, and they run inside the
+        // same mutation block as the disciple row, so the two can never disagree.
+
+        /// <summary>Activate (or create) the active record binding <paramref name="viewerId"/> to this disciple and stamp activity.</summary>
+        private void SyncViewerRegistryForBind(DiscipleState disciple, string viewerId)
+        {
+            var record = _state.ViewerRegistry.Find(viewerId);
+            if (record == null)
+            {
+                record = new ViewerRecord { ViewerId = viewerId, DisplayName = viewerId };
+                _state.ViewerRegistry.Records.Add(record);
+            }
+            record.Status = ViewerMembershipStatus.Active;
+            record.BoundDiscipleId = disciple.DiscipleId;
+            record.LastActiveAtUtc = _clock.UtcNow;
+        }
+
+        /// <summary>Release a record that no longer owns a disciple (kept as Left, never left bound — invariant #3).</summary>
+        private void SyncViewerRegistryForRelease(string viewerId)
+        {
+            var record = _state.ViewerRegistry.Find(viewerId);
+            if (record == null) return;
+            record.Status = ViewerMembershipStatus.Left;
+            record.BoundDiscipleId = string.Empty;
+        }
+
+        // ---------- P3 (Task Assignment UI) — read-only known-task query ----------
+        // Same source of truth as TryAssignTask's KnownTasks set — no second list.
+        public System.Collections.Generic.IReadOnlyList<string> GetKnownTaskIds()
+        {
+            return KnownTaskOrder;
+        }
+
+        // ---------- Task System v2 (§6) + P5B (Hybrid Permissions) ----------
+        // Validation order: disciple lookup → permission (read-only evaluation,
+        // revalidated here) → known task → building gate → no-op → cooldown → commit.
+        // Nothing mutates until every check passes (no partial mutation).
+        // This method never touches Stockpile.RawResources or any progress store.
+        // Public so read-only observers (bridge protection query, UI) use the SAME
+        // requester id the authority checks — no second spelling can drift.
+        public const string SectMasterRequesterId = "SECT_MASTER";
+
+        /// <summary>
+        /// P5B — how long a viewer owner is protected from a SectMaster override,
+        /// measured in REAL time on the injected clock. 10 minutes per the agreed
+        /// policy; the override requires inactivity STRICTLY greater than this
+        /// (exactly 10 minutes still counts as active → protected).
+        /// </summary>
+        private const double ViewerProtectionWindowSeconds = 600d;
+
+        /// <summary>
+        /// P5B — prototype balance value: minimum real-time gap between two ACTUAL
+        /// task changes on the same disciple. Configurable via
+        /// <see cref="TaskChangeCooldownSeconds"/> (0 disables it). A no-op request
+        /// (task already current) never checks or consumes it. This throttles task
+        /// thrash only — it does NOT guarantee crafting completion.
+        /// </summary>
+        public const float DefaultTaskChangeCooldownSeconds = 12f;
+
+        /// <summary>P5B — configurable real-time cooldown for actual task changes (see the const above). 0 disables.</summary>
+        public float TaskChangeCooldownSeconds { get; set; } = DefaultTaskChangeCooldownSeconds;
 
         public bool TryAssignTask(string requesterId, string discipleId, string taskId, out string failReason)
         {
@@ -456,33 +638,398 @@ namespace Xianxia.Sect
                 return false;
             }
 
-            // "SECT_MASTER" may assign anyone; every other requester only their
-            // own disciple. Fail closed (no OwnerId, OwnerType=Npc → nobody owns it).
-            if (requesterId != SectMasterRequesterId && disciple.OwnerId != requesterId)
+            // 1. Permission — same evaluation the read-only UI query exposes
+            // (single authority, so display and commit can never disagree).
+            var permission = EvaluateTaskPermission(requesterId, disciple);
+            if (!permission.Allowed)
             {
-                failReason = $"'{requesterId}' is not allowed to assign tasks to '{discipleId}'.";
+                failReason = permission.Reason;
                 return false;
             }
 
+            // 2. Known task + building requirement (no mutation on failure).
             if (string.IsNullOrEmpty(taskId) || !KnownTasks.Contains(taskId))
             {
                 failReason = $"Unknown task: '{taskId}'.";
                 return false;
             }
 
-            // Building requirement (same seam as TryAssignTask — no mutation,
-            // no DiscipleTaskChangedMessage on failure).
             if (!IsTaskAvailable(taskId, out failReason))
                 return false;
 
+            var trimmedRequester = (requesterId ?? string.Empty).Trim();
+
+            // 3. No-op BEFORE the cooldown: asking for the task already assigned is a
+            // valid no-op — no progress reset, no DiscipleTaskChangedMessage, and it
+            // must not consume or be blocked by the task-change cooldown. It may
+            // refresh the requester's OWN activity (never another viewer's).
+            if (disciple.CurrentTask == taskId)
+            {
+                RefreshRequesterActivity(trimmedRequester);
+                return true;
+            }
+
+            // 4. Cooldown on actual changes (per disciple, real time).
+            if (TaskChangeCooldownSeconds > 0f &&
+                _taskChangeLastAtUtc.TryGetValue(discipleId, out var lastChangeUtc))
+            {
+                var elapsed = (_clock.UtcNow - lastChangeUtc).TotalSeconds;
+                if (elapsed < TaskChangeCooldownSeconds)
+                {
+                    var remaining = TaskChangeCooldownSeconds - elapsed;
+                    failReason = $"Task change for '{discipleId}' is on cooldown " +
+                                 $"({TaskChangeCooldownSeconds:0.#}s) — {remaining:0.0}s remaining.";
+                    return false;
+                }
+            }
+
+            // --- validation complete: single mutation block (no partial writes) ---
             disciple.CurrentTask = taskId;
+            _taskChangeLastAtUtc[discipleId] = _clock.UtcNow;
+            RefreshRequesterActivity(trimmedRequester);
+
             _discipleTaskChangedPublisher.Publish(new DiscipleTaskChangedMessage
             {
                 DiscipleId = discipleId,
                 TaskId = taskId,
             });
 
-            Debug.Log($"[SectStateProvider] {requesterId} assigned task '{taskId}' to {discipleId}.");
+            Debug.Log($"[SectStateProvider] {trimmedRequester} assigned task '{taskId}' to {discipleId}.");
+            return true;
+        }
+
+        // ---------- P5B — permission authority (read-only; never mutates) ----------
+        // Rules, in precedence order:
+        //   0. empty/invalid requester → Denied (fail closed).
+        //   1. missing/contradictory membership data for a Viewer-owned disciple →
+        //      ConsistencyError (NEVER automatic permission), regardless of requester.
+        //   2. "SECT_MASTER": Npc (unowned) / Player (single-player identity
+        //      convention) → Allowed. Viewer-owned → Allowed only when the owner has
+        //      been inactive for strictly more than the protection window.
+        //   3. any other requester → only its own valid Active membership.
+        // Invalid/future owner timestamps are handled conservatively: the owner is
+        // treated as recently active, so protection holds (fail closed).
+        // There is deliberately NO AI-GM bypass: the trusted GM sends the same
+        // SectMasterRequesterId and follows the identical rule.
+        private TaskPermissionResult EvaluateTaskPermission(string requesterId, DiscipleState disciple)
+        {
+            var trimmedRequester = (requesterId ?? string.Empty).Trim();
+            if (trimmedRequester.Length == 0)
+                return TaskPermissionResult.Denied("Requester id is empty.");
+
+            bool isMaster = trimmedRequester == SectMasterRequesterId;
+            if (!isMaster && !IsValidIdentity(trimmedRequester))
+            {
+                return TaskPermissionResult.Denied(
+                    $"Requester id '{trimmedRequester}' does not satisfy the identity convention " +
+                    "(alpha prefix, [A-Za-z0-9_], no whitespace).");
+            }
+
+            // Membership data must be complete and agree before ANY decision about a
+            // Viewer-owned disciple — a gap is a consistency error, never a grant.
+            string consistencyReason = null;
+            ViewerRecord ownerRecord = null;
+
+            if (disciple.OwnerType == DiscipleOwnerType.Viewer)
+            {
+                if (!_state.ViewerRegistry.IsInternallyConsistent())
+                {
+                    consistencyReason = $"the viewer registry is internally inconsistent (disciple '{disciple.DiscipleId}').";
+                }
+                else
+                {
+                    ownerRecord = _state.ViewerRegistry.FindByBoundDisciple(disciple.DiscipleId);
+                    if (ownerRecord == null)
+                    {
+                        consistencyReason = $"disciple '{disciple.DiscipleId}' is viewer-owned but has no active membership record.";
+                    }
+                    else if (ownerRecord.Status != ViewerMembershipStatus.Active)
+                    {
+                        consistencyReason = $"membership record for '{ownerRecord.ViewerId}' is not active.";
+                    }
+                    else if (ownerRecord.ViewerId != disciple.OwnerId)
+                    {
+                        consistencyReason = $"disciple '{disciple.DiscipleId}' owner id disagrees with its membership record.";
+                    }
+                    else if (!ownerRecord.IsSelfConsistent() || !ownerRecord.HasValidIdentityConvention())
+                    {
+                        consistencyReason = $"membership record for '{ownerRecord.ViewerId}' is not self-consistent.";
+                    }
+                }
+            }
+
+            if (isMaster)
+            {
+                if (disciple.OwnerType == DiscipleOwnerType.Viewer)
+                {
+                    if (consistencyReason != null)
+                        return TaskPermissionResult.ConsistencyError(consistencyReason);
+
+                    return EvaluateMasterOverride(ownerRecord, disciple);
+                }
+
+                // Npc = unowned (SectMaster may control) and Player = the existing
+                // single-player identity convention (SectMaster may control).
+                return TaskPermissionResult.Allow();
+            }
+
+            // Non-master: only the disciple's own valid Active membership.
+            if (disciple.OwnerType != DiscipleOwnerType.Viewer)
+            {
+                return TaskPermissionResult.Denied(
+                    $"'{trimmedRequester}' is not allowed to assign tasks to '{disciple.DiscipleId}'.");
+            }
+
+            if (consistencyReason != null)
+                return TaskPermissionResult.ConsistencyError(consistencyReason);
+
+            if (ownerRecord.ViewerId != trimmedRequester)
+            {
+                return TaskPermissionResult.Denied(
+                    $"'{trimmedRequester}' is not allowed to assign tasks to '{disciple.DiscipleId}' " +
+                    $"(owned by '{disciple.OwnerId}').");
+            }
+
+            var requesterRecord = _state.ViewerRegistry.Find(trimmedRequester);
+            if (requesterRecord == null)
+            {
+                return TaskPermissionResult.Denied(
+                    $"'{trimmedRequester}' is not allowed to assign tasks to '{disciple.DiscipleId}' " +
+                    "(no active membership).");
+            }
+            if (!requesterRecord.IsSelfConsistent() || !requesterRecord.HasValidIdentityConvention())
+            {
+                return TaskPermissionResult.ConsistencyError(
+                    $"membership record for '{trimmedRequester}' is not self-consistent.");
+            }
+            if (requesterRecord.Status != ViewerMembershipStatus.Active)
+            {
+                return TaskPermissionResult.Denied(
+                    $"'{trimmedRequester}' is not allowed to assign tasks to '{disciple.DiscipleId}' " +
+                    $"(membership is {requesterRecord.Status}).");
+            }
+
+            return TaskPermissionResult.Allow();
+        }
+
+        /// <summary>
+        /// SectMaster override against a Viewer-owned disciple. Strictly-greater-than
+        /// window on real time; an invalid (MinValue/non-UTC) or future timestamp is
+        /// treated as "recently active" so protection holds rather than silently lapsing.
+        /// </summary>
+        private TaskPermissionResult EvaluateMasterOverride(ViewerRecord ownerRecord, DiscipleState disciple)
+        {
+            var now = _clock.UtcNow;
+            var last = ownerRecord.LastActiveAtUtc;
+
+            if (last == DateTime.MinValue || last.Kind != DateTimeKind.Utc || last > now)
+            {
+                return TaskPermissionResult.Denied(
+                        $"Viewer '{ownerRecord.ViewerId}' has an invalid or future activity timestamp — " +
+                        "treated as recently active, so the owner remains protected.")
+                    .WithProtection((float)ViewerProtectionWindowSeconds);
+            }
+
+            var elapsed = (now - last).TotalSeconds;
+            if (elapsed > ViewerProtectionWindowSeconds)
+                return TaskPermissionResult.Allow();
+
+            return TaskPermissionResult.Denied(
+                    $"Viewer '{ownerRecord.ViewerId}' is still protected " +
+                    $"({elapsed:0}s of {ViewerProtectionWindowSeconds:0}s inactivity; override needs strictly more).")
+                .WithProtection((float)(ViewerProtectionWindowSeconds - elapsed));
+        }
+
+        /// <summary>Identity convention shared with TrySetDiscipleOwner (synthetic local ids, never real Twitch ids).</summary>
+        private static bool IsValidIdentity(string id)
+        {
+            return !string.IsNullOrEmpty(id) &&
+                   System.Text.RegularExpressions.Regex.IsMatch(id, OwnerIdPattern);
+        }
+
+        // ---------- P5B — read-only permission query ----------
+        public TaskPermissionResult CheckTaskPermission(string requesterId, string discipleId, string taskId)
+        {
+            var disciple = FindDisciple(discipleId);
+            if (disciple == null)
+                return TaskPermissionResult.Denied($"No disciple with id: {discipleId}");
+
+            var result = EvaluateTaskPermission(requesterId, disciple);
+            return result.WithNoOp(disciple.CurrentTask == taskId);
+        }
+
+        /// <summary>
+        /// P5B — refresh ONLY the requester's own active membership activity. Never
+        /// creates a record and never touches another viewer's record: an invalid or
+        /// unauthorized command must not extend someone else's protection window.
+        /// SectMaster has no membership record, so this is a no-op for the master.
+        /// </summary>
+        private void RefreshRequesterActivity(string trimmedRequesterId)
+        {
+            if (string.IsNullOrEmpty(trimmedRequesterId) || trimmedRequesterId == SectMasterRequesterId) return;
+
+            var record = _state.ViewerRegistry.Find(trimmedRequesterId);
+            if (record == null || record.Status != ViewerMembershipStatus.Active) return;
+            record.LastActiveAtUtc = _clock.UtcNow;
+        }
+
+        // ---------- P5B — viewer membership persistence (slice export/import) ----------
+        // The registry and the disciples' ownership are exported/imported TOGETHER:
+        // restoring only one half would break invariants #1/#2/#3 (active record ⇔
+        // matching Viewer-owned disciple). Copies are made on export so a caller
+        // cannot mutate live state by holding the returned object.
+
+        public SectViewerMembershipSave ExportViewerMembership()
+        {
+            var save = new SectViewerMembershipSave
+            {
+                Version = SectViewerMembershipSave.CurrentVersion,
+                SavedAtUtc = _clock.UtcNow,
+            };
+
+            for (int i = 0; i < _state.ViewerRegistry.Records.Count; i++)
+            {
+                var r = _state.ViewerRegistry.Records[i];
+                if (r == null) continue;
+                save.Records.Add(new ViewerRecord
+                {
+                    ViewerId = r.ViewerId,
+                    DisplayName = r.DisplayName,
+                    BoundDiscipleId = r.BoundDiscipleId,
+                    Status = r.Status,
+                    LastActiveAtUtc = r.LastActiveAtUtc,
+                });
+            }
+
+            for (int i = 0; i < _state.ViewerRegistry.PendingApplications.Count; i++)
+            {
+                var p = _state.ViewerRegistry.PendingApplications[i];
+                if (p == null) continue;
+                save.PendingApplications.Add(new PendingViewerApplication
+                {
+                    ViewerId = p.ViewerId,
+                    DisplayName = p.DisplayName,
+                    AppliedAtUtc = p.AppliedAtUtc,
+                });
+            }
+
+            for (int i = 0; i < _state.Disciples.Count; i++)
+            {
+                var d = _state.Disciples[i];
+                if (d == null) continue;
+                save.OwnerByDisciple.Add(new SectSavedOwnership
+                {
+                    DiscipleId = d.DiscipleId,
+                    OwnerType = d.OwnerType,
+                    OwnerId = d.OwnerId ?? string.Empty,
+                });
+            }
+
+            return save;
+        }
+
+        public bool TryImportViewerMembership(SectViewerMembershipSave save, out string failReason)
+        {
+            failReason = string.Empty;
+
+            // 1. shape/version — an unknown shape is ignored, never guessed at
+            if (save == null)
+            {
+                failReason = "Save data is null.";
+                return false;
+            }
+            if (save.Version != SectViewerMembershipSave.CurrentVersion)
+            {
+                failReason = $"Unsupported membership save version: {save.Version} (expected {SectViewerMembershipSave.CurrentVersion}).";
+                return false;
+            }
+
+            // 2. every saved ownership row must reference a disciple we actually have,
+            //    and its type must be a defined enum (fail-closed on corrupt data)
+            var ownershipById = new Dictionary<string, SectSavedOwnership>();
+            var saved = save.OwnerByDisciple ?? new List<SectSavedOwnership>();
+            for (int i = 0; i < saved.Count; i++)
+            {
+                var s = saved[i];
+                if (s == null || string.IsNullOrEmpty(s.DiscipleId))
+                {
+                    failReason = "Save data contains an ownership row without a disciple id.";
+                    return false;
+                }
+                if (!Enum.IsDefined(typeof(DiscipleOwnerType), s.OwnerType))
+                {
+                    failReason = $"Save data contains an undefined DiscipleOwnerType for '{s.DiscipleId}'.";
+                    return false;
+                }
+                if (FindDisciple(s.DiscipleId) == null)
+                {
+                    failReason = $"Save data references an unknown disciple: '{s.DiscipleId}'.";
+                    return false;
+                }
+                ownershipById[s.DiscipleId] = s;
+            }
+
+            // 3. the registry itself must be internally consistent
+            var candidate = new SectViewerRegistry
+            {
+                Records = save.Records != null ? new List<ViewerRecord>(save.Records) : new List<ViewerRecord>(),
+                PendingApplications = save.PendingApplications != null
+                    ? new List<PendingViewerApplication>(save.PendingApplications)
+                    : new List<PendingViewerApplication>(),
+            };
+            if (!candidate.IsInternallyConsistent())
+            {
+                failReason = "Save data has an internally inconsistent viewer registry.";
+                return false;
+            }
+
+            // 4. registry ⇄ ownership must agree with the SAVED ownership, not the
+            //    current one — otherwise ownership would be restored from a different
+            //    moment than the registry and the pair could silently disagree.
+            var projected = new List<DiscipleState>(_state.Disciples.Count);
+            for (int i = 0; i < _state.Disciples.Count; i++)
+            {
+                var d = _state.Disciples[i];
+                if (d == null) continue;
+
+                var ownerType = d.OwnerType;
+                var ownerId = d.OwnerId ?? string.Empty;
+                if (ownershipById.TryGetValue(d.DiscipleId, out var row))
+                {
+                    ownerType = row.OwnerType;
+                    ownerId = row.OwnerType == DiscipleOwnerType.Npc ? string.Empty : (row.OwnerId ?? string.Empty);
+                }
+
+                projected.Add(new DiscipleState
+                {
+                    DiscipleId = d.DiscipleId,
+                    OwnerType = ownerType,
+                    OwnerId = ownerId,
+                });
+            }
+
+            if (!candidate.VerifyAgainst(projected))
+            {
+                failReason = "Save data's viewer registry does not agree with its saved ownership.";
+                return false;
+            }
+
+            // --- validation complete: single mutation block (no partial restore) ---
+            _state.ViewerRegistry.Records.Clear();
+            _state.ViewerRegistry.Records.AddRange(candidate.Records);
+            _state.ViewerRegistry.PendingApplications.Clear();
+            _state.ViewerRegistry.PendingApplications.AddRange(candidate.PendingApplications);
+
+            for (int i = 0; i < _state.Disciples.Count; i++)
+            {
+                var d = _state.Disciples[i];
+                if (d == null || !ownershipById.TryGetValue(d.DiscipleId, out var row)) continue;
+                d.OwnerType = row.OwnerType;
+                d.OwnerId = row.OwnerType == DiscipleOwnerType.Npc ? string.Empty : (row.OwnerId ?? string.Empty);
+            }
+
+            Debug.Log($"[SectStateProvider] Imported viewer membership save: " +
+                      $"{_state.ViewerRegistry.Records.Count} record(s), {saved.Count} ownership row(s).");
             return true;
         }
 

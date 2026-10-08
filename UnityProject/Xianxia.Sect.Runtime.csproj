@@ -53,6 +53,7 @@
   <ItemGroup>
     <Compile Include="Assets\Scripts\UI\Views\LogWindowView.cs" />
     <Compile Include="Assets\Scripts\Building\BuildingDef.cs" />
+    <Compile Include="Assets\Scripts\Core\ViewerMembershipPersistence.cs" />
     <Compile Include="Assets\Scripts\UI\Core\UIService.cs" />
     <Compile Include="Assets\Scripts\Core\AssignTaskHandler.cs" />
     <Compile Include="Assets\Scripts\Shared\MessageTypes.cs" />
@@ -94,10 +95,12 @@
     <Compile Include="Assets\Scripts\Data\Gen\game\EventDef.cs" />
     <Compile Include="Assets\Scripts\Core\PurchaseItemHandler.cs" />
     <Compile Include="Assets\Scripts\UI\Systems\BuildingPlacementUISystem.cs" />
+    <Compile Include="Assets\Scripts\Shared\ViewerMembership.cs" />
     <Compile Include="Assets\Scripts\Core\Installers\BuildingInstaller.cs" />
     <Compile Include="Assets\Scripts\UI\Presenters\DiscipleListPresenter.cs" />
     <Compile Include="Assets\Scripts\Visual\Sprite\ChibiFrameClock.cs" />
     <Compile Include="Assets\Scripts\UI\Views\UIViewBase.cs" />
+    <Compile Include="Assets\Scripts\Core\OwnershipObservability.cs" />
     <Compile Include="Assets\Scripts\UI\Views\DiscipleListView.cs" />
     <Compile Include="Assets\Scripts\Systems\BuildingSystem.cs" />
     <Compile Include="Assets\Scripts\Visual\Core\IPortraitVisual.cs" />
@@ -132,6 +135,7 @@
     <Compile Include="Assets\Scripts\Core\Installers\VisualInstaller.cs" />
     <Compile Include="Assets\Scripts\Visual\Scene\RigZoomInput.cs" />
     <Compile Include="Assets\Scripts\UI\Views\BuildingMenuView.cs" />
+    <Compile Include="Assets\Scripts\UI\Presenters\TaskAssignmentPresenter.cs" />
     <Compile Include="Assets\Scripts\UI\Systems\WorldEventUISystem.cs" />
     <Compile Include="Assets\Scripts\Core\Installers\UIInstaller.cs" />
     <Compile Include="Assets\Scripts\Visual\Scene\CameraRigController.cs" />
@@ -142,9 +146,11 @@
     <Compile Include="Assets\Scripts\Data\Gen\worldevent\EventChoiceRow.cs" />
     <Compile Include="Assets\Scripts\UI\Presenters\LogWindowPresenter.cs" />
     <Compile Include="Assets\Scripts\UI\Views\AvatarCustomizationView.cs" />
+    <Compile Include="Assets\Scripts\Core\TaskObservability.cs" />
     <Compile Include="Assets\Scripts\UI\Widgets\DiscipleModalScope.cs" />
     <Compile Include="Assets\Scripts\Core\Installers\GameplayInstaller.cs" />
     <Compile Include="Assets\Scripts\Data\AvatarPartPool.cs" />
+    <Compile Include="Assets\Scripts\UI\Views\TaskAssignmentView.cs" />
     <Compile Include="Assets\Scripts\Building\PlaceableLandMask.cs" />
     <Compile Include="Assets\Scripts\Data\Gen\game\TbEventDef.cs" />
     <Compile Include="Assets\Scripts\UI\Presenters\DiscipleDetailPresenter.cs" />

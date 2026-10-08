@@ -168,11 +168,31 @@ namespace Xianxia.Sect.Tests
             public bool TryAssignTask(string requesterId, string discipleId, string taskId, out string failReason)
             {
                 failReason = null; return false;
-            }
-
-            // Not exercised by these tests — stubbed to satisfy the interface.
+            }            // Not exercised by these tests — stubbed to satisfy the interface.
             // Real behavior covered in TaskRequirementTests.
             public bool IsTaskAvailable(string taskId, out string failReason)
+            {
+                failReason = null; return false;
+            }
+
+            // P3 (Task Assignment UI) — not exercised here; stubbed for the interface.
+            public System.Collections.Generic.IReadOnlyList<string> GetKnownTaskIds()
+                => System.Array.Empty<string>();
+
+            // P4 (ownership harness) — not exercised here; stubbed for the interface.
+            public bool TrySetDiscipleOwner(string discipleId, DiscipleOwnerType ownerType,
+                                            string ownerId, out string failReason)
+            {
+                failReason = null; return false;
+            }
+
+            // P5B (hybrid permissions) — not exercised here; stubbed for the interface.
+            public TaskPermissionResult CheckTaskPermission(string requesterId, string discipleId, string taskId)
+                => TaskPermissionResult.Allow();
+
+            // P5B persistence — not exercised here; stubbed for the interface.
+            public SectViewerMembershipSave ExportViewerMembership() => new SectViewerMembershipSave();
+            public bool TryImportViewerMembership(SectViewerMembershipSave save, out string failReason)
             {
                 failReason = null; return false;
             }

@@ -21,6 +21,11 @@ namespace Xianxia.Sect.UI
         /// event stays for future gameplay handlers.</summary>
         public Button BuildButton => View?.BuildButton;
 
+        /// <summary>P3: discoverable open button for the TaskAssignment panel —
+        /// the placeholder "วิถีเซียน" button (no other gameplay use yet).
+        /// Same wiring shape as WarehouseButton.</summary>
+        public Button TaskAssignmentButton => View?.ImmortalWayButton;
+
         protected override void OnViewBound()
         {
             if (View.BuildButton != null)

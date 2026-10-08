@@ -82,6 +82,24 @@ namespace Xianxia.Sect.Installers
             messagePipeBuilder.RegisterTcpRemoteRequestHandler<AssignTaskRequest, AssignTaskResponse>(interprocess);
             builder.RegisterAsyncRequestHandler<AssignTaskRequest, AssignTaskResponse, AssignTaskHandler>(options);
 
+            // Request/response: the bridge reads the ownership-change log
+            // (P4 observability, READ-ONLY — deliberately no ownership-assignment
+            // pair or tool exists; the only writers stay the dev harness/fixtures).
+            messagePipeBuilder.RegisterTcpRemoteRequestHandler<OwnershipObservabilityQuery, OwnershipObservabilitySnapshot>(interprocess);
+            builder.RegisterAsyncRequestHandler<OwnershipObservabilityQuery, OwnershipObservabilitySnapshot, OwnershipObservabilityHandler>(options);
+
+            // Request/response: the bridge reads the task-change log (P5B
+            // observability, READ-ONLY). Task assignment keeps its own AssignTask
+            // pair; this pair only observes.
+            messagePipeBuilder.RegisterTcpRemoteRequestHandler<TaskChangeObservabilityQuery, TaskChangeObservabilitySnapshot>(interprocess);
+            builder.RegisterAsyncRequestHandler<TaskChangeObservabilityQuery, TaskChangeObservabilitySnapshot, TaskChangeObservabilityHandler>(options);
+
+            // Request/response: the bridge reads the current viewer-protection
+            // state (P5B, READ-ONLY) — protection, remaining time, membership
+            // consistency and who may change each Viewer-owned disciple's task.
+            messagePipeBuilder.RegisterTcpRemoteRequestHandler<TaskProtectionQuery, TaskProtectionSnapshot>(interprocess);
+            builder.RegisterAsyncRequestHandler<TaskProtectionQuery, TaskProtectionSnapshot, TaskProtectionHandler>(options);
+
             // Interprocess pub/sub: broadcast avatar equipment changes to UI + MCP client
             messagePipeBuilder.RegisterTcpInterprocessMessageBroker<string, AvatarEquipmentChangedMessage>(interprocess);
 
