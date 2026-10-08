@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("McpBridge")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d6479be720786680ee546beb45d86e6d4e25c8e2")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+8c866ca39392e0579be2359e7252425b13bbfbdc")]
 [assembly: System.Reflection.AssemblyProductAttribute("McpBridge")]
 [assembly: System.Reflection.AssemblyTitleAttribute("McpBridge")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

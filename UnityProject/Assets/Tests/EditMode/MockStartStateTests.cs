@@ -9,12 +9,15 @@ namespace Xianxia.Sect.Tests
 {
     /// <summary>
     /// Mock start-state acceptance (task building-requirements follow-up):
-    ///   - MockSectData.Create() placed buildings all satisfy BuildingGrid.CanPlace
-    ///     on an empty production-sized grid (50x50, origin -25,-25) with the
-    ///     PlaceableLandMask applied — same invariant BuildingSystem.RebuildGridFromState
-    ///     relies on at Start (AC #6).
-    ///   - d001 (gathering_herb, herb_plot b001 in start state) accrues herb over
-    ///     several ticks, preserving the fractional-accumulator remainder.
+    ///   - The starter state carries NO placed buildings (the player builds
+    ///     everything themselves). The CanPlace/Occupy guard below stays runnable so
+    ///     a future starter building is still validated against the production grid
+    ///     (50x50, origin -25,-25) and the PlaceableLandMask — the same invariant
+    ///     BuildingSystem.RebuildGridFromState relies on at Start.
+    ///   - d001 starts on meditation (its old gathering_herb needed a herb_plot);
+    ///     each gathering test places its OWN herb_plot and switches d001 back to
+    ///     gathering_herb, so herb still accrues over several ticks preserving the
+    ///     fractional-accumulator remainder.
     ///   - A disciple on refining_elixir with no pill_hall placed produces and
     ///     consumes NOTHING and still has CurrentTask "refining_elixir" (gate
     ///     skips without rewriting the task or resetting progress).
@@ -60,10 +63,26 @@ namespace Xianxia.Sect.Tests
             return null;
         }
 
-        // ---- item 3: mock placed buildings satisfy CanPlace with the land mask ----
+        /// <summary>
+        /// The starter state has no buildings, so a gathering test must create its
+        /// own herb_plot (same TryPlaceBuilding-on-a-plain-grid setup the crafting
+        /// tests use for pill_hall) and switch d001 back onto gathering_herb.
+        /// Returns the placed entry so the caller can remove/re-add it to gate ticks.
+        /// </summary>
+        private PlacedBuildingState SetUpGathering()
+        {
+            string reason;
+            PlacedBuildingState herbPlot;
+            Assert.IsTrue(_provider.TryPlaceBuilding("herb_plot", 0, 0, 0, new BuildingGrid(10, 10),
+                                                     out reason, out herbPlot), reason);
+            Find("d001").CurrentTask = "gathering_herb";
+            return herbPlot;
+        }
+
+        // ---- starter state carries no buildings; the production-grid guard stays valid ----
 
         [Test]
-        public void MockPlacedBuildings_SatisfyCanPlace_OnProductionGridWithLandMask()
+        public void StarterState_HasNoPlacedBuildings_ProductionGridGuardStaysValid()
         {
             // production-sized grid: 50x50, origin -25,-25 — same shape BuildingSystem uses
             var grid = new BuildingGrid(PlaceableLandMask.Width, PlaceableLandMask.Height,
@@ -75,8 +94,10 @@ namespace Xianxia.Sect.Tests
 
             var pool = new BuildingDefPool();
             var placed = State.PlacedBuildings;
-            Assert.GreaterOrEqual(placed.Count, 1, "mock start state must carry at least one placed building");
+            Assert.AreEqual(0, placed.Count, "starter state must carry NO placed buildings");
 
+            // guard: still runnable so a future starter building is validated here
+            // (production grid + land mask) before it ships
             foreach (var pb in placed)
             {
                 var def = pool.GetById(pb.DefId);
@@ -92,9 +113,11 @@ namespace Xianxia.Sect.Tests
         [Test]
         public void TickGathering_D001GathersHerb_OverSeveralTicks_WithRemainderHeld()
         {
-            Assert.AreEqual("gathering_herb", Find("d001").CurrentTask, "mock start d001 task");
+            Assert.AreEqual("meditation", Find("d001").CurrentTask,
+                            "start state: d001 holds no gathering task (no herb_plot exists)");
+            SetUpGathering(); // place the herb_plot this task needs, then switch d001
 
-            int herbBefore = Raw("herb"); // mock start: 120
+            int herbBefore = Raw("herb"); // mock start: 120 (placing a plot costs wood, not herb)
 
             // 0.2/s * 10s = 2.0 whole units
             _provider.TickGathering(10f);
@@ -143,7 +166,8 @@ namespace Xianxia.Sect.Tests
         [Test]
         public void TickGathering_BlockedWindow_PreservesFractionalAccumulator()
         {
-            Assert.AreEqual("gathering_herb", Find("d001").CurrentTask, "mock start d001 task");
+            Assert.AreEqual("meditation", Find("d001").CurrentTask, "start state d001 task");
+            var herbPlot = SetUpGathering(); // this test's own herb_plot (gathering_herb gated)
 
             int herbBefore = Raw("herb");
 
@@ -151,9 +175,7 @@ namespace Xianxia.Sect.Tests
             _provider.TickGathering(1.25f);
             Assert.AreEqual(herbBefore, Raw("herb"), "remainder only — no whole unit yet");
 
-            // block: remove herb_plot b001 from live state (gathering_herb gated)
-            var herbPlot = State.PlacedBuildings.Find(p => p.InstanceId == "b001");
-            Assert.IsNotNull(herbPlot, "mock start must contain herb_plot b001");
+            // block: remove this test's herb_plot from live state (gathering_herb gated)
             State.PlacedBuildings.Remove(herbPlot);
 
             _provider.TickGathering(10f);
@@ -210,13 +232,13 @@ namespace Xianxia.Sect.Tests
             Assert.AreEqual("refining_elixir", d001.CurrentTask, "craft completes without rewriting CurrentTask");
         }
 
-        // ---- P2: sequential validate→occupy on ONE shared grid ----
-        // Checking each building on a separate empty grid would miss overlaps;
-        // here every placement is validated against the occupancy left by the
-        // ones before it — the exact order BuildingSystem.RebuildGridFromState
-        // performs at Start (AC #6).
+        // ---- P2: sequential validate→occupy on ONE shared grid (guard) ----
+        // The starter state is empty, so the loop body never runs today. It stays
+        // as the guard: if a starter building is ever added back, every placement
+        // is validated against the occupancy left by the ones before it — the
+        // exact order BuildingSystem.RebuildGridFromState performs at Start.
         [Test]
-        public void StarterBuildings_SequentialValidateThenOccupy_NoOverlap()
+        public void StarterBuildings_EmptyStart_SequentialOccupyGuardStaysValid()
         {
             var grid = new BuildingGrid(PlaceableLandMask.Width, PlaceableLandMask.Height,
                                         PlaceableLandMask.OriginX, PlaceableLandMask.OriginY);
@@ -227,8 +249,10 @@ namespace Xianxia.Sect.Tests
 
             var pool = new BuildingDefPool();
             var placed = State.PlacedBuildings;
-            Assert.GreaterOrEqual(placed.Count, 1, "mock start state must carry at least one placed building");
+            Assert.AreEqual(0, placed.Count, "starter state carries NO placed buildings");
 
+            // guard: keep validating starter buildings (unique id, on land, no overlap)
+            // if any are ever added back to MockSectData
             var ids = new HashSet<string>();
             foreach (var pb in placed)
             {
@@ -245,9 +269,6 @@ namespace Xianxia.Sect.Tests
                 grid.Occupy(pb.InstanceId, pb.GridX, pb.GridZ,
                             def.GridWidth, def.GridHeight, pb.Rotation);
             }
-
-            Assert.AreEqual(1, placed.Count(p => p.DefId == "herb_plot"),
-                            "starter configuration carries exactly one herb_plot");
         }
 
         // ---- P2: every initial disciple task is available in the starter state ----
@@ -257,6 +278,10 @@ namespace Xianxia.Sect.Tests
         [Test]
         public void InitialTasks_AllAvailable_InStarterState()
         {
+            Assert.AreEqual(0, State.PlacedBuildings.Count, "starter state must be building-free");
+            Assert.AreEqual("meditation", Find("d001").CurrentTask,
+                            "d001 starts on meditation now that herb_plot is not in the start state");
+
             foreach (var d in State.Disciples)
             {
                 string reason;

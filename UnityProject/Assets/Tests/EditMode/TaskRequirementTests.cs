@@ -9,8 +9,8 @@ namespace Xianxia.Sect.Tests
     /// <summary>
     /// Task building-requirement gate (§6 addendum — TaskRequiredBuilding):
     ///   - refining_elixir fails with no pill_hall in PlacedBuildings
-    ///     (mock start already places herb_plot b001, so gathering_herb succeeds
-    ///     out of the box — see GatheringHerb_SucceedsWithMockStartHerbPlot)
+    ///   - gathering_herb fails on the building-free start state and succeeds once a
+    ///     herb_plot is placed — see GatheringHerb_SucceedsWithPlacedHerbPlot
     ///   - meditation and gathering_wood succeed with no buildings
     ///   - unknown task keeps its original failReason
     ///   - no DiscipleTaskChangedMessage on a requirement failure
@@ -64,8 +64,8 @@ namespace Xianxia.Sect.Tests
         }
 
         // ---- requirement gate on TryAssignTask ----
-        // (mock start state already places herb_plot b001, so the failure paths
-        // exercise refining_elixir/pill_hall — pill_hall is NOT in the start state)
+        // (the start state has no buildings at all, so every requirement path is
+        // exercised by placing the building it needs first)
 
         [Test]
         public void RefiningElixir_FailsWithoutPillHall()
@@ -78,10 +78,14 @@ namespace Xianxia.Sect.Tests
         }
 
         [Test]
-        public void GatheringHerb_SucceedsWithMockStartHerbPlot()
+        public void GatheringHerb_SucceedsWithPlacedHerbPlot()
         {
-            // mock start already places herb_plot b001 — no setup needed
             string reason;
+            Assert.IsFalse(_provider.TryAssignTask("SECT_MASTER", "d000", "gathering_herb", out reason),
+                           "no herb_plot in the start state — the gate must block it");
+            Assert.IsTrue(reason.Contains("herb_plot"), "got: " + reason);
+
+            Assert.IsTrue(Place("herb_plot"));
             Assert.IsTrue(_provider.TryAssignTask("SECT_MASTER", "d000", "gathering_herb", out reason), reason);
             Assert.AreEqual("gathering_herb", Find("d000").CurrentTask);
             Assert.AreEqual(1, _taskChanged.Messages.Count);

@@ -102,3 +102,5 @@ Start the Unity game first, then run the bridge.
 3. Open `UnityProject/` in Unity, resolve packages via openupm-cli, press Play
 4. `cd McpBridge && dotnet add package MessagePipe && dotnet add package MessagePipe.Interprocess && dotnet add package ModelContextProtocol && dotnet add package Microsoft.Extensions.Hosting && dotnet run`
 5. Confirm the bridge connects (no TCP connection errors in its console) - `get_sect_state` should return the mock data's base64 blob
+
+Run ./build-context.sh then commit

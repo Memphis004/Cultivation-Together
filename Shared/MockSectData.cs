@@ -23,20 +23,11 @@ namespace Xianxia.Sect
                 OwnerScope = OwnerScope.SectStockpile
             });
 
-            // --- Placed buildings (start state for the task building-requirement
-            // gate — gathering_herb must be available without extra setup) ---
-            // b001 herb_plot at top-left (-11,-8): verified against
-            // PlaceableLandMask — all 4 cells (-11,-8),(-10,-8),(-11,-7),(-10,-7)
-            // are land on the production grid (50x50, origin -25,-25), and the
-            // block does not overlap the survey's 3x3 candidate (-10,-2).
-            state.PlacedBuildings.Add(new PlacedBuildingState
-            {
-                InstanceId = "b001",
-                DefId = "herb_plot",
-                GridX = -11,
-                GridZ = -8,
-                Rotation = 0
-            });
+            // --- Placed buildings ---
+            // None. The start state carries NO buildings: the player sees an empty
+            // sect and must build everything themselves. A start-state herb_plot
+            // used to be placed here for the task building-requirement gate, but it
+            // was invisible on screen, so state disagreed with what the player saw.
 
             // --- Disciples (Updated for New Avatar System with SlotPart struct) ---
             
@@ -68,7 +59,7 @@ namespace Xianxia.Sect
                 ChibiBackend = ChibiBackend.SpriteSheet, // Outer = SpriteSheet (แผน §4.1)
                 Rank = DiscipleRank.OuterDisciple,
                 Wallet = new CurrencyWallet { SpiritStones = 12, Contribution = 340 },
-                CurrentTask = "gathering_herb",
+                CurrentTask = "meditation", // was gathering_herb — herb_plot is no longer in start state, gate would block it anyway
                 PersonalInventory = new List<InventoryItem>(),
                 Avatar = AvatarAppearance.FromSlots(
                     new SlotPart(AvatarSlots.Body, "body_robe_grey"),

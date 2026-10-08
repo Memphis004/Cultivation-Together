@@ -57,6 +57,18 @@ namespace Xianxia.Sect.Tests
                 _taskChanged,
                 _ownerChanged,
                 _clock);
+
+            // The start state is building-free, so the gathering_herb cases below need
+            // their own herb_plot (state presence is all the requirement gate checks).
+            PlaceHerbPlot();
+        }
+
+        private void PlaceHerbPlot()
+        {
+            string reason;
+            PlacedBuildingState placed;
+            Assert.IsTrue(_provider.TryPlaceBuilding("herb_plot", 0, 0, 0, new BuildingGrid(10, 10),
+                                                     out reason, out placed), reason);
         }
 
         private SectEconomyState State => _provider.BuildSectEconomyState();
@@ -139,7 +151,7 @@ namespace Xianxia.Sect.Tests
 
             string reason;
             Assert.IsFalse(_provider.TryAssignTask("viewer_test_02", "d001", "gathering_wood", out reason));
-            Assert.AreEqual("gathering_herb", Find("d001").CurrentTask);
+            Assert.AreEqual("meditation", Find("d001").CurrentTask, "start task unchanged by a rejection");
             Assert.AreEqual(0, _taskChanged.Messages.Count);
         }
 
@@ -173,7 +185,7 @@ namespace Xianxia.Sect.Tests
 
             string reason;
             Assert.IsFalse(_provider.TryAssignTask("SECT_MASTER", "d001", "gathering_wood", out reason));
-            Assert.AreEqual("gathering_herb", Find("d001").CurrentTask);
+            Assert.AreEqual("meditation", Find("d001").CurrentTask);
             Assert.AreEqual(0, _taskChanged.Messages.Count);
         }
 
@@ -203,7 +215,7 @@ namespace Xianxia.Sect.Tests
 
             string reason;
             Assert.IsFalse(_provider.TryAssignTask("SECT_MASTER", "d001", "gathering_wood", out reason));
-            Assert.AreEqual("gathering_herb", Find("d001").CurrentTask);
+            Assert.AreEqual("meditation", Find("d001").CurrentTask);
         }
 
         [Test]
@@ -219,7 +231,7 @@ namespace Xianxia.Sect.Tests
 
             string reason;
             Assert.IsFalse(_provider.TryAssignTask("SECT_MASTER", "d001", "gathering_wood", out reason));
-            Assert.AreEqual("gathering_herb", Find("d001").CurrentTask);
+            Assert.AreEqual("meditation", Find("d001").CurrentTask);
         }
 
         [Test]
@@ -289,7 +301,7 @@ namespace Xianxia.Sect.Tests
             // and SECT_MASTER (the id both the player UI and the trusted GM send)
             // is blocked by the same protection rule...
             Assert.IsFalse(_provider.TryAssignTask("SECT_MASTER", "d001", "gathering_wood", out reason));
-            Assert.AreEqual("gathering_herb", Find("d001").CurrentTask);
+            Assert.AreEqual("meditation", Find("d001").CurrentTask);
 
             // ...then allowed once the window lapses — identical rule, no special case.
             _clock.UtcNow = T0.AddMinutes(11);
@@ -363,6 +375,8 @@ namespace Xianxia.Sect.Tests
         public void NoOp_DoesNotResetGatheringProgress()
         {
             // d001 gathers herb at 0.2/s; the fractional accumulator lives per task.
+            // (SetUp placed the herb_plot; d001 itself starts on meditation.)
+            Find("d001").CurrentTask = "gathering_herb";
             var herbAtStart = State.Stockpile.RawResources["herb"];
             Tick(3.5f); // 0.7 accumulated → no whole unit yet
             Assert.AreEqual(herbAtStart, State.Stockpile.RawResources["herb"], "0.7 units produced nothing");
@@ -431,6 +445,7 @@ namespace Xianxia.Sect.Tests
         public void RejectedCommand_LeavesTaskProgressAndResourcesUnchanged()
         {
             Assert.IsTrue(Bind("d001", "viewer_test_01"));
+            Find("d001").CurrentTask = "gathering_herb"; // start state: d001 is on meditation
             Tick(3.5f); // partial gathering progress on d001
 
             var herbBefore = State.Stockpile.RawResources["herb"];

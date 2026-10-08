@@ -41,6 +41,18 @@ namespace Xianxia.Sect.Tests
                 new BuildingDefPool(),
                 new BufferPublisher<BuildingPlacedMessage>(),
                 _taskChanged);
+
+            // The start state carries NO buildings, so the gathering_herb case below
+            // needs its own herb_plot — state presence is all the requirement gate checks.
+            PlaceHerbPlot();
+        }
+
+        private void PlaceHerbPlot()
+        {
+            string reason;
+            PlacedBuildingState placed;
+            Assert.IsTrue(_provider.TryPlaceBuilding("herb_plot", 0, 0, 0, new BuildingGrid(10, 10),
+                                                     out reason, out placed), reason);
         }
 
         private DiscipleState Find(string id)

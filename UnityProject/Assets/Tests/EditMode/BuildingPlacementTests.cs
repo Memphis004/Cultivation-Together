@@ -80,7 +80,7 @@ namespace Xianxia.Sect.Tests
             Assert.IsTrue(_controller.TryCommit(_grid, out reason, out placed), reason);
 
             Assert.AreEqual(woodBefore - 20, Raw("wood"), "cost must be deducted exactly");
-            Assert.AreEqual(2, State.PlacedBuildings.Count, "state append exactly one entry (mock start has b001 herb_plot)");
+            Assert.AreEqual(1, State.PlacedBuildings.Count, "state append exactly one entry (start state is building-free)");
 
             // SectResourceChangedMessage ต้องยิงจริง (HUD อัปเดตจาก message นี้)
             bool resourceMsg = false;
@@ -197,7 +197,7 @@ namespace Xianxia.Sect.Tests
             string reason;
             PlacedBuildingState placed;
             Assert.IsFalse(_controller.TryCommit(_grid, out reason, out placed));
-            Assert.AreEqual(1, State.PlacedBuildings.Count, "mock start b001 is the only placed building");
+            Assert.AreEqual(0, State.PlacedBuildings.Count, "rejected commit appends nothing — start state stays empty");
         }
 
         // ---- cancel: ไม่มีอะไรเปลี่ยนใน state เลย ----
@@ -243,8 +243,8 @@ namespace Xianxia.Sect.Tests
             Assert.AreEqual(90, b.Rotation);
 
             // "reload": grid ใหม่เปล่า + rebuild จาก state.PlacedBuildings เท่านั้น
-            // origin ติดลบได้ (production convention) — mock start b001 herb_plot
-            // อยู่ที่ (-11,-8) บน grid 50x50 origin -25,-25 ต้องคลุมด้วย
+            // origin ติดลบได้ (production convention) — ที่นี่ state มีแค่สองอาคารที่
+            // เพิ่งวาง (2,3) กับ (6,0) ซึ่ง freshGrid 30x30 origin -15,-15 ครอบครบ
             var freshGrid = new BuildingGrid(30, 30, -15, -15);
             var pool = _defPool;
             foreach (var pb in State.PlacedBuildings)

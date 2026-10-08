@@ -45,6 +45,13 @@ namespace Xianxia.Sect.Tests
                 _taskChanged,
                 new BufferPublisher<DiscipleOwnerChangedMessage>(),
                 _clock);
+
+            // The start state is building-free, so the gathering_herb changes below
+            // need their own herb_plot (state presence is all the requirement gate checks).
+            string reason;
+            PlacedBuildingState placed;
+            Assert.IsTrue(_provider.TryPlaceBuilding("herb_plot", 0, 0, 0, new BuildingGrid(10, 10),
+                                                     out reason, out placed), reason);
         }
 
         private SectEconomyState State => _provider.BuildSectEconomyState();
@@ -162,7 +169,7 @@ namespace Xianxia.Sect.Tests
             Assert.AreEqual("d001", e.DiscipleId);
             Assert.AreEqual(DiscipleOwnerType.Viewer, e.OwnerType);
             Assert.AreEqual("viewer_test_01", e.OwnerId);
-            Assert.AreEqual("gathering_herb", e.CurrentTask);
+            Assert.AreEqual("meditation", e.CurrentTask, "d001's start task (no herb_plot in the start state)");
             Assert.IsTrue(e.OwnerProtected);
             Assert.AreEqual(540f, e.OwnerProtectionRemainingSeconds, 0.5f, "600 - 60 elapsed");
             Assert.IsTrue(e.MembershipConsistent);

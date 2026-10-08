@@ -51,6 +51,13 @@ namespace Xianxia.Sect.Tests
                 new BufferPublisher<BuildingPlacedMessage>(),
                 _taskChangedOut);
 
+            // The start state is building-free, so committing gathering_herb below needs
+            // its own herb_plot (state presence is all the requirement gate checks).
+            string placeReason;
+            PlacedBuildingState placedPlot;
+            Assert.IsTrue(_provider.TryPlaceBuilding("herb_plot", 0, 0, 0, new BuildingGrid(10, 10),
+                                                     out placeReason, out placedPlot), placeReason);
+
             _presenter = new TaskAssignmentPresenter(_provider, _taskChangedIn);
 
             // ── minimal real view hierarchy (rowRoot + buttons + banner) ──
@@ -225,7 +232,7 @@ namespace Xianxia.Sect.Tests
 
             Assert.AreEqual("gathering_herb", Find("d000").CurrentTask, "changed row committed");
             Assert.AreEqual("gathering_herb", d000.DropdownValueText, "baseline advanced with the commit");
-            Assert.AreEqual("gathering_herb", Find("d001").CurrentTask, "untouched row d001");
+            Assert.AreEqual("meditation", Find("d001").CurrentTask, "untouched row d001");
             Assert.AreEqual("meditation", Find("d002").CurrentTask, "untouched row d002");
             Assert.AreEqual("meditation", Find("d003").CurrentTask, "untouched row d003");
             Assert.IsFalse(_view.IsConfirmInteractableForTest, "no drafts left after success");
@@ -240,12 +247,12 @@ namespace Xianxia.Sect.Tests
             var d000 = RowOf("d000");
             var d001 = RowOf("d001");
             d000.SelectTask(OptionIndexOf(d000, "refining_elixir")); // FAILS: no pill_hall
-            d001.SelectTask(OptionIndexOf(d001, "meditation"));      // succeeds: no requirement
+            d001.SelectTask(OptionIndexOf(d001, "gathering_wood"));  // succeeds: no requirement
 
             _view.InvokeConfirmForTest();
 
-            Assert.AreEqual("meditation", Find("d001").CurrentTask, "successful row committed");
-            Assert.AreEqual("meditation", d001.DropdownValueText, "success baseline advanced");
+            Assert.AreEqual("gathering_wood", Find("d001").CurrentTask, "successful row committed");
+            Assert.AreEqual("gathering_wood", d001.DropdownValueText, "success baseline advanced");
             Assert.AreEqual("meditation", Find("d000").CurrentTask, "failed row: state unchanged");
             Assert.AreEqual("refining_elixir", d000.DropdownValueText, "failed draft RETAINED in the dropdown for correction");
             StringAssert.Contains("pill_hall", d000.StatusTextForTest, "per-row error names the missing building");

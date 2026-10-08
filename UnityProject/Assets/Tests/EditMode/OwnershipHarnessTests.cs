@@ -91,7 +91,7 @@ namespace Xianxia.Sect.Tests
             // viewer_test_02 ≠ viewer_test_01 — the real gate must fail-closed
             Assert.IsFalse(_provider.TryAssignTask("viewer_test_02", "d001", "gathering_ore", out var reason));
             StringAssert.Contains("not allowed", reason);
-            Assert.AreEqual("gathering_herb", Find("d001").CurrentTask, "rejection leaves CurrentTask");
+            Assert.AreEqual("meditation", Find("d001").CurrentTask, "rejection leaves CurrentTask");
             Assert.AreEqual(0, _taskChanged.Messages.Count);
         }
 
@@ -104,7 +104,7 @@ namespace Xianxia.Sect.Tests
                                                          "viewer_test_01", out _));
 
             Assert.IsFalse(_provider.TryAssignTask("", "d001", "gathering_ore", out _));
-            Assert.AreEqual("gathering_herb", Find("d001").CurrentTask, "empty requester changes nothing");
+            Assert.AreEqual("meditation", Find("d001").CurrentTask, "empty requester changes nothing");
         }
 
         // ---- undefined enum value ----
