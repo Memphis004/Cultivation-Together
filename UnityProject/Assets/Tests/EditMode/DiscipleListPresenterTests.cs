@@ -170,6 +170,13 @@ namespace Xianxia.Sect.Tests
                 failReason = null; return false;
             }
 
+            // Not exercised by these tests — stubbed to satisfy the interface.
+            // Real behavior covered in TaskRequirementTests.
+            public bool IsTaskAvailable(string taskId, out string failReason)
+            {
+                failReason = null; return false;
+            }
+
             public bool TryPlaceBuilding(string defId, int gridX, int gridZ, int rotation,
                                          BuildingGrid grid, out string failReason,
                                          out PlacedBuildingState placed)

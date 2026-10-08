@@ -80,7 +80,7 @@ namespace Xianxia.Sect.Tests
             Assert.IsTrue(_controller.TryCommit(_grid, out reason, out placed), reason);
 
             Assert.AreEqual(woodBefore - 20, Raw("wood"), "cost must be deducted exactly");
-            Assert.AreEqual(1, State.PlacedBuildings.Count, "state append exactly one entry");
+            Assert.AreEqual(2, State.PlacedBuildings.Count, "state append exactly one entry (mock start has b001 herb_plot)");
 
             // SectResourceChangedMessage ต้องยิงจริง (HUD อัปเดตจาก message นี้)
             bool resourceMsg = false;
@@ -197,7 +197,7 @@ namespace Xianxia.Sect.Tests
             string reason;
             PlacedBuildingState placed;
             Assert.IsFalse(_controller.TryCommit(_grid, out reason, out placed));
-            Assert.AreEqual(0, State.PlacedBuildings.Count);
+            Assert.AreEqual(1, State.PlacedBuildings.Count, "mock start b001 is the only placed building");
         }
 
         // ---- cancel: ไม่มีอะไรเปลี่ยนใน state เลย ----

@@ -184,8 +184,9 @@ namespace Xianxia.Sect.Tests
         public void FirstTab_ShowsAllProductionDefs()
         {
             var cards = Cards();
-            Assert.AreEqual(2, cards.Count, "building_defs.json หมวด Production มี herb_plot + pill_hall");
+            Assert.AreEqual(3, cards.Count, "building_defs.json หมวด Production มี herb_plot + pill_hall + forge");
             Assert.AreEqual("herb_plot", cards[0].DefId);
+            Assert.AreEqual("forge", cards[2].DefId, "forge appended to the def list");
         }
 
         [Test]
@@ -221,7 +222,8 @@ namespace Xianxia.Sect.Tests
             PlacementView().ConfirmButton.onClick.Invoke(); // ✓ ปุ่มจริง
 
             Assert.AreEqual(woodBefore - 20, Raw("wood"), "cost deducted through AdjustAndNotify");
-            Assert.AreEqual(1, _stateProvider.BuildSectEconomyState().PlacedBuildings.Count);
+            Assert.AreEqual(2, _stateProvider.BuildSectEconomyState().PlacedBuildings.Count,
+                            "mock start b001 + this commit");
             Assert.IsFalse(_placement.IsActive, "auto-commit exits placement mode");
             Assert.AreEqual(1, _buildEndedBuffer.Messages.Count, "camera returns to overview");
             Assert.AreEqual(1, _placedBuffer.Messages.Count);
@@ -250,8 +252,8 @@ namespace Xianxia.Sect.Tests
             var status = PlacementView().StatusText != null ? PlacementView().StatusText.text : string.Empty;
             Assert.IsTrue(status.Length > 0, "must surface a reason (แดง/ข้อความ §3.2)");
             Assert.IsTrue(_placement.IsActive, "failed commit keeps placement mode for retry");
-            Assert.AreEqual(1, _stateProvider.BuildSectEconomyState().PlacedBuildings.Count,
-                            "no state append on failed commit");
+            Assert.AreEqual(2, _stateProvider.BuildSectEconomyState().PlacedBuildings.Count,
+                            "no state append on failed commit (mock start b001 + first commit)");
         }
 
         // ---- ✕ ยกเลิก: ไม่มีอะไรเปลี่ยนใน state เลย ----
@@ -271,7 +273,7 @@ namespace Xianxia.Sect.Tests
             Assert.AreEqual(wood, Raw("wood"));
             Assert.AreEqual(ore, Raw("ore"));
             Assert.AreEqual(provisions, Raw("provisions"));
-            Assert.AreEqual(0, state.PlacedBuildings.Count, "no state append on cancel");
+            Assert.AreEqual(1, state.PlacedBuildings.Count, "no state append on cancel (mock start b001 stays)");
             Assert.AreEqual(0, _resourceBuffer.Messages.Count, "no resource message on cancel");
             Assert.AreEqual(0, _placedBuffer.Messages.Count);
             Assert.IsFalse(_placement.IsActive);

@@ -65,6 +65,17 @@
             "Rotatable": true,
             "SpritePath": "",
             "ThumbnailPath": ""
+        },
+        {
+            "Id": "forge",
+            "DisplayName": "หรานตีดาบ",
+            "Category": "Production",
+            "GridWidth": 2,
+            "GridHeight": 2,
+            "Cost": [ { "ResourceId": "wood", "Amount": 30 }, { "ResourceId": "ore", "Amount": 20 } ],
+            "Rotatable": true,
+            "SpritePath": "",
+            "ThumbnailPath": ""
         }
     ]
 }

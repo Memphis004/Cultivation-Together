@@ -198,6 +198,14 @@ namespace Xianxia.Sect
         bool TryAssignTask(string requesterId, string discipleId, string taskId, out string failReason);
 
         /// <summary>
+        /// Task building-requirement gate (§6 addendum). Reads the live
+        /// PlacedBuildings list — true when the task is known and either has no
+        /// required building or that building def id already exists in state.
+        /// Unknown task fails with its usual reason; failClosed — never mutates.
+        /// </summary>
+        bool IsTaskAvailable(string taskId, out string failReason);
+
+        /// <summary>
         /// Mutate DiscipleState.ChibiBackend (entitlement) + publish
         /// DiscipleChibiBackendChangedMessage (in-memory). DiscipleVisualSystem respawns
         /// the visual in place on that message — position/activity/facing preserved (§7).

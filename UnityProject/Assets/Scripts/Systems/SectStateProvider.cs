@@ -62,6 +62,57 @@ namespace Xianxia.Sect
             return set;
         }
 
+        // Task building-requirements — static design data, not runtime state:
+        // task id -> building def id that must be in SectEconomyState.PlacedBuildings
+        // before that task can be assigned. Tasks absent from this dictionary
+        // (gathering_wood/ore/provisions, meditation) have no requirement.
+        // Placeholder lookup: list-scan of PlacedBuildings is fast enough while
+        // the roster is small; swap for an index later if it grows (same shape
+        // as NextBuildingInstanceId's scan).
+        private static readonly Dictionary<string, string> TaskRequiredBuilding = new Dictionary<string, string>
+        {
+            ["gathering_herb"] = "herb_plot",
+            ["refining_elixir"] = "pill_hall",
+            ["forging_artifact"] = "forge",
+        };
+
+        // Tick-side variant of IsTaskAvailable — same rules, but the caller
+        // supplies a placed-DefId set built ONCE per tick (never scan
+        // PlacedBuildings per disciple). Same failReason shape so log/UI text
+        // stays consistent with the gate on TryAssignTask.
+        private static bool IsTaskAvailableWithBuildings(string taskId, HashSet<string> placedDefIds, out string failReason)
+        {
+            failReason = string.Empty;
+
+            if (string.IsNullOrEmpty(taskId) || !KnownTasks.Contains(taskId))
+            {
+                failReason = $"Unknown task: '{taskId}'.";
+                return false;
+            }
+
+            string requiredBuilding;
+            if (!TaskRequiredBuilding.TryGetValue(taskId, out requiredBuilding))
+                return true; // no requirement — always available once known
+
+            if (placedDefIds != null && placedDefIds.Contains(requiredBuilding))
+                return true;
+
+            failReason = $"Task '{taskId}' requires an existing '{requiredBuilding}' building.";
+            return false;
+        }
+
+        /// <summary>Placed DefId set for one tick — built once, shared by both ticks.</summary>
+        private HashSet<string> CollectPlacedDefIds()
+        {
+            var set = new HashSet<string>();
+            for (int i = 0; i < _state.PlacedBuildings.Count; i++)
+            {
+                var pb = _state.PlacedBuildings[i];
+                if (pb != null && !string.IsNullOrEmpty(pb.DefId)) set.Add(pb.DefId);
+            }
+            return set;
+        }
+
         // Placeholder name pool - swap for a real generator once there's a
         // reason to (naming conventions, avoiding repeats at scale, etc.).
         private static readonly string[] RecruitNamePool =
@@ -156,11 +207,15 @@ namespace Xianxia.Sect
 
         // Passive resource gathering - every disciple whose CurrentTask is
         // a known gathering task contributes toward that resource. Called
-        // from DiscipleSystem.Tick().
+        // from DiscipleSystem.Tick(). Disciples whose task fails the building
+        // requirement are SKIPPED (CurrentTask is never rewritten here — the
+        // assignment gate is the only place that validates on assignment).
         public void TickGathering(float deltaTimeSeconds)
         {
+            var placedDefIds = CollectPlacedDefIds(); // once per tick, not per disciple
             foreach (var disciple in _state.Disciples)
             {
+                if (!IsTaskAvailableWithBuildings(disciple.CurrentTask, placedDefIds, out _)) continue;
                 if (!GatheringRates.TryGetValue(disciple.CurrentTask, out var rate)) continue;
 
                 var accKey = disciple.CurrentTask;
@@ -185,11 +240,16 @@ namespace Xianxia.Sect
         // ordinary disciples, or straight into personal inventory for
         // Elder+ (matches the ownership rule from the economy design:
         // outer/inner disciples craft for the sect, elders keep their own).
-        // Called from ResourceCraftingSystem.Tick().
+        // Called from ResourceCraftingSystem.Tick(). Disciples whose task
+        // fails the building requirement are SKIPPED — progress is HELD at
+        // its current value exactly like the out-of-materials path (never
+        // reset), and CurrentTask is never rewritten here.
         public void TickCrafting(float deltaTimeSeconds)
         {
+            var placedDefIds = CollectPlacedDefIds(); // once per tick, not per disciple
             foreach (var disciple in _state.Disciples)
             {
+                if (!IsTaskAvailableWithBuildings(disciple.CurrentTask, placedDefIds, out _)) continue;
                 if (!CraftingRecipes.TryGetValue(disciple.CurrentTask, out var recipe)) continue;
 
                 var progress = _craftProgress.TryGetValue(disciple.DiscipleId, out var existing) ? existing : 0f;
@@ -410,6 +470,11 @@ namespace Xianxia.Sect
                 return false;
             }
 
+            // Building requirement (same seam as TryAssignTask — no mutation,
+            // no DiscipleTaskChangedMessage on failure).
+            if (!IsTaskAvailable(taskId, out failReason))
+                return false;
+
             disciple.CurrentTask = taskId;
             _discipleTaskChangedPublisher.Publish(new DiscipleTaskChangedMessage
             {
@@ -419,6 +484,36 @@ namespace Xianxia.Sect
 
             Debug.Log($"[SectStateProvider] {requesterId} assigned task '{taskId}' to {discipleId}.");
             return true;
+        }
+
+        // ---------- Task building-requirement gate (§6 addendum, Phase 2 static-data step) ----------
+        // Public so UI / ghost-preview callers (and TryAssignTask) can check the
+        // requirement without permission checks or mutation. Deliberately plain
+        // C# — no UnityEngine API, no Stockpile touch, no TaskDef pipeline: the
+        // dictionary above IS the source of truth, PlacedBuildings IS the state.
+        public bool IsTaskAvailable(string taskId, out string failReason)
+        {
+            failReason = string.Empty;
+
+            if (string.IsNullOrEmpty(taskId) || !KnownTasks.Contains(taskId))
+            {
+                failReason = $"Unknown task: '{taskId}'.";
+                return false;
+            }
+
+            string requiredBuilding;
+            if (!TaskRequiredBuilding.TryGetValue(taskId, out requiredBuilding))
+                return true; // no requirement — always available once known
+
+            for (int i = 0; i < _state.PlacedBuildings.Count; i++)
+            {
+                var placed = _state.PlacedBuildings[i];
+                if (placed != null && placed.DefId == requiredBuilding)
+                    return true;
+            }
+
+            failReason = $"Task '{taskId}' requires an existing '{requiredBuilding}' building.";
+            return false;
         }
 
         /// <summary>

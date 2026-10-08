@@ -151,6 +151,16 @@ So `"cultivation"` is currently **rejected as unknown** until a human decides.
 `meditation` canonical and the spec example stale?
 **When asked**: treat as a rename decision, not a data-pipeline task.
 
+## 16. `forge` Building Def — Cost Numbers Are Placeholders
+
+**Status**: ⏳ def added 8 Oct 2026 for the task building-requirement step
+(`gathering_herb` → `herb_plot`, `refining_elixir` → `pill_hall`,
+`forging_artifact` → `forge` in SectStateProvider.TaskRequiredBuilding).
+**Open**: the cost numbers in `building_defs.json` for `forge`
+(wood 30 + ore 20) are **placeholders** — they were picked to exist, not from
+design. Display name and 2x2 footprint are equally provisional.
+**When asked**: treat as a balance pass, not a data-pipeline task.
+
 ## When In Doubt
 
 - **Don't assume** — these are deliberately unresolved
