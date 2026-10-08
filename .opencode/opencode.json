@@ -1,0 +1,90 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "provider": {
+    "llama": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "llama.cpp via llama-swap",
+      "options": {
+        "baseURL": "http://127.0.0.1:8080/v1"
+      },
+      "models": {
+        "gemma-e4b": {
+          "name": "Gemma 4 E4B (GPU)",
+          "limit": {
+            "context": 32768,
+            "output": 8192
+          }
+        },
+        "qwen-27b": {
+          "name": "Qwen3.8 27B (GPU)",
+          "limit": {
+            "context": 32768,
+            "output": 8192
+          }
+        },
+        "qwen-coder-30b": {
+          "name": "Qwen3-Coder 30B (GPU)",
+          "limit": {
+            "context": 32768,
+            "output": 8192
+          }
+        }
+      }
+    },
+    "toptools": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "Top-Tools-Ai",
+      "options": {
+        "baseURL": "https://top-tools-ai.com/api/v1",
+        "apiKey": "sk-4b7dafa61fe7e5866df701f148ccffe7474bddc6e9e81574a0aed886ee9fbbf7"
+      },
+      "models": {
+        "Top-Tools-Ai": {
+          "name": "Top-Tools-Ai",
+          "limit": {
+            "context": 65536,
+            "output": 4096
+          }
+        }
+      }
+    },
+    "aipass": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "AiPASS Bridge (Local)",
+      "options": {
+        "baseURL": "http://localhost:8787/v1"
+      },
+      "models": {
+        "gpt-6-astra": {
+          "name": "GPT-6 Astra (via AiPASS)"
+        },
+        "claude-3-5-sonnet": {
+          "name": "Claude 3.5 Sonnet (via AiPASS)"
+        },
+        "gemini-1.5-pro": {
+          "name": "Gemini 1.5 Pro (via AiPASS)"        
+        },
+        "gemini-3.5-flash-lite": {
+          "name": "Gemini 3.5 Flash Lite (via AiPASS)"
+        }
+      }
+    }
+  },
+  "lsp": {
+    "csharp-ls": {
+      "command": [
+        "C:\\Users\\memph\\.dotnet\\tools\\csharp-ls.exe"
+      ]
+    }
+  },
+  "mcp": {
+    "comfy-mcp": {
+      "type": "local",
+      "command": [
+        "C:\\Users\\memph\\AppData\\Local\\Programs\\Python\\Python311\\Scripts\\comfy-mcp.exe"
+      ],
+      "enabled": true,
+      "timeout": 20000
+    }
+  }
+}

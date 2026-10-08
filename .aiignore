@@ -1,0 +1,34 @@
+# Unity build/cache (ไม่จำเป็น)
+UnityProject/Library/
+UnityProject/Temp/
+UnityProject/Obj/
+UnityProject/Logs/
+UnityProject/Builds/
+UnityProject/AssetStoreTools*
+*.unitypackage
+*.dll
+*.meta
+
+# Art assets ที่กิน token เยอะมาก
+Artwork/**/*.psd
+Artwork/**/*.tga
+art/**/*.psd
+comfy/**/*.ckpt
+comfy/**/*.safetensors
+comfy/**/*.png
+
+# IDE / OS
+.vs/
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Binaries / compiled
+bin/
+obj/
+*.exe
+*.dll
+
+# Logs
+*.log
