@@ -157,6 +157,7 @@
     <Compile Include="Assets\Scripts\Data\Gen\game\TbEventDef.cs" />
     <Compile Include="Assets\Scripts\UI\Presenters\DiscipleDetailPresenter.cs" />
     <Compile Include="Assets\Scripts\UI\Widgets\RadarChartGraphic.cs" />
+    <Compile Include="Assets\Scripts\Shared\DiscipleAttributes.cs" />
     <Compile Include="Assets\Scripts\Visual\Core\VisualRuntimeConfig.cs" />
     <Compile Include="Assets\Scripts\Data\Gen\worldevent\EventRow.cs" />
     <Compile Include="Assets\Scripts\Visual\Scene\ChibiSceneRoot.cs" />

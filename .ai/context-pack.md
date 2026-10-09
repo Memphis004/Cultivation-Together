@@ -1,11 +1,11 @@
 # Cultivation-Together Context Pack
 
 - Repository: Memphis004/Cultivation-Together
-- Commit: 8c866ca
+- Commit: 01e0d80
 - Branch: main
 - Generated: 2026-10-09
-- Uncommitted changes in working tree: 26 file(s) (ไฟล์ที่แนบมาอ่านจาก working tree ไม่ใช่จาก commit — ถ้า > 0 อาจต่างจาก commit)
-- Files after .aiignore filter: 2030
+- Uncommitted changes in working tree: 33 file(s) (ไฟล์ที่แนบมาอ่านจาก working tree ไม่ใช่จาก commit — ถ้า > 0 อาจต่างจาก commit)
+- Files after .aiignore filter: 2036
 
 ## Ground Rules (สำคัญมาก — บังคับ AI)
 
@@ -49,13 +49,13 @@
 (ตัด `Gen/`, `Tests/`, `Editor/`, `Spikes/` ออก — ถ้าต้องการให้ขอผ่าน need_files)
 
 - `McpBridge/Program.cs`: static class SectQueryTools, static class SectActionTools
-- `McpBridge/Shared/GameMessages.cs`: class DiscipleRecruitedMessage, class DiscipleRankChangedMessage, class SectResourceChangedMessage, class ContributionEarnedMessage, class SceneLoadedMessage, class WorldEventTriggeredMessage, class TimeSpeedChangedMessage, class SectStateQuery, class SectStateSnapshot, class AwaitWorldEventRequest, class AwaitWorldEventResponse, class EventChoiceInfo, class ExecuteDecisionMessage, class DecisionExecutedMessage, class BuildModeStartedMessage, class BuildModeEndedMessage, class PurchaseItemRequest, class PurchaseItemResponse, class BuildingPlacedMessage, class DiscipleChibiBackendChangedMessage, class DiscipleSelectedMessage, class AvatarEquipmentChangedMessage, class ChangeAvatarPartRequest, class ChangeAvatarPartResponse, class AssignTaskRequest, class AssignTaskResponse, class DiscipleTaskChangedMessage, class DiscipleOwnerChangedMessage, class OwnershipObservabilityQuery, class OwnershipObservabilitySnapshot, class TaskChangeObservabilityQuery, class TaskChangeObservabilitySnapshot, class TaskProtectionQuery, class TaskProtectionEntry, class TaskProtectionSnapshot, class SectViewerMembershipSave, class SectSavedOwnership, static class InterprocessTopics
+- `McpBridge/Shared/GameMessages.cs`: class DiscipleRecruitedMessage, class DiscipleRankChangedMessage, class SectResourceChangedMessage, class ContributionEarnedMessage, class SceneLoadedMessage, class WorldEventTriggeredMessage, class TimeSpeedChangedMessage, class SectStateQuery, class SectStateSnapshot, class AwaitWorldEventRequest, class AwaitWorldEventResponse, class EventChoiceInfo, class ExecuteDecisionMessage, class DecisionExecutedMessage, class BuildModeStartedMessage, class BuildModeEndedMessage, class PurchaseItemRequest, class PurchaseItemResponse, class BuildingPlacedMessage, class DiscipleChibiBackendChangedMessage, class DiscipleSelectedMessage, class AvatarEquipmentChangedMessage, class ChangeAvatarPartRequest, class ChangeAvatarPartResponse, class AssignTaskRequest, class AssignTaskResponse, class DiscipleTaskChangedMessage, class DiscipleOwnerChangedMessage, class DiscipleControlModeChangedMessage, class OwnershipObservabilityQuery, class OwnershipObservabilitySnapshot, class TaskChangeObservabilityQuery, class TaskChangeObservabilitySnapshot, class TaskProtectionQuery, class TaskProtectionEntry, class TaskProtectionSnapshot, class SectViewerMembershipSave, class SectSavedOwnership, static class InterprocessTopics
 - `McpBridge/Shared/MockSectData.cs`: static class MockSectData
-- `McpBridge/Shared/SectEconomyState.cs`: enum OwnerScope, enum DiscipleRank, enum DiscipleSex, enum DiscipleOwnerType, enum ChibiBackend, class CurrencyWallet, class InventoryItem, class DiscipleState, class SectStockpile, class PlacedBuildingState, class SectEconomyState, struct SlotPart, sealed class AvatarAppearance, static class AvatarSlots
+- `McpBridge/Shared/SectEconomyState.cs`: enum OwnerScope, enum DiscipleRank, enum DiscipleSex, enum DiscipleOwnerType, enum DiscipleControlMode, enum ChibiBackend, class CurrencyWallet, class InventoryItem, class DiscipleState, class SectStockpile, class PlacedBuildingState, class SectEconomyState, struct SlotPart, sealed class AvatarAppearance, static class AvatarSlots
 - `McpBridge/Shared/ViewerMembership.cs`: enum ViewerMembershipStatus, class ViewerRecord, class PendingViewerApplication, interface IClock, sealed class UtcClock, class SectViewerRegistry
-- `Shared/GameMessages.cs`: class DiscipleRecruitedMessage, class DiscipleRankChangedMessage, class SectResourceChangedMessage, class ContributionEarnedMessage, class SceneLoadedMessage, class WorldEventTriggeredMessage, class TimeSpeedChangedMessage, class SectStateQuery, class SectStateSnapshot, class AwaitWorldEventRequest, class AwaitWorldEventResponse, class EventChoiceInfo, class ExecuteDecisionMessage, class DecisionExecutedMessage, class BuildModeStartedMessage, class BuildModeEndedMessage, class PurchaseItemRequest, class PurchaseItemResponse, class BuildingPlacedMessage, class DiscipleChibiBackendChangedMessage, class DiscipleSelectedMessage, class AvatarEquipmentChangedMessage, class ChangeAvatarPartRequest, class ChangeAvatarPartResponse, class AssignTaskRequest, class AssignTaskResponse, class DiscipleTaskChangedMessage, class DiscipleOwnerChangedMessage, class OwnershipObservabilityQuery, class OwnershipObservabilitySnapshot, class TaskChangeObservabilityQuery, class TaskChangeObservabilitySnapshot, class TaskProtectionQuery, class TaskProtectionEntry, class TaskProtectionSnapshot, class SectViewerMembershipSave, class SectSavedOwnership, static class InterprocessTopics
+- `Shared/GameMessages.cs`: class DiscipleRecruitedMessage, class DiscipleRankChangedMessage, class SectResourceChangedMessage, class ContributionEarnedMessage, class SceneLoadedMessage, class WorldEventTriggeredMessage, class TimeSpeedChangedMessage, class SectStateQuery, class SectStateSnapshot, class AwaitWorldEventRequest, class AwaitWorldEventResponse, class EventChoiceInfo, class ExecuteDecisionMessage, class DecisionExecutedMessage, class BuildModeStartedMessage, class BuildModeEndedMessage, class PurchaseItemRequest, class PurchaseItemResponse, class BuildingPlacedMessage, class DiscipleChibiBackendChangedMessage, class DiscipleSelectedMessage, class AvatarEquipmentChangedMessage, class ChangeAvatarPartRequest, class ChangeAvatarPartResponse, class AssignTaskRequest, class AssignTaskResponse, class DiscipleTaskChangedMessage, class DiscipleOwnerChangedMessage, class DiscipleControlModeChangedMessage, class OwnershipObservabilityQuery, class OwnershipObservabilitySnapshot, class TaskChangeObservabilityQuery, class TaskChangeObservabilitySnapshot, class TaskProtectionQuery, class TaskProtectionEntry, class TaskProtectionSnapshot, class SectViewerMembershipSave, class SectSavedOwnership, static class InterprocessTopics
 - `Shared/MockSectData.cs`: static class MockSectData
-- `Shared/SectEconomyState.cs`: enum OwnerScope, enum DiscipleRank, enum DiscipleSex, enum DiscipleOwnerType, enum ChibiBackend, class CurrencyWallet, class InventoryItem, class DiscipleState, class SectStockpile, class PlacedBuildingState, class SectEconomyState, struct SlotPart, sealed class AvatarAppearance, static class AvatarSlots
+- `Shared/SectEconomyState.cs`: enum OwnerScope, enum DiscipleRank, enum DiscipleSex, enum DiscipleOwnerType, enum DiscipleControlMode, enum ChibiBackend, class CurrencyWallet, class InventoryItem, class DiscipleState, class SectStockpile, class PlacedBuildingState, class SectEconomyState, struct SlotPart, sealed class AvatarAppearance, static class AvatarSlots
 - `Shared/ViewerMembership.cs`: enum ViewerMembershipStatus, class ViewerRecord, class PendingViewerApplication, interface IClock, sealed class UtcClock, class SectViewerRegistry
 - `UnityProject/Assets/Scripts/Building/BuildingDef.cs`: enum BuildingCategory, class BuildingDef, class BuildingCostEntry
 - `UnityProject/Assets/Scripts/Building/BuildingDefPool.cs`: class BuildingDefTable, class BuildingDefPool
@@ -83,10 +83,12 @@
 - `UnityProject/Assets/Scripts/Data/AvatarPartPool.cs`: class AvatarPartDef, class AvatarPartTable, class AvatarPartPool
 - `UnityProject/Assets/Scripts/Data/LubanEventPool.cs`: class LubanEventPool
 - `UnityProject/Assets/Scripts/Scenes/SectScene/SectSceneLifetimeScope.cs`: sealed class SectSceneLifetimeScope
-- `UnityProject/Assets/Scripts/Shared/GameMessages.cs`: class DiscipleRecruitedMessage, class DiscipleRankChangedMessage, class SectResourceChangedMessage, class ContributionEarnedMessage, class SceneLoadedMessage, class WorldEventTriggeredMessage, class TimeSpeedChangedMessage, class SectStateQuery, class SectStateSnapshot, class AwaitWorldEventRequest, class AwaitWorldEventResponse, class EventChoiceInfo, class ExecuteDecisionMessage, class DecisionExecutedMessage, class BuildModeStartedMessage, class BuildModeEndedMessage, class PurchaseItemRequest, class PurchaseItemResponse, class BuildingPlacedMessage, class DiscipleChibiBackendChangedMessage, class DiscipleSelectedMessage, class AvatarEquipmentChangedMessage, class ChangeAvatarPartRequest, class ChangeAvatarPartResponse, class AssignTaskRequest, class AssignTaskResponse, class DiscipleTaskChangedMessage, class DiscipleOwnerChangedMessage, class OwnershipObservabilityQuery, class OwnershipObservabilitySnapshot, class TaskChangeObservabilityQuery, class TaskChangeObservabilitySnapshot, class TaskProtectionQuery, class TaskProtectionEntry, class TaskProtectionSnapshot, class SectViewerMembershipSave, class SectSavedOwnership, static class InterprocessTopics
+- `UnityProject/Assets/Scripts/Shared/GameMessages.cs`: class DiscipleRecruitedMessage, class DiscipleRankChangedMessage, class SectResourceChangedMessage, class ContributionEarnedMessage, class SceneLoadedMessage, class WorldEventTriggeredMessage, class TimeSpeedChangedMessage, class SectStateQuery, class SectStateSnapshot, class AwaitWorldEventRequest, class AwaitWorldEventResponse, class EventChoiceInfo, class ExecuteDecisionMessage, class DecisionExecutedMessage, class BuildModeStartedMessage, class BuildModeEndedMessage, class PurchaseItemRequest, class PurchaseItemResponse, class BuildingPlacedMessage, class DiscipleChibiBackendChangedMessage, class DiscipleSelectedMessage, class AvatarEquipmentChangedMessage, class ChangeAvatarPartRequest, class ChangeAvatarPartResponse, class AssignTaskRequest, class AssignTaskResponse, class DiscipleTaskChangedMessage, class DiscipleOwnerChangedMessage, class DiscipleControlModeChangedMessage, class OwnershipObservabilityQuery, class OwnershipObservabilitySnapshot, class TaskChangeObservabilityQuery, class TaskChangeObservabilitySnapshot, class TaskProtectionQuery, class TaskProtectionEntry, class TaskProtectionSnapshot, class SectViewerMembershipSave, class SectSavedOwnership, static class InterprocessTopics
 - `UnityProject/Assets/Scripts/Shared/MockSectData.cs`: static class MockSectData
-- `UnityProject/Assets/Scripts/Shared/SectEconomyState.cs`: enum OwnerScope, enum DiscipleRank, enum DiscipleSex, enum DiscipleOwnerType, enum ChibiBackend, class CurrencyWallet, class InventoryItem, class DiscipleState, class SectStockpile, class PlacedBuildingState, class SectEconomyState, struct SlotPart, sealed class AvatarAppearance, static class AvatarSlots
+- `UnityProject/Assets/Scripts/Shared/SectEconomyState.cs`: enum OwnerScope, enum DiscipleRank, enum DiscipleSex, enum DiscipleOwnerType, enum DiscipleControlMode, enum ChibiBackend, class CurrencyWallet, class InventoryItem, class DiscipleState, class SectStockpile, class PlacedBuildingState, class SectEconomyState, struct SlotPart, sealed class AvatarAppearance, static class AvatarSlots
 - `UnityProject/Assets/Scripts/Shared/ViewerMembership.cs`: enum ViewerMembershipStatus, class ViewerRecord, class PendingViewerApplication, interface IClock, sealed class UtcClock, class SectViewerRegistry
+- `UnityProject/Assets/Scripts/Systems/AutoTaskScheduler.cs`: sealed class AutoEvaluationOutcome, class AutoTaskScheduler
+- `UnityProject/Assets/Scripts/Systems/AutoTaskScoring.cs`: enum SectTaskKind, sealed class SectTaskInfo, sealed class AutoTaskFacts, sealed class AutoTaskScore, sealed class AutoTaskDecision, static class AutoTaskWeights, static class AutoTaskTargets, static class AutoTaskScoring
 - `UnityProject/Assets/Scripts/Systems/BuildingSystem.cs`: class BuildingSystem
 - `UnityProject/Assets/Scripts/Systems/DiscipleSystem.cs`: class DiscipleSystem
 - `UnityProject/Assets/Scripts/Systems/ResourceCraftingSystem.cs`: class ResourceCraftingSystem
@@ -200,7 +202,7 @@
     22	echo "  $BRIDGE_DEST"
 ````
 
-### Shared/GameMessages.cs (20183 bytes)
+### Shared/GameMessages.cs (20969 bytes)
 ````
      1	using System;
      2	using System.Collections.Generic;
@@ -528,128 +530,142 @@
    324	        [Key(4)] public string NewOwnerId { get; set; } = string.Empty;
    325	    }
    326	
-   327	    // Request/response pair: the MCP bridge reads the disciples' ownership-change
-   328	    // log (filled by OwnershipObservabilityBuffer, one entry per real change).
-   329	    // Observability ONLY — deliberately no request/response pair or MCP tool that
-   330	    // assigns ownership: the only writer stays the local dev harness / fixtures.
-   331	    [MessagePackObject]
-   332	    public class OwnershipObservabilityQuery
-   333	    {
-   334	        [Key(0)] public string RequestId { get; set; }
-   335	    }
-   336	
-   337	    [MessagePackObject]
-   338	    public class OwnershipObservabilitySnapshot
-   339	    {
-   340	        [Key(0)] public string RequestId { get; set; }
-   341	        [Key(1)] public List<DiscipleOwnerChangedMessage> Events { get; set; } = new List<DiscipleOwnerChangedMessage>();
-   342	    }
-   343	
-   344	    // ---------- P5B observability: task-change log + protection state (READ-ONLY) ----------
-   345	    // Both pairs are pulled on demand by the MCP bridge (request-response, same
-   346	    // mechanism as OwnershipObservabilityQuery — the bridge cannot
-   347	    // IDistributedSubscriber over the TCP transport). Neither pair has a write
-   348	    // path: task assignment keeps its own AssignTaskRequest/Response, and these
-   349	    // are observation only. DiscipleTaskChangedMessage stays in-memory-only; the
-   350	    // bridge pulls the buffered log instead.
+   327	    // ---------- P9A — explicit Manual/Auto control-mode change ----------
+   328	    // Published in-memory by SectStateProvider when a disciple's ControlMode actually
+   329	    // changes: an explicit player toggle, an ownership change that invalidates Auto,
+   330	    // or a successful manual task assignment taking a disciple out of Auto.
+   331	    // ⚠️ Deliberately NOT added to InterprocessTopics — autonomy is a local
+   332	    // player/UI concern, same in-memory-only rule as DiscipleOwnerChangedMessage.
+   333	    [MessagePackObject]
+   334	    public class DiscipleControlModeChangedMessage
+   335	    {
+   336	        [Key(0)] public string DiscipleId { get; set; } = string.Empty;
+   337	        [Key(1)] public DiscipleControlMode OldMode { get; set; }
+   338	        [Key(2)] public DiscipleControlMode NewMode { get; set; }
+   339	    }
+   340	
+   341	    // Request/response pair: the MCP bridge reads the disciples' ownership-change
+   342	    // log (filled by OwnershipObservabilityBuffer, one entry per real change).
+   343	    // Observability ONLY — deliberately no request/response pair or MCP tool that
+   344	    // assigns ownership: the only writer stays the local dev harness / fixtures.
+   345	    [MessagePackObject]
+   346	    public class OwnershipObservabilityQuery
+   347	    {
+   348	        [Key(0)] public string RequestId { get; set; }
+   349	    }
+   350	
    351	    [MessagePackObject]
-   352	    public class TaskChangeObservabilityQuery
+   352	    public class OwnershipObservabilitySnapshot
    353	    {
    354	        [Key(0)] public string RequestId { get; set; }
-   355	    }
-   356	
-   357	    [MessagePackObject]
-   358	    public class TaskChangeObservabilitySnapshot
-   359	    {
-   360	        [Key(0)] public string RequestId { get; set; }
-   361	        [Key(1)] public List<DiscipleTaskChangedMessage> Events { get; set; } = new List<DiscipleTaskChangedMessage>();
-   362	    }
-   363	
-   364	    [MessagePackObject]
-   365	    public class TaskProtectionQuery
-   366	    {
-   367	        [Key(0)] public string RequestId { get; set; }
-   368	    }
-   369	
-   370	    /// <summary>
-   371	    /// One Viewer-owned disciple (the set the hybrid protection policy governs),
-   372	    /// with the read-only answers the bridge needs: is the owner still protected,
-   373	    /// how long is left, is the membership data consistent, and may the SectMaster
-   374	    /// / the owner change its task right now (with the authority's reason).
-   375	    /// Computed from ISectStateProvider.CheckTaskPermission — the same authority
-   376	    /// TryAssignTask revalidates, so this view can never disagree with a commit.
-   377	    /// </summary>
+   355	        [Key(1)] public List<DiscipleOwnerChangedMessage> Events { get; set; } = new List<DiscipleOwnerChangedMessage>();
+   356	    }
+   357	
+   358	    // ---------- P5B observability: task-change log + protection state (READ-ONLY) ----------
+   359	    // Both pairs are pulled on demand by the MCP bridge (request-response, same
+   360	    // mechanism as OwnershipObservabilityQuery — the bridge cannot
+   361	    // IDistributedSubscriber over the TCP transport). Neither pair has a write
+   362	    // path: task assignment keeps its own AssignTaskRequest/Response, and these
+   363	    // are observation only. DiscipleTaskChangedMessage stays in-memory-only; the
+   364	    // bridge pulls the buffered log instead.
+   365	    [MessagePackObject]
+   366	    public class TaskChangeObservabilityQuery
+   367	    {
+   368	        [Key(0)] public string RequestId { get; set; }
+   369	    }
+   370	
+   371	    [MessagePackObject]
+   372	    public class TaskChangeObservabilitySnapshot
+   373	    {
+   374	        [Key(0)] public string RequestId { get; set; }
+   375	        [Key(1)] public List<DiscipleTaskChangedMessage> Events { get; set; } = new List<DiscipleTaskChangedMessage>();
+   376	    }
+   377	
    378	    [MessagePackObject]
-   379	    public class TaskProtectionEntry
+   379	    public class TaskProtectionQuery
    380	    {
-   381	        [Key(0)] public string DiscipleId { get; set; } = string.Empty;
-   382	        [Key(1)] public string CurrentTask { get; set; } = string.Empty;
-   383	        [Key(2)] public DiscipleOwnerType OwnerType { get; set; }
-   384	        [Key(3)] public string OwnerId { get; set; } = string.Empty;
-   385	        [Key(4)] public bool OwnerProtected { get; set; }
-   386	        [Key(5)] public float OwnerProtectionRemainingSeconds { get; set; }
-   387	        [Key(6)] public DateTime LastActiveAtUtc { get; set; }
-   388	        [Key(7)] public bool MembershipConsistent { get; set; }
-   389	        [Key(8)] public bool SectMasterMayChange { get; set; }
-   390	        [Key(9)] public string SectMasterReason { get; set; } = string.Empty;
-   391	        [Key(10)] public bool OwnerMayChange { get; set; }
-   392	        [Key(11)] public string OwnerReason { get; set; } = string.Empty;
-   393	    }
-   394	
-   395	    [MessagePackObject]
-   396	    public class TaskProtectionSnapshot
-   397	    {
-   398	        [Key(0)] public string RequestId { get; set; }
-   399	        [Key(1)] public List<TaskProtectionEntry> Entries { get; set; } = new List<TaskProtectionEntry>();
-   400	    }
-   401	
-   402	    // ---------- P5B persistence: viewer membership slice (local disk, not on the wire) ----------
-   403	    // Persisted together so the registry ⇄ disciple ownership pair can never be
-   404	    // restored half-way (invariants #1/#2/#3 hold across sessions). Deliberately
-   405	    // a SLICE, not the whole SectEconomyState: only membership + ownership +
-   406	    // activity survive; economy/roster still come from MockSectData.
-   407	    [MessagePackObject]
-   408	    public class SectViewerMembershipSave
-   409	    {
-   410	        /// <summary>Only this shape is accepted; anything else is ignored on load (fail-closed to mock start).</summary>
-   411	        public const int CurrentVersion = 1;
-   412	
-   413	        /// <summary>Bumped only if the shape changes incompatibly; a mismatch is ignored on load (fail-closed to mock start).</summary>
-   414	        [Key(0)] public int Version { get; set; } = CurrentVersion;
+   381	        [Key(0)] public string RequestId { get; set; }
+   382	    }
+   383	
+   384	    /// <summary>
+   385	    /// One Viewer-owned disciple (the set the hybrid protection policy governs),
+   386	    /// with the read-only answers the bridge needs: is the owner still protected,
+   387	    /// how long is left, is the membership data consistent, and may the SectMaster
+   388	    /// / the owner change its task right now (with the authority's reason).
+   389	    /// Computed from ISectStateProvider.CheckTaskPermission — the same authority
+   390	    /// TryAssignTask revalidates, so this view can never disagree with a commit.
+   391	    /// </summary>
+   392	    [MessagePackObject]
+   393	    public class TaskProtectionEntry
+   394	    {
+   395	        [Key(0)] public string DiscipleId { get; set; } = string.Empty;
+   396	        [Key(1)] public string CurrentTask { get; set; } = string.Empty;
+   397	        [Key(2)] public DiscipleOwnerType OwnerType { get; set; }
+   398	        [Key(3)] public string OwnerId { get; set; } = string.Empty;
+   399	        [Key(4)] public bool OwnerProtected { get; set; }
+   400	        [Key(5)] public float OwnerProtectionRemainingSeconds { get; set; }
+   401	        [Key(6)] public DateTime LastActiveAtUtc { get; set; }
+   402	        [Key(7)] public bool MembershipConsistent { get; set; }
+   403	        [Key(8)] public bool SectMasterMayChange { get; set; }
+   404	        [Key(9)] public string SectMasterReason { get; set; } = string.Empty;
+   405	        [Key(10)] public bool OwnerMayChange { get; set; }
+   406	        [Key(11)] public string OwnerReason { get; set; } = string.Empty;
+   407	    }
+   408	
+   409	    [MessagePackObject]
+   410	    public class TaskProtectionSnapshot
+   411	    {
+   412	        [Key(0)] public string RequestId { get; set; }
+   413	        [Key(1)] public List<TaskProtectionEntry> Entries { get; set; } = new List<TaskProtectionEntry>();
+   414	    }
    415	
-   416	        /// <summary>When the file was written (UTC) — informational.</summary>
-   417	        [Key(1)] public DateTime SavedAtUtc { get; set; }
-   418	
-   419	        [Key(2)] public List<ViewerRecord> Records { get; set; } = new List<ViewerRecord>();
-   420	        [Key(3)] public List<PendingViewerApplication> PendingApplications { get; set; } = new List<PendingViewerApplication>();
-   421	
-   422	        /// <summary>discipleId → owner, captured in the SAME snapshot so ownership and registry agree on load.</summary>
-   423	        [Key(4)] public List<SectSavedOwnership> OwnerByDisciple { get; set; } = new List<SectSavedOwnership>();
-   424	    }
-   425	
-   426	    [MessagePackObject]
-   427	    public class SectSavedOwnership
-   428	    {
-   429	        [Key(0)] public string DiscipleId { get; set; } = string.Empty;
-   430	        [Key(1)] public DiscipleOwnerType OwnerType { get; set; }
-   431	        [Key(2)] public string OwnerId { get; set; } = string.Empty;
-   432	    }
-   433	
-   434	    // Topic keys for the keyed (IDistributedPublisher<TKey,TMessage>) channels.
-   435	    public static class InterprocessTopics
-   436	    {
-   437	        public const string DiscipleRecruited = "sect.disciple_recruited";
-   438	        public const string DiscipleRankChanged = "sect.disciple_rank_changed";
-   439	        public const string ResourceChanged = "sect.resource_changed";
-   440	        public const string ContributionEarned = "sect.contribution_earned";
-   441	        public const string WorldEvent = "sect.world_event";
-   442	        public const string ExecuteDecision = "sect.execute_decision";
-   443	        public const string AvatarEquipmentChanged = "sect.avatar_equipment_changed";
-   444	    }
-   445	}
+   416	    // ---------- P5B persistence: viewer membership slice (local disk, not on the wire) ----------
+   417	    // Persisted together so the registry ⇄ disciple ownership pair can never be
+   418	    // restored half-way (invariants #1/#2/#3 hold across sessions). Deliberately
+   419	    // a SLICE, not the whole SectEconomyState: only membership + ownership +
+   420	    // activity survive; economy/roster still come from MockSectData.
+   421	    [MessagePackObject]
+   422	    public class SectViewerMembershipSave
+   423	    {
+   424	        /// <summary>Only this shape is accepted; anything else is ignored on load (fail-closed to mock start).</summary>
+   425	        public const int CurrentVersion = 1;
+   426	
+   427	        /// <summary>Bumped only if the shape changes incompatibly; a mismatch is ignored on load (fail-closed to mock start).</summary>
+   428	        [Key(0)] public int Version { get; set; } = CurrentVersion;
+   429	
+   430	        /// <summary>When the file was written (UTC) — informational.</summary>
+   431	        [Key(1)] public DateTime SavedAtUtc { get; set; }
+   432	
+   433	        [Key(2)] public List<ViewerRecord> Records { get; set; } = new List<ViewerRecord>();
+   434	        [Key(3)] public List<PendingViewerApplication> PendingApplications { get; set; } = new List<PendingViewerApplication>();
+   435	
+   436	        /// <summary>discipleId → owner, captured in the SAME snapshot so ownership and registry agree on load.</summary>
+   437	        [Key(4)] public List<SectSavedOwnership> OwnerByDisciple { get; set; } = new List<SectSavedOwnership>();
+   438	    }
+   439	
+   440	    [MessagePackObject]
+   441	    public class SectSavedOwnership
+   442	    {
+   443	        [Key(0)] public string DiscipleId { get; set; } = string.Empty;
+   444	        [Key(1)] public DiscipleOwnerType OwnerType { get; set; }
+   445	        [Key(2)] public string OwnerId { get; set; } = string.Empty;
+   446	    }
+   447	
+   448	    // Topic keys for the keyed (IDistributedPublisher<TKey,TMessage>) channels.
+   449	    public static class InterprocessTopics
+   450	    {
+   451	        public const string DiscipleRecruited = "sect.disciple_recruited";
+   452	        public const string DiscipleRankChanged = "sect.disciple_rank_changed";
+   453	        public const string ResourceChanged = "sect.resource_changed";
+   454	        public const string ContributionEarned = "sect.contribution_earned";
+   455	        public const string WorldEvent = "sect.world_event";
+   456	        public const string ExecuteDecision = "sect.execute_decision";
+   457	        public const string AvatarEquipmentChanged = "sect.avatar_equipment_changed";
+   458	    }
+   459	}
 ````
 
-### Shared/SectEconomyState.cs (10506 bytes)
+### Shared/SectEconomyState.cs (12696 bytes)
 ````
      1	// Plain C# mirror of economy.proto.
      2	// Use this to wire up UI and gameplay logic right away.
@@ -670,223 +686,272 @@
     17	    public enum DiscipleOwnerType { Npc, Player, Viewer }
     18	
     19	    /// <summary>
-    20	    /// Entitlement ของศิษย์: "ได้สิทธิ์" แสดง chibi ในฉากด้วย backend ไหน — ไม่ใช่สิ่งที่ render จริงเสมอไป
-    21	    /// (runtime อาจ degrade Spine → SpriteSheet เมื่อเกิน SpineBudget โดยไม่แก้ค่านี้ — ดู §7 ของแผน)
-    22	    /// 0 = default → save/roster เก่าที่ไม่มี [Key(8)] deserialize ได้ SpriteSheet (L5)
-    23	    /// </summary>
-    24	    public enum ChibiBackend
-    25	    {
-    26	        SpriteSheet = 0,
-    27	        Spine = 1
-    28	    }
-    29	
-    30	    [MessagePackObject]
-    31	    public class CurrencyWallet
-    32	    {
-    33	        [Key(0)] public long SpiritStones { get; set; }
-    34	        [Key(1)] public long Contribution { get; set; }
-    35	    }
-    36	
-    37	    [MessagePackObject]
-    38	    public class InventoryItem
-    39	    {
-    40	        [Key(0)] public string ItemDefId { get; set; }
-    41	        [Key(1)] public int Quantity { get; set; }
-    42	        [Key(2)] public int Grade { get; set; }          // 1-5
-    43	        [Key(3)] public OwnerScope OwnerScope { get; set; }
-    44	    }
-    45	
-    46	    [MessagePackObject]
-    47	    public class DiscipleState
-    48	    {
-    49	        [Key(0)] public string DiscipleId { get; set; }
-    50	        [Key(1)] public string DisplayName { get; set; }
-    51	        [Key(2)] public DiscipleRank Rank { get; set; }
-    52	        [Key(3)] public CurrencyWallet Wallet { get; set; } = new CurrencyWallet();
-    53	        [Key(4)] public List<InventoryItem> PersonalInventory { get; set; } = new List<InventoryItem>();
-    54	        [Key(5)] public string CurrentTask { get; set; }
-    55	        [Key(6)] public AvatarAppearance Avatar { get; set; } = new AvatarAppearance();
-    56	        [Key(7)] public DiscipleSex Sex { get; set; } = DiscipleSex.Unspecified;
-    57	        /// <summary>Entitlement (แกนแยกจาก AvatarAppearance) — default SpriteSheet เมื่อ deserialize state เก่า (L1/L5)</summary>
-    58	        [Key(8)] public ChibiBackend ChibiBackend { get; set; } = ChibiBackend.SpriteSheet;
-    59	
-    60	        /// <summary>Ownership kind (task-system-v2.md §1.1) — append-only; old state default Npc</summary>
-    61	        [Key(9)] public DiscipleOwnerType OwnerType { get; set; } = DiscipleOwnerType.Npc;
-    62	        /// <summary>Owner identity (player/viewer id); empty for Npc-owned</summary>
-    63	        [Key(10)] public string OwnerId { get; set; } = string.Empty;
-    64	    }
-    65	
-    66	    [MessagePackObject]
-    67	    public class SectStockpile
-    68	    {
-    69	        [Key(0)] public Dictionary<string, int> RawResources { get; set; } = new Dictionary<string, int>();
-    70	        [Key(1)] public List<InventoryItem> CraftedGoods { get; set; } = new List<InventoryItem>();
-    71	    }
+    20	    /// P9A — who decides a disciple's task: the human/owner (Manual) or the trusted
+    21	    /// auto-assigner (Auto). Ownership and autonomy are DIFFERENT: an Npc-owned
+    22	    /// disciple is Manual until someone explicitly opts it in, and only Npc-owned
+    23	    /// disciples are eligible for Auto in this MVP. 0 = Manual so state/roster saved
+    24	    /// before this key existed deserializes as Manual (backward-compatible behavior).
+    25	    /// </summary>
+    26	    public enum DiscipleControlMode
+    27	    {
+    28	        Manual = 0,
+    29	        Auto = 1,
+    30	    }
+    31	
+    32	    /// <summary>
+    33	    /// Entitlement ของศิษย์: "ได้สิทธิ์" แสดง chibi ในฉากด้วย backend ไหน — ไม่ใช่สิ่งที่ render จริงเสมอไป
+    34	    /// (runtime อาจ degrade Spine → SpriteSheet เมื่อเกิน SpineBudget โดยไม่แก้ค่านี้ — ดู §7 ของแผน)
+    35	    /// 0 = default → save/roster เก่าที่ไม่มี [Key(8)] deserialize ได้ SpriteSheet (L5)
+    36	    /// </summary>
+    37	    public enum ChibiBackend
+    38	    {
+    39	        SpriteSheet = 0,
+    40	        Spine = 1
+    41	    }
+    42	
+    43	    [MessagePackObject]
+    44	    public class CurrencyWallet
+    45	    {
+    46	        [Key(0)] public long SpiritStones { get; set; }
+    47	        [Key(1)] public long Contribution { get; set; }
+    48	    }
+    49	
+    50	    [MessagePackObject]
+    51	    public class InventoryItem
+    52	    {
+    53	        [Key(0)] public string ItemDefId { get; set; }
+    54	        [Key(1)] public int Quantity { get; set; }
+    55	        [Key(2)] public int Grade { get; set; }          // 1-5
+    56	        [Key(3)] public OwnerScope OwnerScope { get; set; }
+    57	    }
+    58	
+    59	    [MessagePackObject]
+    60	    public class DiscipleState
+    61	    {
+    62	        [Key(0)] public string DiscipleId { get; set; }
+    63	        [Key(1)] public string DisplayName { get; set; }
+    64	        [Key(2)] public DiscipleRank Rank { get; set; }
+    65	        [Key(3)] public CurrencyWallet Wallet { get; set; } = new CurrencyWallet();
+    66	        [Key(4)] public List<InventoryItem> PersonalInventory { get; set; } = new List<InventoryItem>();
+    67	        [Key(5)] public string CurrentTask { get; set; }
+    68	        [Key(6)] public AvatarAppearance Avatar { get; set; } = new AvatarAppearance();
+    69	        [Key(7)] public DiscipleSex Sex { get; set; } = DiscipleSex.Unspecified;
+    70	        /// <summary>Entitlement (แกนแยกจาก AvatarAppearance) — default SpriteSheet เมื่อ deserialize state เก่า (L1/L5)</summary>
+    71	        [Key(8)] public ChibiBackend ChibiBackend { get; set; } = ChibiBackend.SpriteSheet;
     72	
-    73	    /// <summary>
-    74	    /// อาคาร 1 หลังที่วางบน grid สำนักแล้ว (building-system.md §3.3)
-    75	    /// GridX/GridZ = มุมบนซ้าย (cell แรก) ของ footprint; Rotation = 0/90/180/270
-    76	    /// (90/270 ทำให้ footprint กว้าง×สูงสลับกัน — ดู BuildingGrid.ResolveFootprint)
-    77	    /// </summary>
-    78	    [MessagePackObject]
-    79	    public class PlacedBuildingState
-    80	    {
-    81	        [Key(0)] public string InstanceId { get; set; }
-    82	        [Key(1)] public string DefId { get; set; }
-    83	        [Key(2)] public int GridX { get; set; }
-    84	        [Key(3)] public int GridZ { get; set; }
-    85	        [Key(4)] public int Rotation { get; set; }
-    86	    }
-    87	
-    88	    [MessagePackObject]
-    89	    public class SectEconomyState
-    90	    {
-    91	        [Key(0)] public List<DiscipleState> Disciples { get; set; } = new List<DiscipleState>();
-    92	        [Key(1)] public SectStockpile Stockpile { get; set; } = new SectStockpile();
-    93	        /// <summary>Append-only key (building-system.md §3.3) — ห้ามแก้ [Key(0)]/[Key(1)] เดิม</summary>
-    94	        [Key(2)] public List<PlacedBuildingState> PlacedBuildings { get; set; } = new List<PlacedBuildingState>();
-    95	        /// <summary>
-    96	        /// P5A append-only key — สมุดทะเบียนสมาชิกผู้ชม + คำขอรออนุมัติ (แยก list ตาม P5A §4).
-    97	        /// Old saves without [Key(3)] deserialize as empty registry (fail-closed: ไม่มีสมาชิกจนกว่าจะมี mutation).
-    98	        /// ⚠️ ยังไม่มี save/load mechanism ใน repo (open-questions §14) — contract เท่านั้น,
-    99	        /// cross-session reclaim ยังใช้ไม่ได้จนกว่าจะมี persistence จริง
-   100	        /// </summary>
-   101	        [Key(3)] public SectViewerRegistry ViewerRegistry { get; set; } = new SectViewerRegistry();
-   102	
-   103	        public byte[] ToByteArray() => MessagePackSerializer.Serialize(this);
-   104	        public static SectEconomyState FromByteArray(byte[] bytes) =>
-   105	            MessagePackSerializer.Deserialize<SectEconomyState>(bytes);
-   106	    }
-   107	
-   108	    // --- Avatar System (New Dictionary-Based Schema) ---
-   109	
-   110	    /// <summary>
-   111	    /// Struct สำหรับ Factory Method FromSlots (เลี่ยง Value Tuple เพื่อความเข้ากันได้กับ Unity ทุกเวอร์ชัน)
-   112	    /// </summary>
-   113	    public struct SlotPart
-   114	    {
-   115	        public string Slot;
-   116	        public string PartId;
-   117	        public SlotPart(string slot, string partId)
-   118	        {
-   119	            Slot = slot;
-   120	            PartId = partId;
-   121	        }
-   122	    }
-   123	
-   124	    /// <summary>
-   125	    /// หน้าตาของตัวละคร — dictionary-based รองรับ slot จำนวน任意
-   126	    /// Parts: slot → partId (ว่าง = ใช้ default ของ slot นั้น)
-   127	    /// Colors: slot → colorId (มีเฉพาะ slot ที่ tintable)
-   128	    /// </summary>
-   129	    [MessagePackObject]
-   130	    public sealed class AvatarAppearance
-   131	    {
-   132	        [Key(0)] public Dictionary<string, string> Parts { get; set; } = new Dictionary<string, string>();
-   133	        [Key(1)] public Dictionary<string, string> Colors { get; set; } = new Dictionary<string, string>();
-   134	        [Key(2)] public string PoseId { get; set; } = string.Empty;
-   135	
-   136	        public string GetSlot(string slot)
-   137	        {
-   138	            string v;
-   139	            return Parts.TryGetValue(slot, out v) ? v : string.Empty;
-   140	        }
-   141	
-   142	        public bool SetSlot(string slot, string partId)
-   143	        {
-   144	            if (string.IsNullOrEmpty(partId)) { Parts.Remove(slot); return true; }
-   145	            Parts[slot] = partId;
-   146	            return true;
-   147	        }
-   148	
-   149	        public string GetColor(string slot)
-   150	        {
-   151	            string v;
-   152	            return Colors.TryGetValue(slot, out v) ? v : string.Empty;
-   153	        }
-   154	
-   155	        public void SetColor(string slot, string colorId)
-   156	        {
-   157	            if (string.IsNullOrEmpty(colorId)) { Colors.Remove(slot); return; }
-   158	            Colors[slot] = colorId;
-   159	        }
-   160	
-   161	        public AvatarAppearance Clone()
-   162	        {
-   163	            var c = new AvatarAppearance();
-   164	            c.Parts = new Dictionary<string, string>(Parts);
-   165	            c.Colors = new Dictionary<string, string>(Colors);
-   166	            c.PoseId = PoseId;
-   167	            return c;
-   168	        }
-   169	
-   170	        [IgnoreMember]
-   171	        /// <summary>Effective pose: PoseId if set, else fallback to "pose_idle_01".</summary>
-   172	        public string EffectivePose
-   173	        {
-   174	            get { return string.IsNullOrEmpty(PoseId) ? "pose_idle_01" : PoseId; }
-   175	        }
-   176	
-   177	        /// <summary>Factory สำหรับสร้าง AvatarAppearance จาก list — ใช้ใน MockData</summary>
-   178	        public static AvatarAppearance FromSlots(params SlotPart[] slots)
-   179	        {
-   180	            var a = new AvatarAppearance();
-   181	            for (int i = 0; i < slots.Length; i++)
-   182	            {
-   183	                if (!string.IsNullOrEmpty(slots[i].PartId))
-   184	                    a.Parts[slots[i].Slot] = slots[i].PartId;
-   185	            }
-   186	            return a;
-   187	        }
-   188	    }
-   189	
-   190	    /// <summary>ชื่อ slot แบบ const string + Categories สำหรับ UI</summary>
-   191	    public static class AvatarSlots
-   192	    {
-   193	        public const string Base = "base";
-   194	        public const string Body = "body";
-   195	        public const string Head = "head";
-   196	        public const string Eyes = "eyes";
-   197	        public const string Brows = "brows";
-   198	        public const string Mouth = "mouth";
-   199	        public const string Nose = "nose";
-   200	        public const string Hair = "hair";
-   201	        public const string FaceMarking = "face_marking";
-   202	        public const string Eyeshadow = "eyeshadow";
-   203	        public const string Accessory = "accessory";
-   204	
-   205	        public static readonly string[] Equippable =
-   206	        {
-   207	            Body, Head, Eyes, Brows, Mouth, Nose,
-   208	            Hair, FaceMarking, Eyeshadow, Accessory
-   209	        };
-   210	
-   211	        public static readonly IReadOnlyDictionary<string, string[]> Categories =
-   212	            new Dictionary<string, string[]>
-   213	            {
-   214	                { "ใบหน้า", new[] { Head, Eyes, Brows, Mouth, Nose } }, // Head รวมอยู่ในใบหน้าด้วย
-   215	                { "ลักษณะ", new[] { Hair, FaceMarking, Eyeshadow } },
-   216	                { "ร่างกาย", new[] { Body, Accessory } },
-   217	            };
+    73	        /// <summary>Ownership kind (task-system-v2.md §1.1) — append-only; old state default Npc</summary>
+    74	        [Key(9)] public DiscipleOwnerType OwnerType { get; set; } = DiscipleOwnerType.Npc;
+    75	        /// <summary>Owner identity (player/viewer id); empty for Npc-owned</summary>
+    76	        [Key(10)] public string OwnerId { get; set; } = string.Empty;
+    77	
+    78	        /// <summary>
+    79	        /// P9A — explicit autonomy (see DiscipleControlMode). Default Manual; only an
+    80	        /// Npc-owned disciple may be Auto. Append-only key; old state without [Key(11)]
+    81	        /// deserializes as Manual.
+    82	        /// </summary>
+    83	        [Key(11)] public DiscipleControlMode ControlMode { get; set; } = DiscipleControlMode.Manual;
+    84	
+    85	        /// <summary>
+    86	        /// P10A — attribute DATA only (stamina + skill XP; see DiscipleAttributes).
+    87	        /// Append-only key; old state without [Key(12)] deserializes to a class default
+    88	        /// and is repaired by <see cref="DiscipleAttributes.Normalize"/> on load/import.
+    89	        /// </summary>
+    90	        [Key(12)] public DiscipleAttributes Attributes { get; set; } = new DiscipleAttributes();
+    91	    }
+    92	
+    93	    [MessagePackObject]
+    94	    public class SectStockpile
+    95	    {
+    96	        [Key(0)] public Dictionary<string, int> RawResources { get; set; } = new Dictionary<string, int>();
+    97	        [Key(1)] public List<InventoryItem> CraftedGoods { get; set; } = new List<InventoryItem>();
+    98	    }
+    99	
+   100	    /// <summary>
+   101	    /// อาคาร 1 หลังที่วางบน grid สำนักแล้ว (building-system.md §3.3)
+   102	    /// GridX/GridZ = มุมบนซ้าย (cell แรก) ของ footprint; Rotation = 0/90/180/270
+   103	    /// (90/270 ทำให้ footprint กว้าง×สูงสลับกัน — ดู BuildingGrid.ResolveFootprint)
+   104	    /// </summary>
+   105	    [MessagePackObject]
+   106	    public class PlacedBuildingState
+   107	    {
+   108	        [Key(0)] public string InstanceId { get; set; }
+   109	        [Key(1)] public string DefId { get; set; }
+   110	        [Key(2)] public int GridX { get; set; }
+   111	        [Key(3)] public int GridZ { get; set; }
+   112	        [Key(4)] public int Rotation { get; set; }
+   113	    }
+   114	
+   115	    [MessagePackObject]
+   116	    public class SectEconomyState
+   117	    {
+   118	        [Key(0)] public List<DiscipleState> Disciples { get; set; } = new List<DiscipleState>();
+   119	        [Key(1)] public SectStockpile Stockpile { get; set; } = new SectStockpile();
+   120	        /// <summary>Append-only key (building-system.md §3.3) — ห้ามแก้ [Key(0)]/[Key(1)] เดิม</summary>
+   121	        [Key(2)] public List<PlacedBuildingState> PlacedBuildings { get; set; } = new List<PlacedBuildingState>();
+   122	        /// <summary>
+   123	        /// P5A append-only key — สมุดทะเบียนสมาชิกผู้ชม + คำขอรออนุมัติ (แยก list ตาม P5A §4).
+   124	        /// Old saves without [Key(3)] deserialize as empty registry (fail-closed: ไม่มีสมาชิกจนกว่าจะมี mutation).
+   125	        /// ⚠️ ยังไม่มี save/load mechanism ใน repo (open-questions §14) — contract เท่านั้น,
+   126	        /// cross-session reclaim ยังใช้ไม่ได้จนกว่าจะมี persistence จริง
+   127	        /// </summary>
+   128	        [Key(3)] public SectViewerRegistry ViewerRegistry { get; set; } = new SectViewerRegistry();
+   129	
+   130	        public byte[] ToByteArray() => MessagePackSerializer.Serialize(this);
+   131	
+   132	        public static SectEconomyState FromByteArray(byte[] bytes)
+   133	        {
+   134	            var state = MessagePackSerializer.Deserialize<SectEconomyState>(bytes);
+   135	            NormalizeDisciples(state); // P10A — repair attributes on every load/import
+   136	            return state;
+   137	        }
+   138	
+   139	        /// <summary>
+   140	        /// P10A — normalize every disciple's attributes (null / NaN / Infinity / range /
+   141	        /// missing category keys) on a load/import boundary. Null-safe; a null or empty
+   142	        /// roster is a no-op. Never treats a saved 0 as missing.
+   143	        /// </summary>
+   144	        public static void NormalizeDisciples(SectEconomyState state)
+   145	        {
+   146	            if (state == null || state.Disciples == null) return;
+   147	
+   148	            for (int i = 0; i < state.Disciples.Count; i++)
+   149	            {
+   150	                var disciple = state.Disciples[i];
+   151	                if (disciple == null) continue;
+   152	                disciple.Attributes = DiscipleAttributes.Normalize(disciple.Attributes);
+   153	            }
+   154	        }
+   155	    }
+   156	
+   157	    // --- Avatar System (New Dictionary-Based Schema) ---
+   158	
+   159	    /// <summary>
+   160	    /// Struct สำหรับ Factory Method FromSlots (เลี่ยง Value Tuple เพื่อความเข้ากันได้กับ Unity ทุกเวอร์ชัน)
+   161	    /// </summary>
+   162	    public struct SlotPart
+   163	    {
+   164	        public string Slot;
+   165	        public string PartId;
+   166	        public SlotPart(string slot, string partId)
+   167	        {
+   168	            Slot = slot;
+   169	            PartId = partId;
+   170	        }
+   171	    }
+   172	
+   173	    /// <summary>
+   174	    /// หน้าตาของตัวละคร — dictionary-based รองรับ slot จำนวน任意
+   175	    /// Parts: slot → partId (ว่าง = ใช้ default ของ slot นั้น)
+   176	    /// Colors: slot → colorId (มีเฉพาะ slot ที่ tintable)
+   177	    /// </summary>
+   178	    [MessagePackObject]
+   179	    public sealed class AvatarAppearance
+   180	    {
+   181	        [Key(0)] public Dictionary<string, string> Parts { get; set; } = new Dictionary<string, string>();
+   182	        [Key(1)] public Dictionary<string, string> Colors { get; set; } = new Dictionary<string, string>();
+   183	        [Key(2)] public string PoseId { get; set; } = string.Empty;
+   184	
+   185	        public string GetSlot(string slot)
+   186	        {
+   187	            string v;
+   188	            return Parts.TryGetValue(slot, out v) ? v : string.Empty;
+   189	        }
+   190	
+   191	        public bool SetSlot(string slot, string partId)
+   192	        {
+   193	            if (string.IsNullOrEmpty(partId)) { Parts.Remove(slot); return true; }
+   194	            Parts[slot] = partId;
+   195	            return true;
+   196	        }
+   197	
+   198	        public string GetColor(string slot)
+   199	        {
+   200	            string v;
+   201	            return Colors.TryGetValue(slot, out v) ? v : string.Empty;
+   202	        }
+   203	
+   204	        public void SetColor(string slot, string colorId)
+   205	        {
+   206	            if (string.IsNullOrEmpty(colorId)) { Colors.Remove(slot); return; }
+   207	            Colors[slot] = colorId;
+   208	        }
+   209	
+   210	        public AvatarAppearance Clone()
+   211	        {
+   212	            var c = new AvatarAppearance();
+   213	            c.Parts = new Dictionary<string, string>(Parts);
+   214	            c.Colors = new Dictionary<string, string>(Colors);
+   215	            c.PoseId = PoseId;
+   216	            return c;
+   217	        }
    218	
-   219	        public static readonly IReadOnlyDictionary<string, string> Labels =
-   220	            new Dictionary<string, string>
-   221	            {
-   222	                { Body,       "เสื้อผ้า" },
-   223	                { Head,       "ใบหน้า" },
-   224	                { Eyes,       "ตา" },
-   225	                { Brows,      "คิ้ว" },
-   226	                { Mouth,      "ปาก" },
-   227	                { Nose,       "จมูก" },
-   228	                { Hair,       "ทรงผม" },
-   229	                { FaceMarking,"ลายหน้า" },
-   230	                { Eyeshadow,  "อายแชโดว์" },
-   231	                { Accessory,  "เครื่องประดับ" },
-   232	            };
-   233	    }
-   234	}````
+   219	        [IgnoreMember]
+   220	        /// <summary>Effective pose: PoseId if set, else fallback to "pose_idle_01".</summary>
+   221	        public string EffectivePose
+   222	        {
+   223	            get { return string.IsNullOrEmpty(PoseId) ? "pose_idle_01" : PoseId; }
+   224	        }
+   225	
+   226	        /// <summary>Factory สำหรับสร้าง AvatarAppearance จาก list — ใช้ใน MockData</summary>
+   227	        public static AvatarAppearance FromSlots(params SlotPart[] slots)
+   228	        {
+   229	            var a = new AvatarAppearance();
+   230	            for (int i = 0; i < slots.Length; i++)
+   231	            {
+   232	                if (!string.IsNullOrEmpty(slots[i].PartId))
+   233	                    a.Parts[slots[i].Slot] = slots[i].PartId;
+   234	            }
+   235	            return a;
+   236	        }
+   237	    }
+   238	
+   239	    /// <summary>ชื่อ slot แบบ const string + Categories สำหรับ UI</summary>
+   240	    public static class AvatarSlots
+   241	    {
+   242	        public const string Base = "base";
+   243	        public const string Body = "body";
+   244	        public const string Head = "head";
+   245	        public const string Eyes = "eyes";
+   246	        public const string Brows = "brows";
+   247	        public const string Mouth = "mouth";
+   248	        public const string Nose = "nose";
+   249	        public const string Hair = "hair";
+   250	        public const string FaceMarking = "face_marking";
+   251	        public const string Eyeshadow = "eyeshadow";
+   252	        public const string Accessory = "accessory";
+   253	
+   254	        public static readonly string[] Equippable =
+   255	        {
+   256	            Body, Head, Eyes, Brows, Mouth, Nose,
+   257	            Hair, FaceMarking, Eyeshadow, Accessory
+   258	        };
+   259	
+   260	        public static readonly IReadOnlyDictionary<string, string[]> Categories =
+   261	            new Dictionary<string, string[]>
+   262	            {
+   263	                { "ใบหน้า", new[] { Head, Eyes, Brows, Mouth, Nose } }, // Head รวมอยู่ในใบหน้าด้วย
+   264	                { "ลักษณะ", new[] { Hair, FaceMarking, Eyeshadow } },
+   265	                { "ร่างกาย", new[] { Body, Accessory } },
+   266	            };
+   267	
+   268	        public static readonly IReadOnlyDictionary<string, string> Labels =
+   269	            new Dictionary<string, string>
+   270	            {
+   271	                { Body,       "เสื้อผ้า" },
+   272	                { Head,       "ใบหน้า" },
+   273	                { Eyes,       "ตา" },
+   274	                { Brows,      "คิ้ว" },
+   275	                { Mouth,      "ปาก" },
+   276	                { Nose,       "จมูก" },
+   277	                { Hair,       "ทรงผม" },
+   278	                { FaceMarking,"ลายหน้า" },
+   279	                { Eyeshadow,  "อายแชโดว์" },
+   280	                { Accessory,  "เครื่องประดับ" },
+   281	            };
+   282	    }
+   283	}````
 
-### Shared/MockSectData.cs (5765 bytes)
+### Shared/MockSectData.cs (7200 bytes)
 ````
      1	// Sample SectEconomyState for wiring up UI before real gameplay
      2	// systems (resource gathering, crafting, quests) are implemented.
@@ -937,79 +1002,102 @@
     47	                    new SlotPart(AvatarSlots.Head, "head_male_01"),
     48	                    new SlotPart(AvatarSlots.Hair, "hair_topknot_long"),
     49	                    new SlotPart(AvatarSlots.Accessory, "acc_jade_crown")
-    50	                )
-    51	            });
-    52	
-    53	            // d001: Lin Feng (Outer Disciple)
-    54	            state.Disciples.Add(new DiscipleState
-    55	            {
-    56	                DiscipleId = "d001",
-    57	                DisplayName = "Lin Feng",
-    58	                Sex = DiscipleSex.Female,
-    59	                ChibiBackend = ChibiBackend.SpriteSheet, // Outer = SpriteSheet (แผน §4.1)
-    60	                Rank = DiscipleRank.OuterDisciple,
-    61	                Wallet = new CurrencyWallet { SpiritStones = 12, Contribution = 340 },
-    62	                CurrentTask = "meditation", // was gathering_herb — herb_plot is no longer in start state, gate would block it anyway
-    63	                PersonalInventory = new List<InventoryItem>(),
-    64	                Avatar = AvatarAppearance.FromSlots(
-    65	                    new SlotPart(AvatarSlots.Body, "body_robe_grey"),
-    66	                    new SlotPart(AvatarSlots.Head, "head_male_01"),
-    67	                    new SlotPart(AvatarSlots.Hair, "hair_short")
-    68	                )
-    69	            });
-    70	
-    71	            // d002: Su Yan (Inner Disciple - With face marking + twin tail)
-    72	            state.Disciples.Add(new DiscipleState
-    73	            {
-    74	                DiscipleId = "d002",
-    75	                DisplayName = "Su Yan",
-    76	                Sex = DiscipleSex.Female,
-    77	                ChibiBackend = ChibiBackend.SpriteSheet, // Inner = SpriteSheet (แผน §4.1)
-    78	                Rank = DiscipleRank.InnerDisciple,
-    79	                Wallet = new CurrencyWallet { SpiritStones = 45, Contribution = 1120 },
-    80	                CurrentTask = "meditation", // was refining_elixir — pill_hall not in start state, gate would block it anyway
-    81	                PersonalInventory = new List<InventoryItem>(),
-    82	                Avatar = AvatarAppearance.FromSlots(
-    83	                    new SlotPart(AvatarSlots.Body, "body_robe_white"),
-    84	                    new SlotPart(AvatarSlots.Head, "head_female_01"),
-    85	                    new SlotPart(AvatarSlots.Hair, "hair_twin_tail"),
-    86	                    new SlotPart(AvatarSlots.FaceMarking, "face_marking_red_dot"),
-    87	                    new SlotPart(AvatarSlots.Accessory, "acc_hairpin_silver")
-    88	                )
-    89	            });
-    90	
-    91	            // d003: Elder Zhao (Elder - Bald + Beard)
-    92	            state.Disciples.Add(new DiscipleState
-    93	            {
-    94	                DiscipleId = "d003",
-    95	                DisplayName = "Elder Zhao",
-    96	                Sex = DiscipleSex.Male,
-    97	                ChibiBackend = ChibiBackend.Spine, // Elder = Spine tier (แผน §4.1)
-    98	                Rank = DiscipleRank.Elder,
-    99	                Wallet = new CurrencyWallet { SpiritStones = 210, Contribution = 4300 },
-   100	                CurrentTask = "meditation", // was forging_artifact — forge not in start state, gate would block it anyway
-   101	                PersonalInventory = new List<InventoryItem>
-   102	                {
-   103	                    new InventoryItem
-   104	                    {
-   105	                        ItemDefId = "sword_azure_flame",
-   106	                        Quantity = 1,
-   107	                        Grade = 5,
-   108	                        OwnerScope = OwnerScope.Personal
-   109	                    }
-   110	                },
-   111	                Avatar = AvatarAppearance.FromSlots(
-   112	                    new SlotPart(AvatarSlots.Body, "body_robe_black"),
-   113	                    new SlotPart(AvatarSlots.Head, "head_male_elder"),
-   114	                    new SlotPart(AvatarSlots.Hair, "hair_bald_beard"),
-   115	                    new SlotPart(AvatarSlots.Accessory, "acc_gourd")
-   116	                )
-   117	            });
-   118	
-   119	            return state;
-   120	        }
-   121	    }
-   122	}````
+    50	                ),
+    51	                // P10A TEST DATA (prototype): d000 = no skill XP.
+    52	                Attributes = TestAttributes(0f, 0f, 0f)
+    53	            });
+    54	
+    55	            // d001: Lin Feng (Outer Disciple)
+    56	            state.Disciples.Add(new DiscipleState
+    57	            {
+    58	                DiscipleId = "d001",
+    59	                DisplayName = "Lin Feng",
+    60	                Sex = DiscipleSex.Female,
+    61	                ChibiBackend = ChibiBackend.SpriteSheet, // Outer = SpriteSheet (แผน §4.1)
+    62	                Rank = DiscipleRank.OuterDisciple,
+    63	                Wallet = new CurrencyWallet { SpiritStones = 12, Contribution = 340 },
+    64	                CurrentTask = "meditation", // was gathering_herb — herb_plot is no longer in start state, gate would block it anyway
+    65	                PersonalInventory = new List<InventoryItem>(),
+    66	                Avatar = AvatarAppearance.FromSlots(
+    67	                    new SlotPart(AvatarSlots.Body, "body_robe_grey"),
+    68	                    new SlotPart(AvatarSlots.Head, "head_male_01"),
+    69	                    new SlotPart(AvatarSlots.Hair, "hair_short")
+    70	                ),
+    71	                // P10A TEST DATA (prototype): gathering-leaning founder.
+    72	                Attributes = TestAttributes(200f, 0f, 0f)
+    73	            });
+    74	
+    75	            // d002: Su Yan (Inner Disciple - With face marking + twin tail)
+    76	            state.Disciples.Add(new DiscipleState
+    77	            {
+    78	                DiscipleId = "d002",
+    79	                DisplayName = "Su Yan",
+    80	                Sex = DiscipleSex.Female,
+    81	                ChibiBackend = ChibiBackend.SpriteSheet, // Inner = SpriteSheet (แผน §4.1)
+    82	                Rank = DiscipleRank.InnerDisciple,
+    83	                Wallet = new CurrencyWallet { SpiritStones = 45, Contribution = 1120 },
+    84	                CurrentTask = "meditation", // was refining_elixir — pill_hall not in start state, gate would block it anyway
+    85	                PersonalInventory = new List<InventoryItem>(),
+    86	                Avatar = AvatarAppearance.FromSlots(
+    87	                    new SlotPart(AvatarSlots.Body, "body_robe_white"),
+    88	                    new SlotPart(AvatarSlots.Head, "head_female_01"),
+    89	                    new SlotPart(AvatarSlots.Hair, "hair_twin_tail"),
+    90	                    new SlotPart(AvatarSlots.FaceMarking, "face_marking_red_dot"),
+    91	                    new SlotPart(AvatarSlots.Accessory, "acc_hairpin_silver")
+    92	                ),
+    93	                // P10A TEST DATA (prototype): alchemy-leaning founder.
+    94	                Attributes = TestAttributes(0f, 200f, 0f)
+    95	            });
+    96	
+    97	            // d003: Elder Zhao (Elder - Bald + Beard)
+    98	            state.Disciples.Add(new DiscipleState
+    99	            {
+   100	                DiscipleId = "d003",
+   101	                DisplayName = "Elder Zhao",
+   102	                Sex = DiscipleSex.Male,
+   103	                ChibiBackend = ChibiBackend.Spine, // Elder = Spine tier (แผน §4.1)
+   104	                Rank = DiscipleRank.Elder,
+   105	                Wallet = new CurrencyWallet { SpiritStones = 210, Contribution = 4300 },
+   106	                CurrentTask = "meditation", // was forging_artifact — forge not in start state, gate would block it anyway
+   107	                PersonalInventory = new List<InventoryItem>
+   108	                {
+   109	                    new InventoryItem
+   110	                    {
+   111	                        ItemDefId = "sword_azure_flame",
+   112	                        Quantity = 1,
+   113	                        Grade = 5,
+   114	                        OwnerScope = OwnerScope.Personal
+   115	                    }
+   116	                },
+   117	                Avatar = AvatarAppearance.FromSlots(
+   118	                    new SlotPart(AvatarSlots.Body, "body_robe_black"),
+   119	                    new SlotPart(AvatarSlots.Head, "head_male_elder"),
+   120	                    new SlotPart(AvatarSlots.Hair, "hair_bald_beard"),
+   121	                    new SlotPart(AvatarSlots.Accessory, "acc_gourd")
+   122	                ),
+   123	                // P10A TEST DATA (prototype): forging-leaning founder.
+   124	                Attributes = TestAttributes(0f, 0f, 400f)
+   125	            });
+   126	
+   127	            return state;
+   128	        }
+   129	
+   130	        /// <summary>
+   131	        /// P10A TEST DATA (prototype) — build a normalized attribute block for a
+   132	        /// founder. Stamina is 100 for everyone; the four founders differ only in
+   133	        /// which skill category they have XP in, so later phases can tell them apart.
+   134	        /// These are placeholders, NOT balance values.
+   135	        /// </summary>
+   136	        private static DiscipleAttributes TestAttributes(float gatheringXp, float alchemyXp, float forgingXp)
+   137	        {
+   138	            var attributes = new DiscipleAttributes { Stamina = DiscipleAttributesConfig.StaminaDefault };
+   139	            attributes.SkillXp[DiscipleAttributesConfig.CategoryGathering] = gatheringXp;
+   140	            attributes.SkillXp[DiscipleAttributesConfig.CategoryAlchemy] = alchemyXp;
+   141	            attributes.SkillXp[DiscipleAttributesConfig.CategoryForging] = forgingXp;
+   142	            return DiscipleAttributes.Normalize(attributes);
+   143	        }
+   144	    }
+   145	}````
 
 ### McpBridge/Program.cs (8721 bytes)
 ````
@@ -1450,7 +1538,7 @@
     59	}
 ````
 
-### UnityProject/Assets/Scripts/Core/TimeSystem.cs (17061 bytes)
+### UnityProject/Assets/Scripts/Core/TimeSystem.cs (21199 bytes)
 ````
      1	using System.Collections.Generic;
      2	using System.Threading;
@@ -1467,339 +1555,411 @@
     13	    // references to other systems. Compare to the earlier plain GameManager
     14	    // sketch - the difference is TimeSystem doesn't know DiscipleSystem or
     15	    // BuildingSystem exist; it just publishes, and whoever cares subscribes.
-    16	    public class TimeSystem : IStartable, ITickable
-    17	    {
-    18	        private readonly IPublisher<TimeSpeedChangedMessage> _speedPublisher;
-    19	        private readonly IPublisher<WorldEventTriggeredMessage> _worldEventPublisher;
-    20	
-    21	        private int _speed = 1;
-    22	        private bool _paused;
-    23	
-    24	        // Completed (and replaced with a fresh one) every time a world
-    25	        // event fires - see WaitForNextWorldEventAsync()/RaiseWorldEvent().
-    26	        private UniTaskCompletionSource<AwaitWorldEventResponse> _pendingEventSource =
-    27	            new UniTaskCompletionSource<AwaitWorldEventResponse>();
-    28	
-    29	        // If a decision-requiring event fired before anyone called
-    30	        // await_next_world_event, hand it back immediately on the next call
-    31	        // instead of making a late caller wait for a completely new event.
-    32	        // Cleared once handed out - a second call with nothing new pending
-    33	        // goes back to waiting normally.
-    34	        private AwaitWorldEventResponse _cachedPendingEvent;
-    35	
-    36	        public TimeSystem(
-    37	            IPublisher<TimeSpeedChangedMessage> speedPublisher,
-    38	            IPublisher<WorldEventTriggeredMessage> worldEventPublisher)
-    39	        {
-    40	            _speedPublisher = speedPublisher;
-    41	            _worldEventPublisher = worldEventPublisher;
-    42	        }
-    43	
-    44	        public void Start()
-    45	        {
-    46	            _speedPublisher.Publish(new TimeSpeedChangedMessage { Speed = _speed, Paused = _paused });
-    47	        }
-    48	
-    49	        public void SetPaused(bool paused)
+    16	    //
+    17	    // NOTE (P10 simulation time): TimeSystem deliberately does NOT implement ITickable.
+    18	    // Simulation time is derived on demand by SimulationDelta, and game speed is applied
+    19	    // ONLY there — there is intentionally no per-frame hook a second speed multiply could
+    20	    // be added to later.
+    21	    public class TimeSystem : IStartable
+    22	    {
+    23	        private readonly IPublisher<TimeSpeedChangedMessage> _speedPublisher;
+    24	        private readonly IPublisher<WorldEventTriggeredMessage> _worldEventPublisher;
+    25	
+    26	        /// <summary>Lowest supported simulation speed (1x).</summary>
+    27	        public const int MinSpeed = 1;
+    28	        /// <summary>Highest supported simulation speed (3x).</summary>
+    29	        public const int MaxSpeed = 3;
+    30	
+    31	        // Initialised to 1x (SetSpeed only publishes the UI-facing change message).
+    32	        private int _speed = 1;
+    33	        private bool _paused;
+    34	
+    35	        // Completed (and replaced with a fresh one) every time a world
+    36	        // event fires - see WaitForNextWorldEventAsync()/RaiseWorldEvent().
+    37	        private UniTaskCompletionSource<AwaitWorldEventResponse> _pendingEventSource =
+    38	            new UniTaskCompletionSource<AwaitWorldEventResponse>();
+    39	
+    40	        // If a decision-requiring event fired before anyone called
+    41	        // await_next_world_event, hand it back immediately on the next call
+    42	        // instead of making a late caller wait for a completely new event.
+    43	        // Cleared once handed out - a second call with nothing new pending
+    44	        // goes back to waiting normally.
+    45	        private AwaitWorldEventResponse _cachedPendingEvent;
+    46	
+    47	        public TimeSystem(
+    48	            IPublisher<TimeSpeedChangedMessage> speedPublisher,
+    49	            IPublisher<WorldEventTriggeredMessage> worldEventPublisher)
     50	        {
-    51	            _paused = paused;
-    52	            _speedPublisher.Publish(new TimeSpeedChangedMessage { Speed = _speed, Paused = _paused });
+    51	            _speedPublisher = speedPublisher;
+    52	            _worldEventPublisher = worldEventPublisher;
     53	        }
     54	
-    55	        public void SetSpeed(int speed)
+    55	        public void Start()
     56	        {
-    57	            _speed = speed;
-    58	            _speedPublisher.Publish(new TimeSpeedChangedMessage { Speed = _speed, Paused = _paused });
-    59	        }
-    60	
-    61	        public void Tick()
-    62	        {
-    63	            if (_paused) return;
-    64	            // TODO: advance world clock by _speed * UnityEngine.Time.deltaTime
-    65	        }
-    66	
-    67	        public bool IsPaused => _paused;
-    68	
-    69	        // Resolved by AwaitWorldEventHandler - the bridge's await_next_world_event
-    70	        // tool call blocks on this until the next RaiseWorldEvent(), unless
-    71	        // there's already a cached one waiting (see _cachedPendingEvent).
-    72	        //
-    73	        // Remember: while _paused is true (a decision-requiring event is
-    74	        // outstanding), RaiseWorldEvent never fires again - WorldEventSystem
-    75	        // checks IsPaused and skips. Call execute_decision first to unpause,
-    76	        // or this will time out waiting for an event that can't happen yet.
-    77	        public UniTask<AwaitWorldEventResponse> WaitForNextWorldEventAsync()
-    78	        {
-    79	            if (_cachedPendingEvent != null)
-    80	            {
-    81	                Debug.Log("[TimeSystem] Returning cached world event immediately.");
-    82	                var cached = _cachedPendingEvent;
-    83	                _cachedPendingEvent = null;
-    84	                return UniTask.FromResult(cached);
-    85	            }
-    86	
-    87	            return _pendingEventSource.Task;
-    88	        }
-    89	
-    90	        // Called by whatever system decides a world event fired (new
-    91	        // applicant, monster incursion, ...). requiresDecision auto-pauses -
-    92	        // this is the "checkpoint" the AI GM / vote window waits on, and
-    93	        // stays paused until execute_decision is called.
-    94	        //
-    95	        // Not sent over the interprocess bus as pub/sub (see the comment on
-    96	        // AwaitWorldEventRequest in GameMessages.cs for why) - completing
-    97	        // _pendingEventSource is what actually delivers this to the bridge,
-    98	        // via the request-response AwaitWorldEventHandler below. The
-    99	        // in-memory Publish() call is just for any other in-Unity listener.
-   100	        public void RaiseWorldEvent(string eventId, string description, bool requiresDecision, List<EventChoiceInfo> choices)
-   101	        {
-   102	            Debug.Log($"[TimeSystem] World event raised: {eventId} (requiresDecision={requiresDecision})");
-   103	
-   104	            if (requiresDecision) SetPaused(true);
-   105	
-   106	            _worldEventPublisher.Publish(new WorldEventTriggeredMessage
-   107	            {
-   108	                EventId = eventId,
-   109	                RequiresDecision = requiresDecision,
-   110	                Description = description,
-   111	                Choices = choices ?? new List<EventChoiceInfo>(),
-   112	            });
-   113	
-   114	            var response = new AwaitWorldEventResponse
-   115	            {
-   116	                EventId = eventId,
-   117	                RequiresDecision = requiresDecision,
-   118	                Description = description,
-   119	                Choices = choices ?? new List<EventChoiceInfo>(),
-   120	            };
-   121	
-   122	            if (requiresDecision)
-   123	            {
-   124	                _cachedPendingEvent = response;
+    57	            _speedPublisher.Publish(new TimeSpeedChangedMessage { Speed = _speed, Paused = _paused });
+    58	        }
+    59	
+    60	        public void SetPaused(bool paused)
+    61	        {
+    62	            _paused = paused;
+    63	            _speedPublisher.Publish(new TimeSpeedChangedMessage { Speed = _speed, Paused = _paused });
+    64	        }
+    65	
+    66	        public void SetSpeed(int speed)
+    67	        {
+    68	            _speed = speed;
+    69	            _speedPublisher.Publish(new TimeSpeedChangedMessage { Speed = _speed, Paused = _paused });
+    70	        }
+    71	
+    72	        public bool IsPaused => _paused;
+    73	
+    74	        /// <summary>
+    75	        /// Simulation delta for gameplay progression, in seconds — the ONLY place game
+    76	        /// speed is applied. Returns 0 while paused, so a paused game freezes every
+    77	        /// consumer without each one having to re-implement the pause rule.
+    78	        /// <para>Main thread only: reads <see cref="UnityEngine.Time.deltaTime"/>.</para>
+    79	        /// </summary>
+    80	        /// <remarks>
+    81	        /// Time.timeScale is deliberately never written by this class: it is already
+    82	        /// folded into Time.deltaTime, so multiplying by speed here as well would apply
+    83	        /// game speed twice. Speed below <see cref="MinSpeed"/> is clamped up to 1x and
+    84	        /// above <see cref="MaxSpeed"/> down to 3x, so a stale/out-of-range speed (or a
+    85	        /// forgotten SetSpeed) can never yield a zero or unbounded delta while unpaused.
+    86	        /// </remarks>
+    87	        public float SimulationDelta
+    88	        {
+    89	            get { return ComputeSimulationDelta(_paused, _speed, Time.deltaTime); }
+    90	        }
+    91	
+    92	        /// <summary>
+    93	        /// Pure core of <see cref="SimulationDelta"/> — the single speed application,
+    94	        /// split out so the multiplier can be asserted without a rendered frame.
+    95	        /// </summary>
+    96	        public static float ComputeSimulationDelta(bool paused, int speed, float frameDelta)
+    97	        {
+    98	            if (paused) return 0f;
+    99	            return ClampSpeed(speed) * frameDelta;
+   100	        }
+   101	
+   102	        private static int ClampSpeed(int speed)
+   103	        {
+   104	            if (speed < MinSpeed) return MinSpeed;
+   105	            if (speed > MaxSpeed) return MaxSpeed;
+   106	            return speed;
+   107	        }
+   108	
+   109	        // Resolved by AwaitWorldEventHandler - the bridge's await_next_world_event
+   110	        // tool call blocks on this until the next RaiseWorldEvent(), unless
+   111	        // there's already a cached one waiting (see _cachedPendingEvent).
+   112	        //
+   113	        // Remember: while _paused is true (a decision-requiring event is
+   114	        // outstanding), RaiseWorldEvent never fires again - WorldEventSystem
+   115	        // checks IsPaused and skips. Call execute_decision first to unpause,
+   116	        // or this will time out waiting for an event that can't happen yet.
+   117	        public UniTask<AwaitWorldEventResponse> WaitForNextWorldEventAsync()
+   118	        {
+   119	            if (_cachedPendingEvent != null)
+   120	            {
+   121	                Debug.Log("[TimeSystem] Returning cached world event immediately.");
+   122	                var cached = _cachedPendingEvent;
+   123	                _cachedPendingEvent = null;
+   124	                return UniTask.FromResult(cached);
    125	            }
    126	
-   127	            var previous = _pendingEventSource;
-   128	            _pendingEventSource = new UniTaskCompletionSource<AwaitWorldEventResponse>();
-   129	            previous.TrySetResult(response);
-   130	        }
-   131	    }
-   132	
-   133	    // Answers AwaitWorldEventRequest coming in over the interprocess bus.
-   134	    // Request-response, not pub/sub - see the comment on AwaitWorldEventRequest
-   135	    // in GameMessages.cs for why.
-   136	    public class AwaitWorldEventHandler : IAsyncRequestHandler<AwaitWorldEventRequest, AwaitWorldEventResponse>
-   137	    {
-   138	        private readonly TimeSystem _timeSystem;
-   139	
-   140	        public AwaitWorldEventHandler(TimeSystem timeSystem)
+   127	            return _pendingEventSource.Task;
+   128	        }
+   129	
+   130	        // Called by whatever system decides a world event fired (new
+   131	        // applicant, monster incursion, ...). requiresDecision auto-pauses -
+   132	        // this is the "checkpoint" the AI GM / vote window waits on, and
+   133	        // stays paused until execute_decision is called.
+   134	        //
+   135	        // Not sent over the interprocess bus as pub/sub (see the comment on
+   136	        // AwaitWorldEventRequest in GameMessages.cs for why) - completing
+   137	        // _pendingEventSource is what actually delivers this to the bridge,
+   138	        // via the request-response AwaitWorldEventHandler below. The
+   139	        // in-memory Publish() call is just for any other in-Unity listener.
+   140	        public void RaiseWorldEvent(string eventId, string description, bool requiresDecision, List<EventChoiceInfo> choices)
    141	        {
-   142	            _timeSystem = timeSystem;
-   143	        }
-   144	
-   145	        public UniTask<AwaitWorldEventResponse> InvokeAsync(AwaitWorldEventRequest request, CancellationToken cancellationToken = default)
-   146	        {
-   147	            return _timeSystem.WaitForNextWorldEventAsync();
-   148	        }
-   149	    }
-   150	
-   151	    // Answers SectStateQuery requests coming in over the interprocess bus
-   152	    // from the MCP bridge. Aggregates whatever the subsystems currently hold
-   153	    // into the SectEconomyState shape from economy.proto.
-   154	    public class SectStateQueryHandler : IAsyncRequestHandler<SectStateQuery, SectStateSnapshot>
-   155	    {
-   156	        private readonly ISectStateProvider _stateProvider;
-   157	
-   158	        public SectStateQueryHandler(ISectStateProvider stateProvider)
-   159	        {
-   160	            _stateProvider = stateProvider;
-   161	        }
-   162	
-   163	        public UniTask<SectStateSnapshot> InvokeAsync(SectStateQuery request, CancellationToken cancellationToken = default)
-   164	        {
-   165	            var state = _stateProvider.BuildSectEconomyState();
-   166	            var snapshot = new SectStateSnapshot
-   167	            {
-   168	                RequestId = request.RequestId,
-   169	                // MessagePack, committed choice (not a protobuf stub
-   170	                // anymore - see project_summary.md for why).
-   171	                EconomyStateBytes = state.ToByteArray()
-   172	            };
-   173	            return UniTask.FromResult(snapshot);
-   174	        }
-   175	    }
-   176	
-   177	    // ---------- P5B (Hybrid Permissions) — read-only permission contract ----------
-   178	    // The UI must never infer permission from OwnerType != Npc on its own; it asks
-   179	    // the authority (SectStateProvider) and renders the answer. Same evaluation the
-   180	    // mutation path revalidates, so display and commit can never disagree.
-   181	
-   182	    /// <summary>Three-way outcome of a task permission evaluation.</summary>
-   183	    public enum TaskPermissionOutcome
-   184	    {
-   185	        /// <summary>Requester may control this disciple right now.</summary>
-   186	        Allowed = 0,
-   187	        /// <summary>Requester is a known identity that simply does not have permission.</summary>
-   188	        Denied = 1,
-   189	        /// <summary>Membership/ownership data is missing or contradictory — fail closed, NEVER permission.</summary>
-   190	        ConsistencyError = 2,
-   191	    }
-   192	
-   193	    /// <summary>
-   194	    /// P5B — read-only result of a task permission evaluation. Never mutates state;
-   195	    /// the mutation path (TryAssignTask) revalidates the same rules before writing.
-   196	    /// </summary>
-   197	    public sealed class TaskPermissionResult
-   198	    {
-   199	        public TaskPermissionOutcome Outcome { get; private set; }
-   200	        public string Reason { get; private set; } = string.Empty;
-   201	
-   202	        /// <summary>True when the requested task already is the disciple's current task (a valid no-op).</summary>
-   203	        public bool IsNoOp { get; private set; }
-   204	
-   205	        /// <summary>True when a viewer owner is inside the protection window (SectMaster override not yet allowed).</summary>
-   206	        public bool OwnerProtected { get; private set; }
-   207	
-   208	        /// <summary>Seconds left in the owner protection window (0 unless OwnerProtected).</summary>
-   209	        public float OwnerProtectionRemainingSeconds { get; private set; }
-   210	
-   211	        public bool Allowed => Outcome == TaskPermissionOutcome.Allowed;
-   212	
-   213	        public static TaskPermissionResult Allow()
-   214	            => new TaskPermissionResult { Outcome = TaskPermissionOutcome.Allowed };
-   215	
-   216	        public static TaskPermissionResult Denied(string reason)
-   217	            => new TaskPermissionResult { Outcome = TaskPermissionOutcome.Denied, Reason = reason ?? string.Empty };
-   218	
-   219	        public static TaskPermissionResult ConsistencyError(string reason)
-   220	            => new TaskPermissionResult { Outcome = TaskPermissionOutcome.ConsistencyError, Reason = reason ?? string.Empty };
+   142	            Debug.Log($"[TimeSystem] World event raised: {eventId} (requiresDecision={requiresDecision})");
+   143	
+   144	            if (requiresDecision) SetPaused(true);
+   145	
+   146	            _worldEventPublisher.Publish(new WorldEventTriggeredMessage
+   147	            {
+   148	                EventId = eventId,
+   149	                RequiresDecision = requiresDecision,
+   150	                Description = description,
+   151	                Choices = choices ?? new List<EventChoiceInfo>(),
+   152	            });
+   153	
+   154	            var response = new AwaitWorldEventResponse
+   155	            {
+   156	                EventId = eventId,
+   157	                RequiresDecision = requiresDecision,
+   158	                Description = description,
+   159	                Choices = choices ?? new List<EventChoiceInfo>(),
+   160	            };
+   161	
+   162	            if (requiresDecision)
+   163	            {
+   164	                _cachedPendingEvent = response;
+   165	            }
+   166	
+   167	            var previous = _pendingEventSource;
+   168	            _pendingEventSource = new UniTaskCompletionSource<AwaitWorldEventResponse>();
+   169	            previous.TrySetResult(response);
+   170	        }
+   171	    }
+   172	
+   173	    // Answers AwaitWorldEventRequest coming in over the interprocess bus.
+   174	    // Request-response, not pub/sub - see the comment on AwaitWorldEventRequest
+   175	    // in GameMessages.cs for why.
+   176	    public class AwaitWorldEventHandler : IAsyncRequestHandler<AwaitWorldEventRequest, AwaitWorldEventResponse>
+   177	    {
+   178	        private readonly TimeSystem _timeSystem;
+   179	
+   180	        public AwaitWorldEventHandler(TimeSystem timeSystem)
+   181	        {
+   182	            _timeSystem = timeSystem;
+   183	        }
+   184	
+   185	        public UniTask<AwaitWorldEventResponse> InvokeAsync(AwaitWorldEventRequest request, CancellationToken cancellationToken = default)
+   186	        {
+   187	            return _timeSystem.WaitForNextWorldEventAsync();
+   188	        }
+   189	    }
+   190	
+   191	    // Answers SectStateQuery requests coming in over the interprocess bus
+   192	    // from the MCP bridge. Aggregates whatever the subsystems currently hold
+   193	    // into the SectEconomyState shape from economy.proto.
+   194	    public class SectStateQueryHandler : IAsyncRequestHandler<SectStateQuery, SectStateSnapshot>
+   195	    {
+   196	        private readonly ISectStateProvider _stateProvider;
+   197	
+   198	        public SectStateQueryHandler(ISectStateProvider stateProvider)
+   199	        {
+   200	            _stateProvider = stateProvider;
+   201	        }
+   202	
+   203	        public UniTask<SectStateSnapshot> InvokeAsync(SectStateQuery request, CancellationToken cancellationToken = default)
+   204	        {
+   205	            var state = _stateProvider.BuildSectEconomyState();
+   206	            var snapshot = new SectStateSnapshot
+   207	            {
+   208	                RequestId = request.RequestId,
+   209	                // MessagePack, committed choice (not a protobuf stub
+   210	                // anymore - see project_summary.md for why).
+   211	                EconomyStateBytes = state.ToByteArray()
+   212	            };
+   213	            return UniTask.FromResult(snapshot);
+   214	        }
+   215	    }
+   216	
+   217	    // ---------- P5B (Hybrid Permissions) — read-only permission contract ----------
+   218	    // The UI must never infer permission from OwnerType != Npc on its own; it asks
+   219	    // the authority (SectStateProvider) and renders the answer. Same evaluation the
+   220	    // mutation path revalidates, so display and commit can never disagree.
    221	
-   222	        internal TaskPermissionResult WithNoOp(bool isNoOp) { IsNoOp = isNoOp; return this; }
-   223	
-   224	        internal TaskPermissionResult WithProtection(float remainingSeconds)
-   225	        {
-   226	            OwnerProtected = true;
-   227	            OwnerProtectionRemainingSeconds = remainingSeconds < 0f ? 0f : remainingSeconds;
-   228	            return this;
-   229	        }
-   230	    }
-   231	
-   232	    // Thin seam so SectStateQueryHandler doesn't need to know about every
-   233	    // subsystem directly - implement this on a small aggregator class that
-   234	    // does hold references (it's allowed to, it's not part of the bus).
-   235	    public interface ISectStateProvider
-   236	    {
-   237	        SectEconomyState BuildSectEconomyState();
-   238	        void ApplyDecisionConsequence(string eventId, string choiceId);
-   239	        void TickGathering(float deltaTimeSeconds);
-   240	        void TickCrafting(float deltaTimeSeconds);
-   241	        void RecruitOuterDisciple(DiscipleSex sex = DiscipleSex.Unspecified);
-   242	        PurchaseItemResponse TryPurchaseItem(string discipleId, string itemDefId, int grade, int quantity);
-   243	        bool TryChangeAvatarPart(string discipleId, string slot, string partId,
-   244	                                out string failReason, out AvatarAppearance result);
-   245	
-   246	        /// <summary>
-   247	        /// Task System v2 (§6) + P5B — assign a task to a disciple after a permission
-   248	        /// and validity check. Permission follows CheckTaskPermission (revalidated
-   249	        /// here): "SECT_MASTER" may control unowned NPCs and player-controlled
-   250	        /// disciples, and may override a Viewer disciple only when the owner has been
-   251	        /// inactive for strictly more than 10 real-time minutes; any other requester
-   252	        /// only their own valid active membership. Empty/invalid requesters and
-   253	        /// missing/conflicting membership data fail closed. A request for the task
-   254	        /// already assigned is a no-op — no event, no progress reset (it may refresh
-   255	        /// the requester's own activity). Actual task changes honour the configurable
-   256	        /// cooldown. Unknown disciple or task fails closed with a reason. On success
-   257	        /// sets CurrentTask and publishes DiscipleTaskChangedMessage (in-memory only).
-   258	        /// </summary>
-   259	        bool TryAssignTask(string requesterId, string discipleId, string taskId, out string failReason);
-   260	
-   261	        /// <summary>
-   262	        /// P5B (Hybrid Permissions) — read-only permission query for UI. Evaluates the
-   263	        /// SAME rules TryAssignTask revalidates on mutation, and never mutates state:
-   264	        /// a valid requester may control its own active membership; "SECT_MASTER" may
-   265	        /// control unowned NPCs and player-controlled disciples, and may override a
-   266	        /// Viewer disciple only when the owner has been inactive for STRICTLY more than
-   267	        /// 10 real-time minutes (injected clock). Empty/invalid requesters fail closed;
-   268	        /// missing or conflicting membership data returns a ConsistencyError — never
-   269	        /// automatic permission.
-   270	        /// </summary>
-   271	        TaskPermissionResult CheckTaskPermission(string requesterId, string discipleId, string taskId);
-   272	
-   273	        /// <summary>
-   274	        /// P5B persistence — the membership slice worth surviving a session: the
-   275	        /// viewer registry (status / binding / LastActiveAtUtc) TOGETHER with each
-   276	        /// disciple's ownership, so the registry ⇄ ownership invariants hold after a
-   277	        /// load. Read-only — the live state is not modified by exporting.
-   278	        /// </summary>
-   279	        Xianxia.Sect.Messages.SectViewerMembershipSave ExportViewerMembership();
-   280	
-   281	        /// <summary>
-   282	        /// P5B persistence — restore a previously exported slice. Fully validated
-   283	        /// BEFORE any mutation (version, unknown disciples, registry internal
-   284	        /// consistency, and registry ⇄ ownership agreement); anything invalid fails
-   285	        /// closed with the mock start state still in place. Ownership and registry are
-   286	        /// applied together, so a half-restored state can never exist.
-   287	        /// </summary>
-   288	        bool TryImportViewerMembership(Xianxia.Sect.Messages.SectViewerMembershipSave save, out string failReason);
-   289	
-   290	        /// <summary>
-   291	        /// Task building-requirement gate (§6 addendum). Reads the live
-   292	        /// PlacedBuildings list — true when the task is known and either has no
-   293	        /// required building or that building def id already exists in state.
-   294	        /// Unknown task fails with its usual reason; failClosed — never mutates.
-   295	        /// </summary>
-   296	        bool IsTaskAvailable(string taskId, out string failReason);
-   297	
-   298	        /// <summary>
-   299	        /// P3 (Task Assignment UI) — the known-task set TryAssignTask validates
-   300	        /// against, in stable order (gathering, crafting, meditation). The SAME
-   301	        /// source of truth as the assignment gate — the UI lists these directly,
-   302	        /// so no second task list can drift from what assignment accepts.
-   303	        /// Read-only; never mutates.
-   304	        /// </summary>
-   305	        System.Collections.Generic.IReadOnlyList<string> GetKnownTaskIds();
-   306	
-   307	        /// <summary>
-   308	        /// P4 (local ownership test harness) — dev-only ownership assignment.
-   309	        /// NOT exposed as a public viewer command or MCP tool; the intended caller
-   310	        /// is the Editor debug harness / test fixtures. Validates fully before any
-   311	        /// mutation (fail-closed): disciple exists, enum value defined, Npc
-   312	        /// normalizes OwnerId to empty, non-Npc identities satisfy the identity
-   313	        /// convention, and a Viewer identity cannot bind to two disciples.
-   314	        /// Publishes DiscipleOwnerChangedMessage (in-memory) only on a real change.
-   315	        /// P5B: bind/release keeps SectViewerRegistry in lock-step with the disciple
-   316	        /// row (active viewer ⇔ matching active record, invariant #1/#2/#3) and
-   317	        /// refreshes the owner's LastActiveAtUtc on a successful bind/reclaim.
-   318	        /// </summary>
-   319	        bool TrySetDiscipleOwner(string discipleId, Xianxia.Sect.DiscipleOwnerType ownerType,
-   320	                                 string ownerId, out string failReason);
-   321	
-   322	        /// <summary>
-   323	        /// Mutate DiscipleState.ChibiBackend (entitlement) + publish
-   324	        /// DiscipleChibiBackendChangedMessage (in-memory). DiscipleVisualSystem respawns
-   325	        /// the visual in place on that message — position/activity/facing preserved (§7).
-   326	        /// </summary>
-   327	        bool TrySetChibiBackend(string discipleId, ChibiBackend backend, out string failReason);
-   328	
-   329	        /// <summary>
-   330	        /// Building Phase 1 — place a building on the sect grid (player-only, §8 Q3 default).
-   331	        /// Validation order per building-system.md §3.2: def lookup → occupancy → cost,
-   332	        /// then all-or-nothing resource deduction through the AdjustAndNotify choke point,
-   333	        /// state append, and BuildingPlacedMessage publish (in-memory only).
-   334	        /// Caller must call CanAffordBuilding / grid.CanPlace first for ghost preview;
-   335	        /// this re-validates everything and fails closed with a reason.
-   336	        /// </summary>
-   337	        bool TryPlaceBuilding(string defId, int gridX, int gridZ, int rotation,
-   338	                              BuildingGrid grid, out string failReason,
-   339	                              out PlacedBuildingState placed);
-   340	
-   341	        /// <summary>Ghost preview check: can the sect pay this def's cost right now?
-   342	        /// Read-only — no state mutation (occupied-cells check lives on BuildingGrid).</summary>
-   343	        bool CanAffordBuilding(BuildingDef def);
-   344	    }
-   345	}
+   222	    /// <summary>Three-way outcome of a task permission evaluation.</summary>
+   223	    public enum TaskPermissionOutcome
+   224	    {
+   225	        /// <summary>Requester may control this disciple right now.</summary>
+   226	        Allowed = 0,
+   227	        /// <summary>Requester is a known identity that simply does not have permission.</summary>
+   228	        Denied = 1,
+   229	        /// <summary>Membership/ownership data is missing or contradictory — fail closed, NEVER permission.</summary>
+   230	        ConsistencyError = 2,
+   231	    }
+   232	
+   233	    /// <summary>
+   234	    /// P5B — read-only result of a task permission evaluation. Never mutates state;
+   235	    /// the mutation path (TryAssignTask) revalidates the same rules before writing.
+   236	    /// </summary>
+   237	    public sealed class TaskPermissionResult
+   238	    {
+   239	        public TaskPermissionOutcome Outcome { get; private set; }
+   240	        public string Reason { get; private set; } = string.Empty;
+   241	
+   242	        /// <summary>True when the requested task already is the disciple's current task (a valid no-op).</summary>
+   243	        public bool IsNoOp { get; private set; }
+   244	
+   245	        /// <summary>True when a viewer owner is inside the protection window (SectMaster override not yet allowed).</summary>
+   246	        public bool OwnerProtected { get; private set; }
+   247	
+   248	        /// <summary>Seconds left in the owner protection window (0 unless OwnerProtected).</summary>
+   249	        public float OwnerProtectionRemainingSeconds { get; private set; }
+   250	
+   251	        public bool Allowed => Outcome == TaskPermissionOutcome.Allowed;
+   252	
+   253	        public static TaskPermissionResult Allow()
+   254	            => new TaskPermissionResult { Outcome = TaskPermissionOutcome.Allowed };
+   255	
+   256	        public static TaskPermissionResult Denied(string reason)
+   257	            => new TaskPermissionResult { Outcome = TaskPermissionOutcome.Denied, Reason = reason ?? string.Empty };
+   258	
+   259	        public static TaskPermissionResult ConsistencyError(string reason)
+   260	            => new TaskPermissionResult { Outcome = TaskPermissionOutcome.ConsistencyError, Reason = reason ?? string.Empty };
+   261	
+   262	        internal TaskPermissionResult WithNoOp(bool isNoOp) { IsNoOp = isNoOp; return this; }
+   263	
+   264	        internal TaskPermissionResult WithProtection(float remainingSeconds)
+   265	        {
+   266	            OwnerProtected = true;
+   267	            OwnerProtectionRemainingSeconds = remainingSeconds < 0f ? 0f : remainingSeconds;
+   268	            return this;
+   269	        }
+   270	    }
+   271	
+   272	    // Thin seam so SectStateQueryHandler doesn't need to know about every
+   273	    // subsystem directly - implement this on a small aggregator class that
+   274	    // does hold references (it's allowed to, it's not part of the bus).
+   275	    public interface ISectStateProvider
+   276	    {
+   277	        SectEconomyState BuildSectEconomyState();
+   278	        void ApplyDecisionConsequence(string eventId, string choiceId);
+   279	        void TickGathering(float deltaTimeSeconds);
+   280	        void TickCrafting(float deltaTimeSeconds);
+   281	        void RecruitOuterDisciple(DiscipleSex sex = DiscipleSex.Unspecified);
+   282	        PurchaseItemResponse TryPurchaseItem(string discipleId, string itemDefId, int grade, int quantity);
+   283	        bool TryChangeAvatarPart(string discipleId, string slot, string partId,
+   284	                                out string failReason, out AvatarAppearance result);
+   285	
+   286	        /// <summary>
+   287	        /// Task System v2 (§6) + P5B — assign a task to a disciple after a permission
+   288	        /// and validity check. Permission follows CheckTaskPermission (revalidated
+   289	        /// here): "SECT_MASTER" may control unowned NPCs and player-controlled
+   290	        /// disciples, and may override a Viewer disciple only when the owner has been
+   291	        /// inactive for strictly more than 10 real-time minutes; any other requester
+   292	        /// only their own valid active membership. Empty/invalid requesters and
+   293	        /// missing/conflicting membership data fail closed. A request for the task
+   294	        /// already assigned is a no-op — no event, no progress reset (it may refresh
+   295	        /// the requester's own activity). Actual task changes honour the configurable
+   296	        /// cooldown. Unknown disciple or task fails closed with a reason. On success
+   297	        /// sets CurrentTask and publishes DiscipleTaskChangedMessage (in-memory only).
+   298	        /// </summary>
+   299	        bool TryAssignTask(string requesterId, string discipleId, string taskId, out string failReason);
+   300	
+   301	        /// <summary>
+   302	        /// P9A — explicitly set a disciple's Manual/Auto control mode. Ownership and
+   303	        /// autonomy are different: this never changes ownership, and only an Npc-owned
+   304	        /// disciple is eligible for Auto in this MVP. A Player/Viewer-owned disciple is
+   305	        /// rejected even when its owner has been inactive past the protection window —
+   306	        /// hybrid inactivity only lets the SectMaster override a task, it does not
+   307	        /// authorize a brain. Empty/unknown disciple and undefined enum fail closed;
+   308	        /// idempotent (no message when the mode is already set). Publishes
+   309	        /// DiscipleControlModeChangedMessage (in-memory only) on a real change.
+   310	        /// </summary>
+   311	        bool TrySetDiscipleControlMode(string discipleId, DiscipleControlMode mode, out string failReason);
+   312	
+   313	        /// <summary>
+   314	        /// P9A — dedicated authoritative entry point for the future DiscipleBrain. NOT
+   315	        /// TryAssignTask(SectMasterRequesterId, ...): it takes no requester identity, so
+   316	        /// the brain can never impersonate the player or inherit the SectMaster
+   317	        /// override. Rechecks NPC ownership AND Auto mode immediately before commit, then
+   318	        /// shares TryAssignTask's known-task/building/cooldown validation and mutation
+   319	        /// (one implementation). Fails closed with a reason when either eligibility
+   320	        /// precondition no longer holds.
+   321	        /// </summary>
+   322	        bool TryAutoAssignTask(string discipleId, string taskId, out string failReason);
+   323	
+   324	        /// <summary>
+   325	        /// P5B (Hybrid Permissions) — read-only permission query for UI. Evaluates the
+   326	        /// SAME rules TryAssignTask revalidates on mutation, and never mutates state:
+   327	        /// a valid requester may control its own active membership; "SECT_MASTER" may
+   328	        /// control unowned NPCs and player-controlled disciples, and may override a
+   329	        /// Viewer disciple only when the owner has been inactive for STRICTLY more than
+   330	        /// 10 real-time minutes (injected clock). Empty/invalid requesters fail closed;
+   331	        /// missing or conflicting membership data returns a ConsistencyError — never
+   332	        /// automatic permission.
+   333	        /// </summary>
+   334	        TaskPermissionResult CheckTaskPermission(string requesterId, string discipleId, string taskId);
+   335	
+   336	        /// <summary>
+   337	        /// P5B persistence — the membership slice worth surviving a session: the
+   338	        /// viewer registry (status / binding / LastActiveAtUtc) TOGETHER with each
+   339	        /// disciple's ownership, so the registry ⇄ ownership invariants hold after a
+   340	        /// load. Read-only — the live state is not modified by exporting.
+   341	        /// </summary>
+   342	        Xianxia.Sect.Messages.SectViewerMembershipSave ExportViewerMembership();
+   343	
+   344	        /// <summary>
+   345	        /// P5B persistence — restore a previously exported slice. Fully validated
+   346	        /// BEFORE any mutation (version, unknown disciples, registry internal
+   347	        /// consistency, and registry ⇄ ownership agreement); anything invalid fails
+   348	        /// closed with the mock start state still in place. Ownership and registry are
+   349	        /// applied together, so a half-restored state can never exist.
+   350	        /// </summary>
+   351	        bool TryImportViewerMembership(Xianxia.Sect.Messages.SectViewerMembershipSave save, out string failReason);
+   352	
+   353	        /// <summary>
+   354	        /// Task building-requirement gate (§6 addendum). Reads the live
+   355	        /// PlacedBuildings list — true when the task is known and either has no
+   356	        /// required building or that building def id already exists in state.
+   357	        /// Unknown task fails with its usual reason; failClosed — never mutates.
+   358	        /// </summary>
+   359	        bool IsTaskAvailable(string taskId, out string failReason);
+   360	
+   361	        /// <summary>
+   362	        /// P3 (Task Assignment UI) — the known-task set TryAssignTask validates
+   363	        /// against, in stable order (gathering, crafting, meditation). The SAME
+   364	        /// source of truth as the assignment gate — the UI lists these directly,
+   365	        /// so no second task list can drift from what assignment accepts.
+   366	        /// Read-only; never mutates.
+   367	        /// </summary>
+   368	        System.Collections.Generic.IReadOnlyList<string> GetKnownTaskIds();
+   369	
+   370	        /// <summary>
+   371	        /// P9B (utility AI) — read-only metadata for a known task, derived from the SAME
+   372	        /// gathering/crafting tables the assignment gate validates against
+   373	        /// (gathering: produced resource + rate; crafting: produced item + input costs;
+   374	        /// otherwise the no-production meditation fallback). False for an unknown/empty
+   375	        /// task. Never mutates; no second task-definition pipeline.
+   376	        /// </summary>
+   377	        bool TryGetTaskInfo(string taskId, out SectTaskInfo info);
+   378	
+   379	        /// <summary>
+   380	        /// P4 (local ownership test harness) — dev-only ownership assignment.
+   381	        /// NOT exposed as a public viewer command or MCP tool; the intended caller
+   382	        /// is the Editor debug harness / test fixtures. Validates fully before any
+   383	        /// mutation (fail-closed): disciple exists, enum value defined, Npc
+   384	        /// normalizes OwnerId to empty, non-Npc identities satisfy the identity
+   385	        /// convention, and a Viewer identity cannot bind to two disciples.
+   386	        /// Publishes DiscipleOwnerChangedMessage (in-memory) only on a real change.
+   387	        /// P5B: bind/release keeps SectViewerRegistry in lock-step with the disciple
+   388	        /// row (active viewer ⇔ matching active record, invariant #1/#2/#3) and
+   389	        /// refreshes the owner's LastActiveAtUtc on a successful bind/reclaim.
+   390	        /// </summary>
+   391	        bool TrySetDiscipleOwner(string discipleId, Xianxia.Sect.DiscipleOwnerType ownerType,
+   392	                                 string ownerId, out string failReason);
+   393	
+   394	        /// <summary>
+   395	        /// Mutate DiscipleState.ChibiBackend (entitlement) + publish
+   396	        /// DiscipleChibiBackendChangedMessage (in-memory). DiscipleVisualSystem respawns
+   397	        /// the visual in place on that message — position/activity/facing preserved (§7).
+   398	        /// </summary>
+   399	        bool TrySetChibiBackend(string discipleId, ChibiBackend backend, out string failReason);
+   400	
+   401	        /// <summary>
+   402	        /// Building Phase 1 — place a building on the sect grid (player-only, §8 Q3 default).
+   403	        /// Validation order per building-system.md §3.2: def lookup → occupancy → cost,
+   404	        /// then all-or-nothing resource deduction through the AdjustAndNotify choke point,
+   405	        /// state append, and BuildingPlacedMessage publish (in-memory only).
+   406	        /// Caller must call CanAffordBuilding / grid.CanPlace first for ghost preview;
+   407	        /// this re-validates everything and fails closed with a reason.
+   408	        /// </summary>
+   409	        bool TryPlaceBuilding(string defId, int gridX, int gridZ, int rotation,
+   410	                              BuildingGrid grid, out string failReason,
+   411	                              out PlacedBuildingState placed);
+   412	
+   413	        /// <summary>Ghost preview check: can the sect pay this def's cost right now?
+   414	        /// Read-only — no state mutation (occupied-cells check lives on BuildingGrid).</summary>
+   415	        bool CanAffordBuilding(BuildingDef def);
+   416	    }
+   417	}
 ````
 
-### UnityProject/Assets/Scripts/Systems/SectStateProvider.cs (67942 bytes)
+### UnityProject/Assets/Scripts/Systems/SectStateProvider.cs (76763 bytes)
 ````
      1	using System;
      2	using System.Collections.Generic;
@@ -1938,665 +2098,667 @@
    135	        private readonly IPublisher<BuildingPlacedMessage> _buildingPlacedPublisher;
    136	        private readonly IPublisher<DiscipleTaskChangedMessage> _discipleTaskChangedPublisher;
    137	        private readonly IPublisher<DiscipleOwnerChangedMessage> _ownershipChangedPublisher;
-   138	        private readonly BuildingDefPool _buildingDefPool;
-   139	        private readonly AvatarPartPool _avatarPartPool;
-   140	        private readonly VisualRuntimeConfig _visualConfig;
-   141	        private readonly IVisualEntitlementProvider _entitlementProvider;
-   142	        /// <summary>Concrete ref to the injected provider (null when a test/substitute implements the interface directly) — used only for bind-late wiring, not for resolution.</summary>
-   143	        private readonly DefaultEntitlementProvider _defaultEntitlementProvider;
-   144	
-   145	        // P5B — real-time clock for the viewer inactivity/activity rule. Injected so
-   146	        // tests can drive it deterministically; NEVER scaled game time (game time can
-   147	        // be paused/speed-changed, which would silently extend or shrink protection).
-   148	        private readonly IClock _clock;
-   149	
-   150	        // P5B — real-time cooldown on ACTUAL task changes, keyed per disciple.
-   151	        // Prototype balance value (see DefaultTaskChangeCooldownSeconds). A no-op
-   152	        // request never consumes or checks it.
-   153	        private readonly Dictionary<string, DateTime> _taskChangeLastAtUtc = new();
-   154	
-   155	        // Fractional resource accumulated per task since the last whole
-   156	        // unit was added to the stockpile - avoids losing sub-1 production
-   157	        // between ticks.
-   158	        private readonly Dictionary<string, float> _gatherAccumulators = new();
-   159	
-   160	        // Seconds accumulated toward the current craft, keyed per disciple
-   161	        // (not per task like gathering) - crafting has a resource cost, so
-   162	        // two disciples on the same task must progress independently, not
-   163	        // share one pooled timer.
-   164	        private readonly Dictionary<string, float> _craftProgress = new();
-   165	
-   166	        public SectStateProvider(
-   167	            IPublisher<DiscipleRecruitedMessage> discipleRecruitedPublisher,
-   168	            IPublisher<SectResourceChangedMessage> resourceChangedPublisher,
-   169	            IPublisher<AvatarEquipmentChangedMessage> avatarChangedPublisher,
-   170	            IPublisher<DiscipleChibiBackendChangedMessage> chibiBackendPublisher,
-   171	            AvatarPartPool avatarPartPool,
-   172	            VisualRuntimeConfig visualConfig,
-   173	            IVisualEntitlementProvider entitlementProvider,
-   174	            BuildingDefPool buildingDefPool,
-   175	            IPublisher<BuildingPlacedMessage> buildingPlacedPublisher,
-   176	            IPublisher<DiscipleTaskChangedMessage> discipleTaskChangedPublisher,
-   177	            IPublisher<DiscipleOwnerChangedMessage> ownershipChangedPublisher = null,
-   178	            IClock clock = null)
-   179	        {
-   180	            _discipleRecruitedPublisher = discipleRecruitedPublisher;
-   181	            _resourceChangedPublisher = resourceChangedPublisher;
-   182	            _avatarChangedPublisher = avatarChangedPublisher;
-   183	            _chibiBackendPublisher = chibiBackendPublisher;
-   184	            _buildingDefPool = buildingDefPool;
-   185	            _buildingPlacedPublisher = buildingPlacedPublisher;
-   186	            _discipleTaskChangedPublisher = discipleTaskChangedPublisher;
-   187	            // P4: optional (default null) so every existing test construction site
-   188	            // stays valid; production wires it via VContainer in UIInstaller/GameLifetimeScope.
-   189	            _ownershipChangedPublisher = ownershipChangedPublisher;
-   190	            _avatarPartPool = avatarPartPool;
-   191	            _visualConfig = visualConfig;
-   192	            _entitlementProvider = entitlementProvider;
-   193	            _defaultEntitlementProvider = entitlementProvider as DefaultEntitlementProvider;
-   194	            // P5B: production registers UtcClock via DI; every existing test construction
-   195	            // site omits it and keeps working (real UTC clock, which those tests never
-   196	            // depend on because they never cross the 10-minute protection window).
-   197	            _clock = clock ?? new UtcClock();
-   198	
-   199	            // Phase 5 — bind the provider's rank source HERE instead of injecting
-   200	            // ISectStateProvider into the provider itself: that direction would be a
-   201	            // DI cycle (SectStateProvider → provider → SectStateProvider). Bind-late
-   202	            // keeps the provider ignorant of the state module; before this line runs,
-   203	            // CanUse(discipleId, "owner") fails closed (Unspecified = deny).
-   204	            //
-   205	            // Note: inject the INTERFACE, not the concrete type. In this VContainer
-   206	            // version Register<I, Impl> registers only the interface (concrete Resolve
-   207	            // is not available), so consumers must resolve IVisualEntitlementProvider
-   208	            // and reach the concrete for bind-late via a type test.
-   209	            _defaultEntitlementProvider?.BindRankLookup(id =>
-   210	            {
-   211	                var d = FindDisciple(id);
-   212	                return d != null ? d.Rank : DiscipleRank.Unspecified;
-   213	            });
-   214	        }
-   215	
-   216	        /// <summary>Single lookup helper — also used by the entitlement rank binding.</summary>
-   217	        private DiscipleState FindDisciple(string discipleId)
-   218	        {
-   219	            if (string.IsNullOrEmpty(discipleId)) return null;
-   220	            for (int i = 0; i < _state.Disciples.Count; i++)
-   221	            {
-   222	                var d = _state.Disciples[i];
-   223	                if (d != null && d.DiscipleId == discipleId) return d;
-   224	            }
-   225	            return null;
-   226	        }
-   227	
-   228	        public SectEconomyState BuildSectEconomyState()
-   229	        {
-   230	            return _state;
-   231	        }
-   232	
-   233	        // Passive resource gathering - every disciple whose CurrentTask is
-   234	        // a known gathering task contributes toward that resource. Called
-   235	        // from DiscipleSystem.Tick(). Disciples whose task fails the building
-   236	        // requirement are SKIPPED (CurrentTask is never rewritten here — the
-   237	        // assignment gate is the only place that validates on assignment).
-   238	        public void TickGathering(float deltaTimeSeconds)
-   239	        {
-   240	            var placedDefIds = CollectPlacedDefIds(); // once per tick, not per disciple
-   241	            foreach (var disciple in _state.Disciples)
-   242	            {
-   243	                if (!IsTaskAvailableWithBuildings(disciple.CurrentTask, placedDefIds, out _)) continue;
-   244	                if (!GatheringRates.TryGetValue(disciple.CurrentTask, out var rate)) continue;
-   245	
-   246	                var accKey = disciple.CurrentTask;
-   247	                var acc = _gatherAccumulators.TryGetValue(accKey, out var existing) ? existing : 0f;
-   248	                acc += rate.PerSecond * deltaTimeSeconds;
-   249	
-   250	                var wholeUnits = Mathf.FloorToInt(acc);
-   251	                if (wholeUnits > 0)
-   252	                {
-   253	                    AdjustAndNotify(_state.Stockpile.RawResources, rate.Resource, wholeUnits);
-   254	                    acc -= wholeUnits;
-   255	                    Debug.Log($"[SectStateProvider] Gathered +{wholeUnits} {rate.Resource} (task={accKey})");
-   256	                }
-   257	
-   258	                _gatherAccumulators[accKey] = acc;
-   259	            }
-   260	        }
-   261	
-   262	        // Disciple crafting: whoever's CurrentTask matches a known recipe
-   263	        // accumulates progress; once a craft completes, consumes the raw
-   264	        // resource cost and produces the item - into the sect stockpile for
-   265	        // ordinary disciples, or straight into personal inventory for
-   266	        // Elder+ (matches the ownership rule from the economy design:
-   267	        // outer/inner disciples craft for the sect, elders keep their own).
-   268	        // Called from ResourceCraftingSystem.Tick(). Disciples whose task
-   269	        // fails the building requirement are SKIPPED — progress is HELD at
-   270	        // its current value exactly like the out-of-materials path (never
-   271	        // reset), and CurrentTask is never rewritten here.
-   272	        public void TickCrafting(float deltaTimeSeconds)
-   273	        {
-   274	            var placedDefIds = CollectPlacedDefIds(); // once per tick, not per disciple
-   275	            foreach (var disciple in _state.Disciples)
-   276	            {
-   277	                if (!IsTaskAvailableWithBuildings(disciple.CurrentTask, placedDefIds, out _)) continue;
-   278	                if (!CraftingRecipes.TryGetValue(disciple.CurrentTask, out var recipe)) continue;
-   279	
-   280	                var progress = _craftProgress.TryGetValue(disciple.DiscipleId, out var existing) ? existing : 0f;
-   281	                progress += deltaTimeSeconds;
-   282	
-   283	                if (progress < recipe.CraftSeconds) 
-   284	                {
-   285	                    _craftProgress[disciple.DiscipleId] = progress;
-   286	                    continue;
-   287	                }
-   288	
-   289	                if (!TryConsume(_state.Stockpile.RawResources, recipe.Costs))
-   290	                {
-   291	                    // Ready to complete but not enough raw resources - hold
-   292	                    // at the completion threshold and wait rather than
-   293	                    // losing the accumulated progress or overshooting.
-   294	                    _craftProgress[disciple.DiscipleId] = recipe.CraftSeconds;
-   295	                    continue;
-   296	                }
-   297	
-   298	                foreach (var (resource, amount) in recipe.Costs)
-   299	                {
-   300	                    var newTotal = _state.Stockpile.RawResources.TryGetValue(resource, out var v) ? v : 0;
-   301	                    _resourceChangedPublisher.Publish(new SectResourceChangedMessage
-   302	                    {
-   303	                        ResourceId = resource,
-   304	                        Delta = -amount,
-   305	                        NewTotal = newTotal,
-   306	                    });
-   307	                }
-   308	
-   309	                var item = new InventoryItem
-   310	                {
-   311	                    ItemDefId = recipe.ItemDefId,
-   312	                    Quantity = 1,
-   313	                    Grade = recipe.Grade,
-   314	                    OwnerScope = disciple.Rank >= DiscipleRank.Elder ? OwnerScope.Personal : OwnerScope.SectStockpile,
-   315	                };
-   316	
-   317	                if (item.OwnerScope == OwnerScope.Personal)
-   318	                {
-   319	                    disciple.PersonalInventory.Add(item);
-   320	                }
-   321	                else
-   322	                {
-   323	                    AddToStockpileGoods(item);
-   324	                }
-   325	
-   326	                Debug.Log($"[SectStateProvider] {disciple.DisplayName} crafted {item.ItemDefId} " +
-   327	                          $"(grade {item.Grade}, {item.OwnerScope})");
-   328	
-   329	                // Carry over any overshoot instead of resetting to exactly 0.
-   330	                _craftProgress[disciple.DiscipleId] = progress - recipe.CraftSeconds;
-   331	            }
-   332	        }
-   333	
-   334	        // Adds a new Outer Disciple assigned to a gathering task, round-robin
-   335	        // across GatheringTasks so recruits don't all pile onto one resource.
-   336	        public void RecruitOuterDisciple(DiscipleSex sex = DiscipleSex.Unspecified)
-   337	        {
-   338	            var index = _state.Disciples.Count;
-   339	            var task = GatheringTasks[index % GatheringTasks.Length];
-   340	            var name = RecruitNamePool[index % RecruitNamePool.Length];
-   341	
-   342	            // Default parity: even index → Male, odd → Female (preserves existing mixed-roster look)
-   343	            var resolvedSex = (sex != DiscipleSex.Unspecified) ? sex
-   344	                : (index % 2 == 0) ? DiscipleSex.Male : DiscipleSex.Female;
-   345	
-   346	            var disciple = new DiscipleState
-   347	            {
-   348	                DiscipleId = $"d{index + 1:000}",
-   349	                DisplayName = name,
-   350	                Rank = DiscipleRank.OuterDisciple,
-   351	                Wallet = new CurrencyWallet(),
-   352	                PersonalInventory = new List<InventoryItem>(),
-   353	                CurrentTask = task,
-   354	                Sex = resolvedSex,
-   355	                Avatar = CreateStarterAvatar(index, resolvedSex),
-   356	            };
-   357	
-   358	            _state.Disciples.Add(disciple);
-   359	            _discipleRecruitedPublisher.Publish(new DiscipleRecruitedMessage
-   360	            {
-   361	                DiscipleId = disciple.DiscipleId,
-   362	                DisplayName = disciple.DisplayName,
-   363	            });
-   364	
-   365	            Debug.Log($"[SectStateProvider] Recruited outer disciple: {disciple.DisplayName} ({disciple.DiscipleId}), sex={resolvedSex}, assigned to {task}");
-   366	        }
-   367	
-   368	        private AvatarAppearance CreateStarterAvatar(int rosterIndex, DiscipleSex sex)
-   369	        {
-   370	            var a = new AvatarAppearance();
-   371	            a.SetSlot(AvatarSlots.Body, "body_robe_grey");
-   372	            a.SetSlot(AvatarSlots.Head, (sex == DiscipleSex.Female) ? "head_female_01" : "head_male_01");
-   373	            a.SetSlot(AvatarSlots.Hair, StarterHair[rosterIndex % StarterHair.Length]);
-   374	            return a;
-   375	        }
+   138	        // P9A — in-memory only, same rule as the ownership publisher (autonomy is a
+   139	        // local player/UI concern; it never crosses the TCP wire).
+   140	        private readonly IPublisher<DiscipleControlModeChangedMessage> _controlModeChangedPublisher;
+   141	        private readonly BuildingDefPool _buildingDefPool;
+   142	        private readonly AvatarPartPool _avatarPartPool;
+   143	        private readonly VisualRuntimeConfig _visualConfig;
+   144	        private readonly IVisualEntitlementProvider _entitlementProvider;
+   145	        /// <summary>Concrete ref to the injected provider (null when a test/substitute implements the interface directly) — used only for bind-late wiring, not for resolution.</summary>
+   146	        private readonly DefaultEntitlementProvider _defaultEntitlementProvider;
+   147	
+   148	        // P5B — real-time clock for the viewer inactivity/activity rule. Injected so
+   149	        // tests can drive it deterministically; NEVER scaled game time (game time can
+   150	        // be paused/speed-changed, which would silently extend or shrink protection).
+   151	        private readonly IClock _clock;
+   152	
+   153	        // P5B — real-time cooldown on ACTUAL task changes, keyed per disciple.
+   154	        // Prototype balance value (see DefaultTaskChangeCooldownSeconds). A no-op
+   155	        // request never consumes or checks it.
+   156	        private readonly Dictionary<string, DateTime> _taskChangeLastAtUtc = new();
+   157	
+   158	        // Fractional resource accumulated per task since the last whole
+   159	        // unit was added to the stockpile - avoids losing sub-1 production
+   160	        // between ticks.
+   161	        private readonly Dictionary<string, float> _gatherAccumulators = new();
+   162	
+   163	        // Seconds accumulated toward the current craft, keyed per disciple
+   164	        // (not per task like gathering) - crafting has a resource cost, so
+   165	        // two disciples on the same task must progress independently, not
+   166	        // share one pooled timer.
+   167	        private readonly Dictionary<string, float> _craftProgress = new();
+   168	
+   169	        public SectStateProvider(
+   170	            IPublisher<DiscipleRecruitedMessage> discipleRecruitedPublisher,
+   171	            IPublisher<SectResourceChangedMessage> resourceChangedPublisher,
+   172	            IPublisher<AvatarEquipmentChangedMessage> avatarChangedPublisher,
+   173	            IPublisher<DiscipleChibiBackendChangedMessage> chibiBackendPublisher,
+   174	            AvatarPartPool avatarPartPool,
+   175	            VisualRuntimeConfig visualConfig,
+   176	            IVisualEntitlementProvider entitlementProvider,
+   177	            BuildingDefPool buildingDefPool,
+   178	            IPublisher<BuildingPlacedMessage> buildingPlacedPublisher,
+   179	            IPublisher<DiscipleTaskChangedMessage> discipleTaskChangedPublisher,
+   180	            IPublisher<DiscipleOwnerChangedMessage> ownershipChangedPublisher = null,
+   181	            IClock clock = null,
+   182	            IPublisher<DiscipleControlModeChangedMessage> controlModeChangedPublisher = null)
+   183	        {
+   184	            _discipleRecruitedPublisher = discipleRecruitedPublisher;
+   185	            _resourceChangedPublisher = resourceChangedPublisher;
+   186	            _avatarChangedPublisher = avatarChangedPublisher;
+   187	            _chibiBackendPublisher = chibiBackendPublisher;
+   188	            _buildingDefPool = buildingDefPool;
+   189	            _buildingPlacedPublisher = buildingPlacedPublisher;
+   190	            _discipleTaskChangedPublisher = discipleTaskChangedPublisher;
+   191	            // P4: optional (default null) so every existing test construction site
+   192	            // stays valid; production wires it via VContainer in UIInstaller/GameLifetimeScope.
+   193	            _ownershipChangedPublisher = ownershipChangedPublisher;
+   194	            // P9A: optional (default null) for the same reason — appended LAST so the
+   195	            // positional test construction sites (ownerChanged, clock) are unchanged.
+   196	            _controlModeChangedPublisher = controlModeChangedPublisher;
+   197	            _avatarPartPool = avatarPartPool;
+   198	            _visualConfig = visualConfig;
+   199	            _entitlementProvider = entitlementProvider;
+   200	            _defaultEntitlementProvider = entitlementProvider as DefaultEntitlementProvider;
+   201	            // P5B: production registers UtcClock via DI; every existing test construction
+   202	            // site omits it and keeps working (real UTC clock, which those tests never
+   203	            // depend on because they never cross the 10-minute protection window).
+   204	            _clock = clock ?? new UtcClock();
+   205	
+   206	            // Phase 5 — bind the provider's rank source HERE instead of injecting
+   207	            // ISectStateProvider into the provider itself: that direction would be a
+   208	            // DI cycle (SectStateProvider → provider → SectStateProvider). Bind-late
+   209	            // keeps the provider ignorant of the state module; before this line runs,
+   210	            // CanUse(discipleId, "owner") fails closed (Unspecified = deny).
+   211	            //
+   212	            // Note: inject the INTERFACE, not the concrete type. In this VContainer
+   213	            // version Register<I, Impl> registers only the interface (concrete Resolve
+   214	            // is not available), so consumers must resolve IVisualEntitlementProvider
+   215	            // and reach the concrete for bind-late via a type test.
+   216	            _defaultEntitlementProvider?.BindRankLookup(id =>
+   217	            {
+   218	                var d = FindDisciple(id);
+   219	                return d != null ? d.Rank : DiscipleRank.Unspecified;
+   220	            });
+   221	        }
+   222	
+   223	        /// <summary>Single lookup helper — also used by the entitlement rank binding.</summary>
+   224	        private DiscipleState FindDisciple(string discipleId)
+   225	        {
+   226	            if (string.IsNullOrEmpty(discipleId)) return null;
+   227	            for (int i = 0; i < _state.Disciples.Count; i++)
+   228	            {
+   229	                var d = _state.Disciples[i];
+   230	                if (d != null && d.DiscipleId == discipleId) return d;
+   231	            }
+   232	            return null;
+   233	        }
+   234	
+   235	        public SectEconomyState BuildSectEconomyState()
+   236	        {
+   237	            return _state;
+   238	        }
+   239	
+   240	        // Passive resource gathering - every disciple whose CurrentTask is
+   241	        // a known gathering task contributes toward that resource. Called
+   242	        // from DiscipleSystem.Tick(). Disciples whose task fails the building
+   243	        // requirement are SKIPPED (CurrentTask is never rewritten here — the
+   244	        // assignment gate is the only place that validates on assignment).
+   245	        public void TickGathering(float deltaTimeSeconds)
+   246	        {
+   247	            var placedDefIds = CollectPlacedDefIds(); // once per tick, not per disciple
+   248	            foreach (var disciple in _state.Disciples)
+   249	            {
+   250	                if (!IsTaskAvailableWithBuildings(disciple.CurrentTask, placedDefIds, out _)) continue;
+   251	                if (!GatheringRates.TryGetValue(disciple.CurrentTask, out var rate)) continue;
+   252	
+   253	                var accKey = disciple.CurrentTask;
+   254	                var acc = _gatherAccumulators.TryGetValue(accKey, out var existing) ? existing : 0f;
+   255	                acc += rate.PerSecond * deltaTimeSeconds;
+   256	
+   257	                var wholeUnits = Mathf.FloorToInt(acc);
+   258	                if (wholeUnits > 0)
+   259	                {
+   260	                    AdjustAndNotify(_state.Stockpile.RawResources, rate.Resource, wholeUnits);
+   261	                    acc -= wholeUnits;
+   262	                    Debug.Log($"[SectStateProvider] Gathered +{wholeUnits} {rate.Resource} (task={accKey})");
+   263	                }
+   264	
+   265	                _gatherAccumulators[accKey] = acc;
+   266	            }
+   267	        }
+   268	
+   269	        // Disciple crafting: whoever's CurrentTask matches a known recipe
+   270	        // accumulates progress; once a craft completes, consumes the raw
+   271	        // resource cost and produces the item - into the sect stockpile for
+   272	        // ordinary disciples, or straight into personal inventory for
+   273	        // Elder+ (matches the ownership rule from the economy design:
+   274	        // outer/inner disciples craft for the sect, elders keep their own).
+   275	        // Called from ResourceCraftingSystem.Tick(). Disciples whose task
+   276	        // fails the building requirement are SKIPPED — progress is HELD at
+   277	        // its current value exactly like the out-of-materials path (never
+   278	        // reset), and CurrentTask is never rewritten here.
+   279	        public void TickCrafting(float deltaTimeSeconds)
+   280	        {
+   281	            var placedDefIds = CollectPlacedDefIds(); // once per tick, not per disciple
+   282	            foreach (var disciple in _state.Disciples)
+   283	            {
+   284	                if (!IsTaskAvailableWithBuildings(disciple.CurrentTask, placedDefIds, out _)) continue;
+   285	                if (!CraftingRecipes.TryGetValue(disciple.CurrentTask, out var recipe)) continue;
+   286	
+   287	                var progress = _craftProgress.TryGetValue(disciple.DiscipleId, out var existing) ? existing : 0f;
+   288	                progress += deltaTimeSeconds;
+   289	
+   290	                if (progress < recipe.CraftSeconds) 
+   291	                {
+   292	                    _craftProgress[disciple.DiscipleId] = progress;
+   293	                    continue;
+   294	                }
+   295	
+   296	                if (!TryConsume(_state.Stockpile.RawResources, recipe.Costs))
+   297	                {
+   298	                    // Ready to complete but not enough raw resources - hold
+   299	                    // at the completion threshold and wait rather than
+   300	                    // losing the accumulated progress or overshooting.
+   301	                    _craftProgress[disciple.DiscipleId] = recipe.CraftSeconds;
+   302	                    continue;
+   303	                }
+   304	
+   305	                foreach (var (resource, amount) in recipe.Costs)
+   306	                {
+   307	                    var newTotal = _state.Stockpile.RawResources.TryGetValue(resource, out var v) ? v : 0;
+   308	                    _resourceChangedPublisher.Publish(new SectResourceChangedMessage
+   309	                    {
+   310	                        ResourceId = resource,
+   311	                        Delta = -amount,
+   312	                        NewTotal = newTotal,
+   313	                    });
+   314	                }
+   315	
+   316	                var item = new InventoryItem
+   317	                {
+   318	                    ItemDefId = recipe.ItemDefId,
+   319	                    Quantity = 1,
+   320	                    Grade = recipe.Grade,
+   321	                    OwnerScope = disciple.Rank >= DiscipleRank.Elder ? OwnerScope.Personal : OwnerScope.SectStockpile,
+   322	                };
+   323	
+   324	                if (item.OwnerScope == OwnerScope.Personal)
+   325	                {
+   326	                    disciple.PersonalInventory.Add(item);
+   327	                }
+   328	                else
+   329	                {
+   330	                    AddToStockpileGoods(item);
+   331	                }
+   332	
+   333	                Debug.Log($"[SectStateProvider] {disciple.DisplayName} crafted {item.ItemDefId} " +
+   334	                          $"(grade {item.Grade}, {item.OwnerScope})");
+   335	
+   336	                // Carry over any overshoot instead of resetting to exactly 0.
+   337	                _craftProgress[disciple.DiscipleId] = progress - recipe.CraftSeconds;
+   338	            }
+   339	        }
+   340	
+   341	        // Adds a new Outer Disciple assigned to a gathering task, round-robin
+   342	        // across GatheringTasks so recruits don't all pile onto one resource.
+   343	        public void RecruitOuterDisciple(DiscipleSex sex = DiscipleSex.Unspecified)
+   344	        {
+   345	            var index = _state.Disciples.Count;
+   346	            var task = GatheringTasks[index % GatheringTasks.Length];
+   347	            var name = RecruitNamePool[index % RecruitNamePool.Length];
+   348	
+   349	            // Default parity: even index → Male, odd → Female (preserves existing mixed-roster look)
+   350	            var resolvedSex = (sex != DiscipleSex.Unspecified) ? sex
+   351	                : (index % 2 == 0) ? DiscipleSex.Male : DiscipleSex.Female;
+   352	
+   353	            var disciple = new DiscipleState
+   354	            {
+   355	                DiscipleId = $"d{index + 1:000}",
+   356	                DisplayName = name,
+   357	                Rank = DiscipleRank.OuterDisciple,
+   358	                Wallet = new CurrencyWallet(),
+   359	                PersonalInventory = new List<InventoryItem>(),
+   360	                CurrentTask = task,
+   361	                Sex = resolvedSex,
+   362	                Avatar = CreateStarterAvatar(index, resolvedSex),
+   363	                // P9A — new disciples start Manual (explicit, matching the field default).
+   364	                ControlMode = DiscipleControlMode.Manual,
+   365	                // P10A — fresh, normalized attribute block (stamina 100, all 3 skill
+   366	                // categories present at 0 XP). Data only; nothing consumes it yet.
+   367	                Attributes = DiscipleAttributes.Normalize(new DiscipleAttributes()),
+   368	            };
+   369	
+   370	            _state.Disciples.Add(disciple);
+   371	            _discipleRecruitedPublisher.Publish(new DiscipleRecruitedMessage
+   372	            {
+   373	                DiscipleId = disciple.DiscipleId,
+   374	                DisplayName = disciple.DisplayName,
+   375	            });
    376	
-   377	        public bool TryChangeAvatarPart(string discipleId, string slot, string partId,
-   378	                                        out string failReason, out AvatarAppearance result)
-   379	        {
-   380	            failReason = string.Empty;
-   381	            result = null;
-   382	
-   383	            var disciple = _state.Disciples.FirstOrDefault(d => d.DiscipleId == discipleId);
-   384	            if (disciple == null) { failReason = $"No disciple with id: {discipleId}"; return false; }
-   385	
-   386	            if (System.Array.IndexOf(AvatarSlots.Equippable, slot) < 0)
-   387	            { failReason = $"Invalid slot: {slot}"; return false; }
+   377	            Debug.Log($"[SectStateProvider] Recruited outer disciple: {disciple.DisplayName} ({disciple.DiscipleId}), sex={resolvedSex}, assigned to {task}");
+   378	        }
+   379	
+   380	        private AvatarAppearance CreateStarterAvatar(int rosterIndex, DiscipleSex sex)
+   381	        {
+   382	            var a = new AvatarAppearance();
+   383	            a.SetSlot(AvatarSlots.Body, "body_robe_grey");
+   384	            a.SetSlot(AvatarSlots.Head, (sex == DiscipleSex.Female) ? "head_female_01" : "head_male_01");
+   385	            a.SetSlot(AvatarSlots.Hair, StarterHair[rosterIndex % StarterHair.Length]);
+   386	            return a;
+   387	        }
    388	
-   389	            if (!_avatarPartPool.IsValidForSlot(slot, partId))
-   390	            { failReason = $"PartId '{partId}' is not valid for slot '{slot}'"; return false; }
-   391	
-   392	            // Pose validation: reject a part whose poseId is non-empty and
-   393	            // differs from the disciple's effective pose.
-   394	            if (!string.IsNullOrEmpty(partId))
-   395	            {
-   396	                var partDef = _avatarPartPool.GetById(partId);
-   397	                if (partDef != null && !string.IsNullOrEmpty(partDef.poseId))
-   398	                {
-   399	                    string effectivePose = (disciple.Avatar != null && !string.IsNullOrEmpty(disciple.Avatar.PoseId))
-   400	                        ? disciple.Avatar.PoseId
-   401	                        : "pose_idle_01";
-   402	                    if (partDef.poseId != effectivePose)
-   403	                    {
-   404	                        failReason = $"Part '{partId}' requires pose '{partDef.poseId}' but disciple is in pose '{effectivePose}'.";
-   405	                        return false;
-   406	                    }
-   407	                }
-   408	            }
-   409	
-   410	            // Validation ชั้น 5 — coverage: part ต้องมี art อย่างน้อย 1 backend ที่เปิดใช้
-   411	            // (empty layer = เจตนา "ถอดออก" ผ่านเสมอ — *_none defaults)
-   412	            // Face split (Roadmap #1): face sub-layers เป็น portrait-only ตามดีไซน์ (R4 —
-   413	            // chibi เก็บ feature baked-in) จึงผ่านด้วย Portrait เดี่ยว โดยไม่ต้องมี chibi/spine art
-   414	            // (แก้ latent bug: acc_none — ชิ้น "ถอดเครื่องประดับ" ที่มีแต่ chibi art — เคยโดน reject)
-   415	            if (!string.IsNullOrEmpty(partId))
-   416	            {
-   417	                var partDef = _avatarPartPool.GetById(partId);
-   418	                if (partDef != null && !partDef.IsEmptyLayer)
-   419	                {
-   420	                    bool anyCovered =
-   421	                        partDef.Supports(VisualBackend.Portrait) ||
-   422	                        (_visualConfig != null && _visualConfig.SpriteSheetEnabled &&
-   423	                         partDef.Supports(VisualBackend.SpriteSheet)) ||
-   424	                        (_visualConfig != null && _visualConfig.SpineEnabled &&
-   425	                         partDef.Supports(VisualBackend.Spine));
-   426	                    if (!anyCovered)
-   427	                    {
-   428	                        failReason = $"Part '{partId}' has no art on any enabled backend (coverage check).";
-   429	                        return false;
-   430	                    }
-   431	                }
-   432	            }
-   433	
-   434	            // Validation ชั้น 6 — entitlement (Phase 5, §8): part ที่ติด entitlement
-   435	            // ต้องผ่าน IVisualEntitlementProvider เท่านั้น — ต่างจากชั้น 5 ที่ป้องกัน
-   436	            // "render ไม่ได้" ชั้นนี้ป้องกัน "ไม่มีสิทธิ์ใช้" — failReason เขียนให้
-   437	            // AI/UI อ่านแล้วเข้าใจเหตุผล (ตามสเปก Phase 5)
-   438	            if (!string.IsNullOrEmpty(partId) && _entitlementProvider != null)
-   439	            {
-   440	                var entitlementDef = _avatarPartPool.GetById(partId);
-   441	                if (entitlementDef != null && !string.IsNullOrEmpty(entitlementDef.entitlement) &&
-   442	                    !_entitlementProvider.CanUse(discipleId, entitlementDef.entitlement))
-   443	                {
-   444	                    failReason = $"Part '{partId}' requires entitlement '{entitlementDef.entitlement}'.";
-   445	                    return false;
-   446	                }
-   447	            }
-   448	
-   449	            if (disciple.Avatar == null) disciple.Avatar = new AvatarAppearance();
-   450	
-   451	            var oldPart = disciple.Avatar.GetSlot(slot);
-   452	            disciple.Avatar.SetSlot(slot, partId);
-   453	
-   454	            _avatarChangedPublisher.Publish(new AvatarEquipmentChangedMessage
-   455	            {
-   456	                DiscipleId = discipleId,
-   457	                Slot       = slot,
-   458	                OldPartId  = oldPart,
-   459	                NewPartId  = partId
-   460	            });
-   461	
-   462	            result = disciple.Avatar.Clone();   // return copy, not reference to live state
-   463	            return true;
-   464	        }
+   389	        public bool TryChangeAvatarPart(string discipleId, string slot, string partId,
+   390	                                        out string failReason, out AvatarAppearance result)
+   391	        {
+   392	            failReason = string.Empty;
+   393	            result = null;
+   394	
+   395	            var disciple = _state.Disciples.FirstOrDefault(d => d.DiscipleId == discipleId);
+   396	            if (disciple == null) { failReason = $"No disciple with id: {discipleId}"; return false; }
+   397	
+   398	            if (System.Array.IndexOf(AvatarSlots.Equippable, slot) < 0)
+   399	            { failReason = $"Invalid slot: {slot}"; return false; }
+   400	
+   401	            if (!_avatarPartPool.IsValidForSlot(slot, partId))
+   402	            { failReason = $"PartId '{partId}' is not valid for slot '{slot}'"; return false; }
+   403	
+   404	            // Pose validation: reject a part whose poseId is non-empty and
+   405	            // differs from the disciple's effective pose.
+   406	            if (!string.IsNullOrEmpty(partId))
+   407	            {
+   408	                var partDef = _avatarPartPool.GetById(partId);
+   409	                if (partDef != null && !string.IsNullOrEmpty(partDef.poseId))
+   410	                {
+   411	                    string effectivePose = (disciple.Avatar != null && !string.IsNullOrEmpty(disciple.Avatar.PoseId))
+   412	                        ? disciple.Avatar.PoseId
+   413	                        : "pose_idle_01";
+   414	                    if (partDef.poseId != effectivePose)
+   415	                    {
+   416	                        failReason = $"Part '{partId}' requires pose '{partDef.poseId}' but disciple is in pose '{effectivePose}'.";
+   417	                        return false;
+   418	                    }
+   419	                }
+   420	            }
+   421	
+   422	            // Validation ชั้น 5 — coverage: part ต้องมี art อย่างน้อย 1 backend ที่เปิดใช้
+   423	            // (empty layer = เจตนา "ถอดออก" ผ่านเสมอ — *_none defaults)
+   424	            // Face split (Roadmap #1): face sub-layers เป็น portrait-only ตามดีไซน์ (R4 —
+   425	            // chibi เก็บ feature baked-in) จึงผ่านด้วย Portrait เดี่ยว โดยไม่ต้องมี chibi/spine art
+   426	            // (แก้ latent bug: acc_none — ชิ้น "ถอดเครื่องประดับ" ที่มีแต่ chibi art — เคยโดน reject)
+   427	            if (!string.IsNullOrEmpty(partId))
+   428	            {
+   429	                var partDef = _avatarPartPool.GetById(partId);
+   430	                if (partDef != null && !partDef.IsEmptyLayer)
+   431	                {
+   432	                    bool anyCovered =
+   433	                        partDef.Supports(VisualBackend.Portrait) ||
+   434	                        (_visualConfig != null && _visualConfig.SpriteSheetEnabled &&
+   435	                         partDef.Supports(VisualBackend.SpriteSheet)) ||
+   436	                        (_visualConfig != null && _visualConfig.SpineEnabled &&
+   437	                         partDef.Supports(VisualBackend.Spine));
+   438	                    if (!anyCovered)
+   439	                    {
+   440	                        failReason = $"Part '{partId}' has no art on any enabled backend (coverage check).";
+   441	                        return false;
+   442	                    }
+   443	                }
+   444	            }
+   445	
+   446	            // Validation ชั้น 6 — entitlement (Phase 5, §8): part ที่ติด entitlement
+   447	            // ต้องผ่าน IVisualEntitlementProvider เท่านั้น — ต่างจากชั้น 5 ที่ป้องกัน
+   448	            // "render ไม่ได้" ชั้นนี้ป้องกัน "ไม่มีสิทธิ์ใช้" — failReason เขียนให้
+   449	            // AI/UI อ่านแล้วเข้าใจเหตุผล (ตามสเปก Phase 5)
+   450	            if (!string.IsNullOrEmpty(partId) && _entitlementProvider != null)
+   451	            {
+   452	                var entitlementDef = _avatarPartPool.GetById(partId);
+   453	                if (entitlementDef != null && !string.IsNullOrEmpty(entitlementDef.entitlement) &&
+   454	                    !_entitlementProvider.CanUse(discipleId, entitlementDef.entitlement))
+   455	                {
+   456	                    failReason = $"Part '{partId}' requires entitlement '{entitlementDef.entitlement}'.";
+   457	                    return false;
+   458	                }
+   459	            }
+   460	
+   461	            if (disciple.Avatar == null) disciple.Avatar = new AvatarAppearance();
+   462	
+   463	            var oldPart = disciple.Avatar.GetSlot(slot);
+   464	            disciple.Avatar.SetSlot(slot, partId);
    465	
-   466	        // ---------- P4 (local ownership test harness) — validated ownership assignment ----------
-   467	        // Non-Npc OwnerId convention: a real Twitch user id is numeric, so the
-   468	        // synthetic local-identity convention is "viewer_*" / "player_*" (alpha
-   469	        // prefix + underscore, no whitespace) — clearly fake, never shaped like a
-   470	        // real Twitch id. Real authentication (P5B+) replaces this entirely.
-   471	        private const string OwnerIdPattern = "^[A-Za-z][A-Za-z0-9]*(_[A-Za-z0-9]+)*$";
-   472	
-   473	        public bool TrySetDiscipleOwner(string discipleId, DiscipleOwnerType ownerType,
-   474	                                        string ownerId, out string failReason)
-   475	        {
-   476	            failReason = string.Empty;
+   466	            _avatarChangedPublisher.Publish(new AvatarEquipmentChangedMessage
+   467	            {
+   468	                DiscipleId = discipleId,
+   469	                Slot       = slot,
+   470	                OldPartId  = oldPart,
+   471	                NewPartId  = partId
+   472	            });
+   473	
+   474	            result = disciple.Avatar.Clone();   // return copy, not reference to live state
+   475	            return true;
+   476	        }
    477	
-   478	            // 1. disciple must exist
-   479	            var disciple = FindDisciple(discipleId);
-   480	            if (disciple == null)
-   481	            {
-   482	                failReason = $"No disciple with id: {discipleId}";
-   483	                return false;
-   484	            }
-   485	
-   486	            // 2. enum value must be defined (fail-closed on out-of-range casts)
-   487	            if (!Enum.IsDefined(typeof(DiscipleOwnerType), ownerType))
-   488	            {
-   489	                failReason = $"Undefined DiscipleOwnerType value: {ownerType}";
-   490	                return false;
-   491	            }
-   492	
-   493	            var trimmedOwnerId = (ownerId ?? string.Empty).Trim();
-   494	
-   495	            // 3. Npc normalizes OwnerId to empty (no orphaned ids on Npc rows)
-   496	            if (ownerType == DiscipleOwnerType.Npc)
-   497	            {
-   498	                if (!string.IsNullOrEmpty(trimmedOwnerId))
-   499	                {
-   500	                    failReason = "Npc ownership must carry an empty OwnerId.";
-   501	                    return false;
-   502	                }
-   503	                trimmedOwnerId = string.Empty;
-   504	            }
-   505	            else
-   506	            {
-   507	                // 4. non-Npc identities satisfy the identity convention
-   508	                if (string.IsNullOrEmpty(trimmedOwnerId) ||
-   509	                    !System.Text.RegularExpressions.Regex.IsMatch(trimmedOwnerId, OwnerIdPattern))
-   510	                {
-   511	                    failReason = $"OwnerId '{trimmedOwnerId}' does not satisfy the identity convention " +
-   512	                                 "(alpha prefix, [A-Za-z0-9_], no whitespace).";
+   478	        // ---------- P4 (local ownership test harness) — validated ownership assignment ----------
+   479	        // Non-Npc OwnerId convention: a real Twitch user id is numeric, so the
+   480	        // synthetic local-identity convention is "viewer_*" / "player_*" (alpha
+   481	        // prefix + underscore, no whitespace) — clearly fake, never shaped like a
+   482	        // real Twitch id. Real authentication (P5B+) replaces this entirely.
+   483	        private const string OwnerIdPattern = "^[A-Za-z][A-Za-z0-9]*(_[A-Za-z0-9]+)*$";
+   484	
+   485	        public bool TrySetDiscipleOwner(string discipleId, DiscipleOwnerType ownerType,
+   486	                                        string ownerId, out string failReason)
+   487	        {
+   488	            failReason = string.Empty;
+   489	
+   490	            // 1. disciple must exist
+   491	            var disciple = FindDisciple(discipleId);
+   492	            if (disciple == null)
+   493	            {
+   494	                failReason = $"No disciple with id: {discipleId}";
+   495	                return false;
+   496	            }
+   497	
+   498	            // 2. enum value must be defined (fail-closed on out-of-range casts)
+   499	            if (!Enum.IsDefined(typeof(DiscipleOwnerType), ownerType))
+   500	            {
+   501	                failReason = $"Undefined DiscipleOwnerType value: {ownerType}";
+   502	                return false;
+   503	            }
+   504	
+   505	            var trimmedOwnerId = (ownerId ?? string.Empty).Trim();
+   506	
+   507	            // 3. Npc normalizes OwnerId to empty (no orphaned ids on Npc rows)
+   508	            if (ownerType == DiscipleOwnerType.Npc)
+   509	            {
+   510	                if (!string.IsNullOrEmpty(trimmedOwnerId))
+   511	                {
+   512	                    failReason = "Npc ownership must carry an empty OwnerId.";
    513	                    return false;
    514	                }
-   515	            }
-   516	
-   517	            // 5. a Viewer identity must not control a different active disciple
-   518	            if (ownerType == DiscipleOwnerType.Viewer && !string.IsNullOrEmpty(trimmedOwnerId))
-   519	            {
-   520	                for (int i = 0; i < _state.Disciples.Count; i++)
-   521	                {
-   522	                    var other = _state.Disciples[i];
-   523	                    if (other == null || other.DiscipleId == discipleId) continue;
-   524	                    if (other.OwnerType == DiscipleOwnerType.Viewer && other.OwnerId == trimmedOwnerId)
-   525	                    {
-   526	                        failReason = $"Viewer '{trimmedOwnerId}' already controls '{other.DiscipleId}'.";
-   527	                        return false;
-   528	                    }
-   529	                }
-   530	            }
-   531	
-   532	            // 6. no-op → no mutation, no message. A re-bind/reclaim of the SAME
-   533	            // owner (P5B) still refreshes that owner's activity — it is a valid
-   534	            // owner command, and it keeps an active player outside the override window.
-   535	            if (disciple.OwnerType == ownerType && disciple.OwnerId == trimmedOwnerId)
-   536	            {
-   537	                if (ownerType == DiscipleOwnerType.Viewer)
-   538	                    SyncViewerRegistryForBind(disciple, trimmedOwnerId);
-   539	                return true;
-   540	            }
-   541	
-   542	            // --- validation complete: single mutation block (no partial writes) ---
-   543	            var oldType = disciple.OwnerType;
-   544	            var oldOwnerId = disciple.OwnerId;
-   545	            disciple.OwnerType = ownerType;
-   546	            disciple.OwnerId = trimmedOwnerId;
-   547	
-   548	            // P5B: registry travels with the disciple row — release the previous
-   549	            // viewer record (if any), then activate/bind the new one, so invariant
-   550	            // #1/#2/#3 (active ⇔ bound; non-active ⇒ unbound) always holds.
-   551	            if (oldType == DiscipleOwnerType.Viewer && !string.IsNullOrEmpty(oldOwnerId))
-   552	                SyncViewerRegistryForRelease(oldOwnerId);
-   553	            if (ownerType == DiscipleOwnerType.Viewer)
-   554	                SyncViewerRegistryForBind(disciple, trimmedOwnerId);
-   555	
-   556	            _ownershipChangedPublisher?.Publish(new DiscipleOwnerChangedMessage
-   557	            {
-   558	                DiscipleId = discipleId,
-   559	                OldType = oldType,
-   560	                OldOwnerId = oldOwnerId,
-   561	                NewType = ownerType,
-   562	                NewOwnerId = trimmedOwnerId,
-   563	            });
-   564	            return true;
-   565	        }
-   566	
-   567	        // ---------- P5B — SectViewerRegistry ⇄ disciple ownership sync ----------
-   568	        // These are the ONLY writers of membership records, and they run inside the
-   569	        // same mutation block as the disciple row, so the two can never disagree.
-   570	
-   571	        /// <summary>Activate (or create) the active record binding <paramref name="viewerId"/> to this disciple and stamp activity.</summary>
-   572	        private void SyncViewerRegistryForBind(DiscipleState disciple, string viewerId)
-   573	        {
-   574	            var record = _state.ViewerRegistry.Find(viewerId);
-   575	            if (record == null)
-   576	            {
-   577	                record = new ViewerRecord { ViewerId = viewerId, DisplayName = viewerId };
-   578	                _state.ViewerRegistry.Records.Add(record);
-   579	            }
-   580	            record.Status = ViewerMembershipStatus.Active;
-   581	            record.BoundDiscipleId = disciple.DiscipleId;
-   582	            record.LastActiveAtUtc = _clock.UtcNow;
-   583	        }
-   584	
-   585	        /// <summary>Release a record that no longer owns a disciple (kept as Left, never left bound — invariant #3).</summary>
-   586	        private void SyncViewerRegistryForRelease(string viewerId)
-   587	        {
-   588	            var record = _state.ViewerRegistry.Find(viewerId);
-   589	            if (record == null) return;
-   590	            record.Status = ViewerMembershipStatus.Left;
-   591	            record.BoundDiscipleId = string.Empty;
-   592	        }
-   593	
-   594	        // ---------- P3 (Task Assignment UI) — read-only known-task query ----------
-   595	        // Same source of truth as TryAssignTask's KnownTasks set — no second list.
-   596	        public System.Collections.Generic.IReadOnlyList<string> GetKnownTaskIds()
-   597	        {
-   598	            return KnownTaskOrder;
-   599	        }
-   600	
-   601	        // ---------- Task System v2 (§6) + P5B (Hybrid Permissions) ----------
-   602	        // Validation order: disciple lookup → permission (read-only evaluation,
-   603	        // revalidated here) → known task → building gate → no-op → cooldown → commit.
-   604	        // Nothing mutates until every check passes (no partial mutation).
-   605	        // This method never touches Stockpile.RawResources or any progress store.
-   606	        // Public so read-only observers (bridge protection query, UI) use the SAME
-   607	        // requester id the authority checks — no second spelling can drift.
-   608	        public const string SectMasterRequesterId = "SECT_MASTER";
-   609	
-   610	        /// <summary>
-   611	        /// P5B — how long a viewer owner is protected from a SectMaster override,
-   612	        /// measured in REAL time on the injected clock. 10 minutes per the agreed
-   613	        /// policy; the override requires inactivity STRICTLY greater than this
-   614	        /// (exactly 10 minutes still counts as active → protected).
-   615	        /// </summary>
-   616	        private const double ViewerProtectionWindowSeconds = 600d;
+   515	                trimmedOwnerId = string.Empty;
+   516	            }
+   517	            else
+   518	            {
+   519	                // 4. non-Npc identities satisfy the identity convention
+   520	                if (string.IsNullOrEmpty(trimmedOwnerId) ||
+   521	                    !System.Text.RegularExpressions.Regex.IsMatch(trimmedOwnerId, OwnerIdPattern))
+   522	                {
+   523	                    failReason = $"OwnerId '{trimmedOwnerId}' does not satisfy the identity convention " +
+   524	                                 "(alpha prefix, [A-Za-z0-9_], no whitespace).";
+   525	                    return false;
+   526	                }
+   527	            }
+   528	
+   529	            // 5. a Viewer identity must not control a different active disciple
+   530	            if (ownerType == DiscipleOwnerType.Viewer && !string.IsNullOrEmpty(trimmedOwnerId))
+   531	            {
+   532	                for (int i = 0; i < _state.Disciples.Count; i++)
+   533	                {
+   534	                    var other = _state.Disciples[i];
+   535	                    if (other == null || other.DiscipleId == discipleId) continue;
+   536	                    if (other.OwnerType == DiscipleOwnerType.Viewer && other.OwnerId == trimmedOwnerId)
+   537	                    {
+   538	                        failReason = $"Viewer '{trimmedOwnerId}' already controls '{other.DiscipleId}'.";
+   539	                        return false;
+   540	                    }
+   541	                }
+   542	            }
+   543	
+   544	            // 6. no-op → no mutation, no message. A re-bind/reclaim of the SAME
+   545	            // owner (P5B) still refreshes that owner's activity — it is a valid
+   546	            // owner command, and it keeps an active player outside the override window.
+   547	            if (disciple.OwnerType == ownerType && disciple.OwnerId == trimmedOwnerId)
+   548	            {
+   549	                if (ownerType == DiscipleOwnerType.Viewer)
+   550	                    SyncViewerRegistryForBind(disciple, trimmedOwnerId);
+   551	                return true;
+   552	            }
+   553	
+   554	            // --- validation complete: single mutation block (no partial writes) ---
+   555	            var oldType = disciple.OwnerType;
+   556	            var oldOwnerId = disciple.OwnerId;
+   557	            disciple.OwnerType = ownerType;
+   558	            disciple.OwnerId = trimmedOwnerId;
+   559	
+   560	            // P9A — autonomy travels with Npc ownership: any real ownership switch
+   561	            // takes the disciple out of Auto (a Player/Viewer owner is never
+   562	            // brain-controlled, and the switch itself must disable Auto — rule 7).
+   563	            DisableAutoIfEngaged(disciple);
+   564	
+   565	            // P5B: registry travels with the disciple row — release the previous
+   566	            // viewer record (if any), then activate/bind the new one, so invariant
+   567	            // #1/#2/#3 (active ⇔ bound; non-active ⇒ unbound) always holds.
+   568	            if (oldType == DiscipleOwnerType.Viewer && !string.IsNullOrEmpty(oldOwnerId))
+   569	                SyncViewerRegistryForRelease(oldOwnerId);
+   570	            if (ownerType == DiscipleOwnerType.Viewer)
+   571	                SyncViewerRegistryForBind(disciple, trimmedOwnerId);
+   572	
+   573	            _ownershipChangedPublisher?.Publish(new DiscipleOwnerChangedMessage
+   574	            {
+   575	                DiscipleId = discipleId,
+   576	                OldType = oldType,
+   577	                OldOwnerId = oldOwnerId,
+   578	                NewType = ownerType,
+   579	                NewOwnerId = trimmedOwnerId,
+   580	            });
+   581	            return true;
+   582	        }
+   583	
+   584	        // ---------- P5B — SectViewerRegistry ⇄ disciple ownership sync ----------
+   585	        // These are the ONLY writers of membership records, and they run inside the
+   586	        // same mutation block as the disciple row, so the two can never disagree.
+   587	
+   588	        /// <summary>Activate (or create) the active record binding <paramref name="viewerId"/> to this disciple and stamp activity.</summary>
+   589	        private void SyncViewerRegistryForBind(DiscipleState disciple, string viewerId)
+   590	        {
+   591	            var record = _state.ViewerRegistry.Find(viewerId);
+   592	            if (record == null)
+   593	            {
+   594	                record = new ViewerRecord { ViewerId = viewerId, DisplayName = viewerId };
+   595	                _state.ViewerRegistry.Records.Add(record);
+   596	            }
+   597	            record.Status = ViewerMembershipStatus.Active;
+   598	            record.BoundDiscipleId = disciple.DiscipleId;
+   599	            record.LastActiveAtUtc = _clock.UtcNow;
+   600	        }
+   601	
+   602	        /// <summary>Release a record that no longer owns a disciple (kept as Left, never left bound — invariant #3).</summary>
+   603	        private void SyncViewerRegistryForRelease(string viewerId)
+   604	        {
+   605	            var record = _state.ViewerRegistry.Find(viewerId);
+   606	            if (record == null) return;
+   607	            record.Status = ViewerMembershipStatus.Left;
+   608	            record.BoundDiscipleId = string.Empty;
+   609	        }
+   610	
+   611	        // ---------- P3 (Task Assignment UI) — read-only known-task query ----------
+   612	        // Same source of truth as TryAssignTask's KnownTasks set — no second list.
+   613	        public System.Collections.Generic.IReadOnlyList<string> GetKnownTaskIds()
+   614	        {
+   615	            return KnownTaskOrder;
+   616	        }
    617	
-   618	        /// <summary>
-   619	        /// P5B — prototype balance value: minimum real-time gap between two ACTUAL
-   620	        /// task changes on the same disciple. Configurable via
-   621	        /// <see cref="TaskChangeCooldownSeconds"/> (0 disables it). A no-op request
-   622	        /// (task already current) never checks or consumes it. This throttles task
-   623	        /// thrash only — it does NOT guarantee crafting completion.
-   624	        /// </summary>
-   625	        public const float DefaultTaskChangeCooldownSeconds = 12f;
-   626	
-   627	        /// <summary>P5B — configurable real-time cooldown for actual task changes (see the const above). 0 disables.</summary>
-   628	        public float TaskChangeCooldownSeconds { get; set; } = DefaultTaskChangeCooldownSeconds;
-   629	
-   630	        public bool TryAssignTask(string requesterId, string discipleId, string taskId, out string failReason)
-   631	        {
-   632	            failReason = string.Empty;
-   633	
-   634	            var disciple = FindDisciple(discipleId);
-   635	            if (disciple == null)
-   636	            {
-   637	                failReason = $"No disciple with id: {discipleId}";
-   638	                return false;
-   639	            }
-   640	
-   641	            // 1. Permission — same evaluation the read-only UI query exposes
-   642	            // (single authority, so display and commit can never disagree).
-   643	            var permission = EvaluateTaskPermission(requesterId, disciple);
-   644	            if (!permission.Allowed)
-   645	            {
-   646	                failReason = permission.Reason;
-   647	                return false;
-   648	            }
-   649	
-   650	            // 2. Known task + building requirement (no mutation on failure).
-   651	            if (string.IsNullOrEmpty(taskId) || !KnownTasks.Contains(taskId))
-   652	            {
-   653	                failReason = $"Unknown task: '{taskId}'.";
-   654	                return false;
-   655	            }
-   656	
-   657	            if (!IsTaskAvailable(taskId, out failReason))
-   658	                return false;
-   659	
-   660	            var trimmedRequester = (requesterId ?? string.Empty).Trim();
-   661	
-   662	            // 3. No-op BEFORE the cooldown: asking for the task already assigned is a
-   663	            // valid no-op — no progress reset, no DiscipleTaskChangedMessage, and it
-   664	            // must not consume or be blocked by the task-change cooldown. It may
-   665	            // refresh the requester's OWN activity (never another viewer's).
-   666	            if (disciple.CurrentTask == taskId)
-   667	            {
-   668	                RefreshRequesterActivity(trimmedRequester);
-   669	                return true;
-   670	            }
-   671	
-   672	            // 4. Cooldown on actual changes (per disciple, real time).
-   673	            if (TaskChangeCooldownSeconds > 0f &&
-   674	                _taskChangeLastAtUtc.TryGetValue(discipleId, out var lastChangeUtc))
-   675	            {
-   676	                var elapsed = (_clock.UtcNow - lastChangeUtc).TotalSeconds;
-   677	                if (elapsed < TaskChangeCooldownSeconds)
-   678	                {
-   679	                    var remaining = TaskChangeCooldownSeconds - elapsed;
-   680	                    failReason = $"Task change for '{discipleId}' is on cooldown " +
-   681	                                 $"({TaskChangeCooldownSeconds:0.#}s) — {remaining:0.0}s remaining.";
-   682	                    return false;
-   683	                }
-   684	            }
-   685	
-   686	            // --- validation complete: single mutation block (no partial writes) ---
-   687	            disciple.CurrentTask = taskId;
-   688	            _taskChangeLastAtUtc[discipleId] = _clock.UtcNow;
-   689	            RefreshRequesterActivity(trimmedRequester);
+   618	        // ---------- P9B (utility AI) — read-only task metadata ----------
+   619	        // Derived from the SAME GatheringRates/CraftingRecipes/KnownTasks tables the
+   620	        // assignment gate validates against, so the scorer can never describe a task
+   621	        // differently from what assignment accepts. Read-only, no mutation, and no
+   622	        // separate task-definition pipeline: the dictionaries above ARE the source.
+   623	        public bool TryGetTaskInfo(string taskId, out SectTaskInfo info)
+   624	        {
+   625	            info = null;
+   626	            if (string.IsNullOrEmpty(taskId) || !KnownTasks.Contains(taskId)) return false;
+   627	
+   628	            if (GatheringRates.TryGetValue(taskId, out var rate))
+   629	            {
+   630	                info = new SectTaskInfo
+   631	                {
+   632	                    TaskId = taskId,
+   633	                    Kind = SectTaskKind.Gathering,
+   634	                    ProducesResource = rate.Resource,
+   635	                    UnitsPerSecond = rate.PerSecond,
+   636	                };
+   637	                return true;
+   638	            }
+   639	
+   640	            if (CraftingRecipes.TryGetValue(taskId, out var recipe))
+   641	            {
+   642	                info = new SectTaskInfo
+   643	                {
+   644	                    TaskId = taskId,
+   645	                    Kind = SectTaskKind.Crafting,
+   646	                    ProducesItem = recipe.ItemDefId,
+   647	                    ProducesItemGrade = recipe.Grade,
+   648	                    InputCosts = recipe.Costs,
+   649	                };
+   650	                return true;
+   651	            }
+   652	
+   653	            // Anything else in KnownTasks produces nothing (meditation) — the safe fallback.
+   654	            info = new SectTaskInfo { TaskId = taskId, Kind = SectTaskKind.Meditation };
+   655	            return true;
+   656	        }
+   657	
+   658	        // ---------- Task System v2 (§6) + P5B (Hybrid Permissions) ----------
+   659	        // Validation order: disciple lookup → permission (read-only evaluation,
+   660	        // revalidated here) → known task → building gate → no-op → cooldown → commit.
+   661	        // Nothing mutates until every check passes (no partial mutation).
+   662	        // This method never touches Stockpile.RawResources or any progress store.
+   663	        // Public so read-only observers (bridge protection query, UI) use the SAME
+   664	        // requester id the authority checks — no second spelling can drift.
+   665	        public const string SectMasterRequesterId = "SECT_MASTER";
+   666	
+   667	        /// <summary>
+   668	        /// P5B — how long a viewer owner is protected from a SectMaster override,
+   669	        /// measured in REAL time on the injected clock. 10 minutes per the agreed
+   670	        /// policy; the override requires inactivity STRICTLY greater than this
+   671	        /// (exactly 10 minutes still counts as active → protected).
+   672	        /// </summary>
+   673	        private const double ViewerProtectionWindowSeconds = 600d;
+   674	
+   675	        /// <summary>
+   676	        /// P5B — prototype balance value: minimum real-time gap between two ACTUAL
+   677	        /// task changes on the same disciple. Configurable via
+   678	        /// <see cref="TaskChangeCooldownSeconds"/> (0 disables it). A no-op request
+   679	        /// (task already current) never checks or consumes it. This throttles task
+   680	        /// thrash only — it does NOT guarantee crafting completion.
+   681	        /// </summary>
+   682	        public const float DefaultTaskChangeCooldownSeconds = 12f;
+   683	
+   684	        /// <summary>P5B — configurable real-time cooldown for actual task changes (see the const above). 0 disables.</summary>
+   685	        public float TaskChangeCooldownSeconds { get; set; } = DefaultTaskChangeCooldownSeconds;
+   686	
+   687	        public bool TryAssignTask(string requesterId, string discipleId, string taskId, out string failReason)
+   688	        {
+   689	            failReason = string.Empty;
    690	
-   691	            _discipleTaskChangedPublisher.Publish(new DiscipleTaskChangedMessage
-   692	            {
-   693	                DiscipleId = discipleId,
-   694	                TaskId = taskId,
-   695	            });
-   696	
-   697	            Debug.Log($"[SectStateProvider] {trimmedRequester} assigned task '{taskId}' to {discipleId}.");
-   698	            return true;
-   699	        }
-   700	
-   701	        // ---------- P5B — permission authority (read-only; never mutates) ----------
-   702	        // Rules, in precedence order:
-   703	        //   0. empty/invalid requester → Denied (fail closed).
-   704	        //   1. missing/contradictory membership data for a Viewer-owned disciple →
-   705	        //      ConsistencyError (NEVER automatic permission), regardless of requester.
-   706	        //   2. "SECT_MASTER": Npc (unowned) / Player (single-player identity
-   707	        //      convention) → Allowed. Viewer-owned → Allowed only when the owner has
-   708	        //      been inactive for strictly more than the protection window.
-   709	        //   3. any other requester → only its own valid Active membership.
-   710	        // Invalid/future owner timestamps are handled conservatively: the owner is
-   711	        // treated as recently active, so protection holds (fail closed).
-   712	        // There is deliberately NO AI-GM bypass: the trusted GM sends the same
-   713	        // SectMasterRequesterId and follows the identical rule.
-   714	        private TaskPermissionResult EvaluateTaskPermission(string requesterId, DiscipleState disciple)
-   715	        {
-   716	            var trimmedRequester = (requesterId ?? string.Empty).Trim();
-   717	            if (trimmedRequester.Length == 0)
-   718	                return TaskPermissionResult.Denied("Requester id is empty.");
-   719	
-   720	            bool isMaster = trimmedRequester == SectMasterRequesterId;
-   721	            if (!isMaster && !IsValidIdentity(trimmedRequester))
-   722	            {
-   723	                return TaskPermissionResult.Denied(
-   724	                    $"Requester id '{trimmedRequester}' does not satisfy the identity convention " +
-   725	                    "(alpha prefix, [A-Za-z0-9_], no whitespace).");
-   726	            }
-   727	
-   728	            // Membership data must be complete and agree before ANY decision about a
-   729	            // Viewer-owned disciple — a gap is a consistency error, never a grant.
-   730	            string consistencyReason = null;
-   731	            ViewerRecord ownerRecord = null;
-   732	
-   733	            if (disciple.OwnerType == DiscipleOwnerType.Viewer)
-   734	            {
-   735	                if (!_state.ViewerRegistry.IsInternallyConsistent())
-   736	                {
-   737	                    consistencyReason = $"the viewer registry is internally inconsistent (disciple '{disciple.DiscipleId}').";
-   738	                }
-   739	                else
-   740	                {
-   741	                    ownerRecord = _state.ViewerRegistry.FindByBoundDisciple(disciple.DiscipleId);
-   742	                    if (ownerRecord == null)
-   743	                    {
-   744	                        consistencyReason = $"disciple '{disciple.DiscipleId}' is viewer-owned but has no active membership record.";
-   745	                    }
-   746	                    else if (ownerRecord.Status != ViewerMembershipStatus.Active)
-   747	                    {
-   748	                        consistencyReason = $"membership record for '{ownerRecord.ViewerId}' is not active.";
-   749	                    }
-   750	                    else if (ownerRecord.ViewerId != disciple.OwnerId)
-   751	                    {
-   752	                        consistencyReason = $"disciple '{disciple.DiscipleId}' owner id disagrees with its membership record.";
-   753	                    }
-   754	                    else if (!ownerRecord.IsSelfConsistent() || !ownerRecord.HasValidIdentityConvention())
-   755	                    {
-   756	                        consistencyReason = $"membership record for '{ownerRecord.ViewerId}' is not self-consistent.";
-   757	                    }
-   758	                }
-   759	            }
-   760	
-   761	            if (isMaster)
-   762	            {
-   763	                if (disciple.OwnerType == DiscipleOwnerType.Viewer)
-   764	                {
-   765	                    if (consistencyReason != null)
-   766	                        return TaskPermissionResult.ConsistencyError(consistencyReason);
-   767	
-   768	                    return EvaluateMasterOverride(ownerRecord, disciple);
-   769	                }
-   770	
-   771	                // Npc = unowned (SectMaster may control) and Player = the existing
-   772	                // single-player identity convention (SectMaster may control).
-   773	                return TaskPermissionResult.Allow();
-   774	            }
-   775	
-   776	            // Non-master: only the disciple's own valid Active membership.
-   777	            if (disciple.OwnerType != DiscipleOwnerType.Viewer)
-   778	            {
-   779	                return TaskPermissionResult.Denied(
-   780	                    $"'{trimmedRequester}' is not allowed to assign tasks to '{disciple.DiscipleId}'.");
-   781	            }
-   782	
-   783	            if (consistencyReason != null)
-   784	                return TaskPermissionResult.ConsistencyError(consistencyReason);
+   691	            var disciple = FindDisciple(discipleId);
+   692	            if (disciple == null)
+   693	            {
+   694	                failReason = $"No disciple with id: {discipleId}";
+   695	                return false;
+   696	            }
+   697	
+   698	            // 1. Permission — same evaluation the read-only UI query exposes
+   699	            // (single authority, so display and commit can never disagree).
+   700	            var permission = EvaluateTaskPermission(requesterId, disciple);
+   701	            if (!permission.Allowed)
+   702	            {
+   703	                failReason = permission.Reason;
+   704	                return false;
+   705	            }
+   706	
+   707	            var trimmedRequester = (requesterId ?? string.Empty).Trim();
+   708	
+   709	            // 2. Shared validation/mutation path (known task → building gate →
+   710	            // no-op → cooldown → commit). Identical to the auto-assignment path.
+   711	            if (!TryAssignTaskCore(disciple, taskId, trimmedRequester, out failReason))
+   712	                return false;
+   713	
+   714	            // P9A — an explicit manual assignment is a human asserting control: it
+   715	            // takes the disciple out of Auto. Runs only after the shared core committed,
+   716	            // so a failed assignment changes NEITHER the task NOR the mode (rule 5).
+   717	            DisableAutoIfEngaged(disciple);
+   718	            return true;
+   719	        }
+   720	
+   721	        // ---------- P9A — explicit Manual/Auto control (ownership ≠ autonomy) ----------
+   722	
+   723	        /// <summary>
+   724	        /// Explicitly set a disciple's Manual/Auto mode. Ownership and autonomy are
+   725	        /// different: this never changes ownership, and only an Npc-owned disciple may
+   726	        /// opt into Auto in this MVP (Player/Viewer owners are rejected, and viewer
+   727	        /// inactivity never grants Auto — hybrid inactivity only lets the SectMaster
+   728	        /// override a task). Eligibility is rechecked HERE, the authoritative mutation.
+   729	        /// Idempotent; publishes only on a real change.
+   730	        /// </summary>
+   731	        public bool TrySetDiscipleControlMode(string discipleId, DiscipleControlMode mode, out string failReason)
+   732	        {
+   733	            failReason = string.Empty;
+   734	
+   735	            var disciple = FindDisciple(discipleId);
+   736	            if (disciple == null)
+   737	            {
+   738	                failReason = $"No disciple with id: {discipleId}";
+   739	                return false;
+   740	            }
+   741	
+   742	            if (!Enum.IsDefined(typeof(DiscipleControlMode), mode))
+   743	            {
+   744	                failReason = $"Undefined DiscipleControlMode value: {mode}";
+   745	                return false;
+   746	            }
+   747	
+   748	            if (mode == DiscipleControlMode.Auto && disciple.OwnerType != DiscipleOwnerType.Npc)
+   749	            {
+   750	                failReason = $"Only NPC-owned disciples may opt into Auto (owner is '{disciple.OwnerType}').";
+   751	                return false;
+   752	            }
+   753	
+   754	            SetControlModeInternal(disciple, mode);
+   755	            return true;
+   756	        }
+   757	
+   758	        /// <summary>
+   759	        /// P9A — trusted internal caller context for the future DiscipleBrain. NOT
+   760	        /// TryAssignTask(SectMasterRequesterId, ...): the auto-assigner has no requester
+   761	        /// identity, never impersonates the player, and never inherits the SectMaster
+   762	        /// override. Rechecks Npc ownership AND Auto mode immediately before commit,
+   763	        /// then shares TryAssignTaskCore (the exact validation/cooldown/mutation path),
+   764	        /// so the brain can never bypass the known-task/building/cooldown gates.
+   765	        /// </summary>
+   766	        public bool TryAutoAssignTask(string discipleId, string taskId, out string failReason)
+   767	        {
+   768	            failReason = string.Empty;
+   769	
+   770	            var disciple = FindDisciple(discipleId);
+   771	            if (disciple == null)
+   772	            {
+   773	                failReason = $"No disciple with id: {discipleId}";
+   774	                return false;
+   775	            }
+   776	
+   777	            // Recheck immediately before commit — ownership/mode may have changed since
+   778	            // the caller decided to auto-assign.
+   779	            if (disciple.OwnerType != DiscipleOwnerType.Npc)
+   780	            {
+   781	                failReason = $"Disciple '{discipleId}' is not NPC-owned (owner is '{disciple.OwnerType}') " +
+   782	                             "— not eligible for auto-assignment.";
+   783	                return false;
+   784	            }
    785	
-   786	            if (ownerRecord.ViewerId != trimmedRequester)
+   786	            if (disciple.ControlMode != DiscipleControlMode.Auto)
    787	            {
-   788	                return TaskPermissionResult.Denied(
-   789	                    $"'{trimmedRequester}' is not allowed to assign tasks to '{disciple.DiscipleId}' " +
-   790	                    $"(owned by '{disciple.OwnerId}').");
-   791	            }
-   792	
-   793	            var requesterRecord = _state.ViewerRegistry.Find(trimmedRequester);
-   794	            if (requesterRecord == null)
-
-... [TRUNCATED: แสดง 40000 จาก 67942 bytes — ขอส่วนที่เหลือผ่าน need_files]
+   788	                failReason = $"Disciple '{discipleId}' is not in Auto mode (mode is '{disciple.ControlMode}').";
+   789	                return false;
+   790	            }
+   791	
+   792	            return TryAssignTaskCore(disciple, taskId, string.Empty, out failReason);
+   793	        }
+   794	
+   795	        /// <summary>
+   796	        /// Shared task-change implementation for both the manual (TryAssignTask) and
+   797	        /// auto (TryAut
+... [TRUNCATED: แสดง 40000 จาก 76763 bytes — ขอส่วนที่เหลือผ่าน need_files]
 ````
 
 ### DataTables/luban.conf (287 bytes)
@@ -3832,7 +3994,7 @@
     9  UnityProject/Assets/Scripts/Data/Gen
     1  UnityProject/Assets/Scripts/Scenes/SectScene
     5  UnityProject/Assets/Scripts/Shared
-    5  UnityProject/Assets/Scripts/Systems
+    7  UnityProject/Assets/Scripts/Systems
     1  UnityProject/Assets/Scripts/Tests
     9  UnityProject/Assets/Scripts/UI/Core
    11  UnityProject/Assets/Scripts/UI/Presenters
@@ -3883,7 +4045,7 @@
     1  UnityProject/Assets/Spine/Runtime
    42  UnityProject/Assets/Spine/Runtime/spine-csharp
   116  UnityProject/Assets/Spine/Runtime/spine-unity
-   30  UnityProject/Assets/Tests/EditMode
+   34  UnityProject/Assets/Tests/EditMode
     2  UnityProject/Assets/TextMesh Pro/Fonts
     3  UnityProject/Assets/TextMesh Pro/Resources
     4  UnityProject/Assets/TextMesh Pro/Resources/Fonts & Materials
@@ -4414,6 +4576,8 @@
   UnityProject/Assets/Scripts/Shared/MockSectData.cs
   UnityProject/Assets/Scripts/Shared/SectEconomyState.cs
   UnityProject/Assets/Scripts/Shared/ViewerMembership.cs
+  UnityProject/Assets/Scripts/Systems/AutoTaskScheduler.cs
+  UnityProject/Assets/Scripts/Systems/AutoTaskScoring.cs
   UnityProject/Assets/Scripts/Systems/BuildingSystem.cs
   UnityProject/Assets/Scripts/Systems/DiscipleSystem.cs
   UnityProject/Assets/Scripts/Systems/ResourceCraftingSystem.cs
@@ -4765,6 +4929,9 @@
   UnityProject/Assets/Spine/package.json
   UnityProject/Assets/Tests/EditMode/AppearanceResolverTests.cs
   UnityProject/Assets/Tests/EditMode/AssignTaskTests.cs
+  UnityProject/Assets/Tests/EditMode/AutoControlTests.cs
+  UnityProject/Assets/Tests/EditMode/AutoTaskSchedulerTests.cs
+  UnityProject/Assets/Tests/EditMode/AutoTaskScoringTests.cs
   UnityProject/Assets/Tests/EditMode/AvatarIconCropTests.cs
   UnityProject/Assets/Tests/EditMode/AvatarPartCoverageTests.cs
   UnityProject/Assets/Tests/EditMode/BuildingGridTests.cs
@@ -4783,12 +4950,7 @@
   UnityProject/Assets/Tests/EditMode/OwnershipHarnessTests.cs
   UnityProject/Assets/Tests/EditMode/PlaceableLandMaskTests.cs
   UnityProject/Assets/Tests/EditMode/PortraitOverrideTests.cs
-  UnityProject/Assets/Tests/EditMode/RadarChartGraphicTests.cs
-  UnityProject/Assets/Tests/EditMode/SceneNamesTests.cs
-  UnityProject/Assets/Tests/EditMode/TaskActivityMapperTests.cs
-  UnityProject/Assets/Tests/EditMode/TaskAssignmentPresenterTests.cs
-  UnityProject/Assets/Tests/EditMode/TaskObservabilityTests.cs
-  ... [140 more files truncated — ปรับ TREE_MAX_LINES หรือ .aiignore]
+  ... [146 more files truncated — ปรับ TREE_MAX_LINES หรือ .aiignore]
 ```
 
 ## Recent Wiki Log (last 15 entries, each cut to 400 chars)

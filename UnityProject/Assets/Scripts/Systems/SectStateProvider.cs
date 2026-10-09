@@ -362,6 +362,9 @@ namespace Xianxia.Sect
                 Avatar = CreateStarterAvatar(index, resolvedSex),
                 // P9A — new disciples start Manual (explicit, matching the field default).
                 ControlMode = DiscipleControlMode.Manual,
+                // P10A — fresh, normalized attribute block (stamina 100, all 3 skill
+                // categories present at 0 XP). Data only; nothing consumes it yet.
+                Attributes = DiscipleAttributes.Normalize(new DiscipleAttributes()),
             };
 
             _state.Disciples.Add(disciple);

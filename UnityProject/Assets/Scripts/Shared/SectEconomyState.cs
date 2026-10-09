@@ -81,6 +81,13 @@ namespace Xianxia.Sect
         /// deserializes as Manual.
         /// </summary>
         [Key(11)] public DiscipleControlMode ControlMode { get; set; } = DiscipleControlMode.Manual;
+
+        /// <summary>
+        /// P10A — attribute DATA only (stamina + skill XP; see DiscipleAttributes).
+        /// Append-only key; old state without [Key(12)] deserializes to a class default
+        /// and is repaired by <see cref="DiscipleAttributes.Normalize"/> on load/import.
+        /// </summary>
+        [Key(12)] public DiscipleAttributes Attributes { get; set; } = new DiscipleAttributes();
     }
 
     [MessagePackObject]
@@ -121,8 +128,30 @@ namespace Xianxia.Sect
         [Key(3)] public SectViewerRegistry ViewerRegistry { get; set; } = new SectViewerRegistry();
 
         public byte[] ToByteArray() => MessagePackSerializer.Serialize(this);
-        public static SectEconomyState FromByteArray(byte[] bytes) =>
-            MessagePackSerializer.Deserialize<SectEconomyState>(bytes);
+
+        public static SectEconomyState FromByteArray(byte[] bytes)
+        {
+            var state = MessagePackSerializer.Deserialize<SectEconomyState>(bytes);
+            NormalizeDisciples(state); // P10A — repair attributes on every load/import
+            return state;
+        }
+
+        /// <summary>
+        /// P10A — normalize every disciple's attributes (null / NaN / Infinity / range /
+        /// missing category keys) on a load/import boundary. Null-safe; a null or empty
+        /// roster is a no-op. Never treats a saved 0 as missing.
+        /// </summary>
+        public static void NormalizeDisciples(SectEconomyState state)
+        {
+            if (state == null || state.Disciples == null) return;
+
+            for (int i = 0; i < state.Disciples.Count; i++)
+            {
+                var disciple = state.Disciples[i];
+                if (disciple == null) continue;
+                disciple.Attributes = DiscipleAttributes.Normalize(disciple.Attributes);
+            }
+        }
     }
 
     // --- Avatar System (New Dictionary-Based Schema) ---

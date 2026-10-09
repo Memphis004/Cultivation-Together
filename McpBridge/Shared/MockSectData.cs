@@ -47,7 +47,9 @@ namespace Xianxia.Sect
                     new SlotPart(AvatarSlots.Head, "head_male_01"),
                     new SlotPart(AvatarSlots.Hair, "hair_topknot_long"),
                     new SlotPart(AvatarSlots.Accessory, "acc_jade_crown")
-                )
+                ),
+                // P10A TEST DATA (prototype): d000 = no skill XP.
+                Attributes = TestAttributes(0f, 0f, 0f)
             });
 
             // d001: Lin Feng (Outer Disciple)
@@ -65,7 +67,9 @@ namespace Xianxia.Sect
                     new SlotPart(AvatarSlots.Body, "body_robe_grey"),
                     new SlotPart(AvatarSlots.Head, "head_male_01"),
                     new SlotPart(AvatarSlots.Hair, "hair_short")
-                )
+                ),
+                // P10A TEST DATA (prototype): gathering-leaning founder.
+                Attributes = TestAttributes(200f, 0f, 0f)
             });
 
             // d002: Su Yan (Inner Disciple - With face marking + twin tail)
@@ -85,7 +89,9 @@ namespace Xianxia.Sect
                     new SlotPart(AvatarSlots.Hair, "hair_twin_tail"),
                     new SlotPart(AvatarSlots.FaceMarking, "face_marking_red_dot"),
                     new SlotPart(AvatarSlots.Accessory, "acc_hairpin_silver")
-                )
+                ),
+                // P10A TEST DATA (prototype): alchemy-leaning founder.
+                Attributes = TestAttributes(0f, 200f, 0f)
             });
 
             // d003: Elder Zhao (Elder - Bald + Beard)
@@ -113,10 +119,27 @@ namespace Xianxia.Sect
                     new SlotPart(AvatarSlots.Head, "head_male_elder"),
                     new SlotPart(AvatarSlots.Hair, "hair_bald_beard"),
                     new SlotPart(AvatarSlots.Accessory, "acc_gourd")
-                )
+                ),
+                // P10A TEST DATA (prototype): forging-leaning founder.
+                Attributes = TestAttributes(0f, 0f, 400f)
             });
 
             return state;
+        }
+
+        /// <summary>
+        /// P10A TEST DATA (prototype) — build a normalized attribute block for a
+        /// founder. Stamina is 100 for everyone; the four founders differ only in
+        /// which skill category they have XP in, so later phases can tell them apart.
+        /// These are placeholders, NOT balance values.
+        /// </summary>
+        private static DiscipleAttributes TestAttributes(float gatheringXp, float alchemyXp, float forgingXp)
+        {
+            var attributes = new DiscipleAttributes { Stamina = DiscipleAttributesConfig.StaminaDefault };
+            attributes.SkillXp[DiscipleAttributesConfig.CategoryGathering] = gatheringXp;
+            attributes.SkillXp[DiscipleAttributesConfig.CategoryAlchemy] = alchemyXp;
+            attributes.SkillXp[DiscipleAttributesConfig.CategoryForging] = forgingXp;
+            return DiscipleAttributes.Normalize(attributes);
         }
     }
 }
