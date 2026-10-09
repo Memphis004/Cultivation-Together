@@ -1,4 +1,3 @@
-using UnityEngine;
 using VContainer.Unity;
 
 namespace Xianxia.Sect
@@ -9,15 +8,20 @@ namespace Xianxia.Sect
     public class ResourceCraftingSystem : ITickable
     {
         private readonly ISectStateProvider _stateProvider;
+        private readonly TimeSystem _timeSystem;
 
-        public ResourceCraftingSystem(ISectStateProvider stateProvider)
+        public ResourceCraftingSystem(ISectStateProvider stateProvider, TimeSystem timeSystem)
         {
             _stateProvider = stateProvider;
+            _timeSystem = timeSystem;
         }
 
         public void Tick()
         {
-            _stateProvider.TickCrafting(Time.deltaTime);
+            // P10 — same shared simulation delta as every other gameplay tick: pause
+            // freezes crafting and game speed is applied exactly once, inside
+            // TimeSystem (never here).
+            _stateProvider.TickCrafting(_timeSystem.SimulationDelta);
         }
     }
 }

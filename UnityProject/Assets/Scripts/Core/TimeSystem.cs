@@ -13,11 +13,22 @@ namespace Xianxia.Sect
     // references to other systems. Compare to the earlier plain GameManager
     // sketch - the difference is TimeSystem doesn't know DiscipleSystem or
     // BuildingSystem exist; it just publishes, and whoever cares subscribes.
-    public class TimeSystem : IStartable, ITickable
+    //
+    // NOTE (P10 simulation time): TimeSystem deliberately does NOT implement ITickable.
+    // Simulation time is derived on demand by SimulationDelta, and game speed is applied
+    // ONLY there — there is intentionally no per-frame hook a second speed multiply could
+    // be added to later.
+    public class TimeSystem : IStartable
     {
         private readonly IPublisher<TimeSpeedChangedMessage> _speedPublisher;
         private readonly IPublisher<WorldEventTriggeredMessage> _worldEventPublisher;
 
+        /// <summary>Lowest supported simulation speed (1x).</summary>
+        public const int MinSpeed = 1;
+        /// <summary>Highest supported simulation speed (3x).</summary>
+        public const int MaxSpeed = 3;
+
+        // Initialised to 1x (SetSpeed only publishes the UI-facing change message).
         private int _speed = 1;
         private bool _paused;
 
@@ -58,13 +69,42 @@ namespace Xianxia.Sect
             _speedPublisher.Publish(new TimeSpeedChangedMessage { Speed = _speed, Paused = _paused });
         }
 
-        public void Tick()
+        public bool IsPaused => _paused;
+
+        /// <summary>
+        /// Simulation delta for gameplay progression, in seconds — the ONLY place game
+        /// speed is applied. Returns 0 while paused, so a paused game freezes every
+        /// consumer without each one having to re-implement the pause rule.
+        /// <para>Main thread only: reads <see cref="UnityEngine.Time.deltaTime"/>.</para>
+        /// </summary>
+        /// <remarks>
+        /// Time.timeScale is deliberately never written by this class: it is already
+        /// folded into Time.deltaTime, so multiplying by speed here as well would apply
+        /// game speed twice. Speed below <see cref="MinSpeed"/> is clamped up to 1x and
+        /// above <see cref="MaxSpeed"/> down to 3x, so a stale/out-of-range speed (or a
+        /// forgotten SetSpeed) can never yield a zero or unbounded delta while unpaused.
+        /// </remarks>
+        public float SimulationDelta
         {
-            if (_paused) return;
-            // TODO: advance world clock by _speed * UnityEngine.Time.deltaTime
+            get { return ComputeSimulationDelta(_paused, _speed, Time.deltaTime); }
         }
 
-        public bool IsPaused => _paused;
+        /// <summary>
+        /// Pure core of <see cref="SimulationDelta"/> — the single speed application,
+        /// split out so the multiplier can be asserted without a rendered frame.
+        /// </summary>
+        public static float ComputeSimulationDelta(bool paused, int speed, float frameDelta)
+        {
+            if (paused) return 0f;
+            return ClampSpeed(speed) * frameDelta;
+        }
+
+        private static int ClampSpeed(int speed)
+        {
+            if (speed < MinSpeed) return MinSpeed;
+            if (speed > MaxSpeed) return MaxSpeed;
+            return speed;
+        }
 
         // Resolved by AwaitWorldEventHandler - the bridge's await_next_world_event
         // tool call blocks on this until the next RaiseWorldEvent(), unless

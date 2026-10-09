@@ -1,5 +1,4 @@
 using System.Linq;
-using UnityEngine;
 using VContainer.Unity;
 using Xianxia.Sect.Messages;
 
@@ -35,12 +34,27 @@ namespace Xianxia.Sect
 
         public void Tick()
         {
+            // P10 — the same shared simulation delta as every other gameplay tick
+            // (pause = 0, speed applied once inside TimeSystem).
+            Advance(_timeSystem.SimulationDelta);
+        }
+
+        /// <summary>
+        /// Advance the event timer by a simulation delta and raise an event when the
+        /// interval elapses. Split out of <see cref="Tick"/> (same pattern as
+        /// AutoTaskScheduler.Advance) so the cadence is testable without a frame.
+        /// The pause early-return is NOT redundant with SimulationDelta returning 0:
+        /// at the moment a pause begins the timer may already be at the threshold, and
+        /// while a decision is outstanding no further event may fire.
+        /// </summary>
+        public void Advance(float deltaTimeSeconds)
+        {
             // Already waiting on a decision (TimeSystem paused itself when
             // it last raised an event) - don't pile up more events. Nothing
             // fires again until execute_decision unpauses.
             if (_timeSystem.IsPaused) return;
 
-            _timer += Time.deltaTime;
+            _timer += deltaTimeSeconds;
             if (_timer < IntervalSeconds) return;
 
             _timer = 0f;

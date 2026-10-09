@@ -1,4 +1,3 @@
-using UnityEngine;
 using VContainer.Unity;
 
 namespace Xianxia.Sect
@@ -15,15 +14,20 @@ namespace Xianxia.Sect
     public class DiscipleSystem : ITickable
     {
         private readonly ISectStateProvider _stateProvider;
+        private readonly TimeSystem _timeSystem;
 
-        public DiscipleSystem(ISectStateProvider stateProvider)
+        public DiscipleSystem(ISectStateProvider stateProvider, TimeSystem timeSystem)
         {
             _stateProvider = stateProvider;
+            _timeSystem = timeSystem;
         }
 
         public void Tick()
         {
-            _stateProvider.TickGathering(Time.deltaTime);
+            // P10 — one shared simulation delta for all gameplay progression: pause
+            // freezes gathering and game speed is applied exactly once, inside
+            // TimeSystem (never here).
+            _stateProvider.TickGathering(_timeSystem.SimulationDelta);
         }
     }
 }

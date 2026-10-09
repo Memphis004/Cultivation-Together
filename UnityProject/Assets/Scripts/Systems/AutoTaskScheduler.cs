@@ -72,10 +72,12 @@ namespace Xianxia.Sect
                 + ", margin " + ImprovementMargin.ToString("0.00"));
         }
 
-        /// <summary>Frame tick — advances simulation time and evaluates whatever is due.</summary>
+        /// <summary>Frame tick — advances simulation time by the shared simulation delta
+        /// (pause = 0, speed applied once in TimeSystem) and evaluates whatever is due.</summary>
         public void Tick()
         {
-            Advance(Time.deltaTime);
+            if (_timeSystem == null) return; // no time source — nothing to advance
+            Advance(_timeSystem.SimulationDelta);
         }
 
         /// <summary>
