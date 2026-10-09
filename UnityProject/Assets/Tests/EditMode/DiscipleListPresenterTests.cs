@@ -190,6 +190,12 @@ namespace Xianxia.Sect.Tests
             public System.Collections.Generic.IReadOnlyList<string> GetKnownTaskIds()
                 => System.Array.Empty<string>();
 
+            // P9B (utility AI) — not exercised here; stubbed for the interface.
+            public bool TryGetTaskInfo(string taskId, out SectTaskInfo info)
+            {
+                info = null; return false;
+            }
+
             // P4 (ownership harness) — not exercised here; stubbed for the interface.
             public bool TrySetDiscipleOwner(string discipleId, DiscipleOwnerType ownerType,
                                             string ownerId, out string failReason)

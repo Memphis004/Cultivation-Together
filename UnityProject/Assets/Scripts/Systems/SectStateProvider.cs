@@ -612,6 +612,46 @@ namespace Xianxia.Sect
             return KnownTaskOrder;
         }
 
+        // ---------- P9B (utility AI) — read-only task metadata ----------
+        // Derived from the SAME GatheringRates/CraftingRecipes/KnownTasks tables the
+        // assignment gate validates against, so the scorer can never describe a task
+        // differently from what assignment accepts. Read-only, no mutation, and no
+        // separate task-definition pipeline: the dictionaries above ARE the source.
+        public bool TryGetTaskInfo(string taskId, out SectTaskInfo info)
+        {
+            info = null;
+            if (string.IsNullOrEmpty(taskId) || !KnownTasks.Contains(taskId)) return false;
+
+            if (GatheringRates.TryGetValue(taskId, out var rate))
+            {
+                info = new SectTaskInfo
+                {
+                    TaskId = taskId,
+                    Kind = SectTaskKind.Gathering,
+                    ProducesResource = rate.Resource,
+                    UnitsPerSecond = rate.PerSecond,
+                };
+                return true;
+            }
+
+            if (CraftingRecipes.TryGetValue(taskId, out var recipe))
+            {
+                info = new SectTaskInfo
+                {
+                    TaskId = taskId,
+                    Kind = SectTaskKind.Crafting,
+                    ProducesItem = recipe.ItemDefId,
+                    ProducesItemGrade = recipe.Grade,
+                    InputCosts = recipe.Costs,
+                };
+                return true;
+            }
+
+            // Anything else in KnownTasks produces nothing (meditation) — the safe fallback.
+            info = new SectTaskInfo { TaskId = taskId, Kind = SectTaskKind.Meditation };
+            return true;
+        }
+
         // ---------- Task System v2 (§6) + P5B (Hybrid Permissions) ----------
         // Validation order: disciple lookup → permission (read-only evaluation,
         // revalidated here) → known task → building gate → no-op → cooldown → commit.

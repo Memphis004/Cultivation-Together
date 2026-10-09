@@ -30,6 +30,13 @@ namespace Xianxia.Sect.Installers
             builder.RegisterEntryPoint<DecisionLogger>(Lifetime.Singleton).AsSelf();
             builder.RegisterEntryPoint<WorldEventSystem>(Lifetime.Singleton).AsSelf();
 
+            // P9B — utility AI. Re-tasks Auto NPC disciples on a simulation-time
+            // interval, through the P9A auto-assignment entry point (ownership/Auto/
+            // availability/cooldown re-checked at commit). Pure scoring lives in
+            // AutoTaskScoring; this is only the Unity scheduler. Root-scoped, so it
+            // runs independently of the loaded scene.
+            builder.RegisterEntryPoint<AutoTaskScheduler>(Lifetime.Singleton).AsSelf();
+
             // P5B: real-time clock for the viewer inactivity/activity rule. Registered
             // explicitly (rather than relying on the ctor's default) so production and
             // tests both get a deterministic answer for what "now" means.

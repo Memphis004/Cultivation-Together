@@ -139,6 +139,7 @@
     <Compile Include="Assets\Scripts\UI\Systems\WorldEventUISystem.cs" />
     <Compile Include="Assets\Scripts\Core\Installers\UIInstaller.cs" />
     <Compile Include="Assets\Scripts\Visual\Scene\CameraRigController.cs" />
+    <Compile Include="Assets\Scripts\Systems\AutoTaskScoring.cs" />
     <Compile Include="Assets\Scripts\Visual\Scene\CameraRigPanBootstrap.cs" />
     <Compile Include="Assets\Scripts\UI\Views\BuildingPlacementView.cs" />
     <Compile Include="Assets\Scripts\Systems\SectStateProvider.cs" />
@@ -152,6 +153,7 @@
     <Compile Include="Assets\Scripts\Data\AvatarPartPool.cs" />
     <Compile Include="Assets\Scripts\UI\Views\TaskAssignmentView.cs" />
     <Compile Include="Assets\Scripts\Building\PlaceableLandMask.cs" />
+    <Compile Include="Assets\Scripts\Systems\AutoTaskScheduler.cs" />
     <Compile Include="Assets\Scripts\Data\Gen\game\TbEventDef.cs" />
     <Compile Include="Assets\Scripts\UI\Presenters\DiscipleDetailPresenter.cs" />
     <Compile Include="Assets\Scripts\UI\Widgets\RadarChartGraphic.cs" />

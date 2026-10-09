@@ -328,6 +328,15 @@ namespace Xianxia.Sect
         System.Collections.Generic.IReadOnlyList<string> GetKnownTaskIds();
 
         /// <summary>
+        /// P9B (utility AI) — read-only metadata for a known task, derived from the SAME
+        /// gathering/crafting tables the assignment gate validates against
+        /// (gathering: produced resource + rate; crafting: produced item + input costs;
+        /// otherwise the no-production meditation fallback). False for an unknown/empty
+        /// task. Never mutates; no second task-definition pipeline.
+        /// </summary>
+        bool TryGetTaskInfo(string taskId, out SectTaskInfo info);
+
+        /// <summary>
         /// P4 (local ownership test harness) — dev-only ownership assignment.
         /// NOT exposed as a public viewer command or MCP tool; the intended caller
         /// is the Editor debug harness / test fixtures. Validates fully before any
