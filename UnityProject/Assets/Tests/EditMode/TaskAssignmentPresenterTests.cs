@@ -29,6 +29,7 @@ namespace Xianxia.Sect.Tests
         private SectStateProvider _provider;
         private BufferPublisher<DiscipleTaskChangedMessage> _taskChangedOut;
         private RecordingSubscriber _taskChangedIn;
+        private RecordingControlModeSubscriber _controlModeIn;
         private TaskAssignmentPresenter _presenter;
         private TaskAssignmentView _view;
         private GameObject _rootGo;
@@ -38,6 +39,7 @@ namespace Xianxia.Sect.Tests
         {
             _taskChangedOut = new BufferPublisher<DiscipleTaskChangedMessage>();
             _taskChangedIn = new RecordingSubscriber();
+            _controlModeIn = new RecordingControlModeSubscriber();
 
             _provider = new SectStateProvider(
                 new BufferPublisher<DiscipleRecruitedMessage>(),
@@ -58,7 +60,7 @@ namespace Xianxia.Sect.Tests
             Assert.IsTrue(_provider.TryPlaceBuilding("herb_plot", 0, 0, 0, new BuildingGrid(10, 10),
                                                      out placeReason, out placedPlot), placeReason);
 
-            _presenter = new TaskAssignmentPresenter(_provider, _taskChangedIn);
+            _presenter = new TaskAssignmentPresenter(_provider, _taskChangedIn, _controlModeIn);
 
             // ── minimal real view hierarchy (rowRoot + buttons + banner) ──
             _rootGo = new GameObject("TaskAssignmentTestRoot", typeof(RectTransform));
@@ -316,6 +318,82 @@ namespace Xianxia.Sect.Tests
                             "baseline follows the external change");
         }
 
+        // ---- P9A — per-row Manual/Auto toggle ----
+
+        [Test]
+        public void OnOpen_AutoToggle_ReflectsManualDefault_EnabledForNpc()
+        {
+            _presenter.OnOpen(null);
+
+            var d000 = RowOf("d000");
+            Assert.IsFalse(d000.IsAutoOnForTest, "new/existing disciples default Manual");
+            Assert.IsTrue(d000.IsAutoSelectableForTest, "an Npc-owned row is eligible for Auto");
+        }
+
+        [Test]
+        public void AutoToggle_OnNpcRow_TurnsAutoOn_InProviderState()
+        {
+            _presenter.OnOpen(null);
+
+            var row = RowOf("d000");
+            row.ToggleAutoForTest(true);
+
+            Assert.AreEqual(DiscipleControlMode.Auto, Find("d000").ControlMode);
+            Assert.IsTrue(row.IsAutoOnForTest, "the view follows the authority's answer");
+        }
+
+        [Test]
+        public void AutoToggle_OnViewerOwnedRow_Disabled_AndStateUnchanged()
+        {
+            string bindReason;
+            Assert.IsTrue(_provider.TrySetDiscipleOwner("d000", DiscipleOwnerType.Viewer,
+                                                        "viewer_test_01", out bindReason), bindReason);
+            _presenter.OnOpen(null);
+
+            var row = RowOf("d000");
+            Assert.IsFalse(row.IsAutoSelectableForTest,
+                "Player/Viewer-owned rows cannot opt into Auto");
+
+            // a programmatic attempt is rechecked by the authoritative method
+            row.ToggleAutoForTest(true);
+            Assert.AreEqual(DiscipleControlMode.Manual, Find("d000").ControlMode);
+            Assert.IsFalse(row.IsAutoOnForTest, "the toggle snaps back to the authority's answer");
+        }
+
+        [Test]
+        public void ManualAssign_Success_DisablesAuto_AndUpdatesToggle()
+        {
+            _presenter.OnOpen(null);
+
+            var row = RowOf("d000");
+            row.ToggleAutoForTest(true);
+            Assert.IsTrue(row.IsAutoOnForTest);
+
+            row.SelectTask(OptionIndexOf(row, "gathering_wood"));
+            _view.InvokeConfirmForTest();
+
+            Assert.AreEqual("gathering_wood", Find("d000").CurrentTask);
+            Assert.IsFalse(row.IsAutoOnForTest, "a successful manual assignment disables Auto on the row");
+            Assert.AreEqual(DiscipleControlMode.Manual, Find("d000").ControlMode);
+        }
+
+        [Test]
+        public void ExternalAutoChange_UpdatesTheToggle()
+        {
+            _presenter.OnOpen(null);
+
+            var row = RowOf("d000");
+            Assert.IsFalse(row.IsAutoOnForTest);
+
+            _controlModeIn.Emit(new DiscipleControlModeChangedMessage
+            {
+                DiscipleId = "d000",
+                OldMode = DiscipleControlMode.Manual,
+                NewMode = DiscipleControlMode.Auto,
+            });
+            Assert.IsTrue(row.IsAutoOnForTest, "an external mode change updates the toggle");
+        }
+
         // ---- subscription lifecycle (§8) ----
 
         [Test]
@@ -355,6 +433,49 @@ namespace Xianxia.Sect.Tests
         /// MessagePipe's Action-style Subscribe is an extension over IMessageHandler,
         /// so the fake handler here doubles as the IMessageHandler implementation.
         /// </summary>
+        /// <summary>Same minimal shape as RecordingSubscriber, for the P9A control-mode channel.</summary>
+        private sealed class RecordingControlModeSubscriber : ISubscriber<DiscipleControlModeChangedMessage>
+        {
+            private readonly List<ControlHandler> _handlers = new List<ControlHandler>();
+            public int ActiveSubscriptionCount => _handlers.Count;
+
+            public void Emit(DiscipleControlModeChangedMessage message)
+            {
+                for (int i = _handlers.Count - 1; i >= 0; i--) _handlers[i].Handle(message);
+            }
+
+            public IDisposable Subscribe(IMessageHandler<DiscipleControlModeChangedMessage> handler,
+                                         params MessageHandlerFilter<DiscipleControlModeChangedMessage>[] filters)
+            {
+                var wrapped = new ControlHandler(handler);
+                _handlers.Add(wrapped);
+                return new ControlSubscription(this, wrapped);
+            }
+
+            private sealed class ControlHandler : IMessageHandler<DiscipleControlModeChangedMessage>
+            {
+                private readonly IMessageHandler<DiscipleControlModeChangedMessage> _inner;
+                public ControlHandler(IMessageHandler<DiscipleControlModeChangedMessage> inner) => _inner = inner;
+                public void Handle(DiscipleControlModeChangedMessage message) => _inner.Handle(message);
+            }
+
+            private sealed class ControlSubscription : IDisposable
+            {
+                private RecordingControlModeSubscriber _owner;
+                private ControlHandler _handler;
+                public ControlSubscription(RecordingControlModeSubscriber owner, ControlHandler handler)
+                {
+                    _owner = owner; _handler = handler;
+                }
+                public void Dispose()
+                {
+                    if (_owner == null) return;
+                    _owner._handlers.Remove(_handler);
+                    _owner = null; _handler = null;
+                }
+            }
+        }
+
         private sealed class RecordingSubscriber : ISubscriber<DiscipleTaskChangedMessage>
         {
             private readonly List<Handler> _handlers = new List<Handler>();

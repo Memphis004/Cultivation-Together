@@ -135,6 +135,9 @@ namespace Xianxia.Sect
         private readonly IPublisher<BuildingPlacedMessage> _buildingPlacedPublisher;
         private readonly IPublisher<DiscipleTaskChangedMessage> _discipleTaskChangedPublisher;
         private readonly IPublisher<DiscipleOwnerChangedMessage> _ownershipChangedPublisher;
+        // P9A — in-memory only, same rule as the ownership publisher (autonomy is a
+        // local player/UI concern; it never crosses the TCP wire).
+        private readonly IPublisher<DiscipleControlModeChangedMessage> _controlModeChangedPublisher;
         private readonly BuildingDefPool _buildingDefPool;
         private readonly AvatarPartPool _avatarPartPool;
         private readonly VisualRuntimeConfig _visualConfig;
@@ -175,7 +178,8 @@ namespace Xianxia.Sect
             IPublisher<BuildingPlacedMessage> buildingPlacedPublisher,
             IPublisher<DiscipleTaskChangedMessage> discipleTaskChangedPublisher,
             IPublisher<DiscipleOwnerChangedMessage> ownershipChangedPublisher = null,
-            IClock clock = null)
+            IClock clock = null,
+            IPublisher<DiscipleControlModeChangedMessage> controlModeChangedPublisher = null)
         {
             _discipleRecruitedPublisher = discipleRecruitedPublisher;
             _resourceChangedPublisher = resourceChangedPublisher;
@@ -187,6 +191,9 @@ namespace Xianxia.Sect
             // P4: optional (default null) so every existing test construction site
             // stays valid; production wires it via VContainer in UIInstaller/GameLifetimeScope.
             _ownershipChangedPublisher = ownershipChangedPublisher;
+            // P9A: optional (default null) for the same reason — appended LAST so the
+            // positional test construction sites (ownerChanged, clock) are unchanged.
+            _controlModeChangedPublisher = controlModeChangedPublisher;
             _avatarPartPool = avatarPartPool;
             _visualConfig = visualConfig;
             _entitlementProvider = entitlementProvider;
@@ -353,6 +360,8 @@ namespace Xianxia.Sect
                 CurrentTask = task,
                 Sex = resolvedSex,
                 Avatar = CreateStarterAvatar(index, resolvedSex),
+                // P9A — new disciples start Manual (explicit, matching the field default).
+                ControlMode = DiscipleControlMode.Manual,
             };
 
             _state.Disciples.Add(disciple);
@@ -545,6 +554,11 @@ namespace Xianxia.Sect
             disciple.OwnerType = ownerType;
             disciple.OwnerId = trimmedOwnerId;
 
+            // P9A — autonomy travels with Npc ownership: any real ownership switch
+            // takes the disciple out of Auto (a Player/Viewer owner is never
+            // brain-controlled, and the switch itself must disable Auto — rule 7).
+            DisableAutoIfEngaged(disciple);
+
             // P5B: registry travels with the disciple row — release the previous
             // viewer record (if any), then activate/bind the new one, so invariant
             // #1/#2/#3 (active ⇔ bound; non-active ⇒ unbound) always holds.
@@ -647,7 +661,105 @@ namespace Xianxia.Sect
                 return false;
             }
 
-            // 2. Known task + building requirement (no mutation on failure).
+            var trimmedRequester = (requesterId ?? string.Empty).Trim();
+
+            // 2. Shared validation/mutation path (known task → building gate →
+            // no-op → cooldown → commit). Identical to the auto-assignment path.
+            if (!TryAssignTaskCore(disciple, taskId, trimmedRequester, out failReason))
+                return false;
+
+            // P9A — an explicit manual assignment is a human asserting control: it
+            // takes the disciple out of Auto. Runs only after the shared core committed,
+            // so a failed assignment changes NEITHER the task NOR the mode (rule 5).
+            DisableAutoIfEngaged(disciple);
+            return true;
+        }
+
+        // ---------- P9A — explicit Manual/Auto control (ownership ≠ autonomy) ----------
+
+        /// <summary>
+        /// Explicitly set a disciple's Manual/Auto mode. Ownership and autonomy are
+        /// different: this never changes ownership, and only an Npc-owned disciple may
+        /// opt into Auto in this MVP (Player/Viewer owners are rejected, and viewer
+        /// inactivity never grants Auto — hybrid inactivity only lets the SectMaster
+        /// override a task). Eligibility is rechecked HERE, the authoritative mutation.
+        /// Idempotent; publishes only on a real change.
+        /// </summary>
+        public bool TrySetDiscipleControlMode(string discipleId, DiscipleControlMode mode, out string failReason)
+        {
+            failReason = string.Empty;
+
+            var disciple = FindDisciple(discipleId);
+            if (disciple == null)
+            {
+                failReason = $"No disciple with id: {discipleId}";
+                return false;
+            }
+
+            if (!Enum.IsDefined(typeof(DiscipleControlMode), mode))
+            {
+                failReason = $"Undefined DiscipleControlMode value: {mode}";
+                return false;
+            }
+
+            if (mode == DiscipleControlMode.Auto && disciple.OwnerType != DiscipleOwnerType.Npc)
+            {
+                failReason = $"Only NPC-owned disciples may opt into Auto (owner is '{disciple.OwnerType}').";
+                return false;
+            }
+
+            SetControlModeInternal(disciple, mode);
+            return true;
+        }
+
+        /// <summary>
+        /// P9A — trusted internal caller context for the future DiscipleBrain. NOT
+        /// TryAssignTask(SectMasterRequesterId, ...): the auto-assigner has no requester
+        /// identity, never impersonates the player, and never inherits the SectMaster
+        /// override. Rechecks Npc ownership AND Auto mode immediately before commit,
+        /// then shares TryAssignTaskCore (the exact validation/cooldown/mutation path),
+        /// so the brain can never bypass the known-task/building/cooldown gates.
+        /// </summary>
+        public bool TryAutoAssignTask(string discipleId, string taskId, out string failReason)
+        {
+            failReason = string.Empty;
+
+            var disciple = FindDisciple(discipleId);
+            if (disciple == null)
+            {
+                failReason = $"No disciple with id: {discipleId}";
+                return false;
+            }
+
+            // Recheck immediately before commit — ownership/mode may have changed since
+            // the caller decided to auto-assign.
+            if (disciple.OwnerType != DiscipleOwnerType.Npc)
+            {
+                failReason = $"Disciple '{discipleId}' is not NPC-owned (owner is '{disciple.OwnerType}') " +
+                             "— not eligible for auto-assignment.";
+                return false;
+            }
+
+            if (disciple.ControlMode != DiscipleControlMode.Auto)
+            {
+                failReason = $"Disciple '{discipleId}' is not in Auto mode (mode is '{disciple.ControlMode}').";
+                return false;
+            }
+
+            return TryAssignTaskCore(disciple, taskId, string.Empty, out failReason);
+        }
+
+        /// <summary>
+        /// Shared task-change implementation for both the manual (TryAssignTask) and
+        /// auto (TryAutoAssignTask) paths. <paramref name="trimmedRequester"/> drives only
+        /// the per-viewer activity refresh ("SECT_MASTER" and the empty auto source are
+        /// no-ops there); permission is never evaluated here — callers gate before entry.
+        /// </summary>
+        private bool TryAssignTaskCore(DiscipleState disciple, string taskId, string trimmedRequester, out string failReason)
+        {
+            failReason = string.Empty;
+
+            // Known task + building requirement (no mutation on failure).
             if (string.IsNullOrEmpty(taskId) || !KnownTasks.Contains(taskId))
             {
                 failReason = $"Unknown task: '{taskId}'.";
@@ -657,9 +769,7 @@ namespace Xianxia.Sect
             if (!IsTaskAvailable(taskId, out failReason))
                 return false;
 
-            var trimmedRequester = (requesterId ?? string.Empty).Trim();
-
-            // 3. No-op BEFORE the cooldown: asking for the task already assigned is a
+            // No-op BEFORE the cooldown: asking for the task already assigned is a
             // valid no-op — no progress reset, no DiscipleTaskChangedMessage, and it
             // must not consume or be blocked by the task-change cooldown. It may
             // refresh the requester's OWN activity (never another viewer's).
@@ -669,15 +779,15 @@ namespace Xianxia.Sect
                 return true;
             }
 
-            // 4. Cooldown on actual changes (per disciple, real time).
+            // Cooldown on actual changes (per disciple, real time).
             if (TaskChangeCooldownSeconds > 0f &&
-                _taskChangeLastAtUtc.TryGetValue(discipleId, out var lastChangeUtc))
+                _taskChangeLastAtUtc.TryGetValue(disciple.DiscipleId, out var lastChangeUtc))
             {
                 var elapsed = (_clock.UtcNow - lastChangeUtc).TotalSeconds;
                 if (elapsed < TaskChangeCooldownSeconds)
                 {
                     var remaining = TaskChangeCooldownSeconds - elapsed;
-                    failReason = $"Task change for '{discipleId}' is on cooldown " +
+                    failReason = $"Task change for '{disciple.DiscipleId}' is on cooldown " +
                                  $"({TaskChangeCooldownSeconds:0.#}s) — {remaining:0.0}s remaining.";
                     return false;
                 }
@@ -685,17 +795,40 @@ namespace Xianxia.Sect
 
             // --- validation complete: single mutation block (no partial writes) ---
             disciple.CurrentTask = taskId;
-            _taskChangeLastAtUtc[discipleId] = _clock.UtcNow;
+            _taskChangeLastAtUtc[disciple.DiscipleId] = _clock.UtcNow;
             RefreshRequesterActivity(trimmedRequester);
 
             _discipleTaskChangedPublisher.Publish(new DiscipleTaskChangedMessage
             {
-                DiscipleId = discipleId,
+                DiscipleId = disciple.DiscipleId,
                 TaskId = taskId,
             });
 
-            Debug.Log($"[SectStateProvider] {trimmedRequester} assigned task '{taskId}' to {discipleId}.");
+            var who = string.IsNullOrEmpty(trimmedRequester) ? "AUTO" : trimmedRequester;
+            Debug.Log($"[SectStateProvider] {who} assigned task '{taskId}' to {disciple.DiscipleId}.");
             return true;
+        }
+
+        /// <summary>Sets the mode and publishes the in-memory change message, but only on a real change.</summary>
+        private void SetControlModeInternal(DiscipleState disciple, DiscipleControlMode mode)
+        {
+            var old = disciple.ControlMode;
+            if (old == mode) return;
+
+            disciple.ControlMode = mode;
+            _controlModeChangedPublisher?.Publish(new DiscipleControlModeChangedMessage
+            {
+                DiscipleId = disciple.DiscipleId,
+                OldMode = old,
+                NewMode = mode,
+            });
+        }
+
+        /// <summary>P9A — a successful manual assignment takes the disciple out of Auto (human asserted control).</summary>
+        private void DisableAutoIfEngaged(DiscipleState disciple)
+        {
+            if (disciple.ControlMode == DiscipleControlMode.Auto)
+                SetControlModeInternal(disciple, DiscipleControlMode.Manual);
         }
 
         // ---------- P5B — permission authority (read-only; never mutates) ----------
@@ -1026,6 +1159,11 @@ namespace Xianxia.Sect
                 if (d == null || !ownershipById.TryGetValue(d.DiscipleId, out var row)) continue;
                 d.OwnerType = row.OwnerType;
                 d.OwnerId = row.OwnerType == DiscipleOwnerType.Npc ? string.Empty : (row.OwnerId ?? string.Empty);
+
+                // P9A — a restored non-Npc owner is not eligible for Auto; drop the
+                // mode rather than leave a Player/Viewer-owned disciple brain-controlled.
+                if (d.OwnerType != DiscipleOwnerType.Npc)
+                    d.ControlMode = DiscipleControlMode.Manual;
             }
 
             Debug.Log($"[SectStateProvider] Imported viewer membership save: " +

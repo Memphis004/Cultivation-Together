@@ -26,22 +26,28 @@ namespace Xianxia.Sect.UI
         private TMP_Text _ownerText;
         private TMP_Text _statusText;
         private TMP_Dropdown _taskDropdown;
+        private Toggle _autoToggle;
 
         public event Action<int> TaskSelected; // dropdown index
+        public event Action<bool> AutoToggled; // P9A — requested Manual/Auto state
 
         public TMP_Dropdown Dropdown => _taskDropdown;
+        public Toggle AutoToggle => _autoToggle;
 
         public void Init(TMP_Text nameText, TMP_Text baselineText, TMP_Text ownerText,
-                         TMP_Text statusText, TMP_Dropdown taskDropdown)
+                         TMP_Text statusText, TMP_Dropdown taskDropdown, Toggle autoToggle)
         {
             _nameText = nameText;
             _baselineText = baselineText;
             _ownerText = ownerText;
             _statusText = statusText;
             _taskDropdown = taskDropdown;
+            _autoToggle = autoToggle;
 
             if (_taskDropdown != null)
                 _taskDropdown.onValueChanged.AddListener(OnDropdownChanged);
+            if (_autoToggle != null)
+                _autoToggle.onValueChanged.AddListener(OnAutoChanged);
         }
 
         public void SetName(string name) { if (_nameText != null) _nameText.text = name; }
@@ -92,6 +98,18 @@ namespace Xianxia.Sect.UI
             if (_taskDropdown != null) _taskDropdown.interactable = selectable;
         }
 
+        /// <summary>P9A — reflect the disciple's Manual/Auto mode (no callback; view-only).</summary>
+        public void SetAutoState(bool isAuto)
+        {
+            if (_autoToggle != null) _autoToggle.SetIsOnWithoutNotify(isAuto);
+        }
+
+        /// <summary>P9A — only an Npc-owned disciple is eligible for Auto; disable the toggle otherwise.</summary>
+        public void SetAutoSelectable(bool selectable)
+        {
+            if (_autoToggle != null) _autoToggle.interactable = selectable;
+        }
+
         /// <summary>Public on purpose: tests invoke directly (no reflection — C12).
         /// Mirrors real user interaction: the dropdown value changes, THEN the event fires.</summary>
         public void SelectTask(int index)
@@ -101,11 +119,14 @@ namespace Xianxia.Sect.UI
         }
 
         private void OnDropdownChanged(int index) => TaskSelected?.Invoke(index);
+        private void OnAutoChanged(bool isOn) => AutoToggled?.Invoke(isOn);
 
         private void OnDestroy()
         {
             if (_taskDropdown != null) _taskDropdown.onValueChanged.RemoveListener(OnDropdownChanged);
+            if (_autoToggle != null) _autoToggle.onValueChanged.RemoveListener(OnAutoChanged);
             TaskSelected = null;
+            AutoToggled = null;
         }
 
         // ---- test accessors (EditMode tests drive rows without reflection — C12) ----
@@ -114,6 +135,18 @@ namespace Xianxia.Sect.UI
         public string OwnerLabelForTest => _ownerText != null ? _ownerText.text : null;
         public string StatusTextForTest => _statusText != null ? _statusText.text : null;
         public bool IsTaskSelectableForTest => _taskDropdown == null || _taskDropdown.interactable;
+        public bool IsAutoOnForTest => _autoToggle != null && _autoToggle.isOn;
+        public bool IsAutoSelectableForTest => _autoToggle == null || _autoToggle.interactable;
+
+        /// <summary>Public on purpose: tests drive the toggle exactly like a click (set value + fire).</summary>
+        public void ToggleAutoForTest(bool value)
+        {
+            if (_autoToggle == null) return;
+            _autoToggle.SetIsOnWithoutNotify(value);
+            OnAutoChanged(value);
+        }
+
+        public void ClickAutoForTest() => ToggleAutoForTest(!IsAutoOnForTest);
         public string DropdownValueText => _taskDropdown != null && _taskDropdown.options.Count > 0
             ? _taskDropdown.options[Mathf.Clamp(_taskDropdown.value, 0, _taskDropdown.options.Count - 1)].text
             : null;
@@ -199,8 +232,43 @@ namespace Xianxia.Sect.UI
             dropdown.targetGraphic = ddImg;
             dropdown.captionText = CreateRowText(dropdownGo.transform, "Caption", 130f, centered: true);
 
+            // P9A — per-row Manual/Auto toggle, right-anchored left of the dropdown.
+            var autoLabel = CreateRowText(go.transform, "AutoLabel", 44f, centered: true);
+            autoLabel.text = "Auto";
+            var autoLabelRt = autoLabel.rectTransform;
+            autoLabelRt.anchorMin = new Vector2(1f, 0.5f);
+            autoLabelRt.anchorMax = new Vector2(1f, 0.5f);
+            autoLabelRt.pivot = new Vector2(1f, 0.5f);
+            autoLabelRt.anchoredPosition = new Vector2(-176f, 0f);
+
+            var autoGo = new GameObject("AutoToggle", typeof(RectTransform), typeof(Image), typeof(Toggle));
+            autoGo.transform.SetParent(go.transform, false);
+            var autoRt = autoGo.GetComponent<RectTransform>();
+            autoRt.anchorMin = new Vector2(1f, 0.5f);
+            autoRt.anchorMax = new Vector2(1f, 0.5f);
+            autoRt.pivot = new Vector2(1f, 0.5f);
+            autoRt.sizeDelta = new Vector2(28f, 28f);
+            autoRt.anchoredPosition = new Vector2(-220f, 0f);
+            var autoBg = autoGo.GetComponent<Image>();
+            autoBg.color = new Color(0.85f, 0.85f, 0.85f);
+
+            var checkGo = new GameObject("Checkmark", typeof(RectTransform), typeof(Image));
+            checkGo.transform.SetParent(autoGo.transform, false);
+            var checkRt = checkGo.GetComponent<RectTransform>();
+            checkRt.anchorMin = new Vector2(0.15f, 0.15f);
+            checkRt.anchorMax = new Vector2(0.85f, 0.85f);
+            checkRt.offsetMin = Vector2.zero;
+            checkRt.offsetMax = Vector2.zero;
+            var checkImg = checkGo.GetComponent<Image>();
+            checkImg.color = new Color(0.2f, 0.55f, 0.2f);
+
+            var autoToggle = autoGo.GetComponent<Toggle>();
+            autoToggle.targetGraphic = autoBg;
+            autoToggle.graphic = checkImg;
+            autoToggle.isOn = false;
+
             var cell = go.AddComponent<TaskAssignmentRowCell>();
-            cell.Init(nameText, baselineText, ownerText, statusText, dropdown);
+            cell.Init(nameText, baselineText, ownerText, statusText, dropdown, autoToggle);
             _liveRows.Add(cell);
             return cell;
         }

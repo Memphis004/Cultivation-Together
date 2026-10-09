@@ -17,6 +17,19 @@ namespace Xianxia.Sect
     public enum DiscipleOwnerType { Npc, Player, Viewer }
 
     /// <summary>
+    /// P9A — who decides a disciple's task: the human/owner (Manual) or the trusted
+    /// auto-assigner (Auto). Ownership and autonomy are DIFFERENT: an Npc-owned
+    /// disciple is Manual until someone explicitly opts it in, and only Npc-owned
+    /// disciples are eligible for Auto in this MVP. 0 = Manual so state/roster saved
+    /// before this key existed deserializes as Manual (backward-compatible behavior).
+    /// </summary>
+    public enum DiscipleControlMode
+    {
+        Manual = 0,
+        Auto = 1,
+    }
+
+    /// <summary>
     /// Entitlement ของศิษย์: "ได้สิทธิ์" แสดง chibi ในฉากด้วย backend ไหน — ไม่ใช่สิ่งที่ render จริงเสมอไป
     /// (runtime อาจ degrade Spine → SpriteSheet เมื่อเกิน SpineBudget โดยไม่แก้ค่านี้ — ดู §7 ของแผน)
     /// 0 = default → save/roster เก่าที่ไม่มี [Key(8)] deserialize ได้ SpriteSheet (L5)
@@ -61,6 +74,13 @@ namespace Xianxia.Sect
         [Key(9)] public DiscipleOwnerType OwnerType { get; set; } = DiscipleOwnerType.Npc;
         /// <summary>Owner identity (player/viewer id); empty for Npc-owned</summary>
         [Key(10)] public string OwnerId { get; set; } = string.Empty;
+
+        /// <summary>
+        /// P9A — explicit autonomy (see DiscipleControlMode). Default Manual; only an
+        /// Npc-owned disciple may be Auto. Append-only key; old state without [Key(11)]
+        /// deserializes as Manual.
+        /// </summary>
+        [Key(11)] public DiscipleControlMode ControlMode { get; set; } = DiscipleControlMode.Manual;
     }
 
     [MessagePackObject]

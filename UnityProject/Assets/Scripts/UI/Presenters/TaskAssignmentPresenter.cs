@@ -31,9 +31,13 @@ namespace Xianxia.Sect.UI
 
         private readonly ISectStateProvider _stateProvider;
         private readonly ISubscriber<DiscipleTaskChangedMessage> _taskChangedSubscriber;
+        // P9A — reflect an external Manual/Auto change (ownership switch, manual assign)
+        // on the row's Auto toggle. Optional so existing construction sites stay valid.
+        private readonly ISubscriber<DiscipleControlModeChangedMessage> _controlModeChangedSubscriber;
 
         private System.Action _closeCallback;
         private IDisposable _taskChangedSubscription;
+        private IDisposable _controlModeChangedSubscription;
 
         private readonly List<string> _knownTasks = new List<string>();
         private readonly List<TaskAssignmentRowCell> _rows = new List<TaskAssignmentRowCell>();
@@ -52,10 +56,12 @@ namespace Xianxia.Sect.UI
 
         public TaskAssignmentPresenter(
             ISectStateProvider stateProvider,
-            ISubscriber<DiscipleTaskChangedMessage> taskChangedSubscriber)
+            ISubscriber<DiscipleTaskChangedMessage> taskChangedSubscriber,
+            ISubscriber<DiscipleControlModeChangedMessage> controlModeChangedSubscriber = null)
         {
             _stateProvider = stateProvider;
             _taskChangedSubscriber = taskChangedSubscriber;
+            _controlModeChangedSubscriber = controlModeChangedSubscriber;
         }
 
         protected override void OnViewBound()
@@ -69,6 +75,8 @@ namespace Xianxia.Sect.UI
             // UIService.Close) — reopen re-subscribes exactly once.
             if (_taskChangedSubscriber != null)
                 _taskChangedSubscription = _taskChangedSubscriber.Subscribe(OnTaskChangedExternally);
+            if (_controlModeChangedSubscriber != null)
+                _controlModeChangedSubscription = _controlModeChangedSubscriber.Subscribe(OnControlModeChangedExternally);
         }
 
         public override void OnOpen(object args)
@@ -86,6 +94,8 @@ namespace Xianxia.Sect.UI
             // runs presenter.Dispose before destroying the GameObject.
             _taskChangedSubscription?.Dispose();
             _taskChangedSubscription = null;
+            _controlModeChangedSubscription?.Dispose();
+            _controlModeChangedSubscription = null;
 
             View.CloseClicked -= OnCloseClicked;
             View.ConfirmClicked -= OnConfirmClicked;
@@ -131,6 +141,10 @@ namespace Xianxia.Sect.UI
                 row.SetName(d.DisplayName);
                 row.SetBaselineTask(baselineTask);
                 row.SetOwnerLabel(BuildOwnerLabel(d, baselineTask));
+                // P9A — Auto is per-disciple; only Npc ownership is eligible.
+                row.SetAutoState(d.ControlMode == DiscipleControlMode.Auto);
+                row.SetAutoSelectable(d.OwnerType == DiscipleOwnerType.Npc);
+                row.AutoToggled += wantAuto => OnAutoToggled(d.DiscipleId, wantAuto);
                 ApplyRowState(row, d.DiscipleId, baselineTask);
                 row.FillOptions(_knownTasks, baselineTask);
 
@@ -239,6 +253,59 @@ namespace Xianxia.Sect.UI
             View.SetConfirmInteractable(_drafts.Count > 0);
         }
 
+        // ---------- P9A — explicit Manual/Auto ----------
+
+        /// <summary>
+        /// Player toggled Auto for a row. The authoritative method rechecks eligibility
+        /// (only Npc-owned disciples may opt into Auto), so a programmatic or stale
+        /// toggle can never grant Auto to a Player/Viewer-owned disciple. On rejection
+        /// the row snaps back to the authority's state and shows the reason.
+        /// </summary>
+        private void OnAutoToggled(string discipleId, bool wantAuto)
+        {
+            var mode = wantAuto ? DiscipleControlMode.Auto : DiscipleControlMode.Manual;
+            var success = _stateProvider.TrySetDiscipleControlMode(discipleId, mode, out var failReason);
+
+            var rowIndex = _rowOrder.IndexOf(discipleId);
+            if (rowIndex < 0 || rowIndex >= _rows.Count) return;
+            var row = _rows[rowIndex];
+
+            // Always re-read the authority's answer — never trust the toggle's own value.
+            var disciple = FindDisciple(discipleId);
+            row.SetAutoState(disciple != null && disciple.ControlMode == DiscipleControlMode.Auto);
+
+            if (success)
+            {
+                _baseline.TryGetValue(discipleId, out var baselineTask);
+                ApplyRowState(row, discipleId, baselineTask);
+            }
+            else if (!string.IsNullOrEmpty(failReason))
+            {
+                row.SetBaselineStatus(false, failReason);
+            }
+        }
+
+        private DiscipleState FindDisciple(string discipleId)
+        {
+            var disciples = _stateProvider.BuildSectEconomyState()?.Disciples;
+            if (disciples == null) return null;
+            for (int i = 0; i < disciples.Count; i++)
+            {
+                var d = disciples[i];
+                if (d != null && d.DiscipleId == discipleId) return d;
+            }
+            return null;
+        }
+
+        /// <summary>P9A — an external Auto→Manual (ownership switch, manual assign) updates the toggle.</summary>
+        private void OnControlModeChangedExternally(DiscipleControlModeChangedMessage msg)
+        {
+            if (msg == null || string.IsNullOrEmpty(msg.DiscipleId)) return;
+            var rowIndex = _rowOrder.IndexOf(msg.DiscipleId);
+            if (rowIndex < 0 || rowIndex >= _rows.Count) return;
+            _rows[rowIndex].SetAutoState(msg.NewMode == DiscipleControlMode.Auto);
+        }
+
         private void OnCancelClicked()
         {
             // §5: Cancel changes nothing in state — drop drafts + errors + conflicts.
@@ -317,9 +384,12 @@ namespace Xianxia.Sect.UI
                 var row = _rows[i];
                 if (string.IsNullOrEmpty(error))
                 {
-                    // successful commit → status shows the new baseline
+                    // successful commit → status shows the new baseline, and P9A: a
+                    // successful manual assignment disables Auto, so re-read the mode.
                     _baseline.TryGetValue(discipleId, out var baselineTask);
                     ApplyRowState(row, discipleId, baselineTask);
+                    var disciple = FindDisciple(discipleId);
+                    row.SetAutoState(disciple != null && disciple.ControlMode == DiscipleControlMode.Auto);
                 }
                 else
                 {

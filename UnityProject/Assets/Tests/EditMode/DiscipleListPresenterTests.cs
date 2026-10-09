@@ -168,6 +168,17 @@ namespace Xianxia.Sect.Tests
             public bool TryAssignTask(string requesterId, string discipleId, string taskId, out string failReason)
             {
                 failReason = null; return false;
+            }
+
+            // P9A (Manual/Auto control) — not exercised here; stubbed for the interface.
+            public bool TrySetDiscipleControlMode(string discipleId, DiscipleControlMode mode, out string failReason)
+            {
+                failReason = null; return false;
+            }
+
+            public bool TryAutoAssignTask(string discipleId, string taskId, out string failReason)
+            {
+                failReason = null; return false;
             }            // Not exercised by these tests — stubbed to satisfy the interface.
             // Real behavior covered in TaskRequirementTests.
             public bool IsTaskAvailable(string taskId, out string failReason)

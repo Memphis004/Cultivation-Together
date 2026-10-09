@@ -259,6 +259,29 @@ namespace Xianxia.Sect
         bool TryAssignTask(string requesterId, string discipleId, string taskId, out string failReason);
 
         /// <summary>
+        /// P9A — explicitly set a disciple's Manual/Auto control mode. Ownership and
+        /// autonomy are different: this never changes ownership, and only an Npc-owned
+        /// disciple is eligible for Auto in this MVP. A Player/Viewer-owned disciple is
+        /// rejected even when its owner has been inactive past the protection window —
+        /// hybrid inactivity only lets the SectMaster override a task, it does not
+        /// authorize a brain. Empty/unknown disciple and undefined enum fail closed;
+        /// idempotent (no message when the mode is already set). Publishes
+        /// DiscipleControlModeChangedMessage (in-memory only) on a real change.
+        /// </summary>
+        bool TrySetDiscipleControlMode(string discipleId, DiscipleControlMode mode, out string failReason);
+
+        /// <summary>
+        /// P9A — dedicated authoritative entry point for the future DiscipleBrain. NOT
+        /// TryAssignTask(SectMasterRequesterId, ...): it takes no requester identity, so
+        /// the brain can never impersonate the player or inherit the SectMaster
+        /// override. Rechecks NPC ownership AND Auto mode immediately before commit, then
+        /// shares TryAssignTask's known-task/building/cooldown validation and mutation
+        /// (one implementation). Fails closed with a reason when either eligibility
+        /// precondition no longer holds.
+        /// </summary>
+        bool TryAutoAssignTask(string discipleId, string taskId, out string failReason);
+
+        /// <summary>
         /// P5B (Hybrid Permissions) — read-only permission query for UI. Evaluates the
         /// SAME rules TryAssignTask revalidates on mutation, and never mutates state:
         /// a valid requester may control its own active membership; "SECT_MASTER" may

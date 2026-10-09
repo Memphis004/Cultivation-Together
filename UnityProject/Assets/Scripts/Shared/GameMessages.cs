@@ -324,6 +324,20 @@ namespace Xianxia.Sect.Messages
         [Key(4)] public string NewOwnerId { get; set; } = string.Empty;
     }
 
+    // ---------- P9A — explicit Manual/Auto control-mode change ----------
+    // Published in-memory by SectStateProvider when a disciple's ControlMode actually
+    // changes: an explicit player toggle, an ownership change that invalidates Auto,
+    // or a successful manual task assignment taking a disciple out of Auto.
+    // ⚠️ Deliberately NOT added to InterprocessTopics — autonomy is a local
+    // player/UI concern, same in-memory-only rule as DiscipleOwnerChangedMessage.
+    [MessagePackObject]
+    public class DiscipleControlModeChangedMessage
+    {
+        [Key(0)] public string DiscipleId { get; set; } = string.Empty;
+        [Key(1)] public DiscipleControlMode OldMode { get; set; }
+        [Key(2)] public DiscipleControlMode NewMode { get; set; }
+    }
+
     // Request/response pair: the MCP bridge reads the disciples' ownership-change
     // log (filled by OwnershipObservabilityBuffer, one entry per real change).
     // Observability ONLY — deliberately no request/response pair or MCP tool that
