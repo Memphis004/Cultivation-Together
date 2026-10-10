@@ -336,6 +336,13 @@ namespace Xianxia.Sect
     // Answers AwaitWorldEventRequest coming in over the interprocess bus.
     // Request-response, not pub/sub - see the comment on AwaitWorldEventRequest
     // in GameMessages.cs for why.
+    //
+    // THREADING (T1): InvokeAsync runs on the MessagePipe.Interprocess TCP background
+    // thread, and both things it touches - the one-slot cache (_cachedPendingEvent) and
+    // the UniTaskCompletionSource - are main-thread state. It therefore hops FIRST and
+    // then runs the existing wait unchanged: a cached event is consumed on the main
+    // thread, and a genuinely pending wait is only resumed when RaiseWorldEvent
+    // completes the source on the main thread. Awaiting never blocks the main thread.
     public class AwaitWorldEventHandler : IAsyncRequestHandler<AwaitWorldEventRequest, AwaitWorldEventResponse>
     {
         private readonly TimeSystem _timeSystem;
@@ -347,13 +354,38 @@ namespace Xianxia.Sect
 
         public UniTask<AwaitWorldEventResponse> InvokeAsync(AwaitWorldEventRequest request, CancellationToken cancellationToken = default)
         {
-            return _timeSystem.WaitForNextWorldEventAsync();
+            return MainThreadDispatch.RunAwaitingAsync(
+                nameof(AwaitWorldEventHandler),
+                $"requestId={request?.RequestId}",
+                WaitOnMainThreadAsync,
+                reason => new AwaitWorldEventResponse
+                {
+                    // The response contract has no failure field: an empty event id is the
+                    // clearest available answer (the reason is in the Console log line).
+                    EventId = string.Empty,
+                    Description = "unavailable: " + reason,
+                });
+        }
+
+        /// <summary>
+        /// The existing wait, unchanged, entered on the main thread: cache check first, then the
+        /// pending completion source. Kept as its own method so the kept-open await is explicit.
+        /// </summary>
+        private async UniTask<AwaitWorldEventResponse> WaitOnMainThreadAsync()
+        {
+            var waitForEvent = _timeSystem.WaitForNextWorldEventAsync();
+            return await waitForEvent;
         }
     }
 
     // Answers SectStateQuery requests coming in over the interprocess bus
     // from the MCP bridge. Aggregates whatever the subsystems currently hold
     // into the SectEconomyState shape from economy.proto.
+    //
+    // THREADING (T1): InvokeAsync runs on the MessagePipe.Interprocess TCP background
+    // thread, and BuildSectEconomyState() enumerates every live disciple/resource while
+    // the main thread keeps ticking (ToByteArray() then serializes that graph). That is
+    // a read race, so the snapshot is produced after a hop to the Unity main thread.
     public class SectStateQueryHandler : IAsyncRequestHandler<SectStateQuery, SectStateSnapshot>
     {
         private readonly ISectStateProvider _stateProvider;
@@ -365,15 +397,27 @@ namespace Xianxia.Sect
 
         public UniTask<SectStateSnapshot> InvokeAsync(SectStateQuery request, CancellationToken cancellationToken = default)
         {
-            var state = _stateProvider.BuildSectEconomyState();
-            var snapshot = new SectStateSnapshot
-            {
-                RequestId = request.RequestId,
-                // MessagePack, committed choice (not a protobuf stub
-                // anymore - see project_summary.md for why).
-                EconomyStateBytes = state.ToByteArray()
-            };
-            return UniTask.FromResult(snapshot);
+            return MainThreadDispatch.RunAsync(
+                nameof(SectStateQueryHandler),
+                $"requestId={request?.RequestId}",
+                () =>
+                {
+                    var state = _stateProvider.BuildSectEconomyState();
+                    return new SectStateSnapshot
+                    {
+                        RequestId = request.RequestId,
+                        // MessagePack, committed choice (not a protobuf stub
+                        // anymore - see project_summary.md for why).
+                        EconomyStateBytes = state.ToByteArray()
+                    };
+                },
+                reason => new SectStateSnapshot
+                {
+                    // The snapshot contract has no failure field: no bytes means "no state"
+                    // (the bridge's decode fails loudly) and the reason is in the log line.
+                    RequestId = request?.RequestId,
+                    EconomyStateBytes = null
+                });
         }
     }
 

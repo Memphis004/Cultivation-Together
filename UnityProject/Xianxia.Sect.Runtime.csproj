@@ -137,6 +137,7 @@
     <Compile Include="Assets\Scripts\Core\Installers\VisualInstaller.cs" />
     <Compile Include="Assets\Scripts\Visual\Scene\RigZoomInput.cs" />
     <Compile Include="Assets\Scripts\UI\Views\BuildingMenuView.cs" />
+    <Compile Include="Assets\Scripts\Core\MainThreadDispatch.cs" />
     <Compile Include="Assets\Scripts\UI\Presenters\TaskAssignmentPresenter.cs" />
     <Compile Include="Assets\Scripts\UI\Systems\WorldEventUISystem.cs" />
     <Compile Include="Assets\Scripts\Core\TimeRuntimeConfig.cs" />

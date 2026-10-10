@@ -56,7 +56,11 @@ namespace Xianxia.Sect
             }
         }
 
-        /// <summary>Thread-safe snapshot (query handler runs on a TCP background thread).</summary>
+        /// <summary>
+        /// Snapshot of the log. The lock is kept even though the query handler now hops to the
+        /// main thread (T1): the writer is an in-memory MessagePipe subscriber, so the buffer
+        /// never assumes which thread its callers are on.
+        /// </summary>
         public DiscipleTaskChangedMessage[] Snapshot()
         {
             lock (_lock)
@@ -66,7 +70,11 @@ namespace Xianxia.Sect
         }
     }
 
-    /// <summary>Answers TaskChangeObservabilityQuery — the bridge's read-only get_task_change_log tool.</summary>
+    /// <summary>
+    /// Answers TaskChangeObservabilityQuery — the bridge's read-only get_task_change_log tool.
+    /// Read-only, but T1 still applies the uniform rule: the buffer read happens after a hop to
+    /// the Unity main thread (MainThreadDispatch.RunAsync).
+    /// </summary>
     public class TaskChangeObservabilityHandler
         : IAsyncRequestHandler<TaskChangeObservabilityQuery, TaskChangeObservabilitySnapshot>
     {
@@ -80,11 +88,20 @@ namespace Xianxia.Sect
         public UniTask<TaskChangeObservabilitySnapshot> InvokeAsync(
             TaskChangeObservabilityQuery request, CancellationToken cancellationToken = default)
         {
-            return UniTask.FromResult(new TaskChangeObservabilitySnapshot
-            {
-                RequestId = request.RequestId,
-                Events = new List<DiscipleTaskChangedMessage>(_buffer.Snapshot()),
-            });
+            return MainThreadDispatch.RunAsync(
+                nameof(TaskChangeObservabilityHandler),
+                $"requestId={request?.RequestId}",
+                () => new TaskChangeObservabilitySnapshot
+                {
+                    RequestId = request.RequestId,
+                    Events = new List<DiscipleTaskChangedMessage>(_buffer.Snapshot()),
+                },
+                reason => new TaskChangeObservabilitySnapshot
+                {
+                    // Read-only contract has no failure field: no events + the logged reason.
+                    RequestId = request?.RequestId,
+                    Events = new List<DiscipleTaskChangedMessage>(),
+                });
         }
     }
 
@@ -93,7 +110,9 @@ namespace Xianxia.Sect
     /// One entry per Viewer-owned disciple (the set the hybrid protection policy
     /// governs), computed through ISectStateProvider.CheckTaskPermission so the
     /// reported protection/permission always matches what TryAssignTask would do.
-    /// Never mutates state; no clock is needed here because the authority reads it.
+    /// Never mutates state; no clock is needed here because the authority reads it. T1: it reads
+    /// LIVE state (BuildSectEconomyState over every disciple), so the read happens after a hop to
+    /// the Unity main thread (MainThreadDispatch.RunAsync).
     /// </summary>
     public class TaskProtectionHandler
         : IAsyncRequestHandler<TaskProtectionQuery, TaskProtectionSnapshot>
@@ -108,10 +127,27 @@ namespace Xianxia.Sect
         public UniTask<TaskProtectionSnapshot> InvokeAsync(
             TaskProtectionQuery request, CancellationToken cancellationToken = default)
         {
+            return MainThreadDispatch.RunAsync(
+                nameof(TaskProtectionHandler),
+                $"requestId={request?.RequestId}",
+                () => BuildSnapshot(request),
+                reason => new TaskProtectionSnapshot
+                {
+                    // Read-only contract has no failure field: no entries + the logged reason.
+                    RequestId = request?.RequestId,
+                });
+        }
+
+        /// <summary>
+        /// The existing aggregation, unchanged — now entered on the Unity main thread (T1) because
+        /// it reads live state through the authority.
+        /// </summary>
+        private TaskProtectionSnapshot BuildSnapshot(TaskProtectionQuery request)
+        {
             var snapshot = new TaskProtectionSnapshot { RequestId = request?.RequestId };
 
             var state = _stateProvider.BuildSectEconomyState();
-            if (state?.Disciples == null) return UniTask.FromResult(snapshot);
+            if (state?.Disciples == null) return snapshot;
 
             for (int i = 0; i < state.Disciples.Count; i++)
             {
@@ -142,7 +178,7 @@ namespace Xianxia.Sect
                 });
             }
 
-            return UniTask.FromResult(snapshot);
+            return snapshot;
         }
     }
 }

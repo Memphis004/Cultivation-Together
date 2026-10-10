@@ -10,16 +10,14 @@ namespace Xianxia.Sect
     // See SectStateProvider.TryAssignTask for the permission + validity rules
     // (disciple lookup → ownership → known task set).
     //
-    // THREADING: InvokeAsync runs on a MessagePipe.Interprocess TCP background
-    // thread, NOT the Unity main thread. The code called synchronously here
-    // touches only plain managed state (DiscipleState strings, the known-task
-    // HashSet, an in-memory MessagePipe publish) plus Debug.Log — which, like
-    // the existing TryPurchaseItem path served by PurchaseItemHandler, is
-    // thread-safe and calls no scene/object API. There must be NO
-    // Instantiate/GameObject/transform access on this call path. If a future
-    // downstream step needs a Unity object, it has to cross back first with
-    // `await UniTask.SwitchToMainThread();` (see DecisionExecutor.cs for the
-    // pattern) before touching it.
+    // THREADING (T1): InvokeAsync runs on a MessagePipe.Interprocess TCP background
+    // thread, NOT the Unity main thread. TryAssignTask mutates live gameplay state
+    // (and publishes an in-memory DiscipleTaskChangedMessage other systems react to),
+    // so the whole call now runs AFTER a hop to the Unity main thread — see
+    // MainThreadDispatch.RunAsync, the one shared place that owns the hop and the
+    // failure contract. The earlier note here ("plain managed state only, no Unity
+    // API, therefore safe") was wrong: an off-thread read/mutate of live state while
+    // the main thread ticks is a race regardless of which API it touches.
     public class AssignTaskHandler : IAsyncRequestHandler<AssignTaskRequest, AssignTaskResponse>
     {
         private readonly ISectStateProvider _stateProvider;
@@ -31,15 +29,26 @@ namespace Xianxia.Sect
 
         public UniTask<AssignTaskResponse> InvokeAsync(AssignTaskRequest request, CancellationToken cancellationToken = default)
         {
-            string failReason;
-            var success = _stateProvider.TryAssignTask(
-                request.RequesterId, request.DiscipleId, request.TaskId, out failReason);
+            return MainThreadDispatch.RunAsync(
+                nameof(AssignTaskHandler),
+                $"requester={request?.RequesterId} disciple={request?.DiscipleId} task={request?.TaskId}",
+                () =>
+                {
+                    string failReason;
+                    var success = _stateProvider.TryAssignTask(
+                        request.RequesterId, request.DiscipleId, request.TaskId, out failReason);
 
-            return UniTask.FromResult(new AssignTaskResponse
-            {
-                Success = success,
-                FailReason = failReason,
-            });
+                    return new AssignTaskResponse
+                    {
+                        Success = success,
+                        FailReason = failReason,
+                    };
+                },
+                reason => new AssignTaskResponse
+                {
+                    Success = false,
+                    FailReason = "internal error: " + reason,
+                });
         }
     }
 }

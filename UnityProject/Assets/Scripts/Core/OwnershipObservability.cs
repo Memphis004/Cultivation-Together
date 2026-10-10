@@ -59,7 +59,11 @@ namespace Xianxia.Sect
             }
         }
 
-        /// <summary>Thread-safe snapshot (query handler runs on a TCP background thread).</summary>
+        /// <summary>
+        /// Snapshot of the log. The lock is kept even though the query handler now hops to the
+        /// main thread (T1): the writer is an in-memory MessagePipe subscriber, so the buffer never
+        /// assumes which thread its callers are on.
+        /// </summary>
         public DiscipleOwnerChangedMessage[] Snapshot()
         {
             lock (_lock)
@@ -71,9 +75,11 @@ namespace Xianxia.Sect
 
     /// <summary>
     /// Answers OwnershipObservabilityQuery coming in over the interprocess bus —
-    /// the MCP bridge's read-only get_ownership_log tool. Same threading note as
-    /// AssignTaskHandler: InvokeAsync runs on a TCP background thread, so the
-    /// buffer read goes through the buffer's lock via Snapshot().
+    /// the MCP bridge's read-only get_ownership_log tool. Read-only, but NOT
+    /// lock-only: T1 applies the uniform rule, so the buffer read happens after a
+    /// hop to the Unity main thread (MainThreadDispatch.RunAsync). This is the one
+    /// handler where the lock-protected buffer alone would arguably have sufficed;
+    /// the uniform rule is kept so no future edit to this file has to re-judge it.
     /// </summary>
     public class OwnershipObservabilityHandler
         : IAsyncRequestHandler<OwnershipObservabilityQuery, OwnershipObservabilitySnapshot>
@@ -88,11 +94,20 @@ namespace Xianxia.Sect
         public UniTask<OwnershipObservabilitySnapshot> InvokeAsync(
             OwnershipObservabilityQuery request, CancellationToken cancellationToken = default)
         {
-            return UniTask.FromResult(new OwnershipObservabilitySnapshot
-            {
-                RequestId = request.RequestId,
-                Events = new List<DiscipleOwnerChangedMessage>(_buffer.Snapshot()),
-            });
+            return MainThreadDispatch.RunAsync(
+                nameof(OwnershipObservabilityHandler),
+                $"requestId={request?.RequestId}",
+                () => new OwnershipObservabilitySnapshot
+                {
+                    RequestId = request.RequestId,
+                    Events = new List<DiscipleOwnerChangedMessage>(_buffer.Snapshot()),
+                },
+                reason => new OwnershipObservabilitySnapshot
+                {
+                    // Read-only contract has no failure field: no events + the logged reason.
+                    RequestId = request?.RequestId,
+                    Events = new List<DiscipleOwnerChangedMessage>(),
+                });
         }
     }
 }
