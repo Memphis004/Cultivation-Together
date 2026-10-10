@@ -1,11 +1,11 @@
 # Cultivation-Together Context Pack
 
 - Repository: Memphis004/Cultivation-Together
-- Commit: daa0b86
+- Commit: b04e006
 - Branch: main
 - Generated: 2026-10-10
-- Uncommitted changes in working tree: 58 file(s) (ไฟล์ที่แนบมาอ่านจาก working tree ไม่ใช่จาก commit — ถ้า > 0 อาจต่างจาก commit)
-- Files after .aiignore filter: 2057
+- Uncommitted changes in working tree: 1 file(s) (ไฟล์ที่แนบมาอ่านจาก working tree ไม่ใช่จาก commit — ถ้า > 0 อาจต่างจาก commit)
+- Files after .aiignore filter: 2078
 
 ## Ground Rules (สำคัญมาก — บังคับ AI)
 
@@ -53,11 +53,13 @@
 - `McpBridge/Shared/GameMessages.cs`: class DiscipleRecruitedMessage, class DiscipleRankChangedMessage, class SectResourceChangedMessage, class ContributionEarnedMessage, class SceneLoadedMessage, class WorldEventTriggeredMessage, class TimeSpeedChangedMessage, class SectStateQuery, class SectStateSnapshot, class AwaitWorldEventRequest, class AwaitWorldEventResponse, class EventChoiceInfo, class ExecuteDecisionMessage, class DecisionExecutedMessage, class BuildModeStartedMessage, class BuildModeEndedMessage, class PurchaseItemRequest, class PurchaseItemResponse, class BuildingPlacedMessage, class DiscipleChibiBackendChangedMessage, class DiscipleSelectedMessage, class AvatarEquipmentChangedMessage, class ChangeAvatarPartRequest, class ChangeAvatarPartResponse, class AssignTaskRequest, class AssignTaskResponse, class DiscipleTaskChangedMessage, class DiscipleOwnerChangedMessage, class DiscipleControlModeChangedMessage, class OwnershipObservabilityQuery, class OwnershipObservabilitySnapshot, class TaskChangeObservabilityQuery, class TaskChangeObservabilitySnapshot, class TaskProtectionQuery, class TaskProtectionEntry, class TaskProtectionSnapshot, class SectViewerMembershipSave, class SectSavedOwnership, class SessionRestoredMessage, static class InterprocessTopics
 - `McpBridge/Shared/MockSectData.cs`: static class MockSectData
 - `McpBridge/Shared/SectEconomyState.cs`: enum OwnerScope, enum DiscipleRank, enum DiscipleSex, enum DiscipleOwnerType, enum DiscipleControlMode, enum ChibiBackend, class CurrencyWallet, class InventoryItem, class DiscipleState, class SectStockpile, class PlacedBuildingState, class SectEconomyState, struct SlotPart, sealed class AvatarAppearance, static class AvatarSlots
+- `McpBridge/Shared/SectSessionSnapshot.cs`: class SectSessionSnapshotEnvelope, class SectSessionSnapshot
 - `McpBridge/Shared/ViewerMembership.cs`: enum ViewerMembershipStatus, class ViewerRecord, class PendingViewerApplication, interface IClock, sealed class UtcClock, class SectViewerRegistry
 - `Shared/DiscipleAttributes.cs`: static class DiscipleAttributesConfig, class DiscipleAttributes
 - `Shared/GameMessages.cs`: class DiscipleRecruitedMessage, class DiscipleRankChangedMessage, class SectResourceChangedMessage, class ContributionEarnedMessage, class SceneLoadedMessage, class WorldEventTriggeredMessage, class TimeSpeedChangedMessage, class SectStateQuery, class SectStateSnapshot, class AwaitWorldEventRequest, class AwaitWorldEventResponse, class EventChoiceInfo, class ExecuteDecisionMessage, class DecisionExecutedMessage, class BuildModeStartedMessage, class BuildModeEndedMessage, class PurchaseItemRequest, class PurchaseItemResponse, class BuildingPlacedMessage, class DiscipleChibiBackendChangedMessage, class DiscipleSelectedMessage, class AvatarEquipmentChangedMessage, class ChangeAvatarPartRequest, class ChangeAvatarPartResponse, class AssignTaskRequest, class AssignTaskResponse, class DiscipleTaskChangedMessage, class DiscipleOwnerChangedMessage, class DiscipleControlModeChangedMessage, class OwnershipObservabilityQuery, class OwnershipObservabilitySnapshot, class TaskChangeObservabilityQuery, class TaskChangeObservabilitySnapshot, class TaskProtectionQuery, class TaskProtectionEntry, class TaskProtectionSnapshot, class SectViewerMembershipSave, class SectSavedOwnership, class SessionRestoredMessage, static class InterprocessTopics
 - `Shared/MockSectData.cs`: static class MockSectData
 - `Shared/SectEconomyState.cs`: enum OwnerScope, enum DiscipleRank, enum DiscipleSex, enum DiscipleOwnerType, enum DiscipleControlMode, enum ChibiBackend, class CurrencyWallet, class InventoryItem, class DiscipleState, class SectStockpile, class PlacedBuildingState, class SectEconomyState, struct SlotPart, sealed class AvatarAppearance, static class AvatarSlots
+- `Shared/SectSessionSnapshot.cs`: class SectSessionSnapshotEnvelope, class SectSessionSnapshot
 - `Shared/ViewerMembership.cs`: enum ViewerMembershipStatus, class ViewerRecord, class PendingViewerApplication, interface IClock, sealed class UtcClock, class SectViewerRegistry
 - `UnityProject/Assets/Scripts/Building/BuildingDef.cs`: enum BuildingCategory, class BuildingDef, class BuildingCostEntry
 - `UnityProject/Assets/Scripts/Building/BuildingDefPool.cs`: class BuildingDefTable, class BuildingDefPool
@@ -76,10 +78,24 @@
 - `UnityProject/Assets/Scripts/Core/Installers/VisualInstaller.cs`: static class VisualInstaller
 - `UnityProject/Assets/Scripts/Core/MainThreadDispatch.cs`: static class MainThreadDispatch, sealed class MainThreadUnavailableException
 - `UnityProject/Assets/Scripts/Core/OwnershipObservability.cs`: class OwnershipObservabilityBuffer, class OwnershipObservabilityHandler
+- `UnityProject/Assets/Scripts/Core/Persistence/SaveFileSystem.cs`: interface ISaveFileSystem, sealed class SystemSaveFileSystem
+- `UnityProject/Assets/Scripts/Core/Persistence/SaveOperationGate.cs`: sealed class SaveOperationGate
+- `UnityProject/Assets/Scripts/Core/Persistence/SaveSessionService.cs`: sealed class SaveSessionService
+- `UnityProject/Assets/Scripts/Core/Persistence/SaveSlotPersistence.cs`: enum SaveIoErrorKind, sealed class SaveSlotMetadata, sealed class SaveSlotResult, sealed class SaveSlotLoadResult, sealed class SaveSlotPaths
+- `UnityProject/Assets/Scripts/Core/Persistence/SaveSlotRepository.cs`: sealed class SaveSlotRepository
+- `UnityProject/Assets/Scripts/Core/Persistence/SaveWorkScheduler.cs`: interface ISaveWorkScheduler, sealed class UnitySaveWorkScheduler
+- `UnityProject/Assets/Scripts/Core/Persistence/SessionTransitionTracker.cs`: sealed class SessionTransitionTracker
 - `UnityProject/Assets/Scripts/Core/PurchaseItemHandler.cs`: class PurchaseItemHandler
 - `UnityProject/Assets/Scripts/Core/SceneLoader.cs`: class SceneLoader
 - `UnityProject/Assets/Scripts/Core/SceneMessages.cs`: class SceneUnloadedMessage
 - `UnityProject/Assets/Scripts/Core/SceneNames.cs`: static class SceneNames
+- `UnityProject/Assets/Scripts/Core/Session/GameSessionCoordinator.cs`: sealed class GameSessionCoordinator
+- `UnityProject/Assets/Scripts/Core/Session/GameSessionPhase.cs`: enum GameSessionPhase, enum SessionTransitionOutcome, sealed class SessionTransitionResult
+- `UnityProject/Assets/Scripts/Core/Session/IGameSessionCoordinator.cs`: interface ISessionGate, static class SessionGate, interface IGameSessionCoordinator, interface IStarterStateFactory, interface ISessionUiCloser, interface IGameplaySceneLoader
+- `UnityProject/Assets/Scripts/Core/Session/PrototypeStarterStateFactory.cs`: sealed class PrototypeStarterStateFactory
+- `UnityProject/Assets/Scripts/Core/Session/SessionMessages.cs`: class SessionPhaseChangedMessage
+- `UnityProject/Assets/Scripts/Core/Session/SessionUiCloser.cs`: sealed class SessionUiCloser
+- `UnityProject/Assets/Scripts/Core/SessionSnapshotService.cs`: interface ISessionRestoreAuthority, class SessionSnapshotService
 - `UnityProject/Assets/Scripts/Core/TaskObservability.cs`: class TaskChangeObservabilityBuffer, class TaskChangeObservabilityHandler, class TaskProtectionHandler
 - `UnityProject/Assets/Scripts/Core/TimeRuntimeConfig.cs`: sealed class TimeRuntimeConfig
 - `UnityProject/Assets/Scripts/Core/TimeSystem.cs`: enum TimePauseReason, class TimeSystem, class AwaitWorldEventHandler, class SectStateQueryHandler, enum TaskPermissionOutcome, sealed class TaskPermissionResult, interface ISectStateProvider
@@ -92,6 +108,7 @@
 - `UnityProject/Assets/Scripts/Shared/GameMessages.cs`: class DiscipleRecruitedMessage, class DiscipleRankChangedMessage, class SectResourceChangedMessage, class ContributionEarnedMessage, class SceneLoadedMessage, class WorldEventTriggeredMessage, class TimeSpeedChangedMessage, class SectStateQuery, class SectStateSnapshot, class AwaitWorldEventRequest, class AwaitWorldEventResponse, class EventChoiceInfo, class ExecuteDecisionMessage, class DecisionExecutedMessage, class BuildModeStartedMessage, class BuildModeEndedMessage, class PurchaseItemRequest, class PurchaseItemResponse, class BuildingPlacedMessage, class DiscipleChibiBackendChangedMessage, class DiscipleSelectedMessage, class AvatarEquipmentChangedMessage, class ChangeAvatarPartRequest, class ChangeAvatarPartResponse, class AssignTaskRequest, class AssignTaskResponse, class DiscipleTaskChangedMessage, class DiscipleOwnerChangedMessage, class DiscipleControlModeChangedMessage, class OwnershipObservabilityQuery, class OwnershipObservabilitySnapshot, class TaskChangeObservabilityQuery, class TaskChangeObservabilitySnapshot, class TaskProtectionQuery, class TaskProtectionEntry, class TaskProtectionSnapshot, class SectViewerMembershipSave, class SectSavedOwnership, class SessionRestoredMessage, static class InterprocessTopics
 - `UnityProject/Assets/Scripts/Shared/MockSectData.cs`: static class MockSectData
 - `UnityProject/Assets/Scripts/Shared/SectEconomyState.cs`: enum OwnerScope, enum DiscipleRank, enum DiscipleSex, enum DiscipleOwnerType, enum DiscipleControlMode, enum ChibiBackend, class CurrencyWallet, class InventoryItem, class DiscipleState, class SectStockpile, class PlacedBuildingState, class SectEconomyState, struct SlotPart, sealed class AvatarAppearance, static class AvatarSlots
+- `UnityProject/Assets/Scripts/Shared/SectSessionSnapshot.cs`: class SectSessionSnapshotEnvelope, class SectSessionSnapshot
 - `UnityProject/Assets/Scripts/Shared/ViewerMembership.cs`: enum ViewerMembershipStatus, class ViewerRecord, class PendingViewerApplication, interface IClock, sealed class UtcClock, class SectViewerRegistry
 - `UnityProject/Assets/Scripts/Systems/AutoTaskScheduler.cs`: sealed class AutoEvaluationOutcome, class AutoTaskScheduler
 - `UnityProject/Assets/Scripts/Systems/AutoTaskScoring.cs`: enum SectTaskKind, sealed class SectTaskInfo, sealed class AutoTaskFacts, sealed class AutoTaskScore, enum AutoRecoveryState, sealed class AutoTaskDecision, static class AutoTaskWeights, static class AutoTaskTargets, static class AutoTaskScoring
@@ -4036,7 +4053,7 @@
 
 ### Files per directory (depth ≤ 5)
 ```
-    7  .
+    8  .
     1  .agents
     1  .agents/skills/animation-create
     1  .agents/skills/animation-get-data
@@ -4199,8 +4216,8 @@
     9  LLMWiki/wiki/sources/code-snippets
     1  LLMWiki/wiki/sources/references
     2  McpBridge
-    6  McpBridge/Shared
-    7  Shared
+    7  McpBridge/Shared
+    8  Shared
    26  Tools/Luban
     1  Tools/Luban/Templates/common/cpp
     1  Tools/Luban/Templates/common/cs
@@ -4364,12 +4381,14 @@
     1  UnityProject/Assets/Scenes/VisualDemo
     2  UnityProject/Assets/Scripts
     5  UnityProject/Assets/Scripts/Building
-   16  UnityProject/Assets/Scripts/Core
+   17  UnityProject/Assets/Scripts/Core
     5  UnityProject/Assets/Scripts/Core/Installers
+    7  UnityProject/Assets/Scripts/Core/Persistence
+    6  UnityProject/Assets/Scripts/Core/Session
     2  UnityProject/Assets/Scripts/Data
     9  UnityProject/Assets/Scripts/Data/Gen
     1  UnityProject/Assets/Scripts/Scenes/SectScene
-    6  UnityProject/Assets/Scripts/Shared
+    7  UnityProject/Assets/Scripts/Shared
     7  UnityProject/Assets/Scripts/Systems
     1  UnityProject/Assets/Scripts/Tests
     9  UnityProject/Assets/Scripts/UI/Core
@@ -4421,7 +4440,7 @@
     1  UnityProject/Assets/Spine/Runtime
    42  UnityProject/Assets/Spine/Runtime/spine-csharp
   116  UnityProject/Assets/Spine/Runtime/spine-unity
-   41  UnityProject/Assets/Tests/EditMode
+   44  UnityProject/Assets/Tests/EditMode
     2  UnityProject/Assets/TextMesh Pro/Fonts
     3  UnityProject/Assets/TextMesh Pro/Resources
     4  UnityProject/Assets/TextMesh Pro/Resources/Fonts & Materials
@@ -4668,6 +4687,7 @@
   .opencode/skills/portrait-edit-prompt/assets/recipe.example.json
   .zcode/AGENT.md
   .zcode/config.json
+  Common-Rules.md
   DataTables/Data/EventChoiceDef.csv
   DataTables/Data/EventDef.csv
   DataTables/Defines/schema.xml
@@ -4748,6 +4768,7 @@
   McpBridge/Shared/MessageTypes.cs
   McpBridge/Shared/MockSectData.cs
   McpBridge/Shared/SectEconomyState.cs
+  McpBridge/Shared/SectSessionSnapshot.cs
   McpBridge/Shared/ViewerMembership.cs
   README.md
   Shared/DiscipleAttributes.cs
@@ -4755,6 +4776,7 @@
   Shared/MessageTypes.cs
   Shared/MockSectData.cs
   Shared/SectEconomyState.cs
+  Shared/SectSessionSnapshot.cs
   Shared/ViewerMembership.cs
   Tools/Luban/Luban.Bson.deps.json
   Tools/Luban/Luban.CSharp.deps.json
@@ -4942,10 +4964,24 @@
   UnityProject/Assets/Scripts/Core/Installers/VisualInstaller.cs
   UnityProject/Assets/Scripts/Core/MainThreadDispatch.cs
   UnityProject/Assets/Scripts/Core/OwnershipObservability.cs
+  UnityProject/Assets/Scripts/Core/Persistence/SaveFileSystem.cs
+  UnityProject/Assets/Scripts/Core/Persistence/SaveOperationGate.cs
+  UnityProject/Assets/Scripts/Core/Persistence/SaveSessionService.cs
+  UnityProject/Assets/Scripts/Core/Persistence/SaveSlotPersistence.cs
+  UnityProject/Assets/Scripts/Core/Persistence/SaveSlotRepository.cs
+  UnityProject/Assets/Scripts/Core/Persistence/SaveWorkScheduler.cs
+  UnityProject/Assets/Scripts/Core/Persistence/SessionTransitionTracker.cs
   UnityProject/Assets/Scripts/Core/PurchaseItemHandler.cs
   UnityProject/Assets/Scripts/Core/SceneLoader.cs
   UnityProject/Assets/Scripts/Core/SceneMessages.cs
   UnityProject/Assets/Scripts/Core/SceneNames.cs
+  UnityProject/Assets/Scripts/Core/Session/GameSessionCoordinator.cs
+  UnityProject/Assets/Scripts/Core/Session/GameSessionPhase.cs
+  UnityProject/Assets/Scripts/Core/Session/IGameSessionCoordinator.cs
+  UnityProject/Assets/Scripts/Core/Session/PrototypeStarterStateFactory.cs
+  UnityProject/Assets/Scripts/Core/Session/SessionMessages.cs
+  UnityProject/Assets/Scripts/Core/Session/SessionUiCloser.cs
+  UnityProject/Assets/Scripts/Core/SessionSnapshotService.cs
   UnityProject/Assets/Scripts/Core/TaskObservability.cs
   UnityProject/Assets/Scripts/Core/TimeRuntimeConfig.cs
   UnityProject/Assets/Scripts/Core/TimeSystem.cs
@@ -4959,6 +4995,7 @@
   UnityProject/Assets/Scripts/Shared/MessageTypes.cs
   UnityProject/Assets/Scripts/Shared/MockSectData.cs
   UnityProject/Assets/Scripts/Shared/SectEconomyState.cs
+  UnityProject/Assets/Scripts/Shared/SectSessionSnapshot.cs
   UnityProject/Assets/Scripts/Shared/ViewerMembership.cs
   UnityProject/Assets/Scripts/Systems/AutoTaskScheduler.cs
   UnityProject/Assets/Scripts/Systems/AutoTaskScoring.cs
@@ -5308,25 +5345,7 @@
   UnityProject/Assets/Spine/Runtime/spine-unity/Utility/MaterialChecks.cs
   UnityProject/Assets/Spine/Runtime/spine-unity/Utility/SkeletonExtensions.cs
   UnityProject/Assets/Spine/Runtime/spine-unity/Utility/SkinUtilities.cs
-  UnityProject/Assets/Spine/Runtime/spine-unity/Utility/TimelineExtensions.cs
-  UnityProject/Assets/Spine/Runtime/spine-unity/Utility/YieldInstructions/WaitForSpineAnimation.cs
-  UnityProject/Assets/Spine/Runtime/spine-unity/Utility/YieldInstructions/WaitForSpineAnimationComplete.cs
-  UnityProject/Assets/Spine/Runtime/spine-unity/Utility/YieldInstructions/WaitForSpineAnimationEnd.cs
-  UnityProject/Assets/Spine/Runtime/spine-unity/Utility/YieldInstructions/WaitForSpineEvent.cs
-  UnityProject/Assets/Spine/Runtime/spine-unity/Utility/YieldInstructions/WaitForSpineTrackEntryEnd.cs
-  UnityProject/Assets/Spine/package.json
-  UnityProject/Assets/Tests/EditMode/AppearanceResolverTests.cs
-  UnityProject/Assets/Tests/EditMode/AssignTaskTests.cs
-  UnityProject/Assets/Tests/EditMode/AutoControlTests.cs
-  UnityProject/Assets/Tests/EditMode/AutoTaskSchedulerTests.cs
-  UnityProject/Assets/Tests/EditMode/AutoTaskScoringTests.cs
-  UnityProject/Assets/Tests/EditMode/AvatarIconCropTests.cs
-  UnityProject/Assets/Tests/EditMode/AvatarPartCoverageTests.cs
-  UnityProject/Assets/Tests/EditMode/BuildingGridTests.cs
-  UnityProject/Assets/Tests/EditMode/BuildingMenuPresenterTests.cs
-  UnityProject/Assets/Tests/EditMode/BuildingPlacementTests.cs
-  UnityProject/Assets/Tests/EditMode/CameraFramingMathTests.cs
-  ... [165 more files truncated — ปรับ TREE_MAX_LINES หรือ .aiignore]
+  ... [186 more files truncated — ปรับ TREE_MAX_LINES หรือ .aiignore]
 ```
 
 ## Recent Wiki Log (last 15 entries, each cut to 400 chars)

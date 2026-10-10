@@ -86,9 +86,17 @@ namespace Xianxia.Sect.Installers
             // thread (Common-Rules 4: background I/O sees detached data only).
             // MVP scope: ONE manual slot + ONE backup + metadata for Continue (no
             // multi-slot browser, no cloud sync, no autosave, no Title UI yet).
-            builder.RegisterInstance(SaveSlotPaths.UnderPersistentDataPath());
-            builder.RegisterInstance<ISaveFileSystem>(new SystemSaveFileSystem());
-            builder.Register<SaveSlotRepository>(Lifetime.Singleton);
+            var savePaths = SaveSlotPaths.UnderPersistentDataPath();
+            var saveFileSystem = new SystemSaveFileSystem();
+            builder.RegisterInstance(savePaths);
+            builder.RegisterInstance<ISaveFileSystem>(saveFileSystem);
+            // SaveSlotRepository ยังมี ctor (fileSystem, paths, maxSaveFileBytes) ไว้ให้
+            // test ปรับเพดานขนาดไฟล์ — VContainer เลือก ctor ที่มี parameters มากที่สุด
+            // เสมอ (TypeAnalyzer) แล้วพยายาม resolve System.Int32 จึงต้อง pin ctor
+            // ผ่าน factory ที่ composition root เหมือน BuildingGrid ไม่งั้น build scope ล้ม
+            builder.Register<SaveSlotRepository>(
+                resolver => new SaveSlotRepository(saveFileSystem, savePaths),
+                Lifetime.Singleton);
             builder.Register<SessionTransitionTracker>(Lifetime.Singleton);
             builder.Register<SaveOperationGate>(Lifetime.Singleton);
             builder.Register<ISaveWorkScheduler, UnitySaveWorkScheduler>(Lifetime.Singleton);
