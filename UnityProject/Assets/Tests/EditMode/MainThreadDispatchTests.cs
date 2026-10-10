@@ -166,6 +166,84 @@ namespace Xianxia.Sect.Tests
             Assert.AreEqual(-5, pending.GetAwaiter().GetResult());
         }
 
+        [Test]
+        public void RunAwaitingAsync_KeptOpenBody_RunsOnTheThreadThatPumpedTheHop()
+        {
+            // The await-world-event shape: hop first, then await work that stays open.
+            // A kept-open body must not start before the hop is pumped either.
+            int startedThreadId = -1;
+            var gate = new UniTaskCompletionSource<int>();
+
+            var pending = MainThreadDispatch.RunAwaitingAsync(
+                "UnitTestHandler", "req=7",
+                async () =>
+                {
+                    startedThreadId = Thread.CurrentThread.ManagedThreadId;
+                    return await gate.Task;
+                },
+                reason => -6);
+
+            Assert.AreEqual(-1, startedThreadId, "a kept-open body must not start off the main thread");
+
+            var pumpThreadId = Pump();
+            Assert.AreEqual(pumpThreadId, startedThreadId,
+                            "the kept-open body must start on the thread the hop resumed on");
+
+            gate.TrySetResult(11);
+            Assert.AreEqual(11, pending.GetAwaiter().GetResult());
+        }
+
+        [Test]
+        public void AwaitWorldEventHandler_KeptOpenWait_ConsumesTheCacheOnThePumpedThread()
+        {
+            // The cached-event branch is the one that finishes synchronously; it must not
+            // be reached before the hop, or the cache would be consumed off the main thread.
+            var timeSystem = new TimeSystem(
+                new BufferPublisher<TimeSpeedChangedMessage>(),
+                new BufferPublisher<WorldEventTriggeredMessage>(),
+                TimeRuntimeConfig.Instance);
+            // requiresDecision=true is what populates the bridge handoff cache the
+            // handler consumes on its first (synchronous) pass.
+            timeSystem.RaiseWorldEvent("evt_cached", "cached event", true, null);
+
+            var handler = new AwaitWorldEventHandler(timeSystem);
+            var pending = handler.InvokeAsync(new AwaitWorldEventRequest { RequestId = "req-8" });
+
+            Assert.IsFalse(pending.Status.IsCompleted(), "the handler must wait for the hop first");
+
+            Pump();
+            var response = pending.GetAwaiter().GetResult();
+
+            Assert.AreEqual("evt_cached", response.EventId,
+                            "the cached event is handed out after the hop, not before it");
+        }
+
+        [Test]
+        public void ChangeAvatarPartHandler_MutatesNothing_UntilTheHopIsPumped()
+        {
+            // The one mutating handler with no bridge tool of its own: it still has to
+            // obey the same contract as the tool-backed ones.
+            var provider = BuildProvider();
+            var handler = new ChangeAvatarPartHandler(provider);
+            var before = FindPart(provider, "d001", AvatarSlots.Accessory);
+
+            var pending = handler.InvokeAsync(new ChangeAvatarPartRequest
+            {
+                DiscipleId = "d001",
+                Slot = AvatarSlots.Accessory,
+                PartId = "acc_gourd",
+            });
+
+            Assert.AreEqual(before, FindPart(provider, "d001", AvatarSlots.Accessory),
+                            "state must be untouched while the hop is queued");
+
+            Pump();
+            var response = pending.GetAwaiter().GetResult();
+
+            Assert.IsTrue(response.Success, response.FailReason);
+            Assert.AreEqual("acc_gourd", FindPart(provider, "d001", AvatarSlots.Accessory));
+        }
+
         // ---- the real handlers, through the same gate ----
 
         [Test]
@@ -260,6 +338,15 @@ namespace Xianxia.Sect.Tests
             foreach (var d in provider.BuildSectEconomyState().Disciples)
             {
                 if (d.DiscipleId == discipleId) return d.CurrentTask ?? string.Empty;
+            }
+            return null;
+        }
+
+        private static string FindPart(SectStateProvider provider, string discipleId, string slot)
+        {
+            foreach (var d in provider.BuildSectEconomyState().Disciples)
+            {
+                if (d.DiscipleId == discipleId) return d.Avatar.GetSlot(slot) ?? string.Empty;
             }
             return null;
         }
