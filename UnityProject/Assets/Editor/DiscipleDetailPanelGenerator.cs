@@ -40,6 +40,17 @@ namespace Xianxia.Sect.EditorTools
             var walletValue=InkWidgets.StatRow(info,"WalletRow","ทรัพยากร","",font,0,186,924,UiPalette.Jade);
             // Wallet is also repeated in the bottom bar; allow its longer two-part value room.
             walletValue.rectTransform.anchoredPosition=new Vector2(260,-0);walletValue.rectTransform.sizeDelta=new Vector2(654,48);
+            // P10C — attributes on the ข้อมูล tab: a stamina BAR + number, and the three skill levels.
+            // Fixed width/h cells; SetStamina only rewrites the fill width and colour (no layout pass).
+            var staminaRow=InkWidgets.Rect(info,"StaminaRow",0,248,924,48);InkWidgets.Fill(staminaRow,UiPalette.PaperDark);
+            InkWidgets.Fill(InkWidgets.Rect(staminaRow,"Dot",10,19,10,10),UiPalette.Jade);
+            InkWidgets.Text(staminaRow,"Label","stamina",font,26,28,0,300,26,UiPalette.Text);
+            var staminaBar=InkWidgets.Rect(staminaRow,"StaminaBar",28,33,300,9);InkWidgets.Fill(staminaBar,UiPalette.Disabled);
+            var staminaFill=InkWidgets.Rect(staminaBar,"Fill",0,0,300,9);InkWidgets.Fill(staminaFill,UiPalette.Jade);
+            var staminaValue=InkWidgets.Text(staminaRow,"Value","",font,26,536,0,378,48,UiPalette.Text,TextAlignmentOptions.MidlineRight);
+            var skillGathering=InkWidgets.StatRow(info,"SkillRowGathering","ฝีมือ · เก็บทรัพยากร","",font,0,310,924,UiPalette.Jade);
+            var skillAlchemy=InkWidgets.StatRow(info,"SkillRowAlchemy","ฝีมือ · ปรุงยา","",font,0,372,924,UiPalette.Blue);
+            var skillForging=InkWidgets.StatRow(info,"SkillRowForging","ฝีมือ · หลอมหล่อ","",font,0,434,924,UiPalette.Vermilion);
             var status=InkWidgets.Rect(host,"StatusContent",0,0,924,522);InkWidgets.Stretch(status);
             string[] axes={"รากฐาน","รากกระดูก","ปัญญา","ศักยภาพ","เสน่ห์","วาสนา"};
             for(int c=0;c<3;c++)
@@ -62,7 +73,9 @@ namespace Xianxia.Sect.EditorTools
             InkWidgets.Text(window,"WalletFooter","",font,28,766,712,610,64,UiPalette.Text,TextAlignmentOptions.MidlineRight);
             var view=root.gameObject.AddComponent<DiscipleDetailView>();var so=new SerializedObject(view);
             Set(so,"nameText",nameValue);Set(so,"rankText",rankValue);Set(so,"taskText",taskValue);Set(so,"walletText",walletValue);
-            Set(so,"closeButton",close);Set(so,"portraitRenderer",renderer);Set(so,"railContent",content);Set(so,"tabRail",tabs);Set(so,"contentHost",host);Set(so,"headerNameText",name);Set(so,"headerRankText",rank);so.ApplyModifiedPropertiesWithoutUndo();
+            Set(so,"closeButton",close);Set(so,"portraitRenderer",renderer);Set(so,"railContent",content);Set(so,"tabRail",tabs);Set(so,"contentHost",host);            Set(so,"headerNameText",name);Set(so,"headerRankText",rank);so.ApplyModifiedPropertiesWithoutUndo();
+            Set(so,"staminaBarFill",staminaFill.GetComponent<Image>());Set(so,"staminaText",staminaValue);
+            Set(so,"skillGatheringText",skillGathering);Set(so,"skillAlchemyText",skillAlchemy);Set(so,"skillForgingText",skillForging);so.ApplyModifiedPropertiesWithoutUndo();
             var prefab=PrefabUtility.SaveAsPrefabAsset(root.gameObject,"Assets/Prefabs/UI/DiscipleDetailPanel.prefab");Object.DestroyImmediate(root.gameObject);
             var catalog=AssetDatabase.LoadAssetAtPath<UIPanelCatalog>("Assets/Panel Catalog/MainPanelCatalog.asset");var cs=new SerializedObject(catalog);var panels=cs.FindProperty("panels");
             bool found=false;for(int i=0;i<panels.arraySize;i++){var el=panels.GetArrayElementAtIndex(i);if(el.FindPropertyRelative("PanelId").stringValue!="DiscipleDetail")continue;el.FindPropertyRelative("Prefab").objectReferenceValue=prefab;found=true;}

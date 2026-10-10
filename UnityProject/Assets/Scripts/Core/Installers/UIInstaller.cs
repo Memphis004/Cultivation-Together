@@ -35,6 +35,8 @@ namespace Xianxia.Sect.Installers
             builder.Register<ResourcePopupPresenter>(Lifetime.Transient); // คลังสินค้า popup (read-only stockpile)
             builder.Register<DiscipleListPresenter>(Lifetime.Transient); // รายชื่อศิษย์ (cards + baked icons)
             builder.Register<TaskAssignmentPresenter>(Lifetime.Transient); // P3: มอบหมายงาน (draft/confirm)
+            builder.Register<TimeControlPresenter>(Lifetime.Transient); // E1: แถบควบคุมเวลา (pause/1x/2x/3x — E1.1 ตัดปุ่ม Play ออก)
+            builder.Register<WorldEventChipPresenter>(Lifetime.Transient); // E3: ชิป "มีเหตุการณ์รอตัดสินใจ"
             builder.RegisterEntryPoint<DiscipleDetailUISystem>(Lifetime.Singleton); // Phase 4: message → panel
             builder.RegisterEntryPoint<WorldEventUISystem>(Lifetime.Singleton);
             builder.RegisterEntryPoint<UIBootstrap>(Lifetime.Singleton);

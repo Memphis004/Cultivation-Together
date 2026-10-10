@@ -9,6 +9,25 @@ using Xianxia.Sect.Visual;
 
 namespace Xianxia.Sect
 {
+    /// <summary>
+    /// P10B — what one work tick did for one disciple. Exactly ONE of these is
+    /// recorded per disciple per tick; <see cref="None"/> means the tick changed no
+    /// attribute (unknown / other task).
+    /// </summary>
+    public enum DiscipleWorkOutcome
+    {
+        /// <summary>Any other task — no attribute change.</summary>
+        None = 0,
+        /// <summary>Gathering passed its building gate and produced its rate this tick.</summary>
+        ProductiveGathering = 1,
+        /// <summary>Crafting passed its gate and advanced (a completion tick counts as productive).</summary>
+        ProductiveCrafting = 2,
+        /// <summary>Gate failed (building missing) or the craft is held waiting for materials.</summary>
+        Blocked = 3,
+        /// <summary>Meditation.</summary>
+        Resting = 4,
+    }
+
     // Implements the seam TimeSystem.cs defines (ISectStateProvider).
     //
     // IMPORTANT: this holds ONE live state instance for the process
@@ -36,15 +55,23 @@ namespace Xianxia.Sect
         // to that task takes to finish one item, once ingredients are
         // available - if the stockpile runs short, progress holds at 100%
         // and waits rather than losing accumulated time.
+        //
+        // P10B: this dictionary is the ONE definition of the task -> skill-category
+        // mapping — a completed craft awards XP to exactly the category of the recipe
+        // it finished (refining_elixir -> alchemy, forging_artifact -> forging).
+        // Gathering needs no table: every gathering task maps to the single
+        // CategoryGathering constant. Meditation grants no skill XP.
         private static readonly Dictionary<string, CraftingRecipe> CraftingRecipes = new()
         {
             ["refining_elixir"] = new CraftingRecipe(
                 "elixir_qi_gathering", 3, 20f,
-                new Dictionary<string, int> { ["herb"] = 10 }),
+                new Dictionary<string, int> { ["herb"] = 10 },
+                DiscipleAttributesConfig.CategoryAlchemy),
 
             ["forging_artifact"] = new CraftingRecipe(
                 "sword_azure_flame", 5, 30f,
-                new Dictionary<string, int> { ["ore"] = 15, ["wood"] = 10 }),
+                new Dictionary<string, int> { ["ore"] = 15, ["wood"] = 10 },
+                DiscipleAttributesConfig.CategoryForging),
         };        // Task System v2 (§6) — the known task set is the keys of the existing
         // gathering + crafting dictionaries, plus "meditation". No new data
         // pipeline: the dictionaries ARE the source of truth for what a disciple
@@ -166,6 +193,20 @@ namespace Xianxia.Sect
         // share one pooled timer.
         private readonly Dictionary<string, float> _craftProgress = new();
 
+        // P10B — per-tick scratch: disciple id -> that tick's single work record.
+        // Cleared at the start of a tick and consumed by ApplyWorkAttributes, so an
+        // outcome can never be written twice or applied twice. One small map, one
+        // applier — no second clock, no fixed-step loop, no per-frame allocation.
+        private struct WorkTickRecord
+        {
+            public DiscipleWorkOutcome Outcome;
+            /// <summary>Non-null only on a craft-completion tick (P10B §4).</summary>
+            public string CompletedCraftCategory;
+        }
+
+        private readonly Dictionary<string, WorkTickRecord> _workTick = new();
+        private int _workTickRecordCount;
+
         public SectStateProvider(
             IPublisher<DiscipleRecruitedMessage> discipleRecruitedPublisher,
             IPublisher<SectResourceChangedMessage> resourceChangedPublisher,
@@ -242,13 +283,40 @@ namespace Xianxia.Sect
         // from DiscipleSystem.Tick(). Disciples whose task fails the building
         // requirement are SKIPPED (CurrentTask is never rewritten here — the
         // assignment gate is the only place that validates on assignment).
+        //
+        // P10B: production is unchanged; this tick additionally records ONE work
+        // outcome per disciple and then applies the attribute change once.
         public void TickGathering(float deltaTimeSeconds)
         {
             var placedDefIds = CollectPlacedDefIds(); // once per tick, not per disciple
+            BeginWorkTick(); // P10B
             foreach (var disciple in _state.Disciples)
             {
-                if (!IsTaskAvailableWithBuildings(disciple.CurrentTask, placedDefIds, out _)) continue;
-                if (!GatheringRates.TryGetValue(disciple.CurrentTask, out var rate)) continue;
+                // P10B — EVERY disciple gets exactly one outcome in this tick. Meditation
+                // rests; anything that is not a gathering task (including a crafting task,
+                // whose tick owns its change) is None = no attribute change here, so the
+                // outcome cannot be applied twice across the two ticks of a frame. The
+                // empty-task guard must come first so no dictionary is probed with a null key.
+                if (string.IsNullOrEmpty(disciple.CurrentTask))
+                {
+                    RecordWorkOutcome(disciple, DiscipleWorkOutcome.None);
+                    continue;
+                }
+
+                if (!GatheringRates.TryGetValue(disciple.CurrentTask, out var rate))
+                {
+                    RecordWorkOutcome(disciple, IsMeditationTask(disciple.CurrentTask)
+                        ? DiscipleWorkOutcome.Resting
+                        : DiscipleWorkOutcome.None);
+                    continue;
+                }
+
+                if (!IsTaskAvailableWithBuildings(disciple.CurrentTask, placedDefIds, out _))
+                {
+                    // P10B: the gate failed (building missing) → Blocked (small regen).
+                    RecordWorkOutcome(disciple, DiscipleWorkOutcome.Blocked);
+                    continue;
+                }
 
                 var accKey = disciple.CurrentTask;
                 var acc = _gatherAccumulators.TryGetValue(accKey, out var existing) ? existing : 0f;
@@ -263,7 +331,12 @@ namespace Xianxia.Sect
                 }
 
                 _gatherAccumulators[accKey] = acc;
+
+                // P10B: reaching here means the gate passed → Productive.
+                RecordWorkOutcome(disciple, DiscipleWorkOutcome.ProductiveGathering);
             }
+
+            ApplyWorkAttributes(deltaTimeSeconds); // P10B — the single apply step
         }
 
         // Disciple crafting: whoever's CurrentTask matches a known recipe
@@ -279,10 +352,31 @@ namespace Xianxia.Sect
         public void TickCrafting(float deltaTimeSeconds)
         {
             var placedDefIds = CollectPlacedDefIds(); // once per tick, not per disciple
+            BeginWorkTick(); // P10B
             foreach (var disciple in _state.Disciples)
             {
-                if (!IsTaskAvailableWithBuildings(disciple.CurrentTask, placedDefIds, out _)) continue;
-                if (!CraftingRecipes.TryGetValue(disciple.CurrentTask, out var recipe)) continue;
+                // P10B — EVERY disciple gets exactly one outcome in this tick too. Only a
+                // crafting task changes an attribute here; everything else (gathering task,
+                // meditation, unknown/empty) is None = handled by TickGathering, so no
+                // stamina change is applied twice across the two ticks of a frame.
+                if (string.IsNullOrEmpty(disciple.CurrentTask))
+                {
+                    RecordWorkOutcome(disciple, DiscipleWorkOutcome.None);
+                    continue;
+                }
+
+                if (!CraftingRecipes.TryGetValue(disciple.CurrentTask, out var recipe))
+                {
+                    RecordWorkOutcome(disciple, DiscipleWorkOutcome.None);
+                    continue;
+                }
+
+                if (!IsTaskAvailableWithBuildings(disciple.CurrentTask, placedDefIds, out _))
+                {
+                    // P10B: the gate failed (building missing) → Blocked (small regen).
+                    RecordWorkOutcome(disciple, DiscipleWorkOutcome.Blocked);
+                    continue;
+                }
 
                 var progress = _craftProgress.TryGetValue(disciple.DiscipleId, out var existing) ? existing : 0f;
                 progress += deltaTimeSeconds;
@@ -290,6 +384,8 @@ namespace Xianxia.Sect
                 if (progress < recipe.CraftSeconds) 
                 {
                     _craftProgress[disciple.DiscipleId] = progress;
+                    // P10B: progress advanced → Productive (no completion yet).
+                    RecordWorkOutcome(disciple, DiscipleWorkOutcome.ProductiveCrafting);
                     continue;
                 }
 
@@ -299,6 +395,8 @@ namespace Xianxia.Sect
                     // at the completion threshold and wait rather than
                     // losing the accumulated progress or overshooting.
                     _craftProgress[disciple.DiscipleId] = recipe.CraftSeconds;
+                    // P10B: held waiting for materials → Blocked; no XP is awarded.
+                    RecordWorkOutcome(disciple, DiscipleWorkOutcome.Blocked);
                     continue;
                 }
 
@@ -335,8 +433,164 @@ namespace Xianxia.Sect
 
                 // Carry over any overshoot instead of resetting to exactly 0.
                 _craftProgress[disciple.DiscipleId] = progress - recipe.CraftSeconds;
+
+                // P10B: this is the authoritative completion point. The completion tick
+                // counts as Productive (§4 simplification) and carries the recipe's
+                // skill category so the XP is awarded ONCE, in ApplyWorkAttributes.
+                RecordWorkOutcome(disciple, DiscipleWorkOutcome.ProductiveCrafting, recipe.SkillCategory);
+            }
+
+            ApplyWorkAttributes(deltaTimeSeconds); // P10B — the single apply step
+        }
+
+        // ---------- P10B: work outcome → attribute change ----------
+
+        /// <summary>Starts one tick's outcome scratch (P10B).</summary>
+        private void BeginWorkTick()
+        {
+            _workTick.Clear();
+            _workTickRecordCount = 0;
+        }
+
+        /// <summary>
+        /// Records this tick's outcome for one disciple. Each tick writes exactly ONE
+        /// record per disciple (the two ticks of a frame cover different task domains and
+        /// the other side records None), which is what keeps the apply step from
+        /// double-counting a change.
+        /// </summary>
+        private void RecordWorkOutcome(DiscipleState disciple, DiscipleWorkOutcome outcome,
+                                       string completedCraftCategory = null)
+        {
+            if (disciple == null || string.IsNullOrEmpty(disciple.DiscipleId)) return;
+
+            _workTick[disciple.DiscipleId] = new WorkTickRecord
+            {
+                Outcome = outcome,
+                CompletedCraftCategory = completedCraftCategory,
+            };
+            _workTickRecordCount++;
+        }
+
+        /// <summary>
+        /// The ONLY place P10B mutates attributes (one function, called once per tick,
+        /// after that tick's outcomes are recorded — so nothing can be applied twice).
+        /// Rates are linear in the tick's simulation delta (rate * delta, then clamped);
+        /// a zero or non-finite delta (pause) changes no rate-driven value. A completed
+        /// craft is an event, not a rate, so its XP is not scaled by the delta.
+        /// </summary>
+        private void ApplyWorkAttributes(float deltaTimeSeconds)
+        {
+            if (_workTick.Count == 0) return;
+
+            bool ratesApply = deltaTimeSeconds > 0f; // false for 0 (paused) and for NaN
+
+            foreach (var disciple in _state.Disciples)
+            {
+                if (disciple == null || string.IsNullOrEmpty(disciple.DiscipleId)) continue;
+
+                WorkTickRecord record;
+                if (!_workTick.TryGetValue(disciple.DiscipleId, out record)) continue;
+
+                // Attributes are created + normalized by P10A; never invented or repaired here.
+                var attributes = disciple.Attributes;
+                if (attributes == null) continue;
+
+                float staminaPerSecond;
+                string xpCategory = null;
+                float xpPerSecond = 0f;
+
+                switch (record.Outcome)
+                {
+                    case DiscipleWorkOutcome.ProductiveGathering:
+                        staminaPerSecond = -DiscipleAttributesConfig.WorkStaminaDrainPerSecondGathering;
+                        xpCategory = DiscipleAttributesConfig.CategoryGathering;
+                        xpPerSecond = DiscipleAttributesConfig.WorkGatheringXpPerSecond;
+                        break;
+                    case DiscipleWorkOutcome.ProductiveCrafting:
+                        staminaPerSecond = -DiscipleAttributesConfig.WorkStaminaDrainPerSecondCrafting;
+                        break;
+                    case DiscipleWorkOutcome.Resting:
+                        staminaPerSecond = DiscipleAttributesConfig.WorkStaminaRegenPerSecondResting;
+                        break;
+                    case DiscipleWorkOutcome.Blocked:
+                        staminaPerSecond = DiscipleAttributesConfig.WorkStaminaRegenPerSecondBlocked;
+                        break;
+                    default:
+                        continue; // None — no attribute change at all
+                }
+
+                if (ratesApply)
+                {
+                    attributes.Stamina = ClampStamina(attributes.Stamina + staminaPerSecond * deltaTimeSeconds);
+                    if (xpCategory != null)
+                        AddSkillXp(attributes, xpCategory, xpPerSecond * deltaTimeSeconds);
+                }
+
+                // Craft completion XP: awarded where the item was actually produced. A
+                // craft already held at CraftSeconds can complete on a zero-delta frame
+                // (the item is still made), so the award follows the completion, not the delta.
+                if (!string.IsNullOrEmpty(record.CompletedCraftCategory))
+                    AddSkillXp(attributes, record.CompletedCraftCategory,
+                               DiscipleAttributesConfig.WorkCraftXpPerCompletion);
             }
         }
+
+        /// <summary>Adds XP to one category, reading through the shared safe accessor and clamping to the cap.</summary>
+        private static void AddSkillXp(DiscipleAttributes attributes, string category, float amount)
+        {
+            if (string.IsNullOrEmpty(category) || amount == 0f) return;
+            if (attributes.SkillXp == null) attributes.SkillXp = new Dictionary<string, float>();
+
+            float current = DiscipleAttributes.GetSkillXp(attributes, category);
+            attributes.SkillXp[category] = ClampSkillXp(current + amount);
+        }
+
+        /// <summary>Clamps to the configured stamina bounds (a non-finite value is left for Normalize to repair).</summary>
+        private static float ClampStamina(float value)
+        {
+            if (float.IsNaN(value) || float.IsInfinity(value)) return value;
+            if (value < DiscipleAttributesConfig.StaminaMin) return DiscipleAttributesConfig.StaminaMin;
+            if (value > DiscipleAttributesConfig.StaminaMax) return DiscipleAttributesConfig.StaminaMax;
+            return value;
+        }
+
+        /// <summary>Clamps to the configured XP bounds (0..cap).</summary>
+        private static float ClampSkillXp(float value)
+        {
+            if (float.IsNaN(value) || float.IsInfinity(value)) return DiscipleAttributesConfig.SkillXpDefault;
+            if (value < DiscipleAttributesConfig.SkillXpMin) return DiscipleAttributesConfig.SkillXpMin;
+            if (value > DiscipleAttributesConfig.SkillXpMax) return DiscipleAttributesConfig.SkillXpMax;
+            return value;
+        }
+
+        /// <summary>P10B — the resting task id (same literal KnownTasks is built with).</summary>
+        private static bool IsMeditationTask(string taskId)
+        {
+            return taskId == "meditation";
+        }
+
+        // ---- P10B test seams (EditMode tests, no reflection) ----
+
+        /// <summary>The outcome recorded for one disciple in the tick that just ran.</summary>
+        public bool TryGetLastWorkOutcome(string discipleId, out DiscipleWorkOutcome outcome)
+        {
+            WorkTickRecord record;
+            if (!string.IsNullOrEmpty(discipleId) && _workTick.TryGetValue(discipleId, out record))
+            {
+                outcome = record.Outcome;
+                return true;
+            }
+
+            outcome = DiscipleWorkOutcome.None;
+            return false;
+        }
+
+        /// <summary>
+        /// How many outcome records the last tick wrote. Equal to the number of
+        /// disciples means exactly one record each — a second record for the same
+        /// disciple would be one more than the roster size.
+        /// </summary>
+        public int LastTickOutcomeRecordCountForTest => _workTickRecordCount;
 
         // Adds a new Outer Disciple assigned to a gathering task, round-robin
         // across GatheringTasks so recruits don't all pile onto one resource.
@@ -633,6 +887,8 @@ namespace Xianxia.Sect
                     Kind = SectTaskKind.Gathering,
                     ProducesResource = rate.Resource,
                     UnitsPerSecond = rate.PerSecond,
+                    // P10C: same category the work tick awards XP to (P10B) — no second mapping.
+                    SkillCategory = DiscipleAttributesConfig.CategoryGathering,
                 };
                 return true;
             }
@@ -646,11 +902,15 @@ namespace Xianxia.Sect
                     ProducesItem = recipe.ItemDefId,
                     ProducesItemGrade = recipe.Grade,
                     InputCosts = recipe.Costs,
+                    // P10C: the recipe's own category (refining_elixir → alchemy,
+                    // forging_artifact → forging) — the ONE task→category definition.
+                    SkillCategory = recipe.SkillCategory,
                 };
                 return true;
             }
 
-            // Anything else in KnownTasks produces nothing (meditation) — the safe fallback.
+            // Anything else in KnownTasks produces nothing (meditation) — the safe fallback
+            // (and it exercises no skill category, so it never earns a skill bonus).
             info = new SectTaskInfo { TaskId = taskId, Kind = SectTaskKind.Meditation };
             return true;
         }
@@ -1424,7 +1684,9 @@ namespace Xianxia.Sect
                     break;
 
                 case "new_disciple_applicant":
-                    if (choiceId != null && choiceId.ToLowerInvariant().Contains("accept"))
+                    // E2-lite: explicit choice id, not a substring match - the
+                    // choice is already validated against the pending choices.
+                    if (choiceId == "accept")
                     {
                         RecruitOuterDisciple();
                     }
@@ -1584,13 +1846,17 @@ namespace Xianxia.Sect
             public int Grade { get; }
             public float CraftSeconds { get; }
             public Dictionary<string, int> Costs { get; }
+            /// <summary>P10B — skill category this task's COMPLETED crafts award XP to.</summary>
+            public string SkillCategory { get; }
 
-            public CraftingRecipe(string itemDefId, int grade, float craftSeconds, Dictionary<string, int> costs)
+            public CraftingRecipe(string itemDefId, int grade, float craftSeconds,
+                                  Dictionary<string, int> costs, string skillCategory)
             {
                 ItemDefId = itemDefId;
                 Grade = grade;
                 CraftSeconds = craftSeconds;
                 Costs = costs;
+                SkillCategory = skillCategory;
             }
         }
     }

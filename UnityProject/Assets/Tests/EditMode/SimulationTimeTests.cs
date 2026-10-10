@@ -251,7 +251,8 @@ namespace Xianxia.Sect.Tests
             Assert.AreEqual("gathering_herb", Find("d001").CurrentTask, "pause must not rewrite CurrentTask");
 
             // The decision path (DecisionExecutor) unpauses; progression resumes.
-            _timeSystem.SetPaused(false);
+            // E1: resolving a decision clears PendingDecision specifically.
+            _timeSystem.Resume(TimePauseReason.PendingDecision);
             _provider.TickGathering(5f); // 0.2/s * 5s = 1.0 → exactly +1
             Assert.AreEqual(herbBefore + 1, Raw("herb"), "gathering resumes once the decision unpauses");
 
@@ -362,24 +363,31 @@ namespace Xianxia.Sect.Tests
         public void WorldEventTimer_AdvancesOnSimulationDelta_AndFreezesWhilePaused()
         {
             var events = new BufferPublisher<WorldEventTriggeredMessage>();
-            var time = new TimeSystem(new BufferPublisher<TimeSpeedChangedMessage>(), events);
-            var system = new WorldEventSystem(time, new LubanEventPool());
+            // E2-lite: no event is raised from the constructor any more, and this test
+            // is about the event TIMER - so auto-pause is off and the start grace is 0,
+            // letting the clock be driven purely by the explicit deltas below.
+            var time = new TimeSystem(new BufferPublisher<TimeSpeedChangedMessage>(), events,
+                                      new TimeRuntimeConfig { AutoPauseOnDecisionEvent = false });
+            var system = new WorldEventSystem(time, new LubanEventPool(),
+                                              new WorldEventRuntimeConfig { StartGraceSeconds = 0f });
 
-            // The constructor raises an initial event; it may itself be decision-requiring
-            // (which pauses), so normalise before measuring.
-            time.SetPaused(false);
             int baseline = events.Messages.Count;
+
+            system.Advance(0f); // grace 0 elapses -> the first event fires from the tick path
+            Assert.AreEqual(baseline + 1, events.Messages.Count,
+                            "the first event fires from the tick path, not from the constructor");
+            int afterFirst = events.Messages.Count;
 
             time.SetPaused(true);
             system.Advance(1000f);
-            Assert.AreEqual(baseline, events.Messages.Count, "paused: the event timer must not advance (no pile-up)");
+            Assert.AreEqual(afterFirst, events.Messages.Count, "paused: the event timer must not advance (no pile-up)");
 
             time.SetPaused(false);
             system.Advance(10f);
-            Assert.AreEqual(baseline, events.Messages.Count, "below the 15s interval: no event");
+            Assert.AreEqual(afterFirst, events.Messages.Count, "below the 15s interval: no event");
 
             system.Advance(6f); // 10 + 6 = 16s of simulation time
-            Assert.AreEqual(baseline + 1, events.Messages.Count,
+            Assert.AreEqual(afterFirst + 1, events.Messages.Count,
                             "the 15s interval elapsed on simulation time (and the paused 1000f was discarded)");
         }
 

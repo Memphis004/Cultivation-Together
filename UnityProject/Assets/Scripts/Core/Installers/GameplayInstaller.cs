@@ -27,6 +27,16 @@ namespace Xianxia.Sect.Installers
             // Camera framing: plain-C# config (task forbids ScriptableObject
             // here); sprite/PPU/grid values are measured at runtime.
             builder.Register<CameraFramingConfig>(Lifetime.Singleton).AsSelf();
+
+            // E1 — time/pause runtime config (plain-C# singleton, same convention
+            // as VisualRuntimeConfig). Injected into TimeSystem so
+            // AutoPauseOnDecisionEvent is a real config, not a hard-coded constant.
+            builder.RegisterInstance(TimeRuntimeConfig.Instance);
+
+            // E2-lite — world-event spawner config (same plain-C# singleton
+            // convention). Injected into WorldEventSystem so the start grace is a
+            // real config, not a hard-coded constant.
+            builder.RegisterInstance(WorldEventRuntimeConfig.Instance);
             builder.RegisterEntryPoint<DecisionLogger>(Lifetime.Singleton).AsSelf();
             builder.RegisterEntryPoint<WorldEventSystem>(Lifetime.Singleton).AsSelf();
 

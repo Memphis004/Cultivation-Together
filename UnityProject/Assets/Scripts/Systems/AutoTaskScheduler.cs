@@ -16,6 +16,8 @@ namespace Xianxia.Sect
         public string ApplyFailReason { get; set; } = string.Empty;
         /// <summary>Why the disciple was not eligible for evaluation at all.</summary>
         public string SkipReason { get; set; } = string.Empty;
+        /// <summary>P10C — the disciple's stamina when this pass ran (echoed for the log/tests).</summary>
+        public float Stamina { get; set; }
 
         public bool Skipped => Decision == null;
     }
@@ -30,7 +32,12 @@ namespace Xianxia.Sect
     /// (<see cref="ISectStateProvider.TryAutoAssignTask"/>), which re-checks ownership,
     /// Auto mode, availability and cooldown at commit time.
     ///
-    /// Scope (deliberate): no Stamina/Mood/Skills/Traits, no GOAP/BehaviorTree/personas.
+    /// P10C scope: stamina and skills now INFLUENCE the choice of an Auto NPC (a
+    /// recovery rule with hysteresis, plus a bounded per-category skill bonus) — both
+    /// decided in the pure scorer above. Deliberately still absent: Mood, traits,
+    /// hunger/health, GOAP/BehaviorTree/personas, and any productivity effect —
+    /// attributes never change yield, craft speed or the assignment gate, and a
+    /// Manual/Player/Viewer disciple is never evaluated here at all.
     /// </summary>
     public class AutoTaskScheduler : IStartable, ITickable
     {
@@ -64,7 +71,9 @@ namespace Xianxia.Sect
         /// <summary>Log the prototype balance once, so the values are visible rather than hidden.</summary>
         public void Start()
         {
-            Debug.Log("[AutoTaskScheduler] P9B utility AI weights: " + AutoTaskWeights.Describe()
+            Debug.Log("[AutoTaskScheduler] P9B/P10C utility AI weights: " + AutoTaskWeights.Describe()
+                + " | recovery: stamina ≤ " + DiscipleAttributesConfig.RecoveryThresholdLow.ToString("0")
+                + " → meditation, stay until " + DiscipleAttributesConfig.RecoveryThresholdHigh.ToString("0")
                 + " | targets raw " + AutoTaskTargets.DefaultRawResourceTarget
                 + "/crafted " + AutoTaskTargets.DefaultCraftedItemTarget
                 + " | interval " + EvaluationIntervalSeconds.ToString("0.#") + "s"
@@ -144,6 +153,8 @@ namespace Xianxia.Sect
             }
 
             string current = disciple.CurrentTask ?? string.Empty;
+            float stamina = StaminaOf(disciple);
+            outcome.Stamina = stamina;
 
             // Dwell bookkeeping. A change we did not make (e.g. a manual assignment)
             // restarts the dwell clock; the first evaluation is never dwell-gated so a
@@ -160,7 +171,8 @@ namespace Xianxia.Sect
 
             var workers = CountWorkers(state);
             var facts = BuildFacts(state, disciple, workers);
-            var decision = AutoTaskScoring.Decide(current, facts, dwell, MinimumDwellSeconds, ImprovementMargin);
+            var decision = AutoTaskScoring.Decide(current, facts, dwell, MinimumDwellSeconds,
+                                                  ImprovementMargin, stamina);
             outcome.Decision = decision;
 
             if (decision.ShouldChange && !string.IsNullOrEmpty(decision.SelectedTask))
@@ -229,6 +241,10 @@ namespace Xianxia.Sect
                     OtherWorkersOnTask = others,
                 };
 
+                // P10C — the disciple's own level in THIS candidate's category (0 when the
+                // category is unknown or there is no XP), so the skill bonus is per candidate.
+                fact.SkillLevel = SkillLevelFor(disciple, info.SkillCategory);
+
                 if (info.Kind == SectTaskKind.Gathering)
                 {
                     fact.ProducedResourceStock = RawStock(state, info.ProducesResource);
@@ -272,6 +288,27 @@ namespace Xianxia.Sect
             return map;
         }
 
+        /// <summary>
+        /// P10C — live stamina, or the healthy default when attributes are missing/non-finite.
+        /// Read-only: the scheduler never writes attributes (the P10B work tick owns that).
+        /// </summary>
+        private static float StaminaOf(DiscipleState disciple)
+        {
+            var attributes = disciple != null ? disciple.Attributes : null;
+            if (attributes == null) return DiscipleAttributesConfig.StaminaDefault;
+            float stamina = attributes.Stamina;
+            if (float.IsNaN(stamina) || float.IsInfinity(stamina)) return DiscipleAttributesConfig.StaminaDefault;
+            return stamina;
+        }
+
+        /// <summary>P10C — derived level in one skill category (null-safe; unknown category → 0).</summary>
+        private static int SkillLevelFor(DiscipleState disciple, string category)
+        {
+            if (disciple == null || string.IsNullOrEmpty(category)) return 0;
+            return DiscipleAttributes.SkillLevel(
+                DiscipleAttributes.GetSkillXp(disciple.Attributes, category));
+        }
+
         private static int RawStock(SectEconomyState state, string resource)
         {
             if (state == null || state.Stockpile == null || state.Stockpile.RawResources == null) return 0;
@@ -295,20 +332,29 @@ namespace Xianxia.Sect
             return total;
         }
 
-        /// <summary>One concise line per evaluation (never per frame): choice, whether it
-        /// was applied/rejected, the reason, and every candidate's score.</summary>
-        private static void LogEvaluation(string discipleId, AutoEvaluationOutcome outcome)
+        /// <summary>
+        /// P10C — one concise line per evaluation (never per frame, never a message): the
+        /// choice, applied/rejected, the evaluated STAMINA, the recovery decision, the
+        /// reason, and every candidate's score WITH its skill bonus. Pure string building
+        /// so the format is testable without capturing Unity logs;
+        /// <see cref="LogEvaluation"/> prints it on the EXISTING log channel (no second bus).
+        /// </summary>
+        public static string FormatEvaluation(string discipleId, AutoEvaluationOutcome outcome)
         {
-            var decision = outcome.Decision;
-            if (decision == null) return;
+            var decision = outcome != null ? outcome.Decision : null;
+            if (decision == null) return string.Empty;
 
-            var sb = new StringBuilder(160);
+            var sb = new StringBuilder(200);
             sb.Append("[AutoTaskScheduler] ").Append(discipleId).Append(" → ")
               .Append(string.IsNullOrEmpty(decision.SelectedTask) ? "(none)" : decision.SelectedTask);
 
             if (outcome.Applied && decision.ShouldChange) sb.Append(" [applied]");
             else if (decision.ShouldChange) sb.Append(" [rejected: ").Append(outcome.ApplyFailReason).Append(']');
             else sb.Append(" [kept]");
+
+            sb.Append(" | stamina ").Append(outcome.Stamina.ToString("0.0"))
+              .Append('/').Append(DiscipleAttributesConfig.StaminaMax.ToString("0"))
+              .Append(" | recovery: ").Append(RecoveryLabel(decision.Recovery));
 
             sb.Append(" | ").Append(decision.Reason);
             sb.Append(" | candidates: ");
@@ -323,10 +369,30 @@ namespace Xianxia.Sect
                     continue;
                 }
                 sb.Append(' ').Append(c.Total.ToString("0.00"));
+                sb.Append("(skill+").Append(c.SkillBonus.ToString("0.00")).Append(')');
                 if (c.IsFallback) sb.Append("(fallback)");
             }
 
-            Debug.Log(sb.ToString());
+            return sb.ToString();
+        }
+
+        /// <summary>P10C — the recovery decision in words (log/tests).</summary>
+        public static string RecoveryLabel(AutoRecoveryState recovery)
+        {
+            switch (recovery)
+            {
+                case AutoRecoveryState.EnteringMeditation: return "enter meditation";
+                case AutoRecoveryState.StayingToRecover: return "stay to recover";
+                case AutoRecoveryState.MeditationUnavailable: return "meditation unavailable";
+                default: return "normal";
+            }
+        }
+
+        private static void LogEvaluation(string discipleId, AutoEvaluationOutcome outcome)
+        {
+            var line = FormatEvaluation(discipleId, outcome);
+            if (line.Length == 0) return;
+            Debug.Log(line);
         }
     }
 }

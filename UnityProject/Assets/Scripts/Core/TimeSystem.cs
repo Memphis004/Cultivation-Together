@@ -18,10 +18,26 @@ namespace Xianxia.Sect
     // Simulation time is derived on demand by SimulationDelta, and game speed is applied
     // ONLY there — there is intentionally no per-frame hook a second speed multiply could
     // be added to later.
+    /// <summary>
+    /// E1 — explicit pause owners. A flags set, not one boolean: a decision pause
+    /// can never be mistaken for a player pause, and clearing one never clears the
+    /// other. SessionTransition is intentionally NOT defined yet (reserved for P12).
+    /// </summary>
+    [System.Flags]
+    public enum TimePauseReason
+    {
+        None = 0,
+        /// <summary>The player paused (TimeControl HUD / Space hotkey).</summary>
+        User = 1,
+        /// <summary>A decision-requiring world event is outstanding.</summary>
+        PendingDecision = 2,
+    }
+
     public class TimeSystem : IStartable
     {
         private readonly IPublisher<TimeSpeedChangedMessage> _speedPublisher;
         private readonly IPublisher<WorldEventTriggeredMessage> _worldEventPublisher;
+        private readonly TimeRuntimeConfig _config;
 
         /// <summary>Lowest supported simulation speed (1x).</summary>
         public const int MinSpeed = 1;
@@ -30,7 +46,7 @@ namespace Xianxia.Sect
 
         // Initialised to 1x (SetSpeed only publishes the UI-facing change message).
         private int _speed = 1;
-        private bool _paused;
+        private TimePauseReason _reasons = TimePauseReason.None;
 
         // Completed (and replaced with a fresh one) every time a world
         // event fires - see WaitForNextWorldEventAsync()/RaiseWorldEvent().
@@ -42,34 +58,167 @@ namespace Xianxia.Sect
         // instead of making a late caller wait for a completely new event.
         // Cleared once handed out - a second call with nothing new pending
         // goes back to waiting normally.
+        //
+        // NOTE (E2-lite): this cache is the BRIDGE's handoff and its semantics are
+        // deliberately unchanged (cleared on read). The authoritative pending
+        // decision below is a SEPARATE concern and is never cleared by a read.
         private AwaitWorldEventResponse _cachedPendingEvent;
+
+        // E2-lite — authoritative pending decision state (at most ONE at a time).
+        // Set when a decision-requiring event is raised, cleared when a valid
+        // decision is applied. The UI and the decision validator read THIS, so it
+        // does not depend on anyone having consumed the bridge cache.
+        private string _pendingEventId;
+        private string _pendingDescription;
+        private List<EventChoiceInfo> _pendingChoices = new List<EventChoiceInfo>();
 
         public TimeSystem(
             IPublisher<TimeSpeedChangedMessage> speedPublisher,
-            IPublisher<WorldEventTriggeredMessage> worldEventPublisher)
+            IPublisher<WorldEventTriggeredMessage> worldEventPublisher,
+            TimeRuntimeConfig config = null)
         {
             _speedPublisher = speedPublisher;
             _worldEventPublisher = worldEventPublisher;
+            _config = config ?? TimeRuntimeConfig.Instance;
         }
 
         public void Start()
         {
-            _speedPublisher.Publish(new TimeSpeedChangedMessage { Speed = _speed, Paused = _paused });
+            // Unconditional initial publish so any listener that subscribes after
+            // Start still gets one refresh cue (the HUD also reads state on bind).
+            PublishState();
         }
 
+        /// <summary>Adds a pause reason (idempotent). Publishes only on a real change.</summary>
+        public void Pause(TimePauseReason reason) => SetReason(reason, true);
+
+        /// <summary>Clears a pause reason. Never touches any other reason.</summary>
+        public void Resume(TimePauseReason reason) => SetReason(reason, false);
+
+        /// <summary>
+        /// Player "Play": clears BOTH User and PendingDecision. This is what the HUD
+        /// Play button / Space hotkey call, so the player can never be locked out by a
+        /// missing decision popup.
+        /// </summary>
+        public void ResumeByPlayer() => SetReasons(TimePauseReason.None);
+
+        /// <summary>Legacy single-flag API — maps to the User reason (not a decision pause).</summary>
         public void SetPaused(bool paused)
         {
-            _paused = paused;
-            _speedPublisher.Publish(new TimeSpeedChangedMessage { Speed = _speed, Paused = _paused });
+            if (paused) Pause(TimePauseReason.User);
+            else Resume(TimePauseReason.User);
         }
 
+        /// <summary>
+        /// E2-lite — the SINGLE decision-validation path, reused by the in-game UI
+        /// click (EventPopupPresenter) and by the bridge decision (DecisionLogger ->
+        /// DecisionExecutor). The decision is valid only when a decision is pending,
+        /// <paramref name="eventId"/> equals the pending event id, and
+        /// <paramref name="choiceId"/> is one of the pending choices. On success the
+        /// pending state is cleared, so a duplicate/stale/unknown decision can never
+        /// be applied twice. On any failure nothing changes, false is returned, and
+        /// <paramref name="reason"/> says why.
+        /// </summary>
+        public bool TryResolvePendingDecision(string eventId, string choiceId, out string reason)
+        {
+            if (!HasPendingDecision)
+            {
+                reason = "no decision event is pending";
+                return false;
+            }
+            if (eventId != _pendingEventId)
+            {
+                reason = $"eventId '{eventId}' is not the pending event ('{_pendingEventId}')";
+                return false;
+            }
+
+            bool knownChoice = false;
+            for (int i = 0; i < _pendingChoices.Count; i++)
+            {
+                var choice = _pendingChoices[i];
+                if (choice != null && choice.ChoiceId == choiceId)
+                {
+                    knownChoice = true;
+                    break;
+                }
+            }
+            if (!knownChoice)
+            {
+                reason = $"choiceId '{choiceId}' is not one of the pending choices";
+                return false;
+            }
+
+            ClearPendingDecision();
+            reason = null;
+            return true;
+        }
+
+        /// <summary>Clears the authoritative pending decision state (E2-lite).</summary>
+        public void ClearPendingDecision()
+        {
+            _pendingEventId = null;
+            _pendingDescription = null;
+            _pendingChoices = new List<EventChoiceInfo>();
+        }
+
+        /// <summary>Sets the simulation speed, validated to <see cref="MinSpeed"/>..<see cref="MaxSpeed"/>.</summary>
         public void SetSpeed(int speed)
         {
-            _speed = speed;
-            _speedPublisher.Publish(new TimeSpeedChangedMessage { Speed = _speed, Paused = _paused });
+            int clamped = ClampSpeed(speed);
+            if (clamped == _speed) return; // effective change only
+            _speed = clamped;
+            PublishState();
         }
 
-        public bool IsPaused => _paused;
+        /// <summary>True while ANY pause reason is active.</summary>
+        public bool IsPaused => _reasons != TimePauseReason.None;
+
+        /// <summary>True when the player has paused (User reason).</summary>
+        public bool IsUserPaused => HasReason(TimePauseReason.User);
+
+        /// <summary>True when a decision-requiring event is outstanding (the pause reason).</summary>
+        public bool IsPendingDecisionPaused => HasReason(TimePauseReason.PendingDecision);
+
+        // ---------- E2-lite: authoritative pending-decision state ----------
+        // Separate from IsPendingDecisionPaused: the player can clear the pause
+        // (ResumeByPlayer) while the event is still pending and undecided.
+
+        /// <summary>True while a decision-requiring event is outstanding and undecided.</summary>
+        public bool HasPendingDecision => _pendingEventId != null;
+
+        /// <summary>Authoritative id of the pending decision event, or null when none.</summary>
+        public string PendingEventId => _pendingEventId;
+
+        /// <summary>Authoritative description of the pending decision event, or null.</summary>
+        public string PendingDescription => _pendingDescription;
+
+        /// <summary>Authoritative choices of the pending decision event (never null).</summary>
+        public IReadOnlyList<EventChoiceInfo> PendingChoices => _pendingChoices;
+
+        /// <summary>Current (validated) simulation speed.</summary>
+        public int Speed => _speed;
+
+        private bool HasReason(TimePauseReason reason) => (_reasons & reason) == reason;
+
+        private void SetReason(TimePauseReason reason, bool active)
+        {
+            if (reason == TimePauseReason.None) return;
+            SetReasons(active ? (_reasons | reason) : (_reasons & ~reason));
+        }
+
+        private void SetReasons(TimePauseReason next)
+        {
+            if (next == _reasons) return; // no effective change - no message
+            _reasons = next;
+            PublishState();
+        }
+
+        // Refresh trigger only (Paused = IsPaused). The HUD reads reasons/speed
+        // directly from TimeSystem; it never infers them from this message.
+        private void PublishState()
+        {
+            _speedPublisher.Publish(new TimeSpeedChangedMessage { Speed = _speed, Paused = IsPaused });
+        }
 
         /// <summary>
         /// Simulation delta for gameplay progression, in seconds — the ONLY place game
@@ -86,7 +235,7 @@ namespace Xianxia.Sect
         /// </remarks>
         public float SimulationDelta
         {
-            get { return ComputeSimulationDelta(_paused, _speed, Time.deltaTime); }
+            get { return ComputeSimulationDelta(IsPaused, _speed, Time.deltaTime); }
         }
 
         /// <summary>
@@ -110,10 +259,11 @@ namespace Xianxia.Sect
         // tool call blocks on this until the next RaiseWorldEvent(), unless
         // there's already a cached one waiting (see _cachedPendingEvent).
         //
-        // Remember: while _paused is true (a decision-requiring event is
-        // outstanding), RaiseWorldEvent never fires again - WorldEventSystem
-        // checks IsPaused and skips. Call execute_decision first to unpause,
-        // or this will time out waiting for an event that can't happen yet.
+        // Remember: while a pause reason is active (e.g. a decision-requiring
+        // event is outstanding), RaiseWorldEvent never fires again -
+        // WorldEventSystem checks IsPaused and skips. Resolve the decision (or
+        // ResumeByPlayer) first, or this will time out waiting for an event that
+        // can't happen yet.
         public UniTask<AwaitWorldEventResponse> WaitForNextWorldEventAsync()
         {
             if (_cachedPendingEvent != null)
@@ -141,7 +291,20 @@ namespace Xianxia.Sect
         {
             Debug.Log($"[TimeSystem] World event raised: {eventId} (requiresDecision={requiresDecision})");
 
-            if (requiresDecision) SetPaused(true);
+            if (requiresDecision)
+            {
+                // E2-lite: store the authoritative pending state (a single slot).
+                // The pause reason is added only for a NEWLY pending event - if one
+                // is already pending (e.g. the player pressed Play but has not decided
+                // yet), raising further events must NOT re-add the pause.
+                bool alreadyPending = HasPendingDecision;
+                _pendingEventId = eventId;
+                _pendingDescription = description;
+                _pendingChoices = choices ?? new List<EventChoiceInfo>();
+
+                if (!alreadyPending && _config.AutoPauseOnDecisionEvent)
+                    Pause(TimePauseReason.PendingDecision);
+            }
 
             _worldEventPublisher.Publish(new WorldEventTriggeredMessage
             {

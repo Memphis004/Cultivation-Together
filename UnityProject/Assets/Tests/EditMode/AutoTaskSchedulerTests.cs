@@ -325,6 +325,117 @@ namespace Xianxia.Sect.Tests
             StringAssert.Contains("unknown disciple", outcome.SkipReason);
         }
 
+        // ---- P10C: stamina recovery + skills (Auto NPCs only) ----
+
+        private void SetStamina(string id, float stamina) => Find(id).Attributes.Stamina = stamina;
+
+        [Test]
+        public void ExhaustedAutoNpc_RecoversByMeditating_InsteadOfWorking()
+        {
+            MakeOreScarce();
+            SetAuto("d000");
+            Find("d000").CurrentTask = "gathering_wood";
+            SetStamina("d000", DiscipleAttributesConfig.RecoveryThresholdLow);
+
+            var outcome = _scheduler.EvaluateDisciple("d000");
+
+            Assert.AreEqual("meditation", TaskOf("d000"), "an exhausted Auto NPC rests instead of working");
+            Assert.IsTrue(outcome.Applied);
+            Assert.AreEqual(AutoRecoveryState.EnteringMeditation, outcome.Decision.Recovery);
+            Assert.AreEqual(1, _taskChanged.Messages.Count);
+            Assert.AreEqual(DiscipleControlMode.Auto, Find("d000").ControlMode, "recovery must not drop Auto");
+        }
+
+        [Test]
+        public void RecoveringAutoNpc_StaysOnMeditationUntilRecovered()
+        {
+            MakeOreScarce();
+            SetAuto("d000");
+            Find("d000").CurrentTask = "meditation";
+            SetStamina("d000", 40f);
+
+            var staying = _scheduler.EvaluateDisciple("d000");
+            Assert.IsFalse(staying.Decision.ShouldChange, "between low and high the disciple keeps resting");
+            Assert.AreEqual(AutoRecoveryState.StayingToRecover, staying.Decision.Recovery);
+            Assert.AreEqual("meditation", TaskOf("d000"));
+            Assert.AreEqual(0, _taskChanged.Messages.Count, "a no-op decision publishes nothing");
+
+            SetStamina("d000", DiscipleAttributesConfig.RecoveryThresholdHigh);
+            Assert.IsTrue(_scheduler.EvaluateDisciple("d000").Decision.ShouldChange,
+                          "at the high threshold the disciple goes back to work");
+            Assert.AreEqual("gathering_ore", TaskOf("d000"));
+        }
+
+        [Test]
+        public void LowStaminaManualAndViewerDisciples_AreNeverReassigned()
+        {
+            MakeOreScarce();
+            Find("d001").CurrentTask = "gathering_wood";
+            SetStamina("d001", 0f); // Manual (default) and completely exhausted
+
+            _scheduler.Advance(1000f); // several evaluations' worth of time, but it is not eligible
+            Assert.AreEqual("gathering_wood", TaskOf("d001"),
+                            "a Manual disciple is never reassigned, however tired");
+
+            string reason;
+            Assert.IsTrue(_provider.TrySetDiscipleOwner("d001", DiscipleOwnerType.Viewer, "viewer_test_01", out reason), reason);
+            var skipped = _scheduler.EvaluateDisciple("d001");
+
+            Assert.IsTrue(skipped.Skipped);
+            Assert.AreEqual("gathering_wood", TaskOf("d001"),
+                            "a Viewer disciple is never reassigned, however tired");
+            Assert.AreEqual(0, _taskChanged.Messages.Count);
+        }
+
+        [Test]
+        public void RecoveryCooldownRejection_LeavesTheTaskAndDoesNotLoop()
+        {
+            _provider.TaskChangeCooldownSeconds = 12f;
+            MakeOreScarce();
+            SetAuto("d000");
+
+            Assert.IsTrue(_scheduler.EvaluateDisciple("d000").Applied);
+            Assert.AreEqual("gathering_ore", TaskOf("d000"));
+
+            // The disciple is exhausted: the brain wants meditation, the 12s cooldown refuses.
+            SetStamina("d000", 5f);
+            _taskChanged.Messages.Clear();
+
+            var blocked = _scheduler.EvaluateDisciple("d000");
+            Assert.IsFalse(blocked.Applied);
+            StringAssert.Contains("cooldown", blocked.ApplyFailReason);
+            Assert.AreEqual(AutoRecoveryState.EnteringMeditation, blocked.Decision.Recovery);
+            Assert.AreEqual("gathering_ore", TaskOf("d000"), "a rejected recovery switch leaves the task alone");
+            Assert.AreEqual(0, _taskChanged.Messages.Count);
+
+            // ...and it waits for the next scheduled evaluation rather than retrying in a loop.
+            Assert.IsFalse(_scheduler.EvaluateDisciple("d000").Applied);
+            Assert.AreEqual("gathering_ore", TaskOf("d000"));
+            Assert.AreEqual(0, _taskChanged.Messages.Count);
+        }
+
+        [Test]
+        public void EvaluationLogLine_CarriesStaminaRecoveryAndPerCandidateSkillBonus()
+        {
+            MakeOreScarce();
+
+            // d000 (no skill XP): exhausted → the line shows stamina + the recovery decision.
+            SetAuto("d000");
+            Find("d000").CurrentTask = "gathering_wood";
+            SetStamina("d000", 12f);
+            var recovering = AutoTaskScheduler.FormatEvaluation("d000", _scheduler.EvaluateDisciple("d000"));
+            StringAssert.Contains("stamina 12.0", recovering);
+            StringAssert.Contains("recovery: enter meditation", recovering);
+            StringAssert.Contains("skill+0.00", recovering);
+
+            // d001 (200 gathering XP → level 2): its gathering candidates carry +0.04.
+            SetAuto("d001");
+            SetStamina("d001", 100f);
+            var skilled = AutoTaskScheduler.FormatEvaluation("d001", _scheduler.EvaluateDisciple("d001"));
+            StringAssert.Contains("recovery: normal", skilled);
+            StringAssert.Contains("skill+0.04", skilled, "the skill bonus is visible per candidate");
+        }
+
         private void MakeOreScarce()
         {
             SetStock("herb", 200);

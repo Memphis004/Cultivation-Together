@@ -13,9 +13,6 @@ MonoBehaviour:
   m_Name: MainPanelCatalog
   m_EditorClassIdentifier: Xianxia.Sect.Runtime::Xianxia.Sect.UI.UIPanelCatalog
   panels:
-  - PanelId: EventPopup
-    Prefab: {fileID: 2283175409436536035, guid: b829aa7043c31db498f9e8086c254ec0, type: 3}
-    PresenterKind: 0
   - PanelId: WalletHud
     Prefab: {fileID: 2144103126168093755, guid: b65514388194efa4899e1b87d81cd5d5, type: 3}
     PresenterKind: 1
@@ -40,3 +37,12 @@ MonoBehaviour:
   - PanelId: DiscipleList
     Prefab: {fileID: 8951444491150631645, guid: 223fa99a1332864408120958a1dec92d, type: 3}
     PresenterKind: 4
+  - PanelId: EventPopup
+    Prefab: {fileID: 2283175409436536035, guid: b829aa7043c31db498f9e8086c254ec0, type: 3}
+    PresenterKind: 0
+  - PanelId: EventChip
+    Prefab: {fileID: 3970840088991218588, guid: 5cd509cd584797649a1b1ebc54dc0af0, type: 3}
+    PresenterKind: 11
+  - PanelId: TimeControl
+    Prefab: {fileID: 1754927326654791218, guid: 78ef5d4b9009df342a100f2c7f50af5b, type: 3}
+    PresenterKind: 10

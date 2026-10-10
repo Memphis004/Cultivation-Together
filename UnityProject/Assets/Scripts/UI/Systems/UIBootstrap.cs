@@ -46,6 +46,7 @@ namespace Xianxia.Sect.UI
             _uiService.Open("WalletHud");
             _uiService.Open("LogWindow");
             _uiService.Open("BottomMenu");
+            OpenTimeControl();
             // _uiService.Open("AvatarCustomization", new AvatarCustomizationPayload("d001"));
 
             WireResourcePopup();
@@ -259,6 +260,25 @@ namespace Xianxia.Sect.UI
         }
 
         private bool _taskAssignmentOpen;
+
+        /// <summary>
+        /// E1 — time-control bar (pause/1x/2x/3x — E1.1 removed the Play button). Persistent, opened here like
+        /// the other always-on panels. Wrapped like BuildingMenu so a project that has
+        /// not run the generator yet gets a clear instruction instead of a crash.
+        /// </summary>
+        private void OpenTimeControl()
+        {
+            try
+            {
+                _uiService.Open("TimeControl");
+            }
+            catch (System.Exception ex)
+            {
+                Debug.LogWarning("[UIBootstrap] TimeControl panel is not in the catalog yet - " +
+                                 "run menu: Xianxia → Generate TimeControl Panel (once, in edit mode). " +
+                                 "(" + ex.Message + ")");
+            }
+        }
 
         private void OnSceneLoaded(SceneLoadedMessage msg)
         {

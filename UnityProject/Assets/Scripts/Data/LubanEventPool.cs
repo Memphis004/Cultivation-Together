@@ -41,14 +41,44 @@ namespace Xianxia.Sect
             return JSON.Parse(textAsset.text);
         }
 
-        public cfg.game.EventDef GetRandomEvent()
+        /// <summary>
+        /// Weighted random event. E2-lite: when <paramref name="excludeDecisionEvents"/>
+        /// is true (a decision is already pending) the pick drops decision events, so
+        /// the spawner never stacks a second decision event. Returns null when nothing
+        /// is eligible (the whole table is empty, or every candidate was filtered out)
+        /// - the caller then skips this interval (no loop, no spin).
+        /// </summary>
+        public cfg.game.EventDef GetRandomEvent(bool excludeDecisionEvents = false)
         {
-            var events = _tables.TbEventDef.DataList;
+            return GetRandomEvent(excludeDecisionEvents
+                ? (System.Func<cfg.game.EventDef, bool>)(e => !e.RequiresDecision)
+                : null);
+        }
+
+        /// <summary>
+        /// Weighted random event from the candidates that satisfy <paramref name="filter"/>
+        /// (null = no filter). Returns null when nothing is eligible.
+        /// </summary>
+        public cfg.game.EventDef GetRandomEvent(System.Func<cfg.game.EventDef, bool> filter)
+        {
+            IReadOnlyList<cfg.game.EventDef> events = _tables.TbEventDef.DataList;
             if (events.Count == 0)
             {
                 Debug.LogWarning("[LubanEventPool] TbEventDef is empty - check EventDef.csv has rows and gen.sh ran successfully.");
                 return null;
             }
+
+            if (filter != null)
+            {
+                events = events.Where(filter).ToList();
+                if (events.Count == 0)
+                {
+                    Debug.Log("[LubanEventPool] No event is eligible for the current filter - " +
+                              "skipping this interval.");
+                    return null;
+                }
+            }
+
             var totalWeight = events.Sum(e => Mathf.Max(0f, e.Weight));
             if (totalWeight <= 0f)
             {

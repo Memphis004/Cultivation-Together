@@ -74,6 +74,30 @@ namespace Xianxia.EditorTools
                         WriteResult("error:" + ex.Message);
                     }
                     break;
+                case "gen_time_control":
+                    try
+                    {
+                        // E1.1 — no overwrite dialog on this path (nothing can answer it).
+                        Xianxia.Sect.EditorTools.TimeControlPanelGenerator.GenerateNonInteractive();
+                        WriteResult("generated_time_control");
+                    }
+                    catch (System.Exception ex)
+                    {
+                        WriteResult("error:" + ex.Message);
+                    }
+                    break;
+                case "gen_event_popup":
+                    try
+                    {
+                        // E3 — no overwrite dialog on this path (nothing can answer it).
+                        Xianxia.Sect.EditorTools.EventPopupPanelGenerator.GenerateNonInteractive();
+                        WriteResult("generated_event_popup");
+                    }
+                    catch (System.Exception ex)
+                    {
+                        WriteResult("error:" + ex.Message);
+                    }
+                    break;
                 case "import_disciple_list_art":
                     try
                     {

@@ -13,8 +13,14 @@ namespace Xianxia.Sect
     // the only thing that gathers facts and applies the answer through the
     // P9A entry point (ISectStateProvider.TryAutoAssignTask).
     //
-    // MVP scope (deliberate): NO Stamina / Mood / Skills / Traits and no new
-    // data pipeline. Every disciple is scored with the same rules.
+    // P10C scope (deliberate): Stamina and skills INPUT here and nowhere else.
+    //   - Stamina drives ONE recovery rule with hysteresis (low 25 → choose
+    //     meditation, stay until high 80) using the P10A tuning constants.
+    //   - A skill matching the candidate's category adds a small bounded bonus.
+    // Still NO Mood / Traits, no hunger/health, no productivity effect: attributes
+    // never change yield, craft speed or the assignment gate, and the manual path
+    // is untouched. The scheduler (AutoTaskScheduler) is the only thing that
+    // gathers facts and applies the answer.
     // =========================================================================
 
     /// <summary>What a task actually does, read from the SAME tables the assignment
@@ -44,6 +50,13 @@ namespace Xianxia.Sect
         public int ProducesItemGrade { get; set; }
         /// <summary>Crafting only — raw-resource inputs consumed per craft.</summary>
         public IReadOnlyDictionary<string, int> InputCosts { get; set; }
+
+        /// <summary>
+        /// P10C — the skill category this task exercises, taken from the SAME table the
+        /// work-attribute tick awards XP from (gathering, or the recipe's own category;
+        /// null/empty for meditation, which exercises no skill). No second mapping.
+        /// </summary>
+        public string SkillCategory { get; set; } = string.Empty;
     }
 
     /// <summary>
@@ -71,18 +84,46 @@ namespace Xianxia.Sect
         public int ProducedItemStock { get; set; }
         /// <summary>Raw resources on hand, used for crafting input readiness. May be null.</summary>
         public IReadOnlyDictionary<string, int> InputsOnHand { get; set; }
+
+        /// <summary>
+        /// P10C — the evaluated disciple's derived level in <see cref="SectTaskInfo.SkillCategory"/>
+        /// (0 when the category is unknown or the disciple has no XP). Adds the bounded
+        /// skill bonus; the economic shortage stays the dominant term.
+        /// </summary>
+        public int SkillLevel { get; set; }
     }
 
     /// <summary>Scored candidate plus a human-readable breakdown for the debug log.</summary>
     public sealed class AutoTaskScore
     {
         public string TaskId { get; set; } = string.Empty;
+        /// <summary>What the candidate task does (meditation is found by this, not by a name).</summary>
+        public SectTaskKind Kind { get; set; }
         public bool IsAvailable { get; set; }
         /// <summary>True for meditation — a task that produces nothing and only wins
         /// when nothing else is worth doing.</summary>
         public bool IsFallback { get; set; }
         public float Total { get; set; }
+        /// <summary>P10C — the bounded skill bonus included in <see cref="Total"/> (0 for
+        /// meditation, an unknown category, or no XP). Logged so it is never hidden.</summary>
+        public float SkillBonus { get; set; }
         public string Explanation { get; set; } = string.Empty;
+    }
+
+    /// <summary>
+    /// P10C — the recovery decision of one evaluation, so the log (and tests) can see
+    /// WHY a disciple rested or worked. <see cref="Normal"/> means recovery did not
+    /// apply and the ordinary scoring decided.
+    /// </summary>
+    public enum AutoRecoveryState
+    {
+        Normal = 0,
+        /// <summary>Stamina at/below the LOW threshold — meditation chosen.</summary>
+        EnteringMeditation = 1,
+        /// <summary>Already meditating below the HIGH threshold — staying (no flapping).</summary>
+        StayingToRecover = 2,
+        /// <summary>Recovery was needed but no meditation candidate is available.</summary>
+        MeditationUnavailable = 3,
     }
 
     /// <summary>Outcome of one decision pass: what to do, why, and every candidate's score.</summary>
@@ -93,6 +134,10 @@ namespace Xianxia.Sect
         /// <summary>The task to switch to, or the (kept) current task when ShouldChange is false.</summary>
         public string SelectedTask { get; set; } = string.Empty;
         public string Reason { get; set; } = string.Empty;
+        /// <summary>P10C — stamina this evaluation was made with (echoed for the log).</summary>
+        public float Stamina { get; set; }
+        /// <summary>P10C — what the recovery rule decided (see <see cref="AutoRecoveryState"/>).</summary>
+        public AutoRecoveryState Recovery { get; set; }
         public IReadOnlyList<AutoTaskScore> Candidates { get; set; } = Array.Empty<AutoTaskScore>();
     }
 
@@ -121,6 +166,16 @@ namespace Xianxia.Sect
         /// <summary>Meditation baseline — only beats tasks that score below zero.</summary>
         public const float MeditationScore = 0f;
 
+        /// <summary>
+        /// P10C — prototype skill bonus: +this per derived level on the candidate whose
+        /// category matches the disciple's skill. Bounded by <see cref="SkillBonusMax"/>,
+        /// which is well below <see cref="ShortageWeight"/> so an economic shortage can
+        /// never be outvoted by skill (no productivity effect either — score only).
+        /// </summary>
+        public const float SkillBonusPerLevel = 0.02f;
+        /// <summary>P10C — ceiling on the skill bonus (10 levels' worth).</summary>
+        public const float SkillBonusMax = 0.20f;
+
         /// <summary>Human-readable summary, logged once at startup so the prototype
         /// weights are visible rather than hidden.</summary>
         public static string Describe()
@@ -130,7 +185,9 @@ namespace Xianxia.Sect
                  + ", inputReadiness×" + InputReadinessWeight.ToString("0.00")
                  + ", crowding−" + CrowdingPenaltyPerWorker.ToString("0.00") + "/worker"
                  + ", rateNormalizer=" + EffectiveRateForNormalization.ToString("0.00")
-                 + ", meditation=" + MeditationScore.ToString("0.00") + " (fallback)";
+                 + ", meditation=" + MeditationScore.ToString("0.00") + " (fallback)"
+                 + ", skillBonus=" + SkillBonusPerLevel.ToString("0.00") + "/level (max "
+                 + SkillBonusMax.ToString("0.00") + ")";
         }
     }
 
@@ -172,6 +229,7 @@ namespace Xianxia.Sect
             }
 
             score.TaskId = facts.Info.TaskId;
+            score.Kind = facts.Info.Kind;
             score.IsAvailable = facts.IsAvailable;
             if (!facts.IsAvailable)
             {
@@ -189,11 +247,14 @@ namespace Xianxia.Sect
                     int target = AutoTaskTargets.ForRawResource(facts.Info.ProducesResource);
                     float shortage = Shortage(facts.ProducedResourceStock, target);
                     float production = Clamp01(facts.Info.UnitsPerSecond / AutoTaskWeights.EffectiveRateForNormalization);
+                    score.SkillBonus = SkillBonus(facts.SkillLevel);
                     score.Total = AutoTaskWeights.ShortageWeight * shortage
                                 + AutoTaskWeights.ProductionWeight * production
+                                + score.SkillBonus
                                 - AutoTaskWeights.CrowdingPenaltyPerWorker * otherWorkers;
                     score.Explanation = "shortage " + shortage.ToString("0.00")
                         + " + production " + production.ToString("0.00")
+                        + " + skill " + score.SkillBonus.ToString("0.00")
                         + " - crowd " + otherWorkers;
                     break;
                 }
@@ -203,17 +264,22 @@ namespace Xianxia.Sect
                     int target = AutoTaskTargets.ForCraftedItem(facts.Info.ProducesItem);
                     float shortage = Shortage(facts.ProducedItemStock, target);
                     float readiness = InputReadiness(facts);
+                    score.SkillBonus = SkillBonus(facts.SkillLevel);
                     score.Total = AutoTaskWeights.ShortageWeight * shortage
                                 + AutoTaskWeights.InputReadinessWeight * readiness
+                                + score.SkillBonus
                                 - AutoTaskWeights.CrowdingPenaltyPerWorker * otherWorkers;
                     score.Explanation = "itemShortage " + shortage.ToString("0.00")
                         + " + inputReadiness " + readiness.ToString("0.00")
+                        + " + skill " + score.SkillBonus.ToString("0.00")
                         + " - crowd " + otherWorkers;
                     break;
                 }
 
-                default: // Meditation — produces nothing; a safe fallback, never crowded.
+                default: // Meditation — produces nothing; a safe fallback, never crowded and
+                     // never skill-bonused (it exercises no category).
                     score.IsFallback = true;
+                    score.SkillBonus = 0f;
                     score.Total = AutoTaskWeights.MeditationScore;
                     score.Explanation = "fallback (produces nothing)";
                     break;
@@ -231,18 +297,25 @@ namespace Xianxia.Sect
         /// for at least <paramref name="minimumDwellSeconds"/>. When the current task is
         /// unavailable, both are skipped (re-evaluate immediately) — the caller still
         /// re-validates ownership/mode/cooldown before committing.
+        ///
+        /// P10C: <paramref name="stamina"/> drives the recovery rule first (see
+        /// <see cref="AutoRecoveryState"/>). It is one plain number — this stays a pure
+        /// function with no Unity, no time and no state access, so it is unit-testable,
+        /// and it never mutates anything (the scheduler applies the answer).
         /// </summary>
         public static AutoTaskDecision Decide(
             string currentTask,
             IReadOnlyList<AutoTaskFacts> facts,
             float dwellSeconds,
             float minimumDwellSeconds,
-            float improvementMargin)
+            float improvementMargin,
+            float stamina = DiscipleAttributesConfig.StaminaMax)
         {
             var decision = new AutoTaskDecision
             {
                 CurrentTask = currentTask ?? string.Empty,
                 SelectedTask = currentTask ?? string.Empty,
+                Stamina = stamina,
             };
 
             var scores = new List<AutoTaskScore>(facts != null ? facts.Count : 0);
@@ -262,9 +335,57 @@ namespace Xianxia.Sect
 
             if (available.Count == 0)
             {
+                // No meditation candidate exists/available either, so recovery cannot run.
                 decision.Reason = "no candidate task is available";
                 return decision;
             }
+
+            // ---- P10C: recovery (stamina) with hysteresis, BEFORE dwell/margin ----
+            // The disciple's own CurrentTask IS the memory — no "recovering" flag is stored.
+            //   stamina ≤ LOW (25)      → choose meditation, if available
+            //   on meditation < HIGH    → stay (this is what stops 25↔80 flapping)
+            // Recovery overrides the dwell/improvement-margin guards on purpose: an
+            // exhausted disciple must be allowed to rest even inside the dwell window.
+            // The ownership/Auto gate, building gate and the provider's 12s cooldown
+            // remain the only entry guards — a cooldown rejection waits for the next
+            // scheduled evaluation (no retry loop here).
+            AutoTaskScore meditation = null;
+            for (int i = 0; i < scores.Count; i++)
+            {
+                if (scores[i].Kind == SectTaskKind.Meditation)
+                {
+                    meditation = scores[i];
+                    break;
+                }
+            }
+
+            bool meditationAvailable = meditation != null && meditation.IsAvailable;
+            bool currentIsMeditation = meditation != null && !string.IsNullOrEmpty(meditation.TaskId)
+                                       && decision.CurrentTask == meditation.TaskId;
+            bool staminaAtOrBelowLow = stamina <= DiscipleAttributesConfig.RecoveryThresholdLow;
+
+            if (currentIsMeditation && meditationAvailable
+                && stamina < DiscipleAttributesConfig.RecoveryThresholdHigh)
+            {
+                decision.Recovery = AutoRecoveryState.StayingToRecover;
+                decision.Reason = "recovering: stamina " + stamina.ToString("0.0")
+                    + " below high " + DiscipleAttributesConfig.RecoveryThresholdHigh.ToString("0") 
+                    + " — staying on '" + decision.CurrentTask + "'";
+                return decision;
+            }
+
+            if (staminaAtOrBelowLow && meditationAvailable)
+            {
+                decision.Recovery = AutoRecoveryState.EnteringMeditation;
+                decision.SelectedTask = meditation.TaskId;
+                decision.ShouldChange = meditation.TaskId != decision.CurrentTask;
+                decision.Reason = "recovering: stamina " + stamina.ToString("0.0")
+                    + " at/below low " + DiscipleAttributesConfig.RecoveryThresholdLow.ToString("0")
+                    + " — choosing '" + meditation.TaskId + "'";
+                return decision;
+            }
+
+            if (staminaAtOrBelowLow) decision.Recovery = AutoRecoveryState.MeditationUnavailable;
 
             bool currentAvailable = current != null && current.IsAvailable;
 
@@ -348,6 +469,18 @@ namespace Xianxia.Sect
             }
 
             return best;
+        }
+
+        /// <summary>
+        /// P10C — bounded skill bonus: +SkillBonusPerLevel per derived level, capped at
+        /// SkillBonusMax. Deliberately smaller than a one-point swing in shortage, so a
+        /// skill can nudge a tie or a near-tie and never overrule the economy.
+        /// </summary>
+        private static float SkillBonus(int skillLevel)
+        {
+            if (skillLevel <= 0) return 0f;
+            float bonus = skillLevel * AutoTaskWeights.SkillBonusPerLevel;
+            return bonus > AutoTaskWeights.SkillBonusMax ? AutoTaskWeights.SkillBonusMax : bonus;
         }
 
         /// <summary>0..1 — how far below target the stock is.</summary>

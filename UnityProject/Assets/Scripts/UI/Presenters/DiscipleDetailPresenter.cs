@@ -39,6 +39,8 @@ namespace Xianxia.Sect.UI
             View.CloseClicked += OnCloseClicked;
             View.RailItemClicked += SwitchDisciple;
             View.TabClicked += SwitchTab;
+            // P10C — the view ticks at most ~4×/s on unscaled time, only while visible.
+            View.RefreshTick += OnAttributeRefresh;
         }
 
         public override void OnOpen(object args)
@@ -162,6 +164,33 @@ namespace Xianxia.Sect.UI
             }
         }
 
+        /// <summary>
+        /// P10C — the panel's live attribute refresh (≤4/s, unscaled, only while open).
+        /// Only the ข้อมูล tab owns live attributes; the สเตตัส (radar) tab stays the
+        /// untouched placeholder. Re-binding through the tab presenter keeps ONE bind
+        /// path (no duplicated formatting) and writes text only — never a message, so an
+        /// attribute tick cannot wake up the rest of the game.
+        /// </summary>
+        private void OnAttributeRefresh()
+        {
+            if (_currentTab != DiscipleTab.Info) return;
+
+            IDiscipleTabPresenter presenter;
+            if (!_tabs.TryGetValue(DiscipleTab.Info, out presenter)) return;
+
+            var d = FindCurrentDisciple();
+            if (d == null) return;
+
+            presenter.Show(d);
+        }
+
+        private DiscipleState FindCurrentDisciple()
+        {
+            if (string.IsNullOrEmpty(_currentDiscipleId)) return null;
+            return _stateProvider.BuildSectEconomyState()?.Disciples?
+                .Find(x => x != null && x.DiscipleId == _currentDiscipleId);
+        }
+
         private void OnCloseClicked()
         {
             View.Hide();
@@ -172,6 +201,7 @@ namespace Xianxia.Sect.UI
             View.CloseClicked -= OnCloseClicked;
             View.RailItemClicked -= SwitchDisciple;
             View.TabClicked -= SwitchTab;
+            View.RefreshTick -= OnAttributeRefresh; // P10C — no refresh after the panel is gone
         }
     }
 }

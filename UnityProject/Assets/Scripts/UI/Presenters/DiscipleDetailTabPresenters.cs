@@ -19,6 +19,7 @@ namespace Xianxia.Sect.UI
 
     /// <summary>
     /// Tab ข้อมูล: bind ชื่อ/rank/task/wallet จริง (ย้ายมาจาก view เดิม)
+    /// + P10C — stamina (bar + เลข) และ level ของสามหมวดทักษะ ("Lv n · XP x")
     /// + placeholder note "ระบบสายบำเพ็ญ — ยังไม่มีข้อมูล"
     /// (คู่แทร็กบำเพ็ญ / CultivationTrack ไม่มีใน state — backlog แยกงาน)
     /// </summary>
@@ -40,7 +41,33 @@ namespace Xianxia.Sect.UI
                 string.IsNullOrEmpty(d.CurrentTask) ? "—" : d.CurrentTask,
                 "หินวิญญาณ " + (d.Wallet?.SpiritStones ?? 0) +
                 " · อุทิศ " + (d.Wallet?.Contribution ?? 0));
+            ShowAttributes(d);
             // TODO(backlog): คู่แทร็กบำเพ็ญ (CultivationTrack) เมื่อมี data model จริง
+        }
+
+        /// <summary>
+        /// P10C — stamina + the three skill levels, read through the SAME P10A helpers the
+        /// rules use (no second level formula, no cached copy). Called on open/switch and
+        /// on the panel's ≤4/s tick while it is open; it only writes text, never a message.
+        /// Attributes that are missing read as the healthy default / 0 XP.
+        /// </summary>
+        public void ShowAttributes(DiscipleState d)
+        {
+            if (d == null) return;
+            var attributes = d.Attributes;
+
+            _view.SetStamina(attributes != null ? attributes.Stamina : DiscipleAttributesConfig.StaminaDefault);
+            _view.SetSkills(
+                SkillLabel(attributes, DiscipleAttributesConfig.CategoryGathering),
+                SkillLabel(attributes, DiscipleAttributesConfig.CategoryAlchemy),
+                SkillLabel(attributes, DiscipleAttributesConfig.CategoryForging));
+        }
+
+        /// <summary>"Lv n · XP x" — level derived by the shared P10A helper, never recomputed here.</summary>
+        private static string SkillLabel(DiscipleAttributes attributes, string category)
+        {
+            float xp = DiscipleAttributes.GetSkillXp(attributes, category);
+            return "Lv " + DiscipleAttributes.SkillLevel(xp) + " · XP " + Mathf.RoundToInt(xp);
         }
 
         public void Hide() { }

@@ -1,11 +1,11 @@
 # Cultivation-Together Context Pack
 
 - Repository: Memphis004/Cultivation-Together
-- Commit: 01e0d80
+- Commit: 6093e1d
 - Branch: main
-- Generated: 2026-10-09
-- Uncommitted changes in working tree: 33 file(s) (ไฟล์ที่แนบมาอ่านจาก working tree ไม่ใช่จาก commit — ถ้า > 0 อาจต่างจาก commit)
-- Files after .aiignore filter: 2036
+- Generated: 2026-10-10
+- Uncommitted changes in working tree: 81 file(s) (ไฟล์ที่แนบมาอ่านจาก working tree ไม่ใช่จาก commit — ถ้า > 0 อาจต่างจาก commit)
+- Files after .aiignore filter: 2040
 
 ## Ground Rules (สำคัญมาก — บังคับ AI)
 
@@ -49,10 +49,12 @@
 (ตัด `Gen/`, `Tests/`, `Editor/`, `Spikes/` ออก — ถ้าต้องการให้ขอผ่าน need_files)
 
 - `McpBridge/Program.cs`: static class SectQueryTools, static class SectActionTools
+- `McpBridge/Shared/DiscipleAttributes.cs`: static class DiscipleAttributesConfig, class DiscipleAttributes
 - `McpBridge/Shared/GameMessages.cs`: class DiscipleRecruitedMessage, class DiscipleRankChangedMessage, class SectResourceChangedMessage, class ContributionEarnedMessage, class SceneLoadedMessage, class WorldEventTriggeredMessage, class TimeSpeedChangedMessage, class SectStateQuery, class SectStateSnapshot, class AwaitWorldEventRequest, class AwaitWorldEventResponse, class EventChoiceInfo, class ExecuteDecisionMessage, class DecisionExecutedMessage, class BuildModeStartedMessage, class BuildModeEndedMessage, class PurchaseItemRequest, class PurchaseItemResponse, class BuildingPlacedMessage, class DiscipleChibiBackendChangedMessage, class DiscipleSelectedMessage, class AvatarEquipmentChangedMessage, class ChangeAvatarPartRequest, class ChangeAvatarPartResponse, class AssignTaskRequest, class AssignTaskResponse, class DiscipleTaskChangedMessage, class DiscipleOwnerChangedMessage, class DiscipleControlModeChangedMessage, class OwnershipObservabilityQuery, class OwnershipObservabilitySnapshot, class TaskChangeObservabilityQuery, class TaskChangeObservabilitySnapshot, class TaskProtectionQuery, class TaskProtectionEntry, class TaskProtectionSnapshot, class SectViewerMembershipSave, class SectSavedOwnership, static class InterprocessTopics
 - `McpBridge/Shared/MockSectData.cs`: static class MockSectData
 - `McpBridge/Shared/SectEconomyState.cs`: enum OwnerScope, enum DiscipleRank, enum DiscipleSex, enum DiscipleOwnerType, enum DiscipleControlMode, enum ChibiBackend, class CurrencyWallet, class InventoryItem, class DiscipleState, class SectStockpile, class PlacedBuildingState, class SectEconomyState, struct SlotPart, sealed class AvatarAppearance, static class AvatarSlots
 - `McpBridge/Shared/ViewerMembership.cs`: enum ViewerMembershipStatus, class ViewerRecord, class PendingViewerApplication, interface IClock, sealed class UtcClock, class SectViewerRegistry
+- `Shared/DiscipleAttributes.cs`: static class DiscipleAttributesConfig, class DiscipleAttributes
 - `Shared/GameMessages.cs`: class DiscipleRecruitedMessage, class DiscipleRankChangedMessage, class SectResourceChangedMessage, class ContributionEarnedMessage, class SceneLoadedMessage, class WorldEventTriggeredMessage, class TimeSpeedChangedMessage, class SectStateQuery, class SectStateSnapshot, class AwaitWorldEventRequest, class AwaitWorldEventResponse, class EventChoiceInfo, class ExecuteDecisionMessage, class DecisionExecutedMessage, class BuildModeStartedMessage, class BuildModeEndedMessage, class PurchaseItemRequest, class PurchaseItemResponse, class BuildingPlacedMessage, class DiscipleChibiBackendChangedMessage, class DiscipleSelectedMessage, class AvatarEquipmentChangedMessage, class ChangeAvatarPartRequest, class ChangeAvatarPartResponse, class AssignTaskRequest, class AssignTaskResponse, class DiscipleTaskChangedMessage, class DiscipleOwnerChangedMessage, class DiscipleControlModeChangedMessage, class OwnershipObservabilityQuery, class OwnershipObservabilitySnapshot, class TaskChangeObservabilityQuery, class TaskChangeObservabilitySnapshot, class TaskProtectionQuery, class TaskProtectionEntry, class TaskProtectionSnapshot, class SectViewerMembershipSave, class SectSavedOwnership, static class InterprocessTopics
 - `Shared/MockSectData.cs`: static class MockSectData
 - `Shared/SectEconomyState.cs`: enum OwnerScope, enum DiscipleRank, enum DiscipleSex, enum DiscipleOwnerType, enum DiscipleControlMode, enum ChibiBackend, class CurrencyWallet, class InventoryItem, class DiscipleState, class SectStockpile, class PlacedBuildingState, class SectEconomyState, struct SlotPart, sealed class AvatarAppearance, static class AvatarSlots
@@ -78,21 +80,22 @@
 - `UnityProject/Assets/Scripts/Core/SceneMessages.cs`: class SceneUnloadedMessage
 - `UnityProject/Assets/Scripts/Core/SceneNames.cs`: static class SceneNames
 - `UnityProject/Assets/Scripts/Core/TaskObservability.cs`: class TaskChangeObservabilityBuffer, class TaskChangeObservabilityHandler, class TaskProtectionHandler
-- `UnityProject/Assets/Scripts/Core/TimeSystem.cs`: class TimeSystem, class AwaitWorldEventHandler, class SectStateQueryHandler, enum TaskPermissionOutcome, sealed class TaskPermissionResult, interface ISectStateProvider
+- `UnityProject/Assets/Scripts/Core/TimeSystem.cs`: enum TimePauseReason, class TimeSystem, class AwaitWorldEventHandler, class SectStateQueryHandler, enum TaskPermissionOutcome, sealed class TaskPermissionResult, interface ISectStateProvider
 - `UnityProject/Assets/Scripts/Core/ViewerMembershipPersistence.cs`: class ViewerMembershipPersistenceSystem
 - `UnityProject/Assets/Scripts/Data/AvatarPartPool.cs`: class AvatarPartDef, class AvatarPartTable, class AvatarPartPool
 - `UnityProject/Assets/Scripts/Data/LubanEventPool.cs`: class LubanEventPool
 - `UnityProject/Assets/Scripts/Scenes/SectScene/SectSceneLifetimeScope.cs`: sealed class SectSceneLifetimeScope
+- `UnityProject/Assets/Scripts/Shared/DiscipleAttributes.cs`: static class DiscipleAttributesConfig, class DiscipleAttributes
 - `UnityProject/Assets/Scripts/Shared/GameMessages.cs`: class DiscipleRecruitedMessage, class DiscipleRankChangedMessage, class SectResourceChangedMessage, class ContributionEarnedMessage, class SceneLoadedMessage, class WorldEventTriggeredMessage, class TimeSpeedChangedMessage, class SectStateQuery, class SectStateSnapshot, class AwaitWorldEventRequest, class AwaitWorldEventResponse, class EventChoiceInfo, class ExecuteDecisionMessage, class DecisionExecutedMessage, class BuildModeStartedMessage, class BuildModeEndedMessage, class PurchaseItemRequest, class PurchaseItemResponse, class BuildingPlacedMessage, class DiscipleChibiBackendChangedMessage, class DiscipleSelectedMessage, class AvatarEquipmentChangedMessage, class ChangeAvatarPartRequest, class ChangeAvatarPartResponse, class AssignTaskRequest, class AssignTaskResponse, class DiscipleTaskChangedMessage, class DiscipleOwnerChangedMessage, class DiscipleControlModeChangedMessage, class OwnershipObservabilityQuery, class OwnershipObservabilitySnapshot, class TaskChangeObservabilityQuery, class TaskChangeObservabilitySnapshot, class TaskProtectionQuery, class TaskProtectionEntry, class TaskProtectionSnapshot, class SectViewerMembershipSave, class SectSavedOwnership, static class InterprocessTopics
 - `UnityProject/Assets/Scripts/Shared/MockSectData.cs`: static class MockSectData
 - `UnityProject/Assets/Scripts/Shared/SectEconomyState.cs`: enum OwnerScope, enum DiscipleRank, enum DiscipleSex, enum DiscipleOwnerType, enum DiscipleControlMode, enum ChibiBackend, class CurrencyWallet, class InventoryItem, class DiscipleState, class SectStockpile, class PlacedBuildingState, class SectEconomyState, struct SlotPart, sealed class AvatarAppearance, static class AvatarSlots
 - `UnityProject/Assets/Scripts/Shared/ViewerMembership.cs`: enum ViewerMembershipStatus, class ViewerRecord, class PendingViewerApplication, interface IClock, sealed class UtcClock, class SectViewerRegistry
 - `UnityProject/Assets/Scripts/Systems/AutoTaskScheduler.cs`: sealed class AutoEvaluationOutcome, class AutoTaskScheduler
-- `UnityProject/Assets/Scripts/Systems/AutoTaskScoring.cs`: enum SectTaskKind, sealed class SectTaskInfo, sealed class AutoTaskFacts, sealed class AutoTaskScore, sealed class AutoTaskDecision, static class AutoTaskWeights, static class AutoTaskTargets, static class AutoTaskScoring
+- `UnityProject/Assets/Scripts/Systems/AutoTaskScoring.cs`: enum SectTaskKind, sealed class SectTaskInfo, sealed class AutoTaskFacts, sealed class AutoTaskScore, enum AutoRecoveryState, sealed class AutoTaskDecision, static class AutoTaskWeights, static class AutoTaskTargets, static class AutoTaskScoring
 - `UnityProject/Assets/Scripts/Systems/BuildingSystem.cs`: class BuildingSystem
 - `UnityProject/Assets/Scripts/Systems/DiscipleSystem.cs`: class DiscipleSystem
 - `UnityProject/Assets/Scripts/Systems/ResourceCraftingSystem.cs`: class ResourceCraftingSystem
-- `UnityProject/Assets/Scripts/Systems/SectStateProvider.cs`: class SectStateProvider
+- `UnityProject/Assets/Scripts/Systems/SectStateProvider.cs`: enum DiscipleWorkOutcome, class SectStateProvider
 - `UnityProject/Assets/Scripts/Systems/WorldEventSystem.cs`: class WorldEventSystem
 - `UnityProject/Assets/Scripts/UI/Core/IUIView.cs`: interface IUIView
 - `UnityProject/Assets/Scripts/UI/Core/IUIViewPresenter.cs`: interface IUIViewPresenter
@@ -1538,7 +1541,7 @@
     59	}
 ````
 
-### UnityProject/Assets/Scripts/Core/TimeSystem.cs (21199 bytes)
+### UnityProject/Assets/Scripts/Core/TimeSystem.cs (28784 bytes)
 ````
      1	using System.Collections.Generic;
      2	using System.Threading;
@@ -1560,406 +1563,569 @@
     18	    // Simulation time is derived on demand by SimulationDelta, and game speed is applied
     19	    // ONLY there — there is intentionally no per-frame hook a second speed multiply could
     20	    // be added to later.
-    21	    public class TimeSystem : IStartable
-    22	    {
-    23	        private readonly IPublisher<TimeSpeedChangedMessage> _speedPublisher;
-    24	        private readonly IPublisher<WorldEventTriggeredMessage> _worldEventPublisher;
-    25	
-    26	        /// <summary>Lowest supported simulation speed (1x).</summary>
-    27	        public const int MinSpeed = 1;
-    28	        /// <summary>Highest supported simulation speed (3x).</summary>
-    29	        public const int MaxSpeed = 3;
-    30	
-    31	        // Initialised to 1x (SetSpeed only publishes the UI-facing change message).
-    32	        private int _speed = 1;
-    33	        private bool _paused;
-    34	
-    35	        // Completed (and replaced with a fresh one) every time a world
-    36	        // event fires - see WaitForNextWorldEventAsync()/RaiseWorldEvent().
-    37	        private UniTaskCompletionSource<AwaitWorldEventResponse> _pendingEventSource =
-    38	            new UniTaskCompletionSource<AwaitWorldEventResponse>();
-    39	
-    40	        // If a decision-requiring event fired before anyone called
-    41	        // await_next_world_event, hand it back immediately on the next call
-    42	        // instead of making a late caller wait for a completely new event.
-    43	        // Cleared once handed out - a second call with nothing new pending
-    44	        // goes back to waiting normally.
-    45	        private AwaitWorldEventResponse _cachedPendingEvent;
+    21	    /// <summary>
+    22	    /// E1 — explicit pause owners. A flags set, not one boolean: a decision pause
+    23	    /// can never be mistaken for a player pause, and clearing one never clears the
+    24	    /// other. SessionTransition is intentionally NOT defined yet (reserved for P12).
+    25	    /// </summary>
+    26	    [System.Flags]
+    27	    public enum TimePauseReason
+    28	    {
+    29	        None = 0,
+    30	        /// <summary>The player paused (TimeControl HUD / Space hotkey).</summary>
+    31	        User = 1,
+    32	        /// <summary>A decision-requiring world event is outstanding.</summary>
+    33	        PendingDecision = 2,
+    34	    }
+    35	
+    36	    public class TimeSystem : IStartable
+    37	    {
+    38	        private readonly IPublisher<TimeSpeedChangedMessage> _speedPublisher;
+    39	        private readonly IPublisher<WorldEventTriggeredMessage> _worldEventPublisher;
+    40	        private readonly TimeRuntimeConfig _config;
+    41	
+    42	        /// <summary>Lowest supported simulation speed (1x).</summary>
+    43	        public const int MinSpeed = 1;
+    44	        /// <summary>Highest supported simulation speed (3x).</summary>
+    45	        public const int MaxSpeed = 3;
     46	
-    47	        public TimeSystem(
-    48	            IPublisher<TimeSpeedChangedMessage> speedPublisher,
-    49	            IPublisher<WorldEventTriggeredMessage> worldEventPublisher)
-    50	        {
-    51	            _speedPublisher = speedPublisher;
-    52	            _worldEventPublisher = worldEventPublisher;
-    53	        }
-    54	
-    55	        public void Start()
-    56	        {
-    57	            _speedPublisher.Publish(new TimeSpeedChangedMessage { Speed = _speed, Paused = _paused });
-    58	        }
-    59	
-    60	        public void SetPaused(bool paused)
-    61	        {
-    62	            _paused = paused;
-    63	            _speedPublisher.Publish(new TimeSpeedChangedMessage { Speed = _speed, Paused = _paused });
-    64	        }
-    65	
-    66	        public void SetSpeed(int speed)
-    67	        {
-    68	            _speed = speed;
-    69	            _speedPublisher.Publish(new TimeSpeedChangedMessage { Speed = _speed, Paused = _paused });
-    70	        }
-    71	
-    72	        public bool IsPaused => _paused;
-    73	
-    74	        /// <summary>
-    75	        /// Simulation delta for gameplay progression, in seconds — the ONLY place game
-    76	        /// speed is applied. Returns 0 while paused, so a paused game freezes every
-    77	        /// consumer without each one having to re-implement the pause rule.
-    78	        /// <para>Main thread only: reads <see cref="UnityEngine.Time.deltaTime"/>.</para>
-    79	        /// </summary>
-    80	        /// <remarks>
-    81	        /// Time.timeScale is deliberately never written by this class: it is already
-    82	        /// folded into Time.deltaTime, so multiplying by speed here as well would apply
-    83	        /// game speed twice. Speed below <see cref="MinSpeed"/> is clamped up to 1x and
-    84	        /// above <see cref="MaxSpeed"/> down to 3x, so a stale/out-of-range speed (or a
-    85	        /// forgotten SetSpeed) can never yield a zero or unbounded delta while unpaused.
-    86	        /// </remarks>
-    87	        public float SimulationDelta
-    88	        {
-    89	            get { return ComputeSimulationDelta(_paused, _speed, Time.deltaTime); }
+    47	        // Initialised to 1x (SetSpeed only publishes the UI-facing change message).
+    48	        private int _speed = 1;
+    49	        private TimePauseReason _reasons = TimePauseReason.None;
+    50	
+    51	        // Completed (and replaced with a fresh one) every time a world
+    52	        // event fires - see WaitForNextWorldEventAsync()/RaiseWorldEvent().
+    53	        private UniTaskCompletionSource<AwaitWorldEventResponse> _pendingEventSource =
+    54	            new UniTaskCompletionSource<AwaitWorldEventResponse>();
+    55	
+    56	        // If a decision-requiring event fired before anyone called
+    57	        // await_next_world_event, hand it back immediately on the next call
+    58	        // instead of making a late caller wait for a completely new event.
+    59	        // Cleared once handed out - a second call with nothing new pending
+    60	        // goes back to waiting normally.
+    61	        //
+    62	        // NOTE (E2-lite): this cache is the BRIDGE's handoff and its semantics are
+    63	        // deliberately unchanged (cleared on read). The authoritative pending
+    64	        // decision below is a SEPARATE concern and is never cleared by a read.
+    65	        private AwaitWorldEventResponse _cachedPendingEvent;
+    66	
+    67	        // E2-lite — authoritative pending decision state (at most ONE at a time).
+    68	        // Set when a decision-requiring event is raised, cleared when a valid
+    69	        // decision is applied. The UI and the decision validator read THIS, so it
+    70	        // does not depend on anyone having consumed the bridge cache.
+    71	        private string _pendingEventId;
+    72	        private string _pendingDescription;
+    73	        private List<EventChoiceInfo> _pendingChoices = new List<EventChoiceInfo>();
+    74	
+    75	        public TimeSystem(
+    76	            IPublisher<TimeSpeedChangedMessage> speedPublisher,
+    77	            IPublisher<WorldEventTriggeredMessage> worldEventPublisher,
+    78	            TimeRuntimeConfig config = null)
+    79	        {
+    80	            _speedPublisher = speedPublisher;
+    81	            _worldEventPublisher = worldEventPublisher;
+    82	            _config = config ?? TimeRuntimeConfig.Instance;
+    83	        }
+    84	
+    85	        public void Start()
+    86	        {
+    87	            // Unconditional initial publish so any listener that subscribes after
+    88	            // Start still gets one refresh cue (the HUD also reads state on bind).
+    89	            PublishState();
     90	        }
     91	
-    92	        /// <summary>
-    93	        /// Pure core of <see cref="SimulationDelta"/> — the single speed application,
-    94	        /// split out so the multiplier can be asserted without a rendered frame.
-    95	        /// </summary>
-    96	        public static float ComputeSimulationDelta(bool paused, int speed, float frameDelta)
-    97	        {
-    98	            if (paused) return 0f;
-    99	            return ClampSpeed(speed) * frameDelta;
-   100	        }
-   101	
-   102	        private static int ClampSpeed(int speed)
-   103	        {
-   104	            if (speed < MinSpeed) return MinSpeed;
-   105	            if (speed > MaxSpeed) return MaxSpeed;
-   106	            return speed;
-   107	        }
-   108	
-   109	        // Resolved by AwaitWorldEventHandler - the bridge's await_next_world_event
-   110	        // tool call blocks on this until the next RaiseWorldEvent(), unless
-   111	        // there's already a cached one waiting (see _cachedPendingEvent).
-   112	        //
-   113	        // Remember: while _paused is true (a decision-requiring event is
-   114	        // outstanding), RaiseWorldEvent never fires again - WorldEventSystem
-   115	        // checks IsPaused and skips. Call execute_decision first to unpause,
-   116	        // or this will time out waiting for an event that can't happen yet.
-   117	        public UniTask<AwaitWorldEventResponse> WaitForNextWorldEventAsync()
-   118	        {
-   119	            if (_cachedPendingEvent != null)
-   120	            {
-   121	                Debug.Log("[TimeSystem] Returning cached world event immediately.");
-   122	                var cached = _cachedPendingEvent;
-   123	                _cachedPendingEvent = null;
-   124	                return UniTask.FromResult(cached);
-   125	            }
-   126	
-   127	            return _pendingEventSource.Task;
-   128	        }
-   129	
-   130	        // Called by whatever system decides a world event fired (new
-   131	        // applicant, monster incursion, ...). requiresDecision auto-pauses -
-   132	        // this is the "checkpoint" the AI GM / vote window waits on, and
-   133	        // stays paused until execute_decision is called.
-   134	        //
-   135	        // Not sent over the interprocess bus as pub/sub (see the comment on
-   136	        // AwaitWorldEventRequest in GameMessages.cs for why) - completing
-   137	        // _pendingEventSource is what actually delivers this to the bridge,
-   138	        // via the request-response AwaitWorldEventHandler below. The
-   139	        // in-memory Publish() call is just for any other in-Unity listener.
-   140	        public void RaiseWorldEvent(string eventId, string description, bool requiresDecision, List<EventChoiceInfo> choices)
-   141	        {
-   142	            Debug.Log($"[TimeSystem] World event raised: {eventId} (requiresDecision={requiresDecision})");
-   143	
-   144	            if (requiresDecision) SetPaused(true);
-   145	
-   146	            _worldEventPublisher.Publish(new WorldEventTriggeredMessage
-   147	            {
-   148	                EventId = eventId,
-   149	                RequiresDecision = requiresDecision,
-   150	                Description = description,
-   151	                Choices = choices ?? new List<EventChoiceInfo>(),
-   152	            });
-   153	
-   154	            var response = new AwaitWorldEventResponse
-   155	            {
-   156	                EventId = eventId,
-   157	                RequiresDecision = requiresDecision,
-   158	                Description = description,
-   159	                Choices = choices ?? new List<EventChoiceInfo>(),
-   160	            };
-   161	
-   162	            if (requiresDecision)
-   163	            {
-   164	                _cachedPendingEvent = response;
-   165	            }
-   166	
-   167	            var previous = _pendingEventSource;
-   168	            _pendingEventSource = new UniTaskCompletionSource<AwaitWorldEventResponse>();
-   169	            previous.TrySetResult(response);
-   170	        }
-   171	    }
+    92	        /// <summary>Adds a pause reason (idempotent). Publishes only on a real change.</summary>
+    93	        public void Pause(TimePauseReason reason) => SetReason(reason, true);
+    94	
+    95	        /// <summary>Clears a pause reason. Never touches any other reason.</summary>
+    96	        public void Resume(TimePauseReason reason) => SetReason(reason, false);
+    97	
+    98	        /// <summary>
+    99	        /// Player "Play": clears BOTH User and PendingDecision. This is what the HUD
+   100	        /// Play button / Space hotkey call, so the player can never be locked out by a
+   101	        /// missing decision popup.
+   102	        /// </summary>
+   103	        public void ResumeByPlayer() => SetReasons(TimePauseReason.None);
+   104	
+   105	        /// <summary>Legacy single-flag API — maps to the User reason (not a decision pause).</summary>
+   106	        public void SetPaused(bool paused)
+   107	        {
+   108	            if (paused) Pause(TimePauseReason.User);
+   109	            else Resume(TimePauseReason.User);
+   110	        }
+   111	
+   112	        /// <summary>
+   113	        /// E2-lite — the SINGLE decision-validation path, reused by the in-game UI
+   114	        /// click (EventPopupPresenter) and by the bridge decision (DecisionLogger ->
+   115	        /// DecisionExecutor). The decision is valid only when a decision is pending,
+   116	        /// <paramref name="eventId"/> equals the pending event id, and
+   117	        /// <paramref name="choiceId"/> is one of the pending choices. On success the
+   118	        /// pending state is cleared, so a duplicate/stale/unknown decision can never
+   119	        /// be applied twice. On any failure nothing changes, false is returned, and
+   120	        /// <paramref name="reason"/> says why.
+   121	        /// </summary>
+   122	        public bool TryResolvePendingDecision(string eventId, string choiceId, out string reason)
+   123	        {
+   124	            if (!HasPendingDecision)
+   125	            {
+   126	                reason = "no decision event is pending";
+   127	                return false;
+   128	            }
+   129	            if (eventId != _pendingEventId)
+   130	            {
+   131	                reason = $"eventId '{eventId}' is not the pending event ('{_pendingEventId}')";
+   132	                return false;
+   133	            }
+   134	
+   135	            bool knownChoice = false;
+   136	            for (int i = 0; i < _pendingChoices.Count; i++)
+   137	            {
+   138	                var choice = _pendingChoices[i];
+   139	                if (choice != null && choice.ChoiceId == choiceId)
+   140	                {
+   141	                    knownChoice = true;
+   142	                    break;
+   143	                }
+   144	            }
+   145	            if (!knownChoice)
+   146	            {
+   147	                reason = $"choiceId '{choiceId}' is not one of the pending choices";
+   148	                return false;
+   149	            }
+   150	
+   151	            ClearPendingDecision();
+   152	            reason = null;
+   153	            return true;
+   154	        }
+   155	
+   156	        /// <summary>Clears the authoritative pending decision state (E2-lite).</summary>
+   157	        public void ClearPendingDecision()
+   158	        {
+   159	            _pendingEventId = null;
+   160	            _pendingDescription = null;
+   161	            _pendingChoices = new List<EventChoiceInfo>();
+   162	        }
+   163	
+   164	        /// <summary>Sets the simulation speed, validated to <see cref="MinSpeed"/>..<see cref="MaxSpeed"/>.</summary>
+   165	        public void SetSpeed(int speed)
+   166	        {
+   167	            int clamped = ClampSpeed(speed);
+   168	            if (clamped == _speed) return; // effective change only
+   169	            _speed = clamped;
+   170	            PublishState();
+   171	        }
    172	
-   173	    // Answers AwaitWorldEventRequest coming in over the interprocess bus.
-   174	    // Request-response, not pub/sub - see the comment on AwaitWorldEventRequest
-   175	    // in GameMessages.cs for why.
-   176	    public class AwaitWorldEventHandler : IAsyncRequestHandler<AwaitWorldEventRequest, AwaitWorldEventResponse>
-   177	    {
-   178	        private readonly TimeSystem _timeSystem;
-   179	
-   180	        public AwaitWorldEventHandler(TimeSystem timeSystem)
-   181	        {
-   182	            _timeSystem = timeSystem;
-   183	        }
-   184	
-   185	        public UniTask<AwaitWorldEventResponse> InvokeAsync(AwaitWorldEventRequest request, CancellationToken cancellationToken = default)
-   186	        {
-   187	            return _timeSystem.WaitForNextWorldEventAsync();
-   188	        }
-   189	    }
-   190	
-   191	    // Answers SectStateQuery requests coming in over the interprocess bus
-   192	    // from the MCP bridge. Aggregates whatever the subsystems currently hold
-   193	    // into the SectEconomyState shape from economy.proto.
-   194	    public class SectStateQueryHandler : IAsyncRequestHandler<SectStateQuery, SectStateSnapshot>
-   195	    {
-   196	        private readonly ISectStateProvider _stateProvider;
+   173	        /// <summary>True while ANY pause reason is active.</summary>
+   174	        public bool IsPaused => _reasons != TimePauseReason.None;
+   175	
+   176	        /// <summary>True when the player has paused (User reason).</summary>
+   177	        public bool IsUserPaused => HasReason(TimePauseReason.User);
+   178	
+   179	        /// <summary>True when a decision-requiring event is outstanding (the pause reason).</summary>
+   180	        public bool IsPendingDecisionPaused => HasReason(TimePauseReason.PendingDecision);
+   181	
+   182	        // ---------- E2-lite: authoritative pending-decision state ----------
+   183	        // Separate from IsPendingDecisionPaused: the player can clear the pause
+   184	        // (ResumeByPlayer) while the event is still pending and undecided.
+   185	
+   186	        /// <summary>True while a decision-requiring event is outstanding and undecided.</summary>
+   187	        public bool HasPendingDecision => _pendingEventId != null;
+   188	
+   189	        /// <summary>Authoritative id of the pending decision event, or null when none.</summary>
+   190	        public string PendingEventId => _pendingEventId;
+   191	
+   192	        /// <summary>Authoritative description of the pending decision event, or null.</summary>
+   193	        public string PendingDescription => _pendingDescription;
+   194	
+   195	        /// <summary>Authoritative choices of the pending decision event (never null).</summary>
+   196	        public IReadOnlyList<EventChoiceInfo> PendingChoices => _pendingChoices;
    197	
-   198	        public SectStateQueryHandler(ISectStateProvider stateProvider)
-   199	        {
-   200	            _stateProvider = stateProvider;
-   201	        }
+   198	        /// <summary>Current (validated) simulation speed.</summary>
+   199	        public int Speed => _speed;
+   200	
+   201	        private bool HasReason(TimePauseReason reason) => (_reasons & reason) == reason;
    202	
-   203	        public UniTask<SectStateSnapshot> InvokeAsync(SectStateQuery request, CancellationToken cancellationToken = default)
+   203	        private void SetReason(TimePauseReason reason, bool active)
    204	        {
-   205	            var state = _stateProvider.BuildSectEconomyState();
-   206	            var snapshot = new SectStateSnapshot
-   207	            {
-   208	                RequestId = request.RequestId,
-   209	                // MessagePack, committed choice (not a protobuf stub
-   210	                // anymore - see project_summary.md for why).
-   211	                EconomyStateBytes = state.ToByteArray()
-   212	            };
-   213	            return UniTask.FromResult(snapshot);
+   205	            if (reason == TimePauseReason.None) return;
+   206	            SetReasons(active ? (_reasons | reason) : (_reasons & ~reason));
+   207	        }
+   208	
+   209	        private void SetReasons(TimePauseReason next)
+   210	        {
+   211	            if (next == _reasons) return; // no effective change - no message
+   212	            _reasons = next;
+   213	            PublishState();
    214	        }
-   215	    }
-   216	
-   217	    // ---------- P5B (Hybrid Permissions) — read-only permission contract ----------
-   218	    // The UI must never infer permission from OwnerType != Npc on its own; it asks
-   219	    // the authority (SectStateProvider) and renders the answer. Same evaluation the
-   220	    // mutation path revalidates, so display and commit can never disagree.
-   221	
-   222	    /// <summary>Three-way outcome of a task permission evaluation.</summary>
-   223	    public enum TaskPermissionOutcome
-   224	    {
-   225	        /// <summary>Requester may control this disciple right now.</summary>
-   226	        Allowed = 0,
-   227	        /// <summary>Requester is a known identity that simply does not have permission.</summary>
-   228	        Denied = 1,
-   229	        /// <summary>Membership/ownership data is missing or contradictory — fail closed, NEVER permission.</summary>
-   230	        ConsistencyError = 2,
-   231	    }
-   232	
-   233	    /// <summary>
-   234	    /// P5B — read-only result of a task permission evaluation. Never mutates state;
-   235	    /// the mutation path (TryAssignTask) revalidates the same rules before writing.
-   236	    /// </summary>
-   237	    public sealed class TaskPermissionResult
-   238	    {
-   239	        public TaskPermissionOutcome Outcome { get; private set; }
-   240	        public string Reason { get; private set; } = string.Empty;
-   241	
-   242	        /// <summary>True when the requested task already is the disciple's current task (a valid no-op).</summary>
-   243	        public bool IsNoOp { get; private set; }
-   244	
-   245	        /// <summary>True when a viewer owner is inside the protection window (SectMaster override not yet allowed).</summary>
-   246	        public bool OwnerProtected { get; private set; }
-   247	
-   248	        /// <summary>Seconds left in the owner protection window (0 unless OwnerProtected).</summary>
-   249	        public float OwnerProtectionRemainingSeconds { get; private set; }
+   215	
+   216	        // Refresh trigger only (Paused = IsPaused). The HUD reads reasons/speed
+   217	        // directly from TimeSystem; it never infers them from this message.
+   218	        private void PublishState()
+   219	        {
+   220	            _speedPublisher.Publish(new TimeSpeedChangedMessage { Speed = _speed, Paused = IsPaused });
+   221	        }
+   222	
+   223	        /// <summary>
+   224	        /// Simulation delta for gameplay progression, in seconds — the ONLY place game
+   225	        /// speed is applied. Returns 0 while paused, so a paused game freezes every
+   226	        /// consumer without each one having to re-implement the pause rule.
+   227	        /// <para>Main thread only: reads <see cref="UnityEngine.Time.deltaTime"/>.</para>
+   228	        /// </summary>
+   229	        /// <remarks>
+   230	        /// Time.timeScale is deliberately never written by this class: it is already
+   231	        /// folded into Time.deltaTime, so multiplying by speed here as well would apply
+   232	        /// game speed twice. Speed below <see cref="MinSpeed"/> is clamped up to 1x and
+   233	        /// above <see cref="MaxSpeed"/> down to 3x, so a stale/out-of-range speed (or a
+   234	        /// forgotten SetSpeed) can never yield a zero or unbounded delta while unpaused.
+   235	        /// </remarks>
+   236	        public float SimulationDelta
+   237	        {
+   238	            get { return ComputeSimulationDelta(IsPaused, _speed, Time.deltaTime); }
+   239	        }
+   240	
+   241	        /// <summary>
+   242	        /// Pure core of <see cref="SimulationDelta"/> — the single speed application,
+   243	        /// split out so the multiplier can be asserted without a rendered frame.
+   244	        /// </summary>
+   245	        public static float ComputeSimulationDelta(bool paused, int speed, float frameDelta)
+   246	        {
+   247	            if (paused) return 0f;
+   248	            return ClampSpeed(speed) * frameDelta;
+   249	        }
    250	
-   251	        public bool Allowed => Outcome == TaskPermissionOutcome.Allowed;
-   252	
-   253	        public static TaskPermissionResult Allow()
-   254	            => new TaskPermissionResult { Outcome = TaskPermissionOutcome.Allowed };
-   255	
-   256	        public static TaskPermissionResult Denied(string reason)
-   257	            => new TaskPermissionResult { Outcome = TaskPermissionOutcome.Denied, Reason = reason ?? string.Empty };
-   258	
-   259	        public static TaskPermissionResult ConsistencyError(string reason)
-   260	            => new TaskPermissionResult { Outcome = TaskPermissionOutcome.ConsistencyError, Reason = reason ?? string.Empty };
-   261	
-   262	        internal TaskPermissionResult WithNoOp(bool isNoOp) { IsNoOp = isNoOp; return this; }
-   263	
-   264	        internal TaskPermissionResult WithProtection(float remainingSeconds)
-   265	        {
-   266	            OwnerProtected = true;
-   267	            OwnerProtectionRemainingSeconds = remainingSeconds < 0f ? 0f : remainingSeconds;
-   268	            return this;
-   269	        }
-   270	    }
-   271	
-   272	    // Thin seam so SectStateQueryHandler doesn't need to know about every
-   273	    // subsystem directly - implement this on a small aggregator class that
-   274	    // does hold references (it's allowed to, it's not part of the bus).
-   275	    public interface ISectStateProvider
-   276	    {
-   277	        SectEconomyState BuildSectEconomyState();
-   278	        void ApplyDecisionConsequence(string eventId, string choiceId);
-   279	        void TickGathering(float deltaTimeSeconds);
-   280	        void TickCrafting(float deltaTimeSeconds);
-   281	        void RecruitOuterDisciple(DiscipleSex sex = DiscipleSex.Unspecified);
-   282	        PurchaseItemResponse TryPurchaseItem(string discipleId, string itemDefId, int grade, int quantity);
-   283	        bool TryChangeAvatarPart(string discipleId, string slot, string partId,
-   284	                                out string failReason, out AvatarAppearance result);
-   285	
-   286	        /// <summary>
-   287	        /// Task System v2 (§6) + P5B — assign a task to a disciple after a permission
-   288	        /// and validity check. Permission follows CheckTaskPermission (revalidated
-   289	        /// here): "SECT_MASTER" may control unowned NPCs and player-controlled
-   290	        /// disciples, and may override a Viewer disciple only when the owner has been
-   291	        /// inactive for strictly more than 10 real-time minutes; any other requester
-   292	        /// only their own valid active membership. Empty/invalid requesters and
-   293	        /// missing/conflicting membership data fail closed. A request for the task
-   294	        /// already assigned is a no-op — no event, no progress reset (it may refresh
-   295	        /// the requester's own activity). Actual task changes honour the configurable
-   296	        /// cooldown. Unknown disciple or task fails closed with a reason. On success
-   297	        /// sets CurrentTask and publishes DiscipleTaskChangedMessage (in-memory only).
-   298	        /// </summary>
-   299	        bool TryAssignTask(string requesterId, string discipleId, string taskId, out string failReason);
-   300	
-   301	        /// <summary>
-   302	        /// P9A — explicitly set a disciple's Manual/Auto control mode. Ownership and
-   303	        /// autonomy are different: this never changes ownership, and only an Npc-owned
-   304	        /// disciple is eligible for Auto in this MVP. A Player/Viewer-owned disciple is
-   305	        /// rejected even when its owner has been inactive past the protection window —
-   306	        /// hybrid inactivity only lets the SectMaster override a task, it does not
-   307	        /// authorize a brain. Empty/unknown disciple and undefined enum fail closed;
-   308	        /// idempotent (no message when the mode is already set). Publishes
-   309	        /// DiscipleControlModeChangedMessage (in-memory only) on a real change.
-   310	        /// </summary>
-   311	        bool TrySetDiscipleControlMode(string discipleId, DiscipleControlMode mode, out string failReason);
-   312	
-   313	        /// <summary>
-   314	        /// P9A — dedicated authoritative entry point for the future DiscipleBrain. NOT
-   315	        /// TryAssignTask(SectMasterRequesterId, ...): it takes no requester identity, so
-   316	        /// the brain can never impersonate the player or inherit the SectMaster
-   317	        /// override. Rechecks NPC ownership AND Auto mode immediately before commit, then
-   318	        /// shares TryAssignTask's known-task/building/cooldown validation and mutation
-   319	        /// (one implementation). Fails closed with a reason when either eligibility
-   320	        /// precondition no longer holds.
-   321	        /// </summary>
-   322	        bool TryAutoAssignTask(string discipleId, string taskId, out string failReason);
-   323	
-   324	        /// <summary>
-   325	        /// P5B (Hybrid Permissions) — read-only permission query for UI. Evaluates the
-   326	        /// SAME rules TryAssignTask revalidates on mutation, and never mutates state:
-   327	        /// a valid requester may control its own active membership; "SECT_MASTER" may
-   328	        /// control unowned NPCs and player-controlled disciples, and may override a
-   329	        /// Viewer disciple only when the owner has been inactive for STRICTLY more than
-   330	        /// 10 real-time minutes (injected clock). Empty/invalid requesters fail closed;
-   331	        /// missing or conflicting membership data returns a ConsistencyError — never
-   332	        /// automatic permission.
-   333	        /// </summary>
-   334	        TaskPermissionResult CheckTaskPermission(string requesterId, string discipleId, string taskId);
+   251	        private static int ClampSpeed(int speed)
+   252	        {
+   253	            if (speed < MinSpeed) return MinSpeed;
+   254	            if (speed > MaxSpeed) return MaxSpeed;
+   255	            return speed;
+   256	        }
+   257	
+   258	        // Resolved by AwaitWorldEventHandler - the bridge's await_next_world_event
+   259	        // tool call blocks on this until the next RaiseWorldEvent(), unless
+   260	        // there's already a cached one waiting (see _cachedPendingEvent).
+   261	        //
+   262	        // Remember: while a pause reason is active (e.g. a decision-requiring
+   263	        // event is outstanding), RaiseWorldEvent never fires again -
+   264	        // WorldEventSystem checks IsPaused and skips. Resolve the decision (or
+   265	        // ResumeByPlayer) first, or this will time out waiting for an event that
+   266	        // can't happen yet.
+   267	        public UniTask<AwaitWorldEventResponse> WaitForNextWorldEventAsync()
+   268	        {
+   269	            if (_cachedPendingEvent != null)
+   270	            {
+   271	                Debug.Log("[TimeSystem] Returning cached world event immediately.");
+   272	                var cached = _cachedPendingEvent;
+   273	                _cachedPendingEvent = null;
+   274	                return UniTask.FromResult(cached);
+   275	            }
+   276	
+   277	            return _pendingEventSource.Task;
+   278	        }
+   279	
+   280	        // Called by whatever system decides a world event fired (new
+   281	        // applicant, monster incursion, ...). requiresDecision auto-pauses -
+   282	        // this is the "checkpoint" the AI GM / vote window waits on, and
+   283	        // stays paused until execute_decision is called.
+   284	        //
+   285	        // Not sent over the interprocess bus as pub/sub (see the comment on
+   286	        // AwaitWorldEventRequest in GameMessages.cs for why) - completing
+   287	        // _pendingEventSource is what actually delivers this to the bridge,
+   288	        // via the request-response AwaitWorldEventHandler below. The
+   289	        // in-memory Publish() call is just for any other in-Unity listener.
+   290	        public void RaiseWorldEvent(string eventId, string description, bool requiresDecision, List<EventChoiceInfo> choices)
+   291	        {
+   292	            Debug.Log($"[TimeSystem] World event raised: {eventId} (requiresDecision={requiresDecision})");
+   293	
+   294	            if (requiresDecision)
+   295	            {
+   296	                // E2-lite: store the authoritative pending state (a single slot).
+   297	                // The pause reason is added only for a NEWLY pending event - if one
+   298	                // is already pending (e.g. the player pressed Play but has not decided
+   299	                // yet), raising further events must NOT re-add the pause.
+   300	                bool alreadyPending = HasPendingDecision;
+   301	                _pendingEventId = eventId;
+   302	                _pendingDescription = description;
+   303	                _pendingChoices = choices ?? new List<EventChoiceInfo>();
+   304	
+   305	                if (!alreadyPending && _config.AutoPauseOnDecisionEvent)
+   306	                    Pause(TimePauseReason.PendingDecision);
+   307	            }
+   308	
+   309	            _worldEventPublisher.Publish(new WorldEventTriggeredMessage
+   310	            {
+   311	                EventId = eventId,
+   312	                RequiresDecision = requiresDecision,
+   313	                Description = description,
+   314	                Choices = choices ?? new List<EventChoiceInfo>(),
+   315	            });
+   316	
+   317	            var response = new AwaitWorldEventResponse
+   318	            {
+   319	                EventId = eventId,
+   320	                RequiresDecision = requiresDecision,
+   321	                Description = description,
+   322	                Choices = choices ?? new List<EventChoiceInfo>(),
+   323	            };
+   324	
+   325	            if (requiresDecision)
+   326	            {
+   327	                _cachedPendingEvent = response;
+   328	            }
+   329	
+   330	            var previous = _pendingEventSource;
+   331	            _pendingEventSource = new UniTaskCompletionSource<AwaitWorldEventResponse>();
+   332	            previous.TrySetResult(response);
+   333	        }
+   334	    }
    335	
-   336	        /// <summary>
-   337	        /// P5B persistence — the membership slice worth surviving a session: the
-   338	        /// viewer registry (status / binding / LastActiveAtUtc) TOGETHER with each
-   339	        /// disciple's ownership, so the registry ⇄ ownership invariants hold after a
-   340	        /// load. Read-only — the live state is not modified by exporting.
-   341	        /// </summary>
-   342	        Xianxia.Sect.Messages.SectViewerMembershipSave ExportViewerMembership();
-   343	
-   344	        /// <summary>
-   345	        /// P5B persistence — restore a previously exported slice. Fully validated
-   346	        /// BEFORE any mutation (version, unknown disciples, registry internal
-   347	        /// consistency, and registry ⇄ ownership agreement); anything invalid fails
-   348	        /// closed with the mock start state still in place. Ownership and registry are
-   349	        /// applied together, so a half-restored state can never exist.
-   350	        /// </summary>
-   351	        bool TryImportViewerMembership(Xianxia.Sect.Messages.SectViewerMembershipSave save, out string failReason);
-   352	
-   353	        /// <summary>
-   354	        /// Task building-requirement gate (§6 addendum). Reads the live
-   355	        /// PlacedBuildings list — true when the task is known and either has no
-   356	        /// required building or that building def id already exists in state.
-   357	        /// Unknown task fails with its usual reason; failClosed — never mutates.
-   358	        /// </summary>
-   359	        bool IsTaskAvailable(string taskId, out string failReason);
+   336	    // Answers AwaitWorldEventRequest coming in over the interprocess bus.
+   337	    // Request-response, not pub/sub - see the comment on AwaitWorldEventRequest
+   338	    // in GameMessages.cs for why.
+   339	    public class AwaitWorldEventHandler : IAsyncRequestHandler<AwaitWorldEventRequest, AwaitWorldEventResponse>
+   340	    {
+   341	        private readonly TimeSystem _timeSystem;
+   342	
+   343	        public AwaitWorldEventHandler(TimeSystem timeSystem)
+   344	        {
+   345	            _timeSystem = timeSystem;
+   346	        }
+   347	
+   348	        public UniTask<AwaitWorldEventResponse> InvokeAsync(AwaitWorldEventRequest request, CancellationToken cancellationToken = default)
+   349	        {
+   350	            return _timeSystem.WaitForNextWorldEventAsync();
+   351	        }
+   352	    }
+   353	
+   354	    // Answers SectStateQuery requests coming in over the interprocess bus
+   355	    // from the MCP bridge. Aggregates whatever the subsystems currently hold
+   356	    // into the SectEconomyState shape from economy.proto.
+   357	    public class SectStateQueryHandler : IAsyncRequestHandler<SectStateQuery, SectStateSnapshot>
+   358	    {
+   359	        private readonly ISectStateProvider _stateProvider;
    360	
-   361	        /// <summary>
-   362	        /// P3 (Task Assignment UI) — the known-task set TryAssignTask validates
-   363	        /// against, in stable order (gathering, crafting, meditation). The SAME
-   364	        /// source of truth as the assignment gate — the UI lists these directly,
-   365	        /// so no second task list can drift from what assignment accepts.
-   366	        /// Read-only; never mutates.
-   367	        /// </summary>
-   368	        System.Collections.Generic.IReadOnlyList<string> GetKnownTaskIds();
-   369	
-   370	        /// <summary>
-   371	        /// P9B (utility AI) — read-only metadata for a known task, derived from the SAME
-   372	        /// gathering/crafting tables the assignment gate validates against
-   373	        /// (gathering: produced resource + rate; crafting: produced item + input costs;
-   374	        /// otherwise the no-production meditation fallback). False for an unknown/empty
-   375	        /// task. Never mutates; no second task-definition pipeline.
-   376	        /// </summary>
-   377	        bool TryGetTaskInfo(string taskId, out SectTaskInfo info);
-   378	
-   379	        /// <summary>
-   380	        /// P4 (local ownership test harness) — dev-only ownership assignment.
-   381	        /// NOT exposed as a public viewer command or MCP tool; the intended caller
-   382	        /// is the Editor debug harness / test fixtures. Validates fully before any
-   383	        /// mutation (fail-closed): disciple exists, enum value defined, Npc
-   384	        /// normalizes OwnerId to empty, non-Npc identities satisfy the identity
-   385	        /// convention, and a Viewer identity cannot bind to two disciples.
-   386	        /// Publishes DiscipleOwnerChangedMessage (in-memory) only on a real change.
-   387	        /// P5B: bind/release keeps SectViewerRegistry in lock-step with the disciple
-   388	        /// row (active viewer ⇔ matching active record, invariant #1/#2/#3) and
-   389	        /// refreshes the owner's LastActiveAtUtc on a successful bind/reclaim.
-   390	        /// </summary>
-   391	        bool TrySetDiscipleOwner(string discipleId, Xianxia.Sect.DiscipleOwnerType ownerType,
-   392	                                 string ownerId, out string failReason);
-   393	
-   394	        /// <summary>
-   395	        /// Mutate DiscipleState.ChibiBackend (entitlement) + publish
-   396	        /// DiscipleChibiBackendChangedMessage (in-memory). DiscipleVisualSystem respawns
-   397	        /// the visual in place on that message — position/activity/facing preserved (§7).
-   398	        /// </summary>
-   399	        bool TrySetChibiBackend(string discipleId, ChibiBackend backend, out string failReason);
-   400	
-   401	        /// <summary>
-   402	        /// Building Phase 1 — place a building on the sect grid (player-only, §8 Q3 default).
-   403	        /// Validation order per building-system.md §3.2: def lookup → occupancy → cost,
-   404	        /// then all-or-nothing resource deduction through the AdjustAndNotify choke point,
-   405	        /// state append, and BuildingPlacedMessage publish (in-memory only).
-   406	        /// Caller must call CanAffordBuilding / grid.CanPlace first for ghost preview;
-   407	        /// this re-validates everything and fails closed with a reason.
-   408	        /// </summary>
-   409	        bool TryPlaceBuilding(string defId, int gridX, int gridZ, int rotation,
-   410	                              BuildingGrid grid, out string failReason,
-   411	                              out PlacedBuildingState placed);
-   412	
-   413	        /// <summary>Ghost preview check: can the sect pay this def's cost right now?
-   414	        /// Read-only — no state mutation (occupied-cells check lives on BuildingGrid).</summary>
-   415	        bool CanAffordBuilding(BuildingDef def);
-   416	    }
-   417	}
+   361	        public SectStateQueryHandler(ISectStateProvider stateProvider)
+   362	        {
+   363	            _stateProvider = stateProvider;
+   364	        }
+   365	
+   366	        public UniTask<SectStateSnapshot> InvokeAsync(SectStateQuery request, CancellationToken cancellationToken = default)
+   367	        {
+   368	            var state = _stateProvider.BuildSectEconomyState();
+   369	            var snapshot = new SectStateSnapshot
+   370	            {
+   371	                RequestId = request.RequestId,
+   372	                // MessagePack, committed choice (not a protobuf stub
+   373	                // anymore - see project_summary.md for why).
+   374	                EconomyStateBytes = state.ToByteArray()
+   375	            };
+   376	            return UniTask.FromResult(snapshot);
+   377	        }
+   378	    }
+   379	
+   380	    // ---------- P5B (Hybrid Permissions) — read-only permission contract ----------
+   381	    // The UI must never infer permission from OwnerType != Npc on its own; it asks
+   382	    // the authority (SectStateProvider) and renders the answer. Same evaluation the
+   383	    // mutation path revalidates, so display and commit can never disagree.
+   384	
+   385	    /// <summary>Three-way outcome of a task permission evaluation.</summary>
+   386	    public enum TaskPermissionOutcome
+   387	    {
+   388	        /// <summary>Requester may control this disciple right now.</summary>
+   389	        Allowed = 0,
+   390	        /// <summary>Requester is a known identity that simply does not have permission.</summary>
+   391	        Denied = 1,
+   392	        /// <summary>Membership/ownership data is missing or contradictory — fail closed, NEVER permission.</summary>
+   393	        ConsistencyError = 2,
+   394	    }
+   395	
+   396	    /// <summary>
+   397	    /// P5B — read-only result of a task permission evaluation. Never mutates state;
+   398	    /// the mutation path (TryAssignTask) revalidates the same rules before writing.
+   399	    /// </summary>
+   400	    public sealed class TaskPermissionResult
+   401	    {
+   402	        public TaskPermissionOutcome Outcome { get; private set; }
+   403	        public string Reason { get; private set; } = string.Empty;
+   404	
+   405	        /// <summary>True when the requested task already is the disciple's current task (a valid no-op).</summary>
+   406	        public bool IsNoOp { get; private set; }
+   407	
+   408	        /// <summary>True when a viewer owner is inside the protection window (SectMaster override not yet allowed).</summary>
+   409	        public bool OwnerProtected { get; private set; }
+   410	
+   411	        /// <summary>Seconds left in the owner protection window (0 unless OwnerProtected).</summary>
+   412	        public float OwnerProtectionRemainingSeconds { get; private set; }
+   413	
+   414	        public bool Allowed => Outcome == TaskPermissionOutcome.Allowed;
+   415	
+   416	        public static TaskPermissionResult Allow()
+   417	            => new TaskPermissionResult { Outcome = TaskPermissionOutcome.Allowed };
+   418	
+   419	        public static TaskPermissionResult Denied(string reason)
+   420	            => new TaskPermissionResult { Outcome = TaskPermissionOutcome.Denied, Reason = reason ?? string.Empty };
+   421	
+   422	        public static TaskPermissionResult ConsistencyError(string reason)
+   423	            => new TaskPermissionResult { Outcome = TaskPermissionOutcome.ConsistencyError, Reason = reason ?? string.Empty };
+   424	
+   425	        internal TaskPermissionResult WithNoOp(bool isNoOp) { IsNoOp = isNoOp; return this; }
+   426	
+   427	        internal TaskPermissionResult WithProtection(float remainingSeconds)
+   428	        {
+   429	            OwnerProtected = true;
+   430	            OwnerProtectionRemainingSeconds = remainingSeconds < 0f ? 0f : remainingSeconds;
+   431	            return this;
+   432	        }
+   433	    }
+   434	
+   435	    // Thin seam so SectStateQueryHandler doesn't need to know about every
+   436	    // subsystem directly - implement this on a small aggregator class that
+   437	    // does hold references (it's allowed to, it's not part of the bus).
+   438	    public interface ISectStateProvider
+   439	    {
+   440	        SectEconomyState BuildSectEconomyState();
+   441	        void ApplyDecisionConsequence(string eventId, string choiceId);
+   442	        void TickGathering(float deltaTimeSeconds);
+   443	        void TickCrafting(float deltaTimeSeconds);
+   444	        void RecruitOuterDisciple(DiscipleSex sex = DiscipleSex.Unspecified);
+   445	        PurchaseItemResponse TryPurchaseItem(string discipleId, string itemDefId, int grade, int quantity);
+   446	        bool TryChangeAvatarPart(string discipleId, string slot, string partId,
+   447	                                out string failReason, out AvatarAppearance result);
+   448	
+   449	        /// <summary>
+   450	        /// Task System v2 (§6) + P5B — assign a task to a disciple after a permission
+   451	        /// and validity check. Permission follows CheckTaskPermission (revalidated
+   452	        /// here): "SECT_MASTER" may control unowned NPCs and player-controlled
+   453	        /// disciples, and may override a Viewer disciple only when the owner has been
+   454	        /// inactive for strictly more than 10 real-time minutes; any other requester
+   455	        /// only their own valid active membership. Empty/invalid requesters and
+   456	        /// missing/conflicting membership data fail closed. A request for the task
+   457	        /// already assigned is a no-op — no event, no progress reset (it may refresh
+   458	        /// the requester's own activity). Actual task changes honour the configurable
+   459	        /// cooldown. Unknown disciple or task fails closed with a reason. On success
+   460	        /// sets CurrentTask and publishes DiscipleTaskChangedMessage (in-memory only).
+   461	        /// </summary>
+   462	        bool TryAssignTask(string requesterId, string discipleId, string taskId, out string failReason);
+   463	
+   464	        /// <summary>
+   465	        /// P9A — explicitly set a disciple's Manual/Auto control mode. Ownership and
+   466	        /// autonomy are different: this never changes ownership, and only an Npc-owned
+   467	        /// disciple is eligible for Auto in this MVP. A Player/Viewer-owned disciple is
+   468	        /// rejected even when its owner has been inactive past the protection window —
+   469	        /// hybrid inactivity only lets the SectMaster override a task, it does not
+   470	        /// authorize a brain. Empty/unknown disciple and undefined enum fail closed;
+   471	        /// idempotent (no message when the mode is already set). Publishes
+   472	        /// DiscipleControlModeChangedMessage (in-memory only) on a real change.
+   473	        /// </summary>
+   474	        bool TrySetDiscipleControlMode(string discipleId, DiscipleControlMode mode, out string failReason);
+   475	
+   476	        /// <summary>
+   477	        /// P9A — dedicated authoritative entry point for the future DiscipleBrain. NOT
+   478	        /// TryAssignTask(SectMasterRequesterId, ...): it takes no requester identity, so
+   479	        /// the brain can never impersonate the player or inherit the SectMaster
+   480	        /// override. Rechecks NPC ownership AND Auto mode immediately before commit, then
+   481	        /// shares TryAssignTask's known-task/building/cooldown validation and mutation
+   482	        /// (one implementation). Fails closed with a reason when either eligibility
+   483	        /// precondition no longer holds.
+   484	        /// </summary>
+   485	        bool TryAutoAssignTask(string discipleId, string taskId, out string failReason);
+   486	
+   487	        /// <summary>
+   488	        /// P5B (Hybrid Permissions) — read-only permission query for UI. Evaluates the
+   489	        /// SAME rules TryAssignTask revalidates on mutation, and never mutates state:
+   490	        /// a valid requester may control its own active membership; "SECT_MASTER" may
+   491	        /// control unowned NPCs and player-controlled disciples, and may override a
+   492	        /// Viewer disciple only when the owner has been inactive for STRICTLY more than
+   493	        /// 10 real-time minutes (injected clock). Empty/invalid requesters fail closed;
+   494	        /// missing or conflicting membership data returns a ConsistencyError — never
+   495	        /// automatic permission.
+   496	        /// </summary>
+   497	        TaskPermissionResult CheckTaskPermission(string requesterId, string discipleId, string taskId);
+   498	
+   499	        /// <summary>
+   500	        /// P5B persistence — the membership slice worth surviving a session: the
+   501	        /// viewer registry (status / binding / LastActiveAtUtc) TOGETHER with each
+   502	        /// disciple's ownership, so the registry ⇄ ownership invariants hold after a
+   503	        /// load. Read-only — the live state is not modified by exporting.
+   504	        /// </summary>
+   505	        Xianxia.Sect.Messages.SectViewerMembershipSave ExportViewerMembership();
+   506	
+   507	        /// <summary>
+   508	        /// P5B persistence — restore a previously exported slice. Fully validated
+   509	        /// BEFORE any mutation (version, unknown disciples, registry internal
+   510	        /// consistency, and registry ⇄ ownership agreement); anything invalid fails
+   511	        /// closed with the mock start state still in place. Ownership and registry are
+   512	        /// applied together, so a half-restored state can never exist.
+   513	        /// </summary>
+   514	        bool TryImportViewerMembership(Xianxia.Sect.Messages.SectViewerMembershipSave save, out string failReason);
+   515	
+   516	        /// <summary>
+   517	        /// Task building-requirement gate (§6 addendum). Reads the live
+   518	        /// PlacedBuildings list — true when the task is known and either has no
+   519	        /// required building or that building def id already exists in state.
+   520	        /// Unknown task fails with its usual reason; failClosed — never mutates.
+   521	        /// </summary>
+   522	        bool IsTaskAvailable(string taskId, out string failReason);
+   523	
+   524	        /// <summary>
+   525	        /// P3 (Task Assignment UI) — the known-task set TryAssignTask validates
+   526	        /// against, in stable order (gathering, crafting, meditation). The SAME
+   527	        /// source of truth as the assignment gate — the UI lists these directly,
+   528	        /// so no second task list can drift from what assignment accepts.
+   529	        /// Read-only; never mutates.
+   530	        /// </summary>
+   531	        System.Collections.Generic.IReadOnlyList<string> GetKnownTaskIds();
+   532	
+   533	        /// <summary>
+   534	        /// P9B (utility AI) — read-only metadata for a known task, derived from the SAME
+   535	        /// gathering/crafting tables the assignment gate validates against
+   536	        /// (gathering: produced resource + rate; crafting: produced item + input costs;
+   537	        /// otherwise the no-production meditation fallback). False for an unknown/empty
+   538	        /// task. Never mutates; no second task-definition pipeline.
+   539	        /// </summary>
+   540	        bool TryGetTaskInfo(string taskId, out SectTaskInfo info);
+   541	
+   542	        /// <summary>
+   543	        /// P4 (local ownership test harness) — dev-only ownership assignment.
+   544	        /// NOT exposed as a public viewer command or MCP tool; the intended caller
+   545	        /// is the Editor debug harness / test fixtures. Validates fully before any
+   546	        /// mutation (fail-closed): disciple exists, enum value defined, Npc
+   547	        /// normalizes OwnerId to empty, non-Npc identities satisfy the identity
+   548	        /// convention, and a Viewer identity cannot bind to two disciples.
+   549	        /// Publishes DiscipleOwnerChangedMessage (in-memory) only on a real change.
+   550	        /// P5B: bind/release keeps SectViewerRegistry in lock-step with the disciple
+   551	        /// row (active viewer ⇔ matching active record, invariant #1/#2/#3) and
+   552	        /// refreshes the owner's LastActiveAtUtc on a successful bind/reclaim.
+   553	        /// </summary>
+   554	        bool TrySetDiscipleOwner(string discipleId, Xianxia.Sect.DiscipleOwnerType ownerType,
+   555	                                 string ownerId, out string failReason);
+   556	
+   557	        /// <summary>
+   558	        /// Mutate DiscipleState.ChibiBackend (entitlement) + publish
+   559	        /// DiscipleChibiBackendChangedMessage (in-memory). DiscipleVisualSystem respawns
+   560	        /// the visual in place on that message — position/activity/facing preserved (§7).
+   561	        /// </summary>
+   562	        bool TrySetChibiBackend(string discipleId, ChibiBackend backend, out string failReason);
+   563	
+   564	        /// <summary>
+   565	        /// Building Phase 1 — place a building on the sect grid (player-only, §8 Q3 default).
+   566	        /// Validation order per building-system.md §3.2: def lookup → occupancy → cost,
+   567	        /// then all-or-nothing resource deduction through the AdjustAndNotify choke point,
+   568	        /// state append, and BuildingPlacedMessage publish (in-memory only).
+   569	        /// Caller must call CanAffordBuilding / grid.CanPlace first for ghost preview;
+   570	        /// this re-validates everything and fails closed with a reason.
+   571	        /// </summary>
+   572	        bool TryPlaceBuilding(string defId, int gridX, int gridZ, int rotation,
+   573	                              BuildingGrid grid, out string failReason,
+   574	                              out PlacedBuildingState placed);
+   575	
+   576	        /// <summary>Ghost preview check: can the sect pay this def's cost right now?
+   577	        /// Read-only — no state mutation (occupied-cells check lives on BuildingGrid).</summary>
+   578	        bool CanAffordBuilding(BuildingDef def);
+   579	    }
+   580	}
 ````
 
-### UnityProject/Assets/Scripts/Systems/SectStateProvider.cs (76763 bytes)
+### UnityProject/Assets/Scripts/Systems/SectStateProvider.cs (90219 bytes)
 ````
      1	using System;
      2	using System.Collections.Generic;
@@ -1972,793 +2138,780 @@
      9	
     10	namespace Xianxia.Sect
     11	{
-    12	    // Implements the seam TimeSystem.cs defines (ISectStateProvider).
-    13	    //
-    14	    // IMPORTANT: this holds ONE live state instance for the process
-    15	    // lifetime, created once from mock data. Earlier versions called
-    16	    // MockSectData.Create() fresh on every query, which meant any mutation
-    17	    // was invisible on the next get_sect_state call - it was building a
-    18	    // brand new object every time, not reading back the one that got
-    19	    // mutated. Swap _state's origin for real multi-subsystem aggregation
-    20	    // later if this ends up needing more than gathering + recruiting - the
-    21	    // interface doesn't need to change.
-    22	    public class SectStateProvider : ISectStateProvider
-    23	    {
-    24	        // task id -> (resource id, units produced per second while assigned)
-    25	        private static readonly Dictionary<string, (string Resource, float PerSecond)> GatheringRates = new()
-    26	        {
-    27	            ["gathering_herb"] = ("herb", 0.2f),
-    28	            ["gathering_wood"] = ("wood", 0.2f),
-    29	            ["gathering_ore"] = ("ore", 0.15f),
-    30	            ["gathering_provisions"] = ("provisions", 0.25f),
-    31	        };
-    32	
-    33	        private static readonly string[] GatheringTasks = GatheringRates.Keys.ToArray();
-    34	
-    35	        // task id -> recipe. CraftSeconds is how long one disciple assigned
-    36	        // to that task takes to finish one item, once ingredients are
-    37	        // available - if the stockpile runs short, progress holds at 100%
-    38	        // and waits rather than losing accumulated time.
-    39	        private static readonly Dictionary<string, CraftingRecipe> CraftingRecipes = new()
-    40	        {
-    41	            ["refining_elixir"] = new CraftingRecipe(
-    42	                "elixir_qi_gathering", 3, 20f,
-    43	                new Dictionary<string, int> { ["herb"] = 10 }),
-    44	
-    45	            ["forging_artifact"] = new CraftingRecipe(
-    46	                "sword_azure_flame", 5, 30f,
-    47	                new Dictionary<string, int> { ["ore"] = 15, ["wood"] = 10 }),
-    48	        };        // Task System v2 (§6) — the known task set is the keys of the existing
-    49	        // gathering + crafting dictionaries, plus "meditation". No new data
-    50	        // pipeline: the dictionaries ARE the source of truth for what a disciple
-    51	        // can be assigned. See open-questions.md §15 for the cultivation/meditation id question.
-    52	        private static readonly HashSet<string> KnownTasks = BuildKnownTasks();
+    12	    /// <summary>
+    13	    /// P10B — what one work tick did for one disciple. Exactly ONE of these is
+    14	    /// recorded per disciple per tick; <see cref="None"/> means the tick changed no
+    15	    /// attribute (unknown / other task).
+    16	    /// </summary>
+    17	    public enum DiscipleWorkOutcome
+    18	    {
+    19	        /// <summary>Any other task — no attribute change.</summary>
+    20	        None = 0,
+    21	        /// <summary>Gathering passed its building gate and produced its rate this tick.</summary>
+    22	        ProductiveGathering = 1,
+    23	        /// <summary>Crafting passed its gate and advanced (a completion tick counts as productive).</summary>
+    24	        ProductiveCrafting = 2,
+    25	        /// <summary>Gate failed (building missing) or the craft is held waiting for materials.</summary>
+    26	        Blocked = 3,
+    27	        /// <summary>Meditation.</summary>
+    28	        Resting = 4,
+    29	    }
+    30	
+    31	    // Implements the seam TimeSystem.cs defines (ISectStateProvider).
+    32	    //
+    33	    // IMPORTANT: this holds ONE live state instance for the process
+    34	    // lifetime, created once from mock data. Earlier versions called
+    35	    // MockSectData.Create() fresh on every query, which meant any mutation
+    36	    // was invisible on the next get_sect_state call - it was building a
+    37	    // brand new object every time, not reading back the one that got
+    38	    // mutated. Swap _state's origin for real multi-subsystem aggregation
+    39	    // later if this ends up needing more than gathering + recruiting - the
+    40	    // interface doesn't need to change.
+    41	    public class SectStateProvider : ISectStateProvider
+    42	    {
+    43	        // task id -> (resource id, units produced per second while assigned)
+    44	        private static readonly Dictionary<string, (string Resource, float PerSecond)> GatheringRates = new()
+    45	        {
+    46	            ["gathering_herb"] = ("herb", 0.2f),
+    47	            ["gathering_wood"] = ("wood", 0.2f),
+    48	            ["gathering_ore"] = ("ore", 0.15f),
+    49	            ["gathering_provisions"] = ("provisions", 0.25f),
+    50	        };
+    51	
+    52	        private static readonly string[] GatheringTasks = GatheringRates.Keys.ToArray();
     53	
-    54	        // P3 (Task Assignment UI) — stable ordered list of the same known tasks
-    55	        // (gathering, crafting, meditation). Kept beside the HashSet so the UI
-    56	        // query and the assignment gate can never drift apart; both are built
-    57	        // from the same dictionaries.
-    58	        private static readonly string[] KnownTaskOrder =
-    59	            GatheringRates.Keys.Concat(CraftingRecipes.Keys).Concat(new[] { "meditation" }).ToArray();
-    60	
-    61	        private static HashSet<string> BuildKnownTasks()
-    62	        {
-    63	            var set = new HashSet<string>();
-    64	            foreach (var task in GatheringRates.Keys) set.Add(task);
-    65	            foreach (var task in CraftingRecipes.Keys) set.Add(task);
-    66	            set.Add("meditation");
-    67	            return set;
-    68	 }
-    69	
-    70	        // Task building-requirements — static design data, not runtime state:
-    71	        // task id -> building def id that must be in SectEconomyState.PlacedBuildings
-    72	        // before that task can be assigned. Tasks absent from this dictionary
-    73	        // (gathering_wood/ore/provisions, meditation) have no requirement.
-    74	        // Placeholder lookup: list-scan of PlacedBuildings is fast enough while
-    75	        // the roster is small; swap for an index later if it grows (same shape
-    76	        // as NextBuildingInstanceId's scan).
-    77	        private static readonly Dictionary<string, string> TaskRequiredBuilding = new Dictionary<string, string>
-    78	        {
-    79	            ["gathering_herb"] = "herb_plot",
-    80	            ["refining_elixir"] = "pill_hall",
-    81	            ["forging_artifact"] = "forge",
-    82	        };
-    83	
-    84	        // Tick-side variant of IsTaskAvailable — same rules, but the caller
-    85	        // supplies a placed-DefId set built ONCE per tick (never scan
-    86	        // PlacedBuildings per disciple). Same failReason shape so log/UI text
-    87	        // stays consistent with the gate on TryAssignTask.
-    88	        private static bool IsTaskAvailableWithBuildings(string taskId, HashSet<string> placedDefIds, out string failReason)
+    54	        // task id -> recipe. CraftSeconds is how long one disciple assigned
+    55	        // to that task takes to finish one item, once ingredients are
+    56	        // available - if the stockpile runs short, progress holds at 100%
+    57	        // and waits rather than losing accumulated time.
+    58	        //
+    59	        // P10B: this dictionary is the ONE definition of the task -> skill-category
+    60	        // mapping — a completed craft awards XP to exactly the category of the recipe
+    61	        // it finished (refining_elixir -> alchemy, forging_artifact -> forging).
+    62	        // Gathering needs no table: every gathering task maps to the single
+    63	        // CategoryGathering constant. Meditation grants no skill XP.
+    64	        private static readonly Dictionary<string, CraftingRecipe> CraftingRecipes = new()
+    65	        {
+    66	            ["refining_elixir"] = new CraftingRecipe(
+    67	                "elixir_qi_gathering", 3, 20f,
+    68	                new Dictionary<string, int> { ["herb"] = 10 },
+    69	                DiscipleAttributesConfig.CategoryAlchemy),
+    70	
+    71	            ["forging_artifact"] = new CraftingRecipe(
+    72	                "sword_azure_flame", 5, 30f,
+    73	                new Dictionary<string, int> { ["ore"] = 15, ["wood"] = 10 },
+    74	                DiscipleAttributesConfig.CategoryForging),
+    75	        };        // Task System v2 (§6) — the known task set is the keys of the existing
+    76	        // gathering + crafting dictionaries, plus "meditation". No new data
+    77	        // pipeline: the dictionaries ARE the source of truth for what a disciple
+    78	        // can be assigned. See open-questions.md §15 for the cultivation/meditation id question.
+    79	        private static readonly HashSet<string> KnownTasks = BuildKnownTasks();
+    80	
+    81	        // P3 (Task Assignment UI) — stable ordered list of the same known tasks
+    82	        // (gathering, crafting, meditation). Kept beside the HashSet so the UI
+    83	        // query and the assignment gate can never drift apart; both are built
+    84	        // from the same dictionaries.
+    85	        private static readonly string[] KnownTaskOrder =
+    86	            GatheringRates.Keys.Concat(CraftingRecipes.Keys).Concat(new[] { "meditation" }).ToArray();
+    87	
+    88	        private static HashSet<string> BuildKnownTasks()
     89	        {
-    90	            failReason = string.Empty;
-    91	
-    92	            if (string.IsNullOrEmpty(taskId) || !KnownTasks.Contains(taskId))
-    93	            {
-    94	                failReason = $"Unknown task: '{taskId}'.";
-    95	                return false;
-    96	            }
-    97	
-    98	            string requiredBuilding;
-    99	            if (!TaskRequiredBuilding.TryGetValue(taskId, out requiredBuilding))
-   100	                return true; // no requirement — always available once known
-   101	
-   102	            if (placedDefIds != null && placedDefIds.Contains(requiredBuilding))
-   103	                return true;
-   104	
-   105	            failReason = $"Task '{taskId}' requires an existing '{requiredBuilding}' building.";
-   106	            return false;
-   107	        }
-   108	
-   109	        /// <summary>Placed DefId set for one tick — built once, shared by both ticks.</summary>
-   110	        private HashSet<string> CollectPlacedDefIds()
-   111	        {
-   112	            var set = new HashSet<string>();
-   113	            for (int i = 0; i < _state.PlacedBuildings.Count; i++)
-   114	            {
-   115	                var pb = _state.PlacedBuildings[i];
-   116	                if (pb != null && !string.IsNullOrEmpty(pb.DefId)) set.Add(pb.DefId);
-   117	            }
-   118	            return set;
-   119	        }
-   120	
-   121	        // Placeholder name pool - swap for a real generator once there's a
-   122	        // reason to (naming conventions, avoiding repeats at scale, etc.).
-   123	        private static readonly string[] RecruitNamePool =
-   124	        {
-   125	            "Chen Wei", "Bai Ling", "Zhou Tao", "Xiao Mei", "Jiang Yu", "Wen Hao",
-   126	        };
-   127	
-   128	        private static readonly string[] StarterHair = { "hair_short", "hair_topknot", "hair_twin_tail" };
-   129	
-   130	        private readonly SectEconomyState _state = MockSectData.Create();
-   131	        private readonly IPublisher<DiscipleRecruitedMessage> _discipleRecruitedPublisher;
-   132	        private readonly IPublisher<SectResourceChangedMessage> _resourceChangedPublisher;
-   133	        private readonly IPublisher<AvatarEquipmentChangedMessage> _avatarChangedPublisher;
-   134	        private readonly IPublisher<DiscipleChibiBackendChangedMessage> _chibiBackendPublisher;
-   135	        private readonly IPublisher<BuildingPlacedMessage> _buildingPlacedPublisher;
-   136	        private readonly IPublisher<DiscipleTaskChangedMessage> _discipleTaskChangedPublisher;
-   137	        private readonly IPublisher<DiscipleOwnerChangedMessage> _ownershipChangedPublisher;
-   138	        // P9A — in-memory only, same rule as the ownership publisher (autonomy is a
-   139	        // local player/UI concern; it never crosses the TCP wire).
-   140	        private readonly IPublisher<DiscipleControlModeChangedMessage> _controlModeChangedPublisher;
-   141	        private readonly BuildingDefPool _buildingDefPool;
-   142	        private readonly AvatarPartPool _avatarPartPool;
-   143	        private readonly VisualRuntimeConfig _visualConfig;
-   144	        private readonly IVisualEntitlementProvider _entitlementProvider;
-   145	        /// <summary>Concrete ref to the injected provider (null when a test/substitute implements the interface directly) — used only for bind-late wiring, not for resolution.</summary>
-   146	        private readonly DefaultEntitlementProvider _defaultEntitlementProvider;
+    90	            var set = new HashSet<string>();
+    91	            foreach (var task in GatheringRates.Keys) set.Add(task);
+    92	            foreach (var task in CraftingRecipes.Keys) set.Add(task);
+    93	            set.Add("meditation");
+    94	            return set;
+    95	 }
+    96	
+    97	        // Task building-requirements — static design data, not runtime state:
+    98	        // task id -> building def id that must be in SectEconomyState.PlacedBuildings
+    99	        // before that task can be assigned. Tasks absent from this dictionary
+   100	        // (gathering_wood/ore/provisions, meditation) have no requirement.
+   101	        // Placeholder lookup: list-scan of PlacedBuildings is fast enough while
+   102	        // the roster is small; swap for an index later if it grows (same shape
+   103	        // as NextBuildingInstanceId's scan).
+   104	        private static readonly Dictionary<string, string> TaskRequiredBuilding = new Dictionary<string, string>
+   105	        {
+   106	            ["gathering_herb"] = "herb_plot",
+   107	            ["refining_elixir"] = "pill_hall",
+   108	            ["forging_artifact"] = "forge",
+   109	        };
+   110	
+   111	        // Tick-side variant of IsTaskAvailable — same rules, but the caller
+   112	        // supplies a placed-DefId set built ONCE per tick (never scan
+   113	        // PlacedBuildings per disciple). Same failReason shape so log/UI text
+   114	        // stays consistent with the gate on TryAssignTask.
+   115	        private static bool IsTaskAvailableWithBuildings(string taskId, HashSet<string> placedDefIds, out string failReason)
+   116	        {
+   117	            failReason = string.Empty;
+   118	
+   119	            if (string.IsNullOrEmpty(taskId) || !KnownTasks.Contains(taskId))
+   120	            {
+   121	                failReason = $"Unknown task: '{taskId}'.";
+   122	                return false;
+   123	            }
+   124	
+   125	            string requiredBuilding;
+   126	            if (!TaskRequiredBuilding.TryGetValue(taskId, out requiredBuilding))
+   127	                return true; // no requirement — always available once known
+   128	
+   129	            if (placedDefIds != null && placedDefIds.Contains(requiredBuilding))
+   130	                return true;
+   131	
+   132	            failReason = $"Task '{taskId}' requires an existing '{requiredBuilding}' building.";
+   133	            return false;
+   134	        }
+   135	
+   136	        /// <summary>Placed DefId set for one tick — built once, shared by both ticks.</summary>
+   137	        private HashSet<string> CollectPlacedDefIds()
+   138	        {
+   139	            var set = new HashSet<string>();
+   140	            for (int i = 0; i < _state.PlacedBuildings.Count; i++)
+   141	            {
+   142	                var pb = _state.PlacedBuildings[i];
+   143	                if (pb != null && !string.IsNullOrEmpty(pb.DefId)) set.Add(pb.DefId);
+   144	            }
+   145	            return set;
+   146	        }
    147	
-   148	        // P5B — real-time clock for the viewer inactivity/activity rule. Injected so
-   149	        // tests can drive it deterministically; NEVER scaled game time (game time can
-   150	        // be paused/speed-changed, which would silently extend or shrink protection).
-   151	        private readonly IClock _clock;
-   152	
-   153	        // P5B — real-time cooldown on ACTUAL task changes, keyed per disciple.
-   154	        // Prototype balance value (see DefaultTaskChangeCooldownSeconds). A no-op
-   155	        // request never consumes or checks it.
-   156	        private readonly Dictionary<string, DateTime> _taskChangeLastAtUtc = new();
-   157	
-   158	        // Fractional resource accumulated per task since the last whole
-   159	        // unit was added to the stockpile - avoids losing sub-1 production
-   160	        // between ticks.
-   161	        private readonly Dictionary<string, float> _gatherAccumulators = new();
-   162	
-   163	        // Seconds accumulated toward the current craft, keyed per disciple
-   164	        // (not per task like gathering) - crafting has a resource cost, so
-   165	        // two disciples on the same task must progress independently, not
-   166	        // share one pooled timer.
-   167	        private readonly Dictionary<string, float> _craftProgress = new();
-   168	
-   169	        public SectStateProvider(
-   170	            IPublisher<DiscipleRecruitedMessage> discipleRecruitedPublisher,
-   171	            IPublisher<SectResourceChangedMessage> resourceChangedPublisher,
-   172	            IPublisher<AvatarEquipmentChangedMessage> avatarChangedPublisher,
-   173	            IPublisher<DiscipleChibiBackendChangedMessage> chibiBackendPublisher,
-   174	            AvatarPartPool avatarPartPool,
-   175	            VisualRuntimeConfig visualConfig,
-   176	            IVisualEntitlementProvider entitlementProvider,
-   177	            BuildingDefPool buildingDefPool,
-   178	            IPublisher<BuildingPlacedMessage> buildingPlacedPublisher,
-   179	            IPublisher<DiscipleTaskChangedMessage> discipleTaskChangedPublisher,
-   180	            IPublisher<DiscipleOwnerChangedMessage> ownershipChangedPublisher = null,
-   181	            IClock clock = null,
-   182	            IPublisher<DiscipleControlModeChangedMessage> controlModeChangedPublisher = null)
-   183	        {
-   184	            _discipleRecruitedPublisher = discipleRecruitedPublisher;
-   185	            _resourceChangedPublisher = resourceChangedPublisher;
-   186	            _avatarChangedPublisher = avatarChangedPublisher;
-   187	            _chibiBackendPublisher = chibiBackendPublisher;
-   188	            _buildingDefPool = buildingDefPool;
-   189	            _buildingPlacedPublisher = buildingPlacedPublisher;
-   190	            _discipleTaskChangedPublisher = discipleTaskChangedPublisher;
-   191	            // P4: optional (default null) so every existing test construction site
-   192	            // stays valid; production wires it via VContainer in UIInstaller/GameLifetimeScope.
-   193	            _ownershipChangedPublisher = ownershipChangedPublisher;
-   194	            // P9A: optional (default null) for the same reason — appended LAST so the
-   195	            // positional test construction sites (ownerChanged, clock) are unchanged.
-   196	            _controlModeChangedPublisher = controlModeChangedPublisher;
-   197	            _avatarPartPool = avatarPartPool;
-   198	            _visualConfig = visualConfig;
-   199	            _entitlementProvider = entitlementProvider;
-   200	            _defaultEntitlementProvider = entitlementProvider as DefaultEntitlementProvider;
-   201	            // P5B: production registers UtcClock via DI; every existing test construction
-   202	            // site omits it and keeps working (real UTC clock, which those tests never
-   203	            // depend on because they never cross the 10-minute protection window).
-   204	            _clock = clock ?? new UtcClock();
-   205	
-   206	            // Phase 5 — bind the provider's rank source HERE instead of injecting
-   207	            // ISectStateProvider into the provider itself: that direction would be a
-   208	            // DI cycle (SectStateProvider → provider → SectStateProvider). Bind-late
-   209	            // keeps the provider ignorant of the state module; before this line runs,
-   210	            // CanUse(discipleId, "owner") fails closed (Unspecified = deny).
-   211	            //
-   212	            // Note: inject the INTERFACE, not the concrete type. In this VContainer
-   213	            // version Register<I, Impl> registers only the interface (concrete Resolve
-   214	            // is not available), so consumers must resolve IVisualEntitlementProvider
-   215	            // and reach the concrete for bind-late via a type test.
-   216	            _defaultEntitlementProvider?.BindRankLookup(id =>
-   217	            {
-   218	                var d = FindDisciple(id);
-   219	                return d != null ? d.Rank : DiscipleRank.Unspecified;
-   220	            });
-   221	        }
-   222	
-   223	        /// <summary>Single lookup helper — also used by the entitlement rank binding.</summary>
-   224	        private DiscipleState FindDisciple(string discipleId)
-   225	        {
-   226	            if (string.IsNullOrEmpty(discipleId)) return null;
-   227	            for (int i = 0; i < _state.Disciples.Count; i++)
-   228	            {
-   229	                var d = _state.Disciples[i];
-   230	                if (d != null && d.DiscipleId == discipleId) return d;
-   231	            }
-   232	            return null;
-   233	        }
-   234	
-   235	        public SectEconomyState BuildSectEconomyState()
-   236	        {
-   237	            return _state;
-   238	        }
-   239	
-   240	        // Passive resource gathering - every disciple whose CurrentTask is
-   241	        // a known gathering task contributes toward that resource. Called
-   242	        // from DiscipleSystem.Tick(). Disciples whose task fails the building
-   243	        // requirement are SKIPPED (CurrentTask is never rewritten here — the
-   244	        // assignment gate is the only place that validates on assignment).
-   245	        public void TickGathering(float deltaTimeSeconds)
-   246	        {
-   247	            var placedDefIds = CollectPlacedDefIds(); // once per tick, not per disciple
-   248	            foreach (var disciple in _state.Disciples)
-   249	            {
-   250	                if (!IsTaskAvailableWithBuildings(disciple.CurrentTask, placedDefIds, out _)) continue;
-   251	                if (!GatheringRates.TryGetValue(disciple.CurrentTask, out var rate)) continue;
-   252	
-   253	                var accKey = disciple.CurrentTask;
-   254	                var acc = _gatherAccumulators.TryGetValue(accKey, out var existing) ? existing : 0f;
-   255	                acc += rate.PerSecond * deltaTimeSeconds;
-   256	
-   257	                var wholeUnits = Mathf.FloorToInt(acc);
-   258	                if (wholeUnits > 0)
-   259	                {
-   260	                    AdjustAndNotify(_state.Stockpile.RawResources, rate.Resource, wholeUnits);
-   261	                    acc -= wholeUnits;
-   262	                    Debug.Log($"[SectStateProvider] Gathered +{wholeUnits} {rate.Resource} (task={accKey})");
-   263	                }
-   264	
-   265	                _gatherAccumulators[accKey] = acc;
-   266	            }
-   267	        }
-   268	
-   269	        // Disciple crafting: whoever's CurrentTask matches a known recipe
-   270	        // accumulates progress; once a craft completes, consumes the raw
-   271	        // resource cost and produces the item - into the sect stockpile for
-   272	        // ordinary disciples, or straight into personal inventory for
-   273	        // Elder+ (matches the ownership rule from the economy design:
-   274	        // outer/inner disciples craft for the sect, elders keep their own).
-   275	        // Called from ResourceCraftingSystem.Tick(). Disciples whose task
-   276	        // fails the building requirement are SKIPPED — progress is HELD at
-   277	        // its current value exactly like the out-of-materials path (never
-   278	        // reset), and CurrentTask is never rewritten here.
-   279	        public void TickCrafting(float deltaTimeSeconds)
-   280	        {
-   281	            var placedDefIds = CollectPlacedDefIds(); // once per tick, not per disciple
-   282	            foreach (var disciple in _state.Disciples)
-   283	            {
-   284	                if (!IsTaskAvailableWithBuildings(disciple.CurrentTask, placedDefIds, out _)) continue;
-   285	                if (!CraftingRecipes.TryGetValue(disciple.CurrentTask, out var recipe)) continue;
-   286	
-   287	                var progress = _craftProgress.TryGetValue(disciple.DiscipleId, out var existing) ? existing : 0f;
-   288	                progress += deltaTimeSeconds;
-   289	
-   290	                if (progress < recipe.CraftSeconds) 
-   291	                {
-   292	                    _craftProgress[disciple.DiscipleId] = progress;
-   293	                    continue;
-   294	                }
-   295	
-   296	                if (!TryConsume(_state.Stockpile.RawResources, recipe.Costs))
-   297	                {
-   298	                    // Ready to complete but not enough raw resources - hold
-   299	                    // at the completion threshold and wait rather than
-   300	                    // losing the accumulated progress or overshooting.
-   301	                    _craftProgress[disciple.DiscipleId] = recipe.CraftSeconds;
-   302	                    continue;
-   303	                }
-   304	
-   305	                foreach (var (resource, amount) in recipe.Costs)
-   306	                {
-   307	                    var newTotal = _state.Stockpile.RawResources.TryGetValue(resource, out var v) ? v : 0;
-   308	                    _resourceChangedPublisher.Publish(new SectResourceChangedMessage
-   309	                    {
-   310	                        ResourceId = resource,
-   311	                        Delta = -amount,
-   312	                        NewTotal = newTotal,
-   313	                    });
-   314	                }
-   315	
-   316	                var item = new InventoryItem
-   317	                {
-   318	                    ItemDefId = recipe.ItemDefId,
-   319	                    Quantity = 1,
-   320	                    Grade = recipe.Grade,
-   321	                    OwnerScope = disciple.Rank >= DiscipleRank.Elder ? OwnerScope.Personal : OwnerScope.SectStockpile,
-   322	                };
-   323	
-   324	                if (item.OwnerScope == OwnerScope.Personal)
-   325	                {
-   326	                    disciple.PersonalInventory.Add(item);
-   327	                }
-   328	                else
-   329	                {
-   330	                    AddToStockpileGoods(item);
+   148	        // Placeholder name pool - swap for a real generator once there's a
+   149	        // reason to (naming conventions, avoiding repeats at scale, etc.).
+   150	        private static readonly string[] RecruitNamePool =
+   151	        {
+   152	            "Chen Wei", "Bai Ling", "Zhou Tao", "Xiao Mei", "Jiang Yu", "Wen Hao",
+   153	        };
+   154	
+   155	        private static readonly string[] StarterHair = { "hair_short", "hair_topknot", "hair_twin_tail" };
+   156	
+   157	        private readonly SectEconomyState _state = MockSectData.Create();
+   158	        private readonly IPublisher<DiscipleRecruitedMessage> _discipleRecruitedPublisher;
+   159	        private readonly IPublisher<SectResourceChangedMessage> _resourceChangedPublisher;
+   160	        private readonly IPublisher<AvatarEquipmentChangedMessage> _avatarChangedPublisher;
+   161	        private readonly IPublisher<DiscipleChibiBackendChangedMessage> _chibiBackendPublisher;
+   162	        private readonly IPublisher<BuildingPlacedMessage> _buildingPlacedPublisher;
+   163	        private readonly IPublisher<DiscipleTaskChangedMessage> _discipleTaskChangedPublisher;
+   164	        private readonly IPublisher<DiscipleOwnerChangedMessage> _ownershipChangedPublisher;
+   165	        // P9A — in-memory only, same rule as the ownership publisher (autonomy is a
+   166	        // local player/UI concern; it never crosses the TCP wire).
+   167	        private readonly IPublisher<DiscipleControlModeChangedMessage> _controlModeChangedPublisher;
+   168	        private readonly BuildingDefPool _buildingDefPool;
+   169	        private readonly AvatarPartPool _avatarPartPool;
+   170	        private readonly VisualRuntimeConfig _visualConfig;
+   171	        private readonly IVisualEntitlementProvider _entitlementProvider;
+   172	        /// <summary>Concrete ref to the injected provider (null when a test/substitute implements the interface directly) — used only for bind-late wiring, not for resolution.</summary>
+   173	        private readonly DefaultEntitlementProvider _defaultEntitlementProvider;
+   174	
+   175	        // P5B — real-time clock for the viewer inactivity/activity rule. Injected so
+   176	        // tests can drive it deterministically; NEVER scaled game time (game time can
+   177	        // be paused/speed-changed, which would silently extend or shrink protection).
+   178	        private readonly IClock _clock;
+   179	
+   180	        // P5B — real-time cooldown on ACTUAL task changes, keyed per disciple.
+   181	        // Prototype balance value (see DefaultTaskChangeCooldownSeconds). A no-op
+   182	        // request never consumes or checks it.
+   183	        private readonly Dictionary<string, DateTime> _taskChangeLastAtUtc = new();
+   184	
+   185	        // Fractional resource accumulated per task since the last whole
+   186	        // unit was added to the stockpile - avoids losing sub-1 production
+   187	        // between ticks.
+   188	        private readonly Dictionary<string, float> _gatherAccumulators = new();
+   189	
+   190	        // Seconds accumulated toward the current craft, keyed per disciple
+   191	        // (not per task like gathering) - crafting has a resource cost, so
+   192	        // two disciples on the same task must progress independently, not
+   193	        // share one pooled timer.
+   194	        private readonly Dictionary<string, float> _craftProgress = new();
+   195	
+   196	        // P10B — per-tick scratch: disciple id -> that tick's single work record.
+   197	        // Cleared at the start of a tick and consumed by ApplyWorkAttributes, so an
+   198	        // outcome can never be written twice or applied twice. One small map, one
+   199	        // applier — no second clock, no fixed-step loop, no per-frame allocation.
+   200	        private struct WorkTickRecord
+   201	        {
+   202	            public DiscipleWorkOutcome Outcome;
+   203	            /// <summary>Non-null only on a craft-completion tick (P10B §4).</summary>
+   204	            public string CompletedCraftCategory;
+   205	        }
+   206	
+   207	        private readonly Dictionary<string, WorkTickRecord> _workTick = new();
+   208	        private int _workTickRecordCount;
+   209	
+   210	        public SectStateProvider(
+   211	            IPublisher<DiscipleRecruitedMessage> discipleRecruitedPublisher,
+   212	            IPublisher<SectResourceChangedMessage> resourceChangedPublisher,
+   213	            IPublisher<AvatarEquipmentChangedMessage> avatarChangedPublisher,
+   214	            IPublisher<DiscipleChibiBackendChangedMessage> chibiBackendPublisher,
+   215	            AvatarPartPool avatarPartPool,
+   216	            VisualRuntimeConfig visualConfig,
+   217	            IVisualEntitlementProvider entitlementProvider,
+   218	            BuildingDefPool buildingDefPool,
+   219	            IPublisher<BuildingPlacedMessage> buildingPlacedPublisher,
+   220	            IPublisher<DiscipleTaskChangedMessage> discipleTaskChangedPublisher,
+   221	            IPublisher<DiscipleOwnerChangedMessage> ownershipChangedPublisher = null,
+   222	            IClock clock = null,
+   223	            IPublisher<DiscipleControlModeChangedMessage> controlModeChangedPublisher = null)
+   224	        {
+   225	            _discipleRecruitedPublisher = discipleRecruitedPublisher;
+   226	            _resourceChangedPublisher = resourceChangedPublisher;
+   227	            _avatarChangedPublisher = avatarChangedPublisher;
+   228	            _chibiBackendPublisher = chibiBackendPublisher;
+   229	            _buildingDefPool = buildingDefPool;
+   230	            _buildingPlacedPublisher = buildingPlacedPublisher;
+   231	            _discipleTaskChangedPublisher = discipleTaskChangedPublisher;
+   232	            // P4: optional (default null) so every existing test construction site
+   233	            // stays valid; production wires it via VContainer in UIInstaller/GameLifetimeScope.
+   234	            _ownershipChangedPublisher = ownershipChangedPublisher;
+   235	            // P9A: optional (default null) for the same reason — appended LAST so the
+   236	            // positional test construction sites (ownerChanged, clock) are unchanged.
+   237	            _controlModeChangedPublisher = controlModeChangedPublisher;
+   238	            _avatarPartPool = avatarPartPool;
+   239	            _visualConfig = visualConfig;
+   240	            _entitlementProvider = entitlementProvider;
+   241	            _defaultEntitlementProvider = entitlementProvider as DefaultEntitlementProvider;
+   242	            // P5B: production registers UtcClock via DI; every existing test construction
+   243	            // site omits it and keeps working (real UTC clock, which those tests never
+   244	            // depend on because they never cross the 10-minute protection window).
+   245	            _clock = clock ?? new UtcClock();
+   246	
+   247	            // Phase 5 — bind the provider's rank source HERE instead of injecting
+   248	            // ISectStateProvider into the provider itself: that direction would be a
+   249	            // DI cycle (SectStateProvider → provider → SectStateProvider). Bind-late
+   250	            // keeps the provider ignorant of the state module; before this line runs,
+   251	            // CanUse(discipleId, "owner") fails closed (Unspecified = deny).
+   252	            //
+   253	            // Note: inject the INTERFACE, not the concrete type. In this VContainer
+   254	            // version Register<I, Impl> registers only the interface (concrete Resolve
+   255	            // is not available), so consumers must resolve IVisualEntitlementProvider
+   256	            // and reach the concrete for bind-late via a type test.
+   257	            _defaultEntitlementProvider?.BindRankLookup(id =>
+   258	            {
+   259	                var d = FindDisciple(id);
+   260	                return d != null ? d.Rank : DiscipleRank.Unspecified;
+   261	            });
+   262	        }
+   263	
+   264	        /// <summary>Single lookup helper — also used by the entitlement rank binding.</summary>
+   265	        private DiscipleState FindDisciple(string discipleId)
+   266	        {
+   267	            if (string.IsNullOrEmpty(discipleId)) return null;
+   268	            for (int i = 0; i < _state.Disciples.Count; i++)
+   269	            {
+   270	                var d = _state.Disciples[i];
+   271	                if (d != null && d.DiscipleId == discipleId) return d;
+   272	            }
+   273	            return null;
+   274	        }
+   275	
+   276	        public SectEconomyState BuildSectEconomyState()
+   277	        {
+   278	            return _state;
+   279	        }
+   280	
+   281	        // Passive resource gathering - every disciple whose CurrentTask is
+   282	        // a known gathering task contributes toward that resource. Called
+   283	        // from DiscipleSystem.Tick(). Disciples whose task fails the building
+   284	        // requirement are SKIPPED (CurrentTask is never rewritten here — the
+   285	        // assignment gate is the only place that validates on assignment).
+   286	        //
+   287	        // P10B: production is unchanged; this tick additionally records ONE work
+   288	        // outcome per disciple and then applies the attribute change once.
+   289	        public void TickGathering(float deltaTimeSeconds)
+   290	        {
+   291	            var placedDefIds = CollectPlacedDefIds(); // once per tick, not per disciple
+   292	            BeginWorkTick(); // P10B
+   293	            foreach (var disciple in _state.Disciples)
+   294	            {
+   295	                // P10B — EVERY disciple gets exactly one outcome in this tick. Meditation
+   296	                // rests; anything that is not a gathering task (including a crafting task,
+   297	                // whose tick owns its change) is None = no attribute change here, so the
+   298	                // outcome cannot be applied twice across the two ticks of a frame. The
+   299	                // empty-task guard must come first so no dictionary is probed with a null key.
+   300	                if (string.IsNullOrEmpty(disciple.CurrentTask))
+   301	                {
+   302	                    RecordWorkOutcome(disciple, DiscipleWorkOutcome.None);
+   303	                    continue;
+   304	                }
+   305	
+   306	                if (!GatheringRates.TryGetValue(disciple.CurrentTask, out var rate))
+   307	                {
+   308	                    RecordWorkOutcome(disciple, IsMeditationTask(disciple.CurrentTask)
+   309	                        ? DiscipleWorkOutcome.Resting
+   310	                        : DiscipleWorkOutcome.None);
+   311	                    continue;
+   312	                }
+   313	
+   314	                if (!IsTaskAvailableWithBuildings(disciple.CurrentTask, placedDefIds, out _))
+   315	                {
+   316	                    // P10B: the gate failed (building missing) → Blocked (small regen).
+   317	                    RecordWorkOutcome(disciple, DiscipleWorkOutcome.Blocked);
+   318	                    continue;
+   319	                }
+   320	
+   321	                var accKey = disciple.CurrentTask;
+   322	                var acc = _gatherAccumulators.TryGetValue(accKey, out var existing) ? existing : 0f;
+   323	                acc += rate.PerSecond * deltaTimeSeconds;
+   324	
+   325	                var wholeUnits = Mathf.FloorToInt(acc);
+   326	                if (wholeUnits > 0)
+   327	                {
+   328	                    AdjustAndNotify(_state.Stockpile.RawResources, rate.Resource, wholeUnits);
+   329	                    acc -= wholeUnits;
+   330	                    Debug.Log($"[SectStateProvider] Gathered +{wholeUnits} {rate.Resource} (task={accKey})");
    331	                }
    332	
-   333	                Debug.Log($"[SectStateProvider] {disciple.DisplayName} crafted {item.ItemDefId} " +
-   334	                          $"(grade {item.Grade}, {item.OwnerScope})");
-   335	
-   336	                // Carry over any overshoot instead of resetting to exactly 0.
-   337	                _craftProgress[disciple.DiscipleId] = progress - recipe.CraftSeconds;
-   338	            }
-   339	        }
-   340	
-   341	        // Adds a new Outer Disciple assigned to a gathering task, round-robin
-   342	        // across GatheringTasks so recruits don't all pile onto one resource.
-   343	        public void RecruitOuterDisciple(DiscipleSex sex = DiscipleSex.Unspecified)
-   344	        {
-   345	            var index = _state.Disciples.Count;
-   346	            var task = GatheringTasks[index % GatheringTasks.Length];
-   347	            var name = RecruitNamePool[index % RecruitNamePool.Length];
-   348	
-   349	            // Default parity: even index → Male, odd → Female (preserves existing mixed-roster look)
-   350	            var resolvedSex = (sex != DiscipleSex.Unspecified) ? sex
-   351	                : (index % 2 == 0) ? DiscipleSex.Male : DiscipleSex.Female;
-   352	
-   353	            var disciple = new DiscipleState
-   354	            {
-   355	                DiscipleId = $"d{index + 1:000}",
-   356	                DisplayName = name,
-   357	                Rank = DiscipleRank.OuterDisciple,
-   358	                Wallet = new CurrencyWallet(),
-   359	                PersonalInventory = new List<InventoryItem>(),
-   360	                CurrentTask = task,
-   361	                Sex = resolvedSex,
-   362	                Avatar = CreateStarterAvatar(index, resolvedSex),
-   363	                // P9A — new disciples start Manual (explicit, matching the field default).
-   364	                ControlMode = DiscipleControlMode.Manual,
-   365	                // P10A — fresh, normalized attribute block (stamina 100, all 3 skill
-   366	                // categories present at 0 XP). Data only; nothing consumes it yet.
-   367	                Attributes = DiscipleAttributes.Normalize(new DiscipleAttributes()),
-   368	            };
-   369	
-   370	            _state.Disciples.Add(disciple);
-   371	            _discipleRecruitedPublisher.Publish(new DiscipleRecruitedMessage
-   372	            {
-   373	                DiscipleId = disciple.DiscipleId,
-   374	                DisplayName = disciple.DisplayName,
-   375	            });
-   376	
-   377	            Debug.Log($"[SectStateProvider] Recruited outer disciple: {disciple.DisplayName} ({disciple.DiscipleId}), sex={resolvedSex}, assigned to {task}");
-   378	        }
-   379	
-   380	        private AvatarAppearance CreateStarterAvatar(int rosterIndex, DiscipleSex sex)
-   381	        {
-   382	            var a = new AvatarAppearance();
-   383	            a.SetSlot(AvatarSlots.Body, "body_robe_grey");
-   384	            a.SetSlot(AvatarSlots.Head, (sex == DiscipleSex.Female) ? "head_female_01" : "head_male_01");
-   385	            a.SetSlot(AvatarSlots.Hair, StarterHair[rosterIndex % StarterHair.Length]);
-   386	            return a;
-   387	        }
-   388	
-   389	        public bool TryChangeAvatarPart(string discipleId, string slot, string partId,
-   390	                                        out string failReason, out AvatarAppearance result)
-   391	        {
-   392	            failReason = string.Empty;
-   393	            result = null;
-   394	
-   395	            var disciple = _state.Disciples.FirstOrDefault(d => d.DiscipleId == discipleId);
-   396	            if (disciple == null) { failReason = $"No disciple with id: {discipleId}"; return false; }
-   397	
-   398	            if (System.Array.IndexOf(AvatarSlots.Equippable, slot) < 0)
-   399	            { failReason = $"Invalid slot: {slot}"; return false; }
-   400	
-   401	            if (!_avatarPartPool.IsValidForSlot(slot, partId))
-   402	            { failReason = $"PartId '{partId}' is not valid for slot '{slot}'"; return false; }
-   403	
-   404	            // Pose validation: reject a part whose poseId is non-empty and
-   405	            // differs from the disciple's effective pose.
-   406	            if (!string.IsNullOrEmpty(partId))
-   407	            {
-   408	                var partDef = _avatarPartPool.GetById(partId);
-   409	                if (partDef != null && !string.IsNullOrEmpty(partDef.poseId))
-   410	                {
-   411	                    string effectivePose = (disciple.Avatar != null && !string.IsNullOrEmpty(disciple.Avatar.PoseId))
-   412	                        ? disciple.Avatar.PoseId
-   413	                        : "pose_idle_01";
-   414	                    if (partDef.poseId != effectivePose)
-   415	                    {
-   416	                        failReason = $"Part '{partId}' requires pose '{partDef.poseId}' but disciple is in pose '{effectivePose}'.";
-   417	                        return false;
-   418	                    }
-   419	                }
-   420	            }
+   333	                _gatherAccumulators[accKey] = acc;
+   334	
+   335	                // P10B: reaching here means the gate passed → Productive.
+   336	                RecordWorkOutcome(disciple, DiscipleWorkOutcome.ProductiveGathering);
+   337	            }
+   338	
+   339	            ApplyWorkAttributes(deltaTimeSeconds); // P10B — the single apply step
+   340	        }
+   341	
+   342	        // Disciple crafting: whoever's CurrentTask matches a known recipe
+   343	        // accumulates progress; once a craft completes, consumes the raw
+   344	        // resource cost and produces the item - into the sect stockpile for
+   345	        // ordinary disciples, or straight into personal inventory for
+   346	        // Elder+ (matches the ownership rule from the economy design:
+   347	        // outer/inner disciples craft for the sect, elders keep their own).
+   348	        // Called from ResourceCraftingSystem.Tick(). Disciples whose task
+   349	        // fails the building requirement are SKIPPED — progress is HELD at
+   350	        // its current value exactly like the out-of-materials path (never
+   351	        // reset), and CurrentTask is never rewritten here.
+   352	        public void TickCrafting(float deltaTimeSeconds)
+   353	        {
+   354	            var placedDefIds = CollectPlacedDefIds(); // once per tick, not per disciple
+   355	            BeginWorkTick(); // P10B
+   356	            foreach (var disciple in _state.Disciples)
+   357	            {
+   358	                // P10B — EVERY disciple gets exactly one outcome in this tick too. Only a
+   359	                // crafting task changes an attribute here; everything else (gathering task,
+   360	                // meditation, unknown/empty) is None = handled by TickGathering, so no
+   361	                // stamina change is applied twice across the two ticks of a frame.
+   362	                if (string.IsNullOrEmpty(disciple.CurrentTask))
+   363	                {
+   364	                    RecordWorkOutcome(disciple, DiscipleWorkOutcome.None);
+   365	                    continue;
+   366	                }
+   367	
+   368	                if (!CraftingRecipes.TryGetValue(disciple.CurrentTask, out var recipe))
+   369	                {
+   370	                    RecordWorkOutcome(disciple, DiscipleWorkOutcome.None);
+   371	                    continue;
+   372	                }
+   373	
+   374	                if (!IsTaskAvailableWithBuildings(disciple.CurrentTask, placedDefIds, out _))
+   375	                {
+   376	                    // P10B: the gate failed (building missing) → Blocked (small regen).
+   377	                    RecordWorkOutcome(disciple, DiscipleWorkOutcome.Blocked);
+   378	                    continue;
+   379	                }
+   380	
+   381	                var progress = _craftProgress.TryGetValue(disciple.DiscipleId, out var existing) ? existing : 0f;
+   382	                progress += deltaTimeSeconds;
+   383	
+   384	                if (progress < recipe.CraftSeconds) 
+   385	                {
+   386	                    _craftProgress[disciple.DiscipleId] = progress;
+   387	                    // P10B: progress advanced → Productive (no completion yet).
+   388	                    RecordWorkOutcome(disciple, DiscipleWorkOutcome.ProductiveCrafting);
+   389	                    continue;
+   390	                }
+   391	
+   392	                if (!TryConsume(_state.Stockpile.RawResources, recipe.Costs))
+   393	                {
+   394	                    // Ready to complete but not enough raw resources - hold
+   395	                    // at the completion threshold and wait rather than
+   396	                    // losing the accumulated progress or overshooting.
+   397	                    _craftProgress[disciple.DiscipleId] = recipe.CraftSeconds;
+   398	                    // P10B: held waiting for materials → Blocked; no XP is awarded.
+   399	                    RecordWorkOutcome(disciple, DiscipleWorkOutcome.Blocked);
+   400	                    continue;
+   401	                }
+   402	
+   403	                foreach (var (resource, amount) in recipe.Costs)
+   404	                {
+   405	                    var newTotal = _state.Stockpile.RawResources.TryGetValue(resource, out var v) ? v : 0;
+   406	                    _resourceChangedPublisher.Publish(new SectResourceChangedMessage
+   407	                    {
+   408	                        ResourceId = resource,
+   409	                        Delta = -amount,
+   410	                        NewTotal = newTotal,
+   411	                    });
+   412	                }
+   413	
+   414	                var item = new InventoryItem
+   415	                {
+   416	                    ItemDefId = recipe.ItemDefId,
+   417	                    Quantity = 1,
+   418	                    Grade = recipe.Grade,
+   419	                    OwnerScope = disciple.Rank >= DiscipleRank.Elder ? OwnerScope.Personal : OwnerScope.SectStockpile,
+   420	                };
    421	
-   422	            // Validation ชั้น 5 — coverage: part ต้องมี art อย่างน้อย 1 backend ที่เปิดใช้
-   423	            // (empty layer = เจตนา "ถอดออก" ผ่านเสมอ — *_none defaults)
-   424	            // Face split (Roadmap #1): face sub-layers เป็น portrait-only ตามดีไซน์ (R4 —
-   425	            // chibi เก็บ feature baked-in) จึงผ่านด้วย Portrait เดี่ยว โดยไม่ต้องมี chibi/spine art
-   426	            // (แก้ latent bug: acc_none — ชิ้น "ถอดเครื่องประดับ" ที่มีแต่ chibi art — เคยโดน reject)
-   427	            if (!string.IsNullOrEmpty(partId))
-   428	            {
-   429	                var partDef = _avatarPartPool.GetById(partId);
-   430	                if (partDef != null && !partDef.IsEmptyLayer)
-   431	                {
-   432	                    bool anyCovered =
-   433	                        partDef.Supports(VisualBackend.Portrait) ||
-   434	                        (_visualConfig != null && _visualConfig.SpriteSheetEnabled &&
-   435	                         partDef.Supports(VisualBackend.SpriteSheet)) ||
-   436	                        (_visualConfig != null && _visualConfig.SpineEnabled &&
-   437	                         partDef.Supports(VisualBackend.Spine));
-   438	                    if (!anyCovered)
-   439	                    {
-   440	                        failReason = $"Part '{partId}' has no art on any enabled backend (coverage check).";
-   441	                        return false;
-   442	                    }
-   443	                }
-   444	            }
+   422	                if (item.OwnerScope == OwnerScope.Personal)
+   423	                {
+   424	                    disciple.PersonalInventory.Add(item);
+   425	                }
+   426	                else
+   427	                {
+   428	                    AddToStockpileGoods(item);
+   429	                }
+   430	
+   431	                Debug.Log($"[SectStateProvider] {disciple.DisplayName} crafted {item.ItemDefId} " +
+   432	                          $"(grade {item.Grade}, {item.OwnerScope})");
+   433	
+   434	                // Carry over any overshoot instead of resetting to exactly 0.
+   435	                _craftProgress[disciple.DiscipleId] = progress - recipe.CraftSeconds;
+   436	
+   437	                // P10B: this is the authoritative completion point. The completion tick
+   438	                // counts as Productive (§4 simplification) and carries the recipe's
+   439	                // skill category so the XP is awarded ONCE, in ApplyWorkAttributes.
+   440	                RecordWorkOutcome(disciple, DiscipleWorkOutcome.ProductiveCrafting, recipe.SkillCategory);
+   441	            }
+   442	
+   443	            ApplyWorkAttributes(deltaTimeSeconds); // P10B — the single apply step
+   444	        }
    445	
-   446	            // Validation ชั้น 6 — entitlement (Phase 5, §8): part ที่ติด entitlement
-   447	            // ต้องผ่าน IVisualEntitlementProvider เท่านั้น — ต่างจากชั้น 5 ที่ป้องกัน
-   448	            // "render ไม่ได้" ชั้นนี้ป้องกัน "ไม่มีสิทธิ์ใช้" — failReason เขียนให้
-   449	            // AI/UI อ่านแล้วเข้าใจเหตุผล (ตามสเปก Phase 5)
-   450	            if (!string.IsNullOrEmpty(partId) && _entitlementProvider != null)
-   451	            {
-   452	                var entitlementDef = _avatarPartPool.GetById(partId);
-   453	                if (entitlementDef != null && !string.IsNullOrEmpty(entitlementDef.entitlement) &&
-   454	                    !_entitlementProvider.CanUse(discipleId, entitlementDef.entitlement))
-   455	                {
-   456	                    failReason = $"Part '{partId}' requires entitlement '{entitlementDef.entitlement}'.";
-   457	                    return false;
-   458	                }
-   459	            }
-   460	
-   461	            if (disciple.Avatar == null) disciple.Avatar = new AvatarAppearance();
-   462	
-   463	            var oldPart = disciple.Avatar.GetSlot(slot);
-   464	            disciple.Avatar.SetSlot(slot, partId);
+   446	        // ---------- P10B: work outcome → attribute change ----------
+   447	
+   448	        /// <summary>Starts one tick's outcome scratch (P10B).</summary>
+   449	        private void BeginWorkTick()
+   450	        {
+   451	            _workTick.Clear();
+   452	            _workTickRecordCount = 0;
+   453	        }
+   454	
+   455	        /// <summary>
+   456	        /// Records this tick's outcome for one disciple. Each tick writes exactly ONE
+   457	        /// record per disciple (the two ticks of a frame cover different task domains and
+   458	        /// the other side records None), which is what keeps the apply step from
+   459	        /// double-counting a change.
+   460	        /// </summary>
+   461	        private void RecordWorkOutcome(DiscipleState disciple, DiscipleWorkOutcome outcome,
+   462	                                       string completedCraftCategory = null)
+   463	        {
+   464	            if (disciple == null || string.IsNullOrEmpty(disciple.DiscipleId)) return;
    465	
-   466	            _avatarChangedPublisher.Publish(new AvatarEquipmentChangedMessage
+   466	            _workTick[disciple.DiscipleId] = new WorkTickRecord
    467	            {
-   468	                DiscipleId = discipleId,
-   469	                Slot       = slot,
-   470	                OldPartId  = oldPart,
-   471	                NewPartId  = partId
-   472	            });
+   468	                Outcome = outcome,
+   469	                CompletedCraftCategory = completedCraftCategory,
+   470	            };
+   471	            _workTickRecordCount++;
+   472	        }
    473	
-   474	            result = disciple.Avatar.Clone();   // return copy, not reference to live state
-   475	            return true;
-   476	        }
-   477	
-   478	        // ---------- P4 (local ownership test harness) — validated ownership assignment ----------
-   479	        // Non-Npc OwnerId convention: a real Twitch user id is numeric, so the
-   480	        // synthetic local-identity convention is "viewer_*" / "player_*" (alpha
-   481	        // prefix + underscore, no whitespace) — clearly fake, never shaped like a
-   482	        // real Twitch id. Real authentication (P5B+) replaces this entirely.
-   483	        private const string OwnerIdPattern = "^[A-Za-z][A-Za-z0-9]*(_[A-Za-z0-9]+)*$";
+   474	        /// <summary>
+   475	        /// The ONLY place P10B mutates attributes (one function, called once per tick,
+   476	        /// after that tick's outcomes are recorded — so nothing can be applied twice).
+   477	        /// Rates are linear in the tick's simulation delta (rate * delta, then clamped);
+   478	        /// a zero or non-finite delta (pause) changes no rate-driven value. A completed
+   479	        /// craft is an event, not a rate, so its XP is not scaled by the delta.
+   480	        /// </summary>
+   481	        private void ApplyWorkAttributes(float deltaTimeSeconds)
+   482	        {
+   483	            if (_workTick.Count == 0) return;
    484	
-   485	        public bool TrySetDiscipleOwner(string discipleId, DiscipleOwnerType ownerType,
-   486	                                        string ownerId, out string failReason)
-   487	        {
-   488	            failReason = string.Empty;
-   489	
-   490	            // 1. disciple must exist
-   491	            var disciple = FindDisciple(discipleId);
-   492	            if (disciple == null)
-   493	            {
-   494	                failReason = $"No disciple with id: {discipleId}";
-   495	                return false;
-   496	            }
+   485	            bool ratesApply = deltaTimeSeconds > 0f; // false for 0 (paused) and for NaN
+   486	
+   487	            foreach (var disciple in _state.Disciples)
+   488	            {
+   489	                if (disciple == null || string.IsNullOrEmpty(disciple.DiscipleId)) continue;
+   490	
+   491	                WorkTickRecord record;
+   492	                if (!_workTick.TryGetValue(disciple.DiscipleId, out record)) continue;
+   493	
+   494	                // Attributes are created + normalized by P10A; never invented or repaired here.
+   495	                var attributes = disciple.Attributes;
+   496	                if (attributes == null) continue;
    497	
-   498	            // 2. enum value must be defined (fail-closed on out-of-range casts)
-   499	            if (!Enum.IsDefined(typeof(DiscipleOwnerType), ownerType))
-   500	            {
-   501	                failReason = $"Undefined DiscipleOwnerType value: {ownerType}";
-   502	                return false;
-   503	            }
-   504	
-   505	            var trimmedOwnerId = (ownerId ?? string.Empty).Trim();
-   506	
-   507	            // 3. Npc normalizes OwnerId to empty (no orphaned ids on Npc rows)
-   508	            if (ownerType == DiscipleOwnerType.Npc)
-   509	            {
-   510	                if (!string.IsNullOrEmpty(trimmedOwnerId))
-   511	                {
-   512	                    failReason = "Npc ownership must carry an empty OwnerId.";
-   513	                    return false;
-   514	                }
-   515	                trimmedOwnerId = string.Empty;
-   516	            }
-   517	            else
-   518	            {
-   519	                // 4. non-Npc identities satisfy the identity convention
-   520	                if (string.IsNullOrEmpty(trimmedOwnerId) ||
-   521	                    !System.Text.RegularExpressions.Regex.IsMatch(trimmedOwnerId, OwnerIdPattern))
-   522	                {
-   523	                    failReason = $"OwnerId '{trimmedOwnerId}' does not satisfy the identity convention " +
-   524	                                 "(alpha prefix, [A-Za-z0-9_], no whitespace).";
-   525	                    return false;
-   526	                }
-   527	            }
+   498	                float staminaPerSecond;
+   499	                string xpCategory = null;
+   500	                float xpPerSecond = 0f;
+   501	
+   502	                switch (record.Outcome)
+   503	                {
+   504	                    case DiscipleWorkOutcome.ProductiveGathering:
+   505	                        staminaPerSecond = -DiscipleAttributesConfig.WorkStaminaDrainPerSecondGathering;
+   506	                        xpCategory = DiscipleAttributesConfig.CategoryGathering;
+   507	                        xpPerSecond = DiscipleAttributesConfig.WorkGatheringXpPerSecond;
+   508	                        break;
+   509	                    case DiscipleWorkOutcome.ProductiveCrafting:
+   510	                        staminaPerSecond = -DiscipleAttributesConfig.WorkStaminaDrainPerSecondCrafting;
+   511	                        break;
+   512	                    case DiscipleWorkOutcome.Resting:
+   513	                        staminaPerSecond = DiscipleAttributesConfig.WorkStaminaRegenPerSecondResting;
+   514	                        break;
+   515	                    case DiscipleWorkOutcome.Blocked:
+   516	                        staminaPerSecond = DiscipleAttributesConfig.WorkStaminaRegenPerSecondBlocked;
+   517	                        break;
+   518	                    default:
+   519	                        continue; // None — no attribute change at all
+   520	                }
+   521	
+   522	                if (ratesApply)
+   523	                {
+   524	                    attributes.Stamina = ClampStamina(attributes.Stamina + staminaPerSecond * deltaTimeSeconds);
+   525	                    if (xpCategory != null)
+   526	                        AddSkillXp(attributes, xpCategory, xpPerSecond * deltaTimeSeconds);
+   527	                }
    528	
-   529	            // 5. a Viewer identity must not control a different active disciple
-   530	            if (ownerType == DiscipleOwnerType.Viewer && !string.IsNullOrEmpty(trimmedOwnerId))
-   531	            {
-   532	                for (int i = 0; i < _state.Disciples.Count; i++)
-   533	                {
-   534	                    var other = _state.Disciples[i];
-   535	                    if (other == null || other.DiscipleId == discipleId) continue;
-   536	                    if (other.OwnerType == DiscipleOwnerType.Viewer && other.OwnerId == trimmedOwnerId)
-   537	                    {
-   538	                        failReason = $"Viewer '{trimmedOwnerId}' already controls '{other.DiscipleId}'.";
-   539	                        return false;
-   540	                    }
-   541	                }
-   542	            }
+   529	                // Craft completion XP: awarded where the item was actually produced. A
+   530	                // craft already held at CraftSeconds can complete on a zero-delta frame
+   531	                // (the item is still made), so the award follows the completion, not the delta.
+   532	                if (!string.IsNullOrEmpty(record.CompletedCraftCategory))
+   533	                    AddSkillXp(attributes, record.CompletedCraftCategory,
+   534	                               DiscipleAttributesConfig.WorkCraftXpPerCompletion);
+   535	            }
+   536	        }
+   537	
+   538	        /// <summary>Adds XP to one category, reading through the shared safe accessor and clamping to the cap.</summary>
+   539	        private static void AddSkillXp(DiscipleAttributes attributes, string category, float amount)
+   540	        {
+   541	            if (string.IsNullOrEmpty(category) || amount == 0f) return;
+   542	            if (attributes.SkillXp == null) attributes.SkillXp = new Dictionary<string, float>();
    543	
-   544	            // 6. no-op → no mutation, no message. A re-bind/reclaim of the SAME
-   545	            // owner (P5B) still refreshes that owner's activity — it is a valid
-   546	            // owner command, and it keeps an active player outside the override window.
-   547	            if (disciple.OwnerType == ownerType && disciple.OwnerId == trimmedOwnerId)
-   548	            {
-   549	                if (ownerType == DiscipleOwnerType.Viewer)
-   550	                    SyncViewerRegistryForBind(disciple, trimmedOwnerId);
-   551	                return true;
-   552	            }
-   553	
-   554	            // --- validation complete: single mutation block (no partial writes) ---
-   555	            var oldType = disciple.OwnerType;
-   556	            var oldOwnerId = disciple.OwnerId;
-   557	            disciple.OwnerType = ownerType;
-   558	            disciple.OwnerId = trimmedOwnerId;
-   559	
-   560	            // P9A — autonomy travels with Npc ownership: any real ownership switch
-   561	            // takes the disciple out of Auto (a Player/Viewer owner is never
-   562	            // brain-controlled, and the switch itself must disable Auto — rule 7).
-   563	            DisableAutoIfEngaged(disciple);
-   564	
-   565	            // P5B: registry travels with the disciple row — release the previous
-   566	            // viewer record (if any), then activate/bind the new one, so invariant
-   567	            // #1/#2/#3 (active ⇔ bound; non-active ⇒ unbound) always holds.
-   568	            if (oldType == DiscipleOwnerType.Viewer && !string.IsNullOrEmpty(oldOwnerId))
-   569	                SyncViewerRegistryForRelease(oldOwnerId);
-   570	            if (ownerType == DiscipleOwnerType.Viewer)
-   571	                SyncViewerRegistryForBind(disciple, trimmedOwnerId);
-   572	
-   573	            _ownershipChangedPublisher?.Publish(new DiscipleOwnerChangedMessage
-   574	            {
-   575	                DiscipleId = discipleId,
-   576	                OldType = oldType,
-   577	                OldOwnerId = oldOwnerId,
-   578	                NewType = ownerType,
-   579	                NewOwnerId = trimmedOwnerId,
-   580	            });
-   581	            return true;
-   582	        }
+   544	            float current = DiscipleAttributes.GetSkillXp(attributes, category);
+   545	            attributes.SkillXp[category] = ClampSkillXp(current + amount);
+   546	        }
+   547	
+   548	        /// <summary>Clamps to the configured stamina bounds (a non-finite value is left for Normalize to repair).</summary>
+   549	        private static float ClampStamina(float value)
+   550	        {
+   551	            if (float.IsNaN(value) || float.IsInfinity(value)) return value;
+   552	            if (value < DiscipleAttributesConfig.StaminaMin) return DiscipleAttributesConfig.StaminaMin;
+   553	            if (value > DiscipleAttributesConfig.StaminaMax) return DiscipleAttributesConfig.StaminaMax;
+   554	            return value;
+   555	        }
+   556	
+   557	        /// <summary>Clamps to the configured XP bounds (0..cap).</summary>
+   558	        private static float ClampSkillXp(float value)
+   559	        {
+   560	            if (float.IsNaN(value) || float.IsInfinity(value)) return DiscipleAttributesConfig.SkillXpDefault;
+   561	            if (value < DiscipleAttributesConfig.SkillXpMin) return DiscipleAttributesConfig.SkillXpMin;
+   562	            if (value > DiscipleAttributesConfig.SkillXpMax) return DiscipleAttributesConfig.SkillXpMax;
+   563	            return value;
+   564	        }
+   565	
+   566	        /// <summary>P10B — the resting task id (same literal KnownTasks is built with).</summary>
+   567	        private static bool IsMeditationTask(string taskId)
+   568	        {
+   569	            return taskId == "meditation";
+   570	        }
+   571	
+   572	        // ---- P10B test seams (EditMode tests, no reflection) ----
+   573	
+   574	        /// <summary>The outcome recorded for one disciple in the tick that just ran.</summary>
+   575	        public bool TryGetLastWorkOutcome(string discipleId, out DiscipleWorkOutcome outcome)
+   576	        {
+   577	            WorkTickRecord record;
+   578	            if (!string.IsNullOrEmpty(discipleId) && _workTick.TryGetValue(discipleId, out record))
+   579	            {
+   580	                outcome = record.Outcome;
+   581	                return true;
+   582	            }
    583	
-   584	        // ---------- P5B — SectViewerRegistry ⇄ disciple ownership sync ----------
-   585	        // These are the ONLY writers of membership records, and they run inside the
-   586	        // same mutation block as the disciple row, so the two can never disagree.
+   584	            outcome = DiscipleWorkOutcome.None;
+   585	            return false;
+   586	        }
    587	
-   588	        /// <summary>Activate (or create) the active record binding <paramref name="viewerId"/> to this disciple and stamp activity.</summary>
-   589	        private void SyncViewerRegistryForBind(DiscipleState disciple, string viewerId)
-   590	        {
-   591	            var record = _state.ViewerRegistry.Find(viewerId);
-   592	            if (record == null)
-   593	            {
-   594	                record = new ViewerRecord { ViewerId = viewerId, DisplayName = viewerId };
-   595	                _state.ViewerRegistry.Records.Add(record);
-   596	            }
-   597	            record.Status = ViewerMembershipStatus.Active;
-   598	            record.BoundDiscipleId = disciple.DiscipleId;
-   599	            record.LastActiveAtUtc = _clock.UtcNow;
-   600	        }
-   601	
-   602	        /// <summary>Release a record that no longer owns a disciple (kept as Left, never left bound — invariant #3).</summary>
-   603	        private void SyncViewerRegistryForRelease(string viewerId)
-   604	        {
-   605	            var record = _state.ViewerRegistry.Find(viewerId);
-   606	            if (record == null) return;
-   607	            record.Status = ViewerMembershipStatus.Left;
-   608	            record.BoundDiscipleId = string.Empty;
-   609	        }
-   610	
-   611	        // ---------- P3 (Task Assignment UI) — read-only known-task query ----------
-   612	        // Same source of truth as TryAssignTask's KnownTasks set — no second list.
-   613	        public System.Collections.Generic.IReadOnlyList<string> GetKnownTaskIds()
-   614	        {
-   615	            return KnownTaskOrder;
-   616	        }
-   617	
-   618	        // ---------- P9B (utility AI) — read-only task metadata ----------
-   619	        // Derived from the SAME GatheringRates/CraftingRecipes/KnownTasks tables the
-   620	        // assignment gate validates against, so the scorer can never describe a task
-   621	        // differently from what assignment accepts. Read-only, no mutation, and no
-   622	        // separate task-definition pipeline: the dictionaries above ARE the source.
-   623	        public bool TryGetTaskInfo(string taskId, out SectTaskInfo info)
-   624	        {
-   625	            info = null;
-   626	            if (string.IsNullOrEmpty(taskId) || !KnownTasks.Contains(taskId)) return false;
-   627	
-   628	            if (GatheringRates.TryGetValue(taskId, out var rate))
-   629	            {
-   630	                info = new SectTaskInfo
-   631	                {
-   632	                    TaskId = taskId,
-   633	                    Kind = SectTaskKind.Gathering,
-   634	                    ProducesResource = rate.Resource,
-   635	                    UnitsPerSecond = rate.PerSecond,
-   636	                };
-   637	                return true;
-   638	            }
-   639	
-   640	            if (CraftingRecipes.TryGetValue(taskId, out var recipe))
-   641	            {
-   642	                info = new SectTaskInfo
-   643	                {
-   644	                    TaskId = taskId,
-   645	                    Kind = SectTaskKind.Crafting,
-   646	                    ProducesItem = recipe.ItemDefId,
-   647	                    ProducesItemGrade = recipe.Grade,
-   648	                    InputCosts = recipe.Costs,
-   649	                };
-   650	                return true;
-   651	            }
-   652	
-   653	            // Anything else in KnownTasks produces nothing (meditation) — the safe fallback.
-   654	            info = new SectTaskInfo { TaskId = taskId, Kind = SectTaskKind.Meditation };
-   655	            return true;
-   656	        }
+   588	        /// <summary>
+   589	        /// How many outcome records the last tick wrote. Equal to the number of
+   590	        /// disciples means exactly one record each — a second record for the same
+   591	        /// disciple would be one more than the roster size.
+   592	        /// </summary>
+   593	        public int LastTickOutcomeRecordCountForTest => _workTickRecordCount;
+   594	
+   595	        // Adds a new Outer Disciple assigned to a gathering task, round-robin
+   596	        // across GatheringTasks so recruits don't all pile onto one resource.
+   597	        public void RecruitOuterDisciple(DiscipleSex sex = DiscipleSex.Unspecified)
+   598	        {
+   599	            var index = _state.Disciples.Count;
+   600	            var task = GatheringTasks[index % GatheringTasks.Length];
+   601	            var name = RecruitNamePool[index % RecruitNamePool.Length];
+   602	
+   603	            // Default parity: even index → Male, odd → Female (preserves existing mixed-roster look)
+   604	            var resolvedSex = (sex != DiscipleSex.Unspecified) ? sex
+   605	                : (index % 2 == 0) ? DiscipleSex.Male : DiscipleSex.Female;
+   606	
+   607	            var disciple = new DiscipleState
+   608	            {
+   609	                DiscipleId = $"d{index + 1:000}",
+   610	                DisplayName = name,
+   611	                Rank = DiscipleRank.OuterDisciple,
+   612	                Wallet = new CurrencyWallet(),
+   613	                PersonalInventory = new List<InventoryItem>(),
+   614	                CurrentTask = task,
+   615	                Sex = resolvedSex,
+   616	                Avatar = CreateStarterAvatar(index, resolvedSex),
+   617	                // P9A — new disciples start Manual (explicit, matching the field default).
+   618	                ControlMode = DiscipleControlMode.Manual,
+   619	                // P10A — fresh, normalized attribute block (stamina 100, all 3 skill
+   620	                // categories present at 0 XP). Data only; nothing consumes it yet.
+   621	                Attributes = DiscipleAttributes.Normalize(new DiscipleAttributes()),
+   622	            };
+   623	
+   624	            _state.Disciples.Add(disciple);
+   625	            _discipleRecruitedPublisher.Publish(new DiscipleRecruitedMessage
+   626	            {
+   627	                DiscipleId = disciple.DiscipleId,
+   628	                DisplayName = disciple.DisplayName,
+   629	            });
+   630	
+   631	            Debug.Log($"[SectStateProvider] Recruited outer disciple: {disciple.DisplayName} ({disciple.DiscipleId}), sex={resolvedSex}, assigned to {task}");
+   632	        }
+   633	
+   634	        private AvatarAppearance CreateStarterAvatar(int rosterIndex, DiscipleSex sex)
+   635	        {
+   636	            var a = new AvatarAppearance();
+   637	            a.SetSlot(AvatarSlots.Body, "body_robe_grey");
+   638	            a.SetSlot(AvatarSlots.Head, (sex == DiscipleSex.Female) ? "head_female_01" : "head_male_01");
+   639	            a.SetSlot(AvatarSlots.Hair, StarterHair[rosterIndex % StarterHair.Length]);
+   640	            return a;
+   641	        }
+   642	
+   643	        public bool TryChangeAvatarPart(string discipleId, string slot, string partId,
+   644	                                        out string failReason, out AvatarAppearance result)
+   645	        {
+   646	            failReason = string.Empty;
+   647	            result = null;
+   648	
+   649	            var disciple = _state.Disciples.FirstOrDefault(d => d.DiscipleId == discipleId);
+   650	            if (disciple == null) { failReason = $"No disciple with id: {discipleId}"; return false; }
+   651	
+   652	            if (System.Array.IndexOf(AvatarSlots.Equippable, slot) < 0)
+   653	            { failReason = $"Invalid slot: {slot}"; return false; }
+   654	
+   655	            if (!_avatarPartPool.IsValidForSlot(slot, partId))
+   656	            { failReason = $"PartId '{partId}' is not valid for slot '{slot}'"; return false; }
    657	
-   658	        // ---------- Task System v2 (§6) + P5B (Hybrid Permissions) ----------
-   659	        // Validation order: disciple lookup → permission (read-only evaluation,
-   660	        // revalidated here) → known task → building gate → no-op → cooldown → commit.
-   661	        // Nothing mutates until every check passes (no partial mutation).
-   662	        // This method never touches Stockpile.RawResources or any progress store.
-   663	        // Public so read-only observers (bridge protection query, UI) use the SAME
-   664	        // requester id the authority checks — no second spelling can drift.
-   665	        public const string SectMasterRequesterId = "SECT_MASTER";
-   666	
-   667	        /// <summary>
-   668	        /// P5B — how long a viewer owner is protected from a SectMaster override,
-   669	        /// measured in REAL time on the injected clock. 10 minutes per the agreed
-   670	        /// policy; the override requires inactivity STRICTLY greater than this
-   671	        /// (exactly 10 minutes still counts as active → protected).
-   672	        /// </summary>
-   673	        private const double ViewerProtectionWindowSeconds = 600d;
-   674	
-   675	        /// <summary>
-   676	        /// P5B — prototype balance value: minimum real-time gap between two ACTUAL
-   677	        /// task changes on the same disciple. Configurable via
-   678	        /// <see cref="TaskChangeCooldownSeconds"/> (0 disables it). A no-op request
-   679	        /// (task already current) never checks or consumes it. This throttles task
-   680	        /// thrash only — it does NOT guarantee crafting completion.
-   681	        /// </summary>
-   682	        public const float DefaultTaskChangeCooldownSeconds = 12f;
-   683	
-   684	        /// <summary>P5B — configurable real-time cooldown for actual task changes (see the const above). 0 disables.</summary>
-   685	        public float TaskChangeCooldownSeconds { get; set; } = DefaultTaskChangeCooldownSeconds;
-   686	
-   687	        public bool TryAssignTask(string requesterId, string discipleId, string taskId, out string failReason)
-   688	        {
-   689	            failReason = string.Empty;
-   690	
-   691	            var disciple = FindDisciple(discipleId);
-   692	            if (disciple == null)
-   693	            {
-   694	                failReason = $"No disciple with id: {discipleId}";
-   695	                return false;
-   696	            }
-   697	
-   698	            // 1. Permission — same evaluation the read-only UI query exposes
-   699	            // (single authority, so display and commit can never disagree).
-   700	            var permission = EvaluateTaskPermission(requesterId, disciple);
-   701	            if (!permission.Allowed)
-   702	            {
-   703	                failReason = permission.Reason;
-   704	                return false;
-   705	            }
-   706	
-   707	            var trimmedRequester = (requesterId ?? string.Empty).Trim();
-   708	
-   709	            // 2. Shared validation/mutation path (known task → building gate →
-   710	            // no-op → cooldown → commit). Identical to the auto-assignment path.
-   711	            if (!TryAssignTaskCore(disciple, taskId, trimmedRequester, out failReason))
-   712	                return false;
-   713	
-   714	            // P9A — an explicit manual assignment is a human asserting control: it
-   715	            // takes the disciple out of Auto. Runs only after the shared core committed,
-   716	            // so a failed assignment changes NEITHER the task NOR the mode (rule 5).
-   717	            DisableAutoIfEngaged(disciple);
-   718	            return true;
-   719	        }
-   720	
-   721	        // ---------- P9A — explicit Manual/Auto control (ownership ≠ autonomy) ----------
-   722	
-   723	        /// <summary>
-   724	        /// Explicitly set a disciple's Manual/Auto mode. Ownership and autonomy are
-   725	        /// different: this never changes ownership, and only an Npc-owned disciple may
-   726	        /// opt into Auto in this MVP (Player/Viewer owners are rejected, and viewer
-   727	        /// inactivity never grants Auto — hybrid inactivity only lets the SectMaster
-   728	        /// override a task). Eligibility is rechecked HERE, the authoritative mutation.
-   729	        /// Idempotent; publishes only on a real change.
-   730	        /// </summary>
-   731	        public bool TrySetDiscipleControlMode(string discipleId, DiscipleControlMode mode, out string failReason)
-   732	        {
-   733	            failReason = string.Empty;
-   734	
-   735	            var disciple = FindDisciple(discipleId);
-   736	            if (disciple == null)
-   737	            {
-   738	                failReason = $"No disciple with id: {discipleId}";
-   739	                return false;
-   740	            }
-   741	
-   742	            if (!Enum.IsDefined(typeof(DiscipleControlMode), mode))
-   743	            {
-   744	                failReason = $"Undefined DiscipleControlMode value: {mode}";
-   745	                return false;
-   746	            }
-   747	
-   748	            if (mode == DiscipleControlMode.Auto && disciple.OwnerType != DiscipleOwnerType.Npc)
-   749	            {
-   750	                failReason = $"Only NPC-owned disciples may opt into Auto (owner is '{disciple.OwnerType}').";
-   751	                return false;
-   752	            }
-   753	
-   754	            SetControlModeInternal(disciple, mode);
-   755	            return true;
-   756	        }
-   757	
-   758	        /// <summary>
-   759	        /// P9A — trusted internal caller context for the future DiscipleBrain. NOT
-   760	        /// TryAssignTask(SectMasterRequesterId, ...): the auto-assigner has no requester
-   761	        /// identity, never impersonates the player, and never inherits the SectMaster
-   762	        /// override. Rechecks Npc ownership AND Auto mode immediately before commit,
-   763	        /// then shares TryAssignTaskCore (the exact validation/cooldown/mutation path),
-   764	        /// so the brain can never bypass the known-task/building/cooldown gates.
-   765	        /// </summary>
-   766	        public bool TryAutoAssignTask(string discipleId, string taskId, out string failReason)
-   767	        {
-   768	            failReason = string.Empty;
-   769	
-   770	            var disciple = FindDisciple(discipleId);
-   771	            if (disciple == null)
+   658	            // Pose validation: reject a part whose poseId is non-empty and
+   659	            // differs from the disciple's effective pose.
+   660	            if (!string.IsNullOrEmpty(partId))
+   661	            {
+   662	                var partDef = _avatarPartPool.GetById(partId);
+   663	                if (partDef != null && !string.IsNullOrEmpty(partDef.poseId))
+   664	                {
+   665	                    string effectivePose = (disciple.Avatar != null && !string.IsNullOrEmpty(disciple.Avatar.PoseId))
+   666	                        ? disciple.Avatar.PoseId
+   667	                        : "pose_idle_01";
+   668	                    if (partDef.poseId != effectivePose)
+   669	                    {
+   670	                        failReason = $"Part '{partId}' requires pose '{partDef.poseId}' but disciple is in pose '{effectivePose}'.";
+   671	                        return false;
+   672	                    }
+   673	                }
+   674	            }
+   675	
+   676	            // Validation ชั้น 5 — coverage: part ต้องมี art อย่างน้อย 1 backend ที่เปิดใช้
+   677	            // (empty layer = เจตนา "ถอดออก" ผ่านเสมอ — *_none defaults)
+   678	            // Face split (Roadmap #1): face sub-layers เป็น portrait-only ตามดีไซน์ (R4 —
+   679	            // chibi เก็บ feature baked-in) จึงผ่านด้วย Portrait เดี่ยว โดยไม่ต้องมี chibi/spine art
+   680	            // (แก้ latent bug: acc_none — ชิ้น "ถอดเครื่องประดับ" ที่มีแต่ chibi art — เคยโดน reject)
+   681	            if (!string.IsNullOrEmpty(partId))
+   682	            {
+   683	                var partDef = _avatarPartPool.GetById(partId);
+   684	                if (partDef != null && !partDef.IsEmptyLayer)
+   685	                {
+   686	                    bool anyCovered =
+   687	                        partDef.Supports(VisualBackend.Portrait) ||
+   688	                        (_visualConfig != null && _visualConfig.SpriteSheetEnabled &&
+   689	                         partDef.Supports(VisualBackend.SpriteSheet)) ||
+   690	                        (_visualConfig != null && _visualConfig.SpineEnabled &&
+   691	                         partDef.Supports(VisualBackend.Spine));
+   692	                    if (!anyCovered)
+   693	                    {
+   694	                        failReason = $"Part '{partId}' has no art on any enabled backend (coverage check).";
+   695	                        return false;
+   696	                    }
+   697	                }
+   698	            }
+   699	
+   700	            // Validation ชั้น 6 — entitlement (Phase 5, §8): part ที่ติด entitlement
+   701	            // ต้องผ่าน IVisualEntitlementProvider เท่านั้น — ต่างจากชั้น 5 ที่ป้องกัน
+   702	            // "render ไม่ได้" ชั้นนี้ป้องกัน "ไม่มีสิทธิ์ใช้" — failReason เขียนให้
+   703	            // AI/UI อ่านแล้วเข้าใจเหตุผล (ตามสเปก Phase 5)
+   704	            if (!string.IsNullOrEmpty(partId) && _entitlementProvider != null)
+   705	            {
+   706	                var entitlementDef = _avatarPartPool.GetById(partId);
+   707	                if (entitlementDef != null && !string.IsNullOrEmpty(entitlementDef.entitlement) &&
+   708	                    !_entitlementProvider.CanUse(discipleId, entitlementDef.entitlement))
+   709	                {
+   710	                    failReason = $"Part '{partId}' requires entitlement '{entitlementDef.entitlement}'.";
+   711	                    return false;
+   712	                }
+   713	            }
+   714	
+   715	            if (disciple.Avatar == null) disciple.Avatar = new AvatarAppearance();
+   716	
+   717	            var oldPart = disciple.Avatar.GetSlot(slot);
+   718	            disciple.Avatar.SetSlot(slot, partId);
+   719	
+   720	            _avatarChangedPublisher.Publish(new AvatarEquipmentChangedMessage
+   721	            {
+   722	                DiscipleId = discipleId,
+   723	                Slot       = slot,
+   724	                OldPartId  = oldPart,
+   725	                NewPartId  = partId
+   726	            });
+   727	
+   728	            result = disciple.Avatar.Clone();   // return copy, not reference to live state
+   729	            return true;
+   730	        }
+   731	
+   732	        // ---------- P4 (local ownership test harness) — validated ownership assignment ----------
+   733	        // Non-Npc OwnerId convention: a real Twitch user id is numeric, so the
+   734	        // synthetic local-identity convention is "viewer_*" / "player_*" (alpha
+   735	        // prefix + underscore, no whitespace) — clearly fake, never shaped like a
+   736	        // real Twitch id. Real authentication (P5B+) replaces this entirely.
+   737	        private const string OwnerIdPattern = "^[A-Za-z][A-Za-z0-9]*(_[A-Za-z0-9]+)*$";
+   738	
+   739	        public bool TrySetDiscipleOwner(string discipleId, DiscipleOwnerType ownerType,
+   740	                                        string ownerId, out string failReason)
+   741	        {
+   742	            failReason = string.Empty;
+   743	
+   744	            // 1. disciple must exist
+   745	            var disciple = FindDisciple(discipleId);
+   746	            if (disciple == null)
+   747	            {
+   748	                failReason = $"No disciple with id: {discipleId}";
+   749	                return false;
+   750	            }
+   751	
+   752	            // 2. enum value must be defined (fail-closed on out-of-range casts)
+   753	            if (!Enum.IsDefined(typeof(DiscipleOwnerType), ownerType))
+   754	            {
+   755	                failReason = $"Undefined DiscipleOwnerType value: {ownerType}";
+   756	                return false;
+   757	            }
+   758	
+   759	            var trimmedOwnerId = (ownerId ?? string.Empty).Trim();
+   760	
+   761	            // 3. Npc normalizes OwnerId to empty (no orphaned ids on Npc rows)
+   762	            if (ownerType == DiscipleOwnerType.Npc)
+   763	            {
+   764	                if (!string.IsNullOrEmpty(trimmedOwnerId))
+   765	                {
+   766	                    failReason = "Npc ownership must carry an empty OwnerId.";
+   767	                    return false;
+   768	                }
+   769	                trimmedOwnerId = string.Empty;
+   770	            }
+   771	            else
    772	            {
-   773	                failReason = $"No disciple with id: {discipleId}";
-   774	                return false;
-   775	            }
-   776	
-   777	            // Recheck immediately before commit — ownership/mode may have changed since
-   778	            // the caller decided to auto-assign.
-   779	            if (disciple.OwnerType != DiscipleOwnerType.Npc)
-   780	            {
-   781	                failReason = $"Disciple '{discipleId}' is not NPC-owned (owner is '{disciple.OwnerType}') " +
-   782	                             "— not eligible for auto-assignment.";
-   783	                return false;
-   784	            }
-   785	
-   786	            if (disciple.ControlMode != DiscipleControlMode.Auto)
-   787	            {
-   788	                failReason = $"Disciple '{discipleId}' is not in Auto mode (mode is '{disciple.ControlMode}').";
-   789	                return false;
-   790	            }
-   791	
-   792	            return TryAssignTaskCore(disciple, taskId, string.Empty, out failReason);
-   793	        }
-   794	
-   795	        /// <summary>
-   796	        /// Shared task-change implementation for both the manual (TryAssignTask) and
-   797	        /// auto (TryAut
-... [TRUNCATED: แสดง 40000 จาก 76763 bytes — ขอส่วนที่เหลือผ่าน need_files]
+   773	                // 4. non-Npc identities satisfy the identity convention
+   774	                if (string.IsNullOrEmpty(trimmedOwnerId) ||
+   775	                    !System.Text.RegularExpressions.Regex.IsMatch(trimmedOwnerId, OwnerIdPattern))
+   776	                {
+   777	                    failReason = $"OwnerId '{trimmedOwnerId}' does not satisfy the identity convention " +
+   778	                                 "(alpha prefix, [A-Za-z0-9_], no whitespace).";
+   779	                    return false;
+   780	                }
+   781	            }
+   782	
+   783	            // 5. a Viewer identity must not control a different active disciple
+   784	            if (ownerType == DiscipleOwnerType.Viewer && !string.IsNullOrE
+... [TRUNCATED: แสดง 40000 จาก 90219 bytes — ขอส่วนที่เหลือผ่าน need_files]
 ````
 
 ### DataTables/luban.conf (287 bytes)
@@ -3823,8 +3976,8 @@
     9  LLMWiki/wiki/sources/code-snippets
     1  LLMWiki/wiki/sources/references
     2  McpBridge
-    5  McpBridge/Shared
-    6  Shared
+    6  McpBridge/Shared
+    7  Shared
    26  Tools/Luban
     1  Tools/Luban/Templates/common/cpp
     1  Tools/Luban/Templates/common/cs
@@ -3993,7 +4146,7 @@
     2  UnityProject/Assets/Scripts/Data
     9  UnityProject/Assets/Scripts/Data/Gen
     1  UnityProject/Assets/Scripts/Scenes/SectScene
-    5  UnityProject/Assets/Scripts/Shared
+    6  UnityProject/Assets/Scripts/Shared
     7  UnityProject/Assets/Scripts/Systems
     1  UnityProject/Assets/Scripts/Tests
     9  UnityProject/Assets/Scripts/UI/Core
@@ -4045,7 +4198,7 @@
     1  UnityProject/Assets/Spine/Runtime
    42  UnityProject/Assets/Spine/Runtime/spine-csharp
   116  UnityProject/Assets/Spine/Runtime/spine-unity
-   34  UnityProject/Assets/Tests/EditMode
+   35  UnityProject/Assets/Tests/EditMode
     2  UnityProject/Assets/TextMesh Pro/Fonts
     3  UnityProject/Assets/TextMesh Pro/Resources
     4  UnityProject/Assets/TextMesh Pro/Resources/Fonts & Materials
@@ -4367,12 +4520,14 @@
   LLMWiki/wiki/sources/task-system.md
   LLMWiki/wiki/sources/visual-demo-scene.md
   McpBridge/Program.cs
+  McpBridge/Shared/DiscipleAttributes.cs
   McpBridge/Shared/GameMessages.cs
   McpBridge/Shared/MessageTypes.cs
   McpBridge/Shared/MockSectData.cs
   McpBridge/Shared/SectEconomyState.cs
   McpBridge/Shared/ViewerMembership.cs
   README.md
+  Shared/DiscipleAttributes.cs
   Shared/GameMessages.cs
   Shared/MessageTypes.cs
   Shared/MockSectData.cs
@@ -4571,6 +4726,7 @@
   UnityProject/Assets/Scripts/Data/AvatarPartPool.cs
   UnityProject/Assets/Scripts/Data/LubanEventPool.cs
   UnityProject/Assets/Scripts/Scenes/SectScene/SectSceneLifetimeScope.cs
+  UnityProject/Assets/Scripts/Shared/DiscipleAttributes.cs
   UnityProject/Assets/Scripts/Shared/GameMessages.cs
   UnityProject/Assets/Scripts/Shared/MessageTypes.cs
   UnityProject/Assets/Scripts/Shared/MockSectData.cs
@@ -4942,15 +5098,12 @@
   UnityProject/Assets/Tests/EditMode/ChibiFrameBankTests.cs
   UnityProject/Assets/Tests/EditMode/CompositionRootContainerTests.cs
   UnityProject/Assets/Tests/EditMode/CompositionRootTests.cs
+  UnityProject/Assets/Tests/EditMode/DiscipleAttributesTests.cs
   UnityProject/Assets/Tests/EditMode/DiscipleListPresenterTests.cs
   UnityProject/Assets/Tests/EditMode/EntitlementTests.cs
   UnityProject/Assets/Tests/EditMode/FaceSplitTests.cs
   UnityProject/Assets/Tests/EditMode/HybridPermissionTests.cs
-  UnityProject/Assets/Tests/EditMode/MockStartStateTests.cs
-  UnityProject/Assets/Tests/EditMode/OwnershipHarnessTests.cs
-  UnityProject/Assets/Tests/EditMode/PlaceableLandMaskTests.cs
-  UnityProject/Assets/Tests/EditMode/PortraitOverrideTests.cs
-  ... [146 more files truncated — ปรับ TREE_MAX_LINES หรือ .aiignore]
+  ... [150 more files truncated — ปรับ TREE_MAX_LINES หรือ .aiignore]
 ```
 
 ## Recent Wiki Log (last 15 entries, each cut to 400 chars)

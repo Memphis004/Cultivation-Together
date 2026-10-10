@@ -78,6 +78,7 @@
     <Compile Include="Assets\Scripts\Shared\GameMessages.cs" />
     <Compile Include="Assets\Scripts\Core\DecisionLogger.cs" />
     <Compile Include="Assets\Scripts\UI\Views\FitWidthGridLayoutGroup.cs" />
+    <Compile Include="Assets\Scripts\UI\Views\TimeControlView.cs" />
     <Compile Include="Assets\Scripts\Systems\DiscipleSystem.cs" />
     <Compile Include="Assets\Scripts\Tests\AdditiveSceneTest.cs" />
     <Compile Include="Assets\Scripts\Visual\Scene\CameraFramingConfig.cs" />
@@ -85,6 +86,7 @@
     <Compile Include="Assets\Scripts\UI\Views\AvatarRenderer.cs" />
     <Compile Include="Assets\Scripts\Visual\Scene\TerrainBackdropRenderer.cs" />
     <Compile Include="Assets\Scripts\Data\Gen\worldevent\TbEvent.cs" />
+    <Compile Include="Assets\Scripts\Core\WorldEventRuntimeConfig.cs" />
     <Compile Include="Assets\Scripts\Visual\Core\IChibiVisual.cs" />
     <Compile Include="Assets\Scripts\Visual\Scene\IsometricCellMath.cs" />
     <Compile Include="Assets\Scripts\Visual\Scene\GridOverlayRenderer.cs" />
@@ -137,6 +139,7 @@
     <Compile Include="Assets\Scripts\UI\Views\BuildingMenuView.cs" />
     <Compile Include="Assets\Scripts\UI\Presenters\TaskAssignmentPresenter.cs" />
     <Compile Include="Assets\Scripts\UI\Systems\WorldEventUISystem.cs" />
+    <Compile Include="Assets\Scripts\Core\TimeRuntimeConfig.cs" />
     <Compile Include="Assets\Scripts\Core\Installers\UIInstaller.cs" />
     <Compile Include="Assets\Scripts\Visual\Scene\CameraRigController.cs" />
     <Compile Include="Assets\Scripts\Systems\AutoTaskScoring.cs" />
@@ -144,12 +147,14 @@
     <Compile Include="Assets\Scripts\UI\Views\BuildingPlacementView.cs" />
     <Compile Include="Assets\Scripts\Systems\SectStateProvider.cs" />
     <Compile Include="Assets\Scripts\UI\Presenters\WalletHudPresenter.cs" />
+    <Compile Include="Assets\Scripts\UI\Presenters\TimeControlPresenter.cs" />
     <Compile Include="Assets\Scripts\Data\Gen\worldevent\EventChoiceRow.cs" />
     <Compile Include="Assets\Scripts\UI\Presenters\LogWindowPresenter.cs" />
     <Compile Include="Assets\Scripts\UI\Views\AvatarCustomizationView.cs" />
     <Compile Include="Assets\Scripts\Core\TaskObservability.cs" />
     <Compile Include="Assets\Scripts\UI\Widgets\DiscipleModalScope.cs" />
     <Compile Include="Assets\Scripts\Core\Installers\GameplayInstaller.cs" />
+    <Compile Include="Assets\Scripts\UI\Views\WorldEventChipView.cs" />
     <Compile Include="Assets\Scripts\Data\AvatarPartPool.cs" />
     <Compile Include="Assets\Scripts\UI\Views\TaskAssignmentView.cs" />
     <Compile Include="Assets\Scripts\Building\PlaceableLandMask.cs" />
@@ -158,6 +163,7 @@
     <Compile Include="Assets\Scripts\UI\Presenters\DiscipleDetailPresenter.cs" />
     <Compile Include="Assets\Scripts\UI\Widgets\RadarChartGraphic.cs" />
     <Compile Include="Assets\Scripts\Shared\DiscipleAttributes.cs" />
+    <Compile Include="Assets\Scripts\UI\Presenters\WorldEventChipPresenter.cs" />
     <Compile Include="Assets\Scripts\Visual\Core\VisualRuntimeConfig.cs" />
     <Compile Include="Assets\Scripts\Data\Gen\worldevent\EventRow.cs" />
     <Compile Include="Assets\Scripts\Visual\Scene\ChibiSceneRoot.cs" />

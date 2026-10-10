@@ -255,5 +255,146 @@ namespace Xianxia.Sect.Tests
             StringAssert.Contains("crowding", described);
             StringAssert.Contains("meditation", described);
         }
+
+        // ================= P10C: recovery (stamina) with hysteresis =================
+
+        private static AutoTaskDecision DecideWithStamina(string current, float stamina, params AutoTaskFacts[] facts)
+            => AutoTaskScoring.Decide(current, facts, float.PositiveInfinity, 0f, 0f, stamina);
+
+        [Test]
+        public void Recovery_EntersMeditationAtOrBelowTheLowThreshold()
+        {
+            var facts = new[] { Gathering("gathering_herb", "herb", 0.2f, 0), Meditation() };
+
+            var atLow = DecideWithStamina("gathering_herb", DiscipleAttributesConfig.RecoveryThresholdLow, facts);
+            Assert.IsTrue(atLow.ShouldChange, "at the low threshold the disciple stops working");
+            Assert.AreEqual("meditation", atLow.SelectedTask);
+            Assert.AreEqual(AutoRecoveryState.EnteringMeditation, atLow.Recovery);
+            Assert.AreEqual(DiscipleAttributesConfig.RecoveryThresholdLow, atLow.Stamina,
+                            "the stamina used is echoed for the log");
+
+            var justAboveLow = DecideWithStamina("gathering_herb",
+                DiscipleAttributesConfig.RecoveryThresholdLow + 0.01f, facts);
+            Assert.IsFalse(justAboveLow.ShouldChange, "above the low threshold the ordinary scoring decides");
+            Assert.AreEqual("gathering_herb", justAboveLow.SelectedTask);
+            Assert.AreEqual(AutoRecoveryState.Normal, justAboveLow.Recovery);
+        }
+
+        [Test]
+        public void Recovery_StaysOnMeditationUntilTheHighThreshold_NoFlappingInBetween()
+        {
+            var facts = new[] { Gathering("gathering_herb", "herb", 0.2f, 0), Meditation() };
+
+            // Everywhere between LOW and HIGH the disciple keeps resting — this is the
+            // hysteresis that stops a 25↔80 oscillation (no recovering flag is stored).
+            foreach (var stamina in new[] { 26f, 40f, DiscipleAttributesConfig.RecoveryThresholdHigh - 0.1f })
+            {
+                var staying = DecideWithStamina("meditation", stamina, facts);
+                Assert.IsFalse(staying.ShouldChange, "stamina " + stamina + " must not leave meditation");
+                Assert.AreEqual("meditation", staying.SelectedTask);
+                Assert.AreEqual(AutoRecoveryState.StayingToRecover, staying.Recovery);
+            }
+
+            // At HIGH, recovery ends and normal scoring resumes (herb is scarce → work).
+            var recovered = DecideWithStamina("meditation", DiscipleAttributesConfig.RecoveryThresholdHigh, facts);
+            Assert.AreEqual(AutoRecoveryState.Normal, recovered.Recovery);
+            Assert.IsTrue(recovered.ShouldChange);
+            Assert.AreEqual("gathering_herb", recovered.SelectedTask);
+        }
+
+        [Test]
+        public void Recovery_WithoutAnAvailableMeditation_FallsBackToNormalScoring()
+        {
+            var decision = DecideWithStamina("gathering_herb", 5f,
+                Gathering("gathering_herb", "herb", 0.2f, 0),
+                Meditation(available: false));
+
+            Assert.AreEqual(AutoRecoveryState.MeditationUnavailable, decision.Recovery);
+            Assert.AreEqual("gathering_herb", decision.SelectedTask,
+                            "no rest is possible, so the disciple keeps working");
+        }
+
+        [Test]
+        public void Recovery_NeedsNoStaminaArgument_HealthyDefaultIsUnchanged()
+        {
+            // The pre-P10C call shape (no stamina) must behave exactly as before.
+            var decision = Decide("gathering_herb",
+                Gathering("gathering_herb", "herb", 0.2f, 0), Meditation());
+
+            Assert.AreEqual(AutoRecoveryState.Normal, decision.Recovery);
+            Assert.IsFalse(decision.ShouldChange);
+        }
+
+        // ================= P10C: bounded skill bonus =================
+
+        private static AutoTaskFacts WithSkill(AutoTaskFacts fact, int skillLevel)
+        {
+            fact.SkillLevel = skillLevel;
+            return fact;
+        }
+
+        [Test]
+        public void SkillBonus_IsPerLevelInTheTotalAndCappedAtTheMaximum()
+        {
+            var none = AutoTaskScoring.Score(WithSkill(Gathering("gathering_herb", "herb", 0.2f, 200), 0));
+            var three = AutoTaskScoring.Score(WithSkill(Gathering("gathering_herb", "herb", 0.2f, 200), 3));
+            var absurd = AutoTaskScoring.Score(WithSkill(Gathering("gathering_herb", "herb", 0.2f, 200), 99));
+
+            Assert.AreEqual(0f, none.SkillBonus, 1e-6f);
+            Assert.AreEqual(3f * AutoTaskWeights.SkillBonusPerLevel, three.SkillBonus, 1e-6f);
+            Assert.AreEqual(AutoTaskWeights.SkillBonusMax, absurd.SkillBonus, 1e-6f, "the bonus is bounded");
+            Assert.AreEqual(none.Total + three.SkillBonus, three.Total, 1e-4f,
+                            "the bonus is part of the candidate's total");
+            Assert.Less(AutoTaskWeights.SkillBonusMax, AutoTaskWeights.ShortageWeight,
+                        "a maxed skill can never outweigh the whole economy shortage term");
+        }
+
+        [Test]
+        public void SkillBonus_AppliesToTheCandidatesCategoryOnly_NeverToMeditation()
+        {
+            var crafting = WithSkill(Crafting("refining_elixir", "elixir_qi_gathering", 0,
+                    new Dictionary<string, int> { ["herb"] = 10 },
+                    new Dictionary<string, int> { ["herb"] = 10 }), 4);
+
+            Assert.AreEqual(4f * AutoTaskWeights.SkillBonusPerLevel,
+                            AutoTaskScoring.Score(crafting).SkillBonus, 1e-6f,
+                            "a crafting candidate uses the level the scheduler put in for ITS category");
+
+            // Meditation exercises no category, so a level on it can never pay.
+            Assert.AreEqual(0f, AutoTaskScoring.Score(WithSkill(Meditation(), 9)).SkillBonus, 1e-6f);
+        }
+
+        [Test]
+        public void SkillBonus_TipsANearTieDeterministically()
+        {
+            // identical stock and rate → the skill bonus is the only difference
+            var plain = WithSkill(Gathering("gathering_wood", "wood", 0.2f, 150), 0);
+            var skilled = WithSkill(Gathering("gathering_herb", "herb", 0.2f, 150), 5);
+
+            var decision = Decide(null, plain, skilled); // the skilled one is LATER on purpose
+
+            Assert.AreEqual("gathering_herb", decision.SelectedTask);
+            Assert.Greater(AutoTaskScoring.Score(skilled).Total, AutoTaskScoring.Score(plain).Total);
+        }
+
+        [Test]
+        public void SkillBonus_NeverOverridesAnEconomicShortage()
+        {
+            // the absolutely best skill on a task the sect is NOT short of, versus an
+            // unskilled task the sect has none of
+            var skilledButStocked = WithSkill(Gathering("gathering_wood", "wood", 0.2f, 200), 99);
+            var unskilledButShort = WithSkill(Gathering("gathering_herb", "herb", 0.2f, 0), 0);
+
+            var decision = Decide(null, skilledButStocked, unskilledButShort);
+
+            Assert.AreEqual("gathering_herb", decision.SelectedTask,
+                            "economic shortage stays dominant over the skill bonus");
+        }
+
+        [Test]
+        public void SkillBonusWeight_IsReported()
+        {
+            StringAssert.Contains("skillBonus", AutoTaskWeights.Describe());
+        }
     }
 }

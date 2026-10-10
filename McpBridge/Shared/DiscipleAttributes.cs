@@ -1,8 +1,11 @@
 // P10A — disciple attribute DATA only (stamina + skill XP).
+// P10B — adds the work rates (drain/regen/XP) to the tuning class below; the DATA
+// and its derived helpers are unchanged.
 //
-// Scope (deliberate, per P10A roadmap): DATA + derived helpers + tuning constants
-// ONLY. No per-tick drain/regen, no AI scoring, no productivity effects, no UI.
-// P10B will add the drain/regen rates — none of those values live here yet.
+// Scope (deliberate): DATA + derived helpers + tuning constants ONLY. No AI
+// scoring, no productivity effects, no traits, no Mood, no UI. Attributes never
+// feed back into resource yield, craft speed, task assignment or the Auto
+// scheduler — P10B only writes them from work outcomes.
 //
 // Shared/ is the authoritative copy. Edit here, then run ./sync-shared.sh.
 // Plain C# — no UnityEngine API (Shared is also consumed by the McpBridge
@@ -65,12 +68,34 @@ namespace Xianxia.Sect
         public const int SkillLevelMax = 10;
 
         // --- recovery thresholds (prototype proposal) ---
-        // Named now so P10B can reference them, UNUSED for now (no drain/regen yet).
+        // Named now so P10B can reference them. Still UNUSED after P10B: the
+        // roadmap's low/high hysteresis (stop working below low, only resume above
+        // high) is NOT part of P10B — nothing reads these yet.
 
-        /// <summary>Prototype proposal — low recovery threshold (unused until P10B).</summary>
+        /// <summary>Prototype proposal — low recovery threshold (unused until a later phase).</summary>
         public const float RecoveryThresholdLow = 25f;
-        /// <summary>Prototype proposal — high recovery threshold (unused until P10B).</summary>
+        /// <summary>Prototype proposal — high recovery threshold (unused until a later phase).</summary>
         public const float RecoveryThresholdHigh = 80f;
+
+        // --- P10B work rates (prototype proposal) ---
+        // Linear per-second rates against the tick's simulation delta (which is
+        // TimeSystem.SimulationDelta: 0 while paused, already multiplied by 1x/2x/3x).
+        // Applied per disciple per tick and clamped to the stamina / XP bounds above.
+        // These change DISCIPLE ATTRIBUTES ONLY — no effect on resource yield, craft
+        // speed, task assignment or the Auto scheduler.
+
+        /// <summary>Prototype proposal — stamina drain per second while gathering productively.</summary>
+        public const float WorkStaminaDrainPerSecondGathering = 0.12f;
+        /// <summary>Prototype proposal — stamina drain per second while crafting productively.</summary>
+        public const float WorkStaminaDrainPerSecondCrafting = 0.18f;
+        /// <summary>Prototype proposal — stamina recovery per second while resting (meditation).</summary>
+        public const float WorkStaminaRegenPerSecondResting = 0.40f;
+        /// <summary>Prototype proposal — stamina recovery per second while blocked (gate failed / held for materials).</summary>
+        public const float WorkStaminaRegenPerSecondBlocked = 0.05f;
+        /// <summary>Prototype proposal — gathering skill XP per second while gathering productively.</summary>
+        public const float WorkGatheringXpPerSecond = 0.05f;
+        /// <summary>Prototype proposal — skill XP for the matching category on each COMPLETED craft.</summary>
+        public const float WorkCraftXpPerCompletion = 1f;
     }
 
     /// <summary>
