@@ -214,6 +214,15 @@ namespace Xianxia.Sect.Tests
                 failReason = null; return false;
             }
 
+            // P11A full-session snapshot — not exercised here; stubbed for the interface.
+            public SectSessionSnapshot CaptureSessionSnapshot() => new SectSessionSnapshot();
+            public bool TryValidateSessionSnapshot(SectSessionSnapshot snapshot, out string failReason)
+            {
+                failReason = null; return false;
+            }
+
+            public bool TryApplySessionSnapshot(SectSessionSnapshot snapshot) => false;
+
             public bool TryPlaceBuilding(string defId, int gridX, int gridZ, int rotation,
                                          BuildingGrid grid, out string failReason,
                                          out PlacedBuildingState placed)

@@ -32,11 +32,26 @@ namespace Xianxia.Sect
         public const float AutoSaveIntervalSeconds = 10f;
 
         private readonly ISectStateProvider _stateProvider;
+        private readonly ISessionRestoreAuthority _restoreAuthority;
         private float _sinceLastSave;
 
         public ViewerMembershipPersistenceSystem(ISectStateProvider stateProvider)
+            : this(stateProvider, null)
+        {
+        }
+
+        /// <summary>
+        /// P11A — <paramref name="restoreAuthority"/> (optional) is the single
+        /// orchestration owner of full-session restore. When it reports a full session
+        /// is already authoritative, this slice's automatic import REFUSES rather than
+        /// overwriting the restored session (see <see cref="Load"/>). The export path
+        /// (<see cref="Save"/>) is unaffected.
+        /// </summary>
+        public ViewerMembershipPersistenceSystem(ISectStateProvider stateProvider,
+                                                 ISessionRestoreAuthority restoreAuthority)
         {
             _stateProvider = stateProvider;
+            _restoreAuthority = restoreAuthority;
             SavePath = DefaultPath();
         }
 
@@ -85,6 +100,18 @@ namespace Xianxia.Sect
         {
             LoadAttemptCount++;
             LastLoadError = string.Empty;
+
+            // P11A — this slice must never become a competing automatic restore after
+            // a full-session load. The full-session orchestrator is the single owner;
+            // once it has committed, this narrower slice refuses (fail closed) instead
+            // of silently overwriting live state. The export/save path is unaffected.
+            if (_restoreAuthority != null && _restoreAuthority.HasFullSessionAuthority)
+            {
+                LastLoadError = "A full session is already authoritative; refusing to overwrite it " +
+                                "with the viewer-membership slice.";
+                Debug.Log($"[ViewerMembershipPersistenceSystem] Skipping slice load at '{SavePath}': {LastLoadError}");
+                return false;
+            }
 
             if (string.IsNullOrEmpty(SavePath) || !File.Exists(SavePath))
                 return false;

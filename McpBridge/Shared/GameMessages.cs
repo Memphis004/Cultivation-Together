@@ -445,6 +445,33 @@ namespace Xianxia.Sect.Messages
         [Key(2)] public string OwnerId { get; set; } = string.Empty;
     }
 
+    // ---------- P11A — session restored notification ----------
+    // Published in-memory AFTER a full-session snapshot has been committed to live
+    // state (SectStateProvider + TimeSystem). Derived systems react by rebuilding
+    // caches and dropping stale session references:
+    //   - BuildingSystem       rebuilds grid occupancy + placed markers
+    //   - DiscipleVisualSystem reconciles (despawn gone / spawn restored)
+    //   - AutoTaskScheduler    clears its simulation-time scheduling maps
+    //   - WalletHudPresenter   re-reads the authoritative wallet/stockpile
+    // ⚠️ Deliberately NOT added to InterprocessTopics — session load is a local
+    // player concern; the bridge observes state via SectStateQuery, not this.
+    // Never published on a failed restore (invalid data leaves the session unchanged).
+    [MessagePackObject]
+    public class SessionRestoredMessage
+    {
+        /// <summary>True when a full-session snapshot was committed (as opposed to a legacy slice).</summary>
+        [Key(0)] public bool FullSession { get; set; }
+
+        /// <summary>UTC time the restore committed.</summary>
+        [Key(1)] public DateTime RestoredAtUtc { get; set; }
+
+        /// <summary>Roster size after the restore (diagnostic / UI priming).</summary>
+        [Key(2)] public int DiscipleCount { get; set; }
+
+        /// <summary>Placed-building count after the restore (diagnostic / UI priming).</summary>
+        [Key(3)] public int BuildingCount { get; set; }
+    }
+
     // Topic keys for the keyed (IDistributedPublisher<TKey,TMessage>) channels.
     public static class InterprocessTopics
     {

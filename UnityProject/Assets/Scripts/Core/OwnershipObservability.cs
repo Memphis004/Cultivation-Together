@@ -71,6 +71,15 @@ namespace Xianxia.Sect
                 return _entries.ToArray();
             }
         }
+
+        /// <summary>P12A — drop every recorded change. The log is session-scoped: entries describe the session being left, so a New Game / Load must not carry them forward.</summary>
+        public void Clear()
+        {
+            lock (_lock)
+            {
+                _entries.Clear();
+            }
+        }
     }
 
     /// <summary>

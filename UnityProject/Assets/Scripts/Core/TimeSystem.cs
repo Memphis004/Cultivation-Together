@@ -48,6 +48,14 @@ namespace Xianxia.Sect
         private int _speed = 1;
         private TimePauseReason _reasons = TimePauseReason.None;
 
+        // P12A — whether a live gameplay session is active. Deliberately a SEPARATE fact
+        // from the pause reasons: "no active game" (Title / session transition) is not a
+        // player pause and not a pending-decision pause, so SimulationDelta freezes for
+        // either, while IsPaused / IsUserPaused / IsPendingDecisionPaused stay honest.
+        // Defaults to active so a TimeSystem built outside the session coordinator
+        // (tests / legacy construction) keeps its previous behaviour.
+        private bool _sessionActive = true;
+
         // Completed (and replaced with a fresh one) every time a world
         // event fires - see WaitForNextWorldEventAsync()/RaiseWorldEvent().
         private UniTaskCompletionSource<AwaitWorldEventResponse> _pendingEventSource =
@@ -110,6 +118,55 @@ namespace Xianxia.Sect
         }
 
         /// <summary>
+        /// P12A — toggles whether a live gameplay session is active (set by
+        /// <see cref="GameSessionCoordinator"/> on every phase change). Publishing on the
+        /// effective change keeps any speed/pause listener refreshed without a new bus.
+        /// </summary>
+        public void SetSessionActive(bool active)
+        {
+            if (_sessionActive == active) return;
+            _sessionActive = active;
+            PublishState();
+        }
+
+        /// <summary>
+        /// P12A — end the current session's simulation clock exactly once at the seam
+        /// between two sessions: freeze simulation (session inactive), clear every pause
+        /// reason (a fresh session starts unpaused), clear the authoritative pending
+        /// decision, and complete any outstanding world-event awaiter with a defined
+        /// "session ended" response. Real-time (UTC) viewer/cooldown clocks are
+        /// independent of this class and are not affected.
+        /// </summary>
+        public void EndSession(string reason)
+        {
+            SetSessionActive(false);
+            ClearPendingDecision();
+            SetReasons(TimePauseReason.None);
+            CancelPendingWorldEventWait(reason);
+        }
+
+        /// <summary>
+        /// P12A — never retain a stale cached world-event response from a prior session,
+        /// and never strand an existing awaiter: the handoff cache is dropped and the
+        /// current wait is completed with an empty event id (the response contract's
+        /// clearest "no event" answer) plus an explicit reason.
+        /// </summary>
+        public void CancelPendingWorldEventWait(string reason)
+        {
+            _cachedPendingEvent = null;
+
+            var previous = _pendingEventSource;
+            _pendingEventSource = new UniTaskCompletionSource<AwaitWorldEventResponse>();
+            previous.TrySetResult(new AwaitWorldEventResponse
+            {
+                EventId = string.Empty,
+                Description = string.IsNullOrEmpty(reason)
+                    ? "session ended before a world event fired"
+                    : "session ended before a world event fired: " + reason,
+            });
+        }
+
+        /// <summary>
         /// E2-lite — the SINGLE decision-validation path, reused by the in-game UI
         /// click (EventPopupPresenter) and by the bridge decision (DecisionLogger ->
         /// DecisionExecutor). The decision is valid only when a decision is pending,
@@ -161,6 +218,44 @@ namespace Xianxia.Sect
             _pendingChoices = new List<EventChoiceInfo>();
         }
 
+        /// <summary>
+        /// P11A — restore simulation state from a validated session snapshot, on the
+        /// Unity main thread. Sets the (pre-validated) speed, then re-establishes or
+        /// clears the authoritative pending decision. A restored pending decision is
+        /// re-published as a world-event message so the UI/AI can react; the bridge
+        /// handoff cache is deliberately NOT restored (it is consumed-on-read
+        /// transport state — see SectSessionSnapshot.cs classification). Nothing here
+        /// touches gameplay state; SectStateProvider owns that half.
+        /// </summary>
+        public void RestoreSimulationState(int speed, string pendingEventId, string pendingDescription,
+                                           List<EventChoiceInfo> pendingChoices, bool pendingDecisionPaused)
+        {
+            SetSpeed(speed);
+
+            if (string.IsNullOrEmpty(pendingEventId))
+            {
+                ClearPendingDecision();
+                Resume(TimePauseReason.PendingDecision); // a fresh session is not decision-paused
+                return;
+            }
+
+            _pendingEventId = pendingEventId;
+            _pendingDescription = pendingDescription;
+            _pendingChoices = pendingChoices != null
+                ? new List<EventChoiceInfo>(pendingChoices)
+                : new List<EventChoiceInfo>();
+
+            if (pendingDecisionPaused) Pause(TimePauseReason.PendingDecision);
+
+            _worldEventPublisher.Publish(new WorldEventTriggeredMessage
+            {
+                EventId = _pendingEventId,
+                RequiresDecision = true,
+                Description = _pendingDescription,
+                Choices = _pendingChoices,
+            });
+        }
+
         /// <summary>Sets the simulation speed, validated to <see cref="MinSpeed"/>..<see cref="MaxSpeed"/>.</summary>
         public void SetSpeed(int speed)
         {
@@ -172,6 +267,14 @@ namespace Xianxia.Sect
 
         /// <summary>True while ANY pause reason is active.</summary>
         public bool IsPaused => _reasons != TimePauseReason.None;
+
+        /// <summary>
+        /// P12A — true while a live gameplay session is active. When false (Title or a
+        /// session transition) <see cref="SimulationDelta"/> is exactly 0, but that is NOT
+        /// reported as a pause (see <see cref="IsPaused"/>). UTC/viewer clocks are
+        /// unaffected — they never read simulation time.
+        /// </summary>
+        public bool IsSessionActive => _sessionActive;
 
         /// <summary>True when the player has paused (User reason).</summary>
         public bool IsUserPaused => HasReason(TimePauseReason.User);
@@ -235,7 +338,10 @@ namespace Xianxia.Sect
         /// </remarks>
         public float SimulationDelta
         {
-            get { return ComputeSimulationDelta(IsPaused, _speed, Time.deltaTime); }
+            // P12A — gameplay progression requires BOTH an unpaused clock and an active
+            // Playing session. The two are independent: a stale "no session" state can
+            // never be mistaken for, or clear, a player/decision pause.
+            get { return ComputeSimulationDelta(IsPaused || !_sessionActive, _speed, Time.deltaTime); }
         }
 
         /// <summary>
@@ -266,6 +372,18 @@ namespace Xianxia.Sect
         // can't happen yet.
         public UniTask<AwaitWorldEventResponse> WaitForNextWorldEventAsync()
         {
+            // P12A — outside a Playing session there is no event stream to wait on, so a
+            // new awaiter is answered immediately with a clear "no active session" result
+            // instead of being parked until some future session fires an event.
+            if (!_sessionActive)
+            {
+                return UniTask.FromResult(new AwaitWorldEventResponse
+                {
+                    EventId = string.Empty,
+                    Description = "no active session: gameplay is not in a Playing state",
+                });
+            }
+
             if (_cachedPendingEvent != null)
             {
                 Debug.Log("[TimeSystem] Returning cached world event immediately.");
@@ -556,6 +674,29 @@ namespace Xianxia.Sect
         /// applied together, so a half-restored state can never exist.
         /// </summary>
         bool TryImportViewerMembership(Xianxia.Sect.Messages.SectViewerMembershipSave save, out string failReason);
+
+        /// <summary>
+        /// P11A — capture a detached full-session snapshot of the authoritative
+        /// economy + work accumulators (roster/economy/buildings/appearance/
+        /// attributes/ownership/membership). Read-only; the returned object never
+        /// aliases live state. Simulation speed / pending decision live in TimeSystem
+        /// and are merged by SessionSnapshotService.
+        /// </summary>
+        SectSessionSnapshot CaptureSessionSnapshot();
+
+        /// <summary>
+        /// P11A — validate a candidate full-session snapshot BEFORE any live state is
+        /// replaced. Fail-closed: invalid data returns false with a reason and leaves
+        /// the running session unchanged. Never mutates the candidate or live state.
+        /// </summary>
+        bool TryValidateSessionSnapshot(SectSessionSnapshot snapshot, out string failReason);
+
+        /// <summary>
+        /// P11A — atomically replace live economy + work accumulators from a snapshot
+        /// that already passed TryValidateSessionSnapshot. The candidate is deep-cloned
+        /// on the way in, so the caller's object never aliases live state.
+        /// </summary>
+        bool TryApplySessionSnapshot(SectSessionSnapshot snapshot);
 
         /// <summary>
         /// Task building-requirement gate (§6 addendum). Reads the live

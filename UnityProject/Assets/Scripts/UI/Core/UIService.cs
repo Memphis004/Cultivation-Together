@@ -60,6 +60,26 @@ namespace Xianxia.Sect.UI
             return handle;
         }
 
+        /// <summary>
+        /// P12A — close every open panel except the supplied persistent ids (null/empty
+        /// closes them all). Each close runs the presenter's OnClose/Dispose and destroys
+        /// the panel instance, exactly like <see cref="Close"/>. Returns how many panels
+        /// were actually closed. Used by the session coordinator when a session ends.
+        /// </summary>
+        public int CloseAllExcept(ICollection<string> keepOpen)
+        {
+            if (_openPanels.Count == 0) return 0;
+
+            var toClose = new List<string>();
+            foreach (var panelId in _openPanels.Keys)
+            {
+                if (keepOpen == null || !keepOpen.Contains(panelId)) toClose.Add(panelId);
+            }
+
+            for (int i = 0; i < toClose.Count; i++) Close(toClose[i]);
+            return toClose.Count;
+        }
+
         public void Close(string panelId)
         {
             if (!_openPanels.TryGetValue(panelId, out var handle)) return;

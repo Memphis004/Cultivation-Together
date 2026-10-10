@@ -16,10 +16,12 @@ namespace Xianxia.Sect
     public class ChangeAvatarPartHandler : IAsyncRequestHandler<ChangeAvatarPartRequest, ChangeAvatarPartResponse>
     {
         private readonly ISectStateProvider _stateProvider;
+        private readonly ISessionGate _session;
 
-        public ChangeAvatarPartHandler(ISectStateProvider stateProvider)
+        public ChangeAvatarPartHandler(ISectStateProvider stateProvider, ISessionGate session = null)
         {
             _stateProvider = stateProvider;
+            _session = session;
         }
 
         public UniTask<ChangeAvatarPartResponse> InvokeAsync(ChangeAvatarPartRequest request, CancellationToken cancellationToken = default)
@@ -29,6 +31,15 @@ namespace Xianxia.Sect
                 $"disciple={request?.DiscipleId} slot={request?.Slot} part={request?.PartId}",
                 () =>
                 {
+                    // P12A — refused outside a Playing session (checked after the main-thread hop).
+                    if (_session != null && !_session.IsPlaying)
+                        return new ChangeAvatarPartResponse
+                        {
+                            Success = false,
+                            FailReason = SessionGate.NoActiveSessionReason,
+                            ResultAvatar = null,
+                        };
+
                     var success = _stateProvider.TryChangeAvatarPart(
                         request.DiscipleId, request.Slot, request.PartId,
                         out var failReason, out var resultAvatar);

@@ -16,7 +16,7 @@ namespace Xianxia.Sect
     /// Registered in GameLifetimeScope.Configure() as Singleton entry point.
     /// CoreScene loads single (persistent), GameplayScenes load additive.
     /// </summary>
-    public class SceneLoader : IStartable
+    public class SceneLoader : IStartable, IGameplaySceneLoader
     {
         /// <summary>ฉากเกมเพลย์ที่โหลดอัตโนมัติตอนเริ่มเกม (additive บน CoreScene) —
         /// เดิมต้องกดปุ่ม "Load A (additive)" ใน AdditiveSceneTest เองจึงจะเห็นฉาก</summary>
@@ -39,19 +39,17 @@ namespace Xianxia.Sect
             _rootScope = rootScope;
         }
 
-        /// <summary>IStartable — โหลดฉากเกมเพลย์เริ่มต้นทันทีที่ composition root พร้อม
-        /// (publish SceneLoadedMessage หลังโหลดจบ ระบบกล้อง/วิชวลจึง bind ตามปกติ)
-        /// ถ้ามีคนเปิดฉากนี้ค้างไว้แล้ว (เช่นเซฟจาก editor) ให้ข้าม</summary>
+        /// <summary>
+        /// P12A — the INITIAL gameplay load is owned by <see cref="GameSessionCoordinator"/>
+        /// (the explicit Title → StartingNewGame → Playing lifecycle), so SceneLoader no
+        /// longer auto-loads on Start. It stays a pure additive-scene service: it loads and
+        /// unloads on request, publishes SceneLoadedMessage/SceneUnloadedMessage exactly as
+        /// before, and never decides when a session starts. Kept as an entry point so the
+        /// loader is constructed at composition-root build (and implementable as
+        /// <see cref="IGameplaySceneLoader"/>); there is still exactly one loader.
+        /// </summary>
         public void Start()
         {
-            if (SceneManager.GetSceneByName(DefaultGameplayScene).isLoaded)
-            {
-                Debug.Log($"[SceneLoader] '{DefaultGameplayScene}' already loaded — skip auto-load");
-                return;
-            }
-
-            Debug.Log($"[SceneLoader] auto-loading '{DefaultGameplayScene}' at game start...");
-            LoadGameplayScene(DefaultGameplayScene).Forget();
         }
 
         /// <summary>

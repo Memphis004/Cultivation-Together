@@ -51,9 +51,13 @@ namespace Xianxia.Sect
         protected override void Configure(IContainerBuilder builder)
         {
             // Scene management
-            // Entry point = โหลดฉากเกมเพลย์เริ่มต้น (SectScene) อัตโนมัติ
-            // ทันทีที่ composition root พร้อม — .AsSelf() ให้ยัง inject เป็น concrete ได้
-            builder.RegisterEntryPoint<SceneLoader>(Lifetime.Singleton).AsSelf();
+            // P12A — SceneLoader ไม่ auto-load เองอีกต่อไป (GameSessionCoordinator เป็น
+            // เจ้าของ lifecycle). ยัง register เป็น entry point + AsSelf (Editor verify
+            // runners resolve concrete) และเพิ่ม As<IGameplaySceneLoader> ให้ coordinator
+            // ฉีด seam เดียวกัน — ยังมี loader ตัวเดียวในโปรเจกต์
+            builder.RegisterEntryPoint<SceneLoader>(Lifetime.Singleton)
+                   .AsSelf()
+                   .As<IGameplaySceneLoader>();
             builder.RegisterComponentInHierarchy<AdditiveSceneTest>();
             // Design-time data now sourced from Luban (see DataTables/ at
             // the workspace root and Assets/Scripts/Data/LubanEventPool.cs),

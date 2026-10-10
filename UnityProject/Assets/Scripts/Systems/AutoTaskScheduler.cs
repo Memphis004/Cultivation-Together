@@ -1,7 +1,9 @@
 using System.Collections.Generic;
 using System.Text;
+using MessagePipe;
 using UnityEngine;
 using VContainer.Unity;
+using Xianxia.Sect.Messages;
 
 namespace Xianxia.Sect
 {
@@ -46,6 +48,7 @@ namespace Xianxia.Sect
 
         private readonly ISectStateProvider _stateProvider;
         private readonly TimeSystem _timeSystem;
+        private readonly ISubscriber<SessionRestoredMessage> _sessionRestoredSubscriber;
 
         /// <summary>Simulation seconds between a disciple's evaluations (not frames).</summary>
         public float EvaluationIntervalSeconds { get; set; } = 10f;
@@ -62,15 +65,21 @@ namespace Xianxia.Sect
         private readonly Dictionary<string, float> _lastChangeAt = new Dictionary<string, float>();
         private readonly HashSet<string> _evaluatedOnce = new HashSet<string>();
 
-        public AutoTaskScheduler(ISectStateProvider stateProvider, TimeSystem timeSystem)
+        public AutoTaskScheduler(ISectStateProvider stateProvider, TimeSystem timeSystem,
+                                 ISubscriber<SessionRestoredMessage> sessionRestoredSubscriber = null)
         {
             _stateProvider = stateProvider;
             _timeSystem = timeSystem;
+            _sessionRestoredSubscriber = sessionRestoredSubscriber;
         }
 
         /// <summary>Log the prototype balance once, so the values are visible rather than hidden.</summary>
         public void Start()
         {
+            // P11A — a restored session invalidates every derived scheduling reference
+            // (old-session disciple ids, dwell clocks, staggered eval slots).
+            _sessionRestoredSubscriber?.Subscribe(OnSessionRestored);
+
             Debug.Log("[AutoTaskScheduler] P9B/P10C utility AI weights: " + AutoTaskWeights.Describe()
                 + " | recovery: stamina ≤ " + DiscipleAttributesConfig.RecoveryThresholdLow.ToString("0")
                 + " → meditation, stay until " + DiscipleAttributesConfig.RecoveryThresholdHigh.ToString("0")
@@ -80,6 +89,25 @@ namespace Xianxia.Sect
                 + ", minDwell " + MinimumDwellSeconds.ToString("0.#") + "s"
                 + ", margin " + ImprovementMargin.ToString("0.00"));
         }
+
+        /// <summary>
+        /// P11A — the AI's per-disciple scheduling/dwell maps describe the PREVIOUS
+        /// session; a restored roster may reuse ids with different tasks or drop them
+        /// entirely. Clear them so the next pass re-registers from scratch and a stale
+        /// dwell clock can never gate (or rush) a freshly restored disciple's choice.
+        /// This is presentation cadence only — no assignment or reward lives here.
+        /// </summary>
+        public void ResetDerivedSchedule()
+        {
+            _simTime = 0f;
+            _registeredCount = 0;
+            _nextEvalAt.Clear();
+            _observedTask.Clear();
+            _lastChangeAt.Clear();
+            _evaluatedOnce.Clear();
+        }
+
+        private void OnSessionRestored(SessionRestoredMessage message) => ResetDerivedSchedule();
 
         /// <summary>Frame tick — advances simulation time by the shared simulation delta
         /// (pause = 0, speed applied once in TimeSystem) and evaluates whatever is due.</summary>

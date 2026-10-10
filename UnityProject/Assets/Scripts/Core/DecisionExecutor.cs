@@ -65,6 +65,22 @@ namespace Xianxia.Sect
         /// </summary>
         public DecisionResult Execute(string eventId, string choiceId)
         {
+            // P12A — a decision is a mutation: outside a Playing session nothing is
+            // pending that a decision could legitimately resolve, so refuse clearly.
+            // The authoritative "a live session is Playing" fact already lives on the
+            // injected simulation clock (GameSessionCoordinator flips it once per session
+            // boundary), so no extra dependency is taken on purpose: VContainer always
+            // picks the widest constructor and ignores default parameter values, so a new
+            // injectable type here would have to be registered by every container that
+            // resolves this class (including hand-built test containers).
+            if (_timeSystem != null && !_timeSystem.IsSessionActive)
+            {
+                Debug.LogWarning(
+                    $"[DecisionExecutor] Rejected decision — {SessionGate.NoActiveSessionReason} " +
+                    $"(eventId={eventId} choiceId={choiceId}).");
+                return DecisionResult.Reject(SessionGate.NoActiveSessionReason);
+            }
+
             // Single validation path (shared by the UI click and the bridge path).
             // Clearing the pending state on success is what makes a duplicate a
             // rejection: the second call finds nothing pending.

@@ -79,8 +79,9 @@ namespace Xianxia.Sect.Visual
         private readonly ISubscriber<DiscipleChibiBackendChangedMessage> _backendSub;
         private readonly ISubscriber<SceneLoadedMessage> _sceneLoadedSub;
         private readonly ISubscriber<SceneUnloadedMessage> _sceneUnloadedSub;
+        private readonly ISubscriber<SessionRestoredMessage> _sessionRestoredSub; // P11A
 
-        private readonly List<IDisposable> _subscriptions = new List<IDisposable>(5);
+        private readonly List<IDisposable> _subscriptions = new List<IDisposable>(6);
         private readonly Dictionary<string, IChibiVisual> _active =
             new Dictionary<string, IChibiVisual>(StringComparer.Ordinal);
 
@@ -100,7 +101,8 @@ namespace Xianxia.Sect.Visual
             ISubscriber<AvatarEquipmentChangedMessage> equipmentSub,
             ISubscriber<DiscipleChibiBackendChangedMessage> backendSub,
             ISubscriber<SceneLoadedMessage> sceneLoadedSub,
-            ISubscriber<SceneUnloadedMessage> sceneUnloadedSub)
+            ISubscriber<SceneUnloadedMessage> sceneUnloadedSub,
+            ISubscriber<SessionRestoredMessage> sessionRestoredSub)
         {
             _stateProvider = stateProvider;
             _resolver = resolver;
@@ -115,6 +117,7 @@ namespace Xianxia.Sect.Visual
             _backendSub = backendSub;
             _sceneLoadedSub = sceneLoadedSub;
             _sceneUnloadedSub = sceneUnloadedSub;
+            _sessionRestoredSub = sessionRestoredSub;
         }
 
         public void Start()
@@ -124,6 +127,7 @@ namespace Xianxia.Sect.Visual
             _subscriptions.Add(_backendSub.Subscribe(OnChibiBackendChanged));
             _subscriptions.Add(_sceneLoadedSub.Subscribe(OnSceneLoaded));
             _subscriptions.Add(_sceneUnloadedSub.Subscribe(OnSceneUnloaded));
+            _subscriptions.Add(_sessionRestoredSub.Subscribe(OnSessionRestored)); // P11A
 
             // CoreScene already loaded when we start: pick up its ChibiSceneRoot (if any)
             // and spawn the current roster — handles the "game boots straight into
@@ -170,6 +174,17 @@ namespace Xianxia.Sect.Visual
         private void OnSceneLoaded(SceneLoadedMessage msg)
         {
             TryBindRootFromActiveScenes();
+            if (_root != null) Reconcile();
+        }
+
+        /// <summary>
+        /// P11A — a full session was restored. The active chibi set belongs to the
+        /// previous roster, so reconcile: despawn disciples that are gone, spawn the
+        /// restored ones, and re-run the §7 Spine allocation. No-op until a scene root
+        /// exists — the next SceneLoaded reconcile covers that path.
+        /// </summary>
+        private void OnSessionRestored(SessionRestoredMessage msg)
+        {
             if (_root != null) Reconcile();
         }
 

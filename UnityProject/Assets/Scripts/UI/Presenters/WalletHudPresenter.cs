@@ -8,21 +8,28 @@ namespace Xianxia.Sect.UI
     public class WalletHudPresenter : UIPresenter<WalletHudView>
     {
         private readonly ISubscriber<SectResourceChangedMessage> _resourceSubscriber;
+        private readonly ISubscriber<SessionRestoredMessage> _sessionRestoredSubscriber;
         private readonly ISectStateProvider _stateProvider;
 
         private IDisposable _subscription;
+        private IDisposable _sessionRestoredSubscription;
 
         public WalletHudPresenter(
             ISubscriber<SectResourceChangedMessage> resourceSubscriber,
-            ISectStateProvider stateProvider)
+            ISectStateProvider stateProvider,
+            ISubscriber<SessionRestoredMessage> sessionRestoredSubscriber = null)
         {
             _resourceSubscriber = resourceSubscriber;
             _stateProvider = stateProvider;
+            _sessionRestoredSubscriber = sessionRestoredSubscriber;
         }
 
         protected override void OnViewBound()
         {
             _subscription = _resourceSubscriber.Subscribe(OnResourceChanged);
+            // P11A — re-prime the persistent HUD from the restored session instead of
+            // leaving the previous session's numbers on screen.
+            _sessionRestoredSubscription = _sessionRestoredSubscriber?.Subscribe(OnSessionRestored);
 
             // Prime the view with current values immediately instead of
             // waiting for the next change - matches the old SectHudView's
@@ -61,9 +68,22 @@ namespace Xianxia.Sect.UI
             View.UpdateWallet(sectMaster.Wallet.SpiritStones, sectMaster.Wallet.Contribution);
         }
 
+        /// <summary>P11A — a full session was restored: drop the previous session's values and re-read state.</summary>
+        private void OnSessionRestored(SessionRestoredMessage message)
+        {
+            var state = _stateProvider.BuildSectEconomyState();
+            if (state == null || state.Stockpile == null) return;
+
+            foreach (var kv in state.Stockpile.RawResources)
+                View.SetInitialResource(kv.Key, kv.Value);
+
+            RefreshWallet();
+        }
+
         public override void Dispose()
         {
             _subscription?.Dispose();
+            _sessionRestoredSubscription?.Dispose();
         }
     }
 }

@@ -1474,6 +1474,419 @@ namespace Xianxia.Sect
             return true;
         }
 
+        // ---------- P11A — full-session snapshot (capture / validate / apply) ----------
+        // Unity owns gameplay state, so the authority over what counts as a valid
+        // candidate and how live state is replaced stays HERE. SessionSnapshotService
+        // orchestrates WHEN a restore happens; this class owns WHAT is valid and the
+        // atomic swap. Everything below works on detached DTOs only.
+
+        /// <summary>
+        /// P11A — deep, detached copy of the authoritative economy + work
+        /// accumulators. Simulation speed / pending decision live in TimeSystem and
+        /// are merged by <c>SessionSnapshotService</c>. Read-only: live state is
+        /// never modified, and mutating the returned snapshot cannot touch it.
+        /// </summary>
+        public SectSessionSnapshot CaptureSessionSnapshot()
+        {
+            var snapshot = new SectSessionSnapshot
+            {
+                Economy = CloneEconomy(_state),
+            };
+
+            foreach (var pair in _gatherAccumulators)
+                snapshot.GatherAccumulators[pair.Key] = pair.Value;
+            foreach (var pair in _craftProgress)
+                snapshot.CraftProgress[pair.Key] = pair.Value;
+
+            return snapshot;
+        }
+
+        /// <summary>
+        /// P11A — validate a candidate snapshot BEFORE anything live is replaced. A
+        /// failure leaves the running session untouched (fail closed). Checks:
+        /// unique non-empty ids, finite numeric values, defined enums, ownership ⇄
+        /// membership agreement, avatar presence, known task ids, known building
+        /// defs, valid rotations, and in-grid non-overlapping placement. Never mutates
+        /// the candidate or live state.
+        /// </summary>
+        public bool TryValidateSessionSnapshot(SectSessionSnapshot snapshot, out string failReason)
+        {
+            failReason = string.Empty;
+
+            if (snapshot == null) { failReason = "Session snapshot is null."; return false; }
+
+            var economy = snapshot.Economy;
+            if (economy == null) { failReason = "Session snapshot has no economy state."; return false; }
+
+            // 1. work accumulators — finite and non-negative (a negative float would
+            //    be a corrupted carry-over, not a real sub-unit remainder).
+            if (!ValidateAccumulators(snapshot.GatherAccumulators, "gather accumulator", out failReason)) return false;
+            if (!ValidateAccumulators(snapshot.CraftProgress, "craft progress", out failReason)) return false;
+
+            // 2. roster
+            var disciples = economy.Disciples;
+            if (disciples == null) { failReason = "Session snapshot has no disciple roster."; return false; }
+
+            var discipleIds = new HashSet<string>();
+            for (int i = 0; i < disciples.Count; i++)
+            {
+                var d = disciples[i];
+                if (d == null) { failReason = $"Session snapshot has a null disciple at index {i}."; return false; }
+                if (string.IsNullOrEmpty(d.DiscipleId))
+                { failReason = $"Session snapshot has a disciple without an id at index {i}."; return false; }
+                if (!discipleIds.Add(d.DiscipleId))
+                { failReason = $"Session snapshot has a duplicate disciple id: '{d.DiscipleId}'."; return false; }
+
+                if (!Enum.IsDefined(typeof(DiscipleRank), d.Rank))
+                { failReason = $"Disciple '{d.DiscipleId}' has an undefined rank value."; return false; }
+                if (!Enum.IsDefined(typeof(DiscipleSex), d.Sex))
+                { failReason = $"Disciple '{d.DiscipleId}' has an undefined sex value."; return false; }
+                if (!Enum.IsDefined(typeof(ChibiBackend), d.ChibiBackend))
+                { failReason = $"Disciple '{d.DiscipleId}' has an undefined chibi backend value."; return false; }
+                if (!Enum.IsDefined(typeof(DiscipleControlMode), d.ControlMode))
+                { failReason = $"Disciple '{d.DiscipleId}' has an undefined control mode value."; return false; }
+
+                // ownership
+                if (!Enum.IsDefined(typeof(DiscipleOwnerType), d.OwnerType))
+                { failReason = $"Disciple '{d.DiscipleId}' has an undefined owner type value."; return false; }
+                if (d.OwnerType == DiscipleOwnerType.Npc)
+                {
+                    if (!string.IsNullOrEmpty(d.OwnerId))
+                    { failReason = $"Npc-owned disciple '{d.DiscipleId}' must carry an empty OwnerId."; return false; }
+                }
+                else if (!IsValidIdentity(d.OwnerId))
+                {
+                    failReason = $"Disciple '{d.DiscipleId}' has an invalid OwnerId '{d.OwnerId}'.";
+                    return false;
+                }
+
+                // autonomy only for Npc-owned disciples (same rule the mutation path enforces)
+                if (d.ControlMode == DiscipleControlMode.Auto && d.OwnerType != DiscipleOwnerType.Npc)
+                {
+                    failReason = $"Disciple '{d.DiscipleId}' is {d.OwnerType}-owned but in Auto mode.";
+                    return false;
+                }
+
+                // task — a live directive; an unknown id fails rather than silently
+                // keeping an unexecutable task or substituting another one.
+                if (!string.IsNullOrEmpty(d.CurrentTask) && !KnownTasks.Contains(d.CurrentTask))
+                {
+                    failReason = $"Disciple '{d.DiscipleId}' references an unknown task id '{d.CurrentTask}'.";
+                    return false;
+                }
+
+                if (d.Wallet == null)
+                { failReason = $"Disciple '{d.DiscipleId}' has no wallet."; return false; }
+                if (d.Avatar == null)
+                { failReason = $"Disciple '{d.DiscipleId}' has no avatar appearance."; return false; }
+
+                if (!ValidateAttributeBlock(d, out failReason)) return false;
+
+                if (d.PersonalInventory == null)
+                { failReason = $"Disciple '{d.DiscipleId}' has a null personal inventory."; return false; }
+                if (!ValidateItems(d.PersonalInventory, $"disciple '{d.DiscipleId}' inventory", out failReason)) return false;
+            }
+
+            // 3. stockpile
+            if (economy.Stockpile == null) { failReason = "Session snapshot has no stockpile."; return false; }
+            var raw = economy.Stockpile.RawResources;
+            if (raw == null) { failReason = "Session snapshot has a null raw-resource dictionary."; return false; }
+            foreach (var pair in raw)
+            {
+                if (string.IsNullOrEmpty(pair.Key))
+                { failReason = "Session snapshot has a raw resource without an id."; return false; }
+                if (pair.Value < 0)
+                { failReason = $"Session snapshot has a negative '{pair.Key}' amount ({pair.Value})."; return false; }
+            }
+            if (!ValidateItems(economy.Stockpile.CraftedGoods, "sect stockpile goods", out failReason)) return false;
+
+            // 4. buildings — unique ids, known defs, valid rotation, in-grid + non-overlapping.
+            if (!ValidateBuildings(economy.PlacedBuildings, out failReason)) return false;
+
+            // 5. membership ⇄ ownership must agree in the SAME snapshot.
+            if (economy.ViewerRegistry == null)
+            { failReason = "Session snapshot has no viewer registry."; return false; }
+            if (!economy.ViewerRegistry.IsInternallyConsistent())
+            { failReason = "Session snapshot has an internally inconsistent viewer registry."; return false; }
+            if (!economy.ViewerRegistry.VerifyAgainst(economy.Disciples))
+            { failReason = "Session snapshot's viewer registry does not agree with its disciple ownership."; return false; }
+
+            return true;
+        }
+
+        /// <summary>
+        /// P11A — replace live economy + work accumulators from a VALIDATED snapshot.
+        /// The candidate is deep-cloned on the way in, so the caller's object never
+        /// aliases live state and can be safely reused or mutated afterwards. Never
+        /// fails after validation (the two steps are split for that reason): if this
+        /// is called on an unvalidated snapshot it simply returns false and leaves
+        /// live state untouched.
+        /// </summary>
+        public bool TryApplySessionSnapshot(SectSessionSnapshot snapshot)
+        {
+            if (snapshot == null || snapshot.Economy == null) return false;
+
+            var candidate = CloneEconomy(snapshot.Economy);
+            SectEconomyState.NormalizeDisciples(candidate); // P10A repair on the detached copy only
+
+            // --- commit: economy (single assignment per field; no partial state) ---
+            _state.Disciples = candidate.Disciples;
+            _state.Stockpile.RawResources = candidate.Stockpile.RawResources;
+            _state.Stockpile.CraftedGoods = candidate.Stockpile.CraftedGoods;
+            _state.PlacedBuildings = candidate.PlacedBuildings;
+            _state.ViewerRegistry = candidate.ViewerRegistry;
+
+            // --- commit: work accumulators ---
+            _gatherAccumulators.Clear();
+            if (snapshot.GatherAccumulators != null)
+            {
+                foreach (var pair in snapshot.GatherAccumulators)
+                    if (!string.IsNullOrEmpty(pair.Key) && IsFinite(pair.Value) && pair.Value >= 0f)
+                        _gatherAccumulators[pair.Key] = pair.Value;
+            }
+
+            _craftProgress.Clear();
+            if (snapshot.CraftProgress != null)
+            {
+                foreach (var pair in snapshot.CraftProgress)
+                    if (!string.IsNullOrEmpty(pair.Key) && IsFinite(pair.Value) && pair.Value >= 0f)
+                        _craftProgress[pair.Key] = pair.Value;
+            }
+
+            // --- intentional resets (see SectSessionSnapshot.cs classification) ---
+            _taskChangeLastAtUtc.Clear(); // real-UTC task-change cooldown is session-scoped
+            _workTick.Clear();            // per-tick scratch — must never carry a stale outcome
+            _workTickRecordCount = 0;
+
+            return true;
+        }
+
+        // ---- P11A validation helpers ----
+
+        private static bool ValidateAccumulators(Dictionary<string, float> map, string label, out string failReason)
+        {
+            failReason = string.Empty;
+            if (map == null) return true; // missing map == empty
+
+            foreach (var pair in map)
+            {
+                if (string.IsNullOrEmpty(pair.Key))
+                { failReason = $"Session snapshot has a {label} with an empty key."; return false; }
+                if (!IsFinite(pair.Value) || pair.Value < 0f)
+                { failReason = $"Session snapshot {label} for '{pair.Key}' is not a finite non-negative value."; return false; }
+            }
+            return true;
+        }
+
+        private static bool ValidateAttributeBlock(DiscipleState disciple, out string failReason)
+        {
+            failReason = string.Empty;
+            var attributes = disciple.Attributes;
+            if (attributes == null)
+            { failReason = $"Disciple '{disciple.DiscipleId}' has no attribute block."; return false; }
+            if (!IsFinite(attributes.Stamina))
+            { failReason = $"Disciple '{disciple.DiscipleId}' has a non-finite stamina value."; return false; }
+
+            if (attributes.SkillXp != null)
+            {
+                foreach (var pair in attributes.SkillXp)
+                {
+                    if (string.IsNullOrEmpty(pair.Key))
+                    { failReason = $"Disciple '{disciple.DiscipleId}' has a skill entry with an empty category."; return false; }
+                    if (!IsFinite(pair.Value))
+                    { failReason = $"Disciple '{disciple.DiscipleId}' has a non-finite skill XP value for '{pair.Key}'."; return false; }
+                }
+            }
+            return true;
+        }
+
+        private static bool ValidateItems(List<InventoryItem> items, string context, out string failReason)
+        {
+            failReason = string.Empty;
+            if (items == null) return true;
+
+            for (int i = 0; i < items.Count; i++)
+            {
+                var item = items[i];
+                if (item == null) { failReason = $"Session snapshot has a null item in {context}."; return false; }
+                if (string.IsNullOrEmpty(item.ItemDefId))
+                { failReason = $"Session snapshot has an item without a def id in {context}."; return false; }
+                if (item.Quantity <= 0)
+                { failReason = $"Session snapshot item '{item.ItemDefId}' in {context} has a non-positive quantity."; return false; }
+                if (item.Grade < 1 || item.Grade > 5)
+                { failReason = $"Session snapshot item '{item.ItemDefId}' in {context} has an out-of-range grade {item.Grade}."; return false; }
+                if (!Enum.IsDefined(typeof(OwnerScope), item.OwnerScope))
+                { failReason = $"Session snapshot item '{item.ItemDefId}' in {context} has an undefined owner scope."; return false; }
+            }
+            return true;
+        }
+
+        private bool ValidateBuildings(List<PlacedBuildingState> buildings, out string failReason)
+        {
+            failReason = string.Empty;
+            if (buildings == null) return true; // missing list == none placed
+
+            // Same grid geometry production uses (BuildingInstaller factory); the
+            // land mask is deliberately NOT applied here — mask is scene-derived, and
+            // placement validity is bounds + overlap + known def + rotation.
+            var grid = new BuildingGrid(
+                GridOverlayRenderer.GridExtent, GridOverlayRenderer.GridExtent,
+                -GridOverlayRenderer.GridExtent / 2, -GridOverlayRenderer.GridExtent / 2);
+
+            var seen = new HashSet<string>();
+            for (int i = 0; i < buildings.Count; i++)
+            {
+                var pb = buildings[i];
+                if (pb == null) { failReason = $"Session snapshot has a null building at index {i}."; return false; }
+                if (string.IsNullOrEmpty(pb.InstanceId))
+                { failReason = $"Session snapshot has a building without an instance id at index {i}."; return false; }
+                if (!seen.Add(pb.InstanceId))
+                { failReason = $"Session snapshot has a duplicate building instance id: '{pb.InstanceId}'."; return false; }
+                if (!BuildingGrid.IsValidRotation(pb.Rotation))
+                { failReason = $"Building '{pb.InstanceId}' has an invalid rotation {pb.Rotation}."; return false; }
+
+                var def = _buildingDefPool != null ? _buildingDefPool.GetById(pb.DefId) : null;
+                if (def == null)
+                { failReason = $"Building '{pb.InstanceId}' references an unknown def id '{pb.DefId}'."; return false; }
+
+                if (!grid.CanPlace(pb.GridX, pb.GridZ, def.GridWidth, def.GridHeight, pb.Rotation))
+                {
+                    failReason = $"Building '{pb.InstanceId}' cannot be placed at ({pb.GridX},{pb.GridZ}) " +
+                                 $"rot={pb.Rotation} - outside the sect grid or overlapping another building.";
+                    return false;
+                }
+                grid.Occupy(pb.InstanceId, pb.GridX, pb.GridZ, def.GridWidth, def.GridHeight, pb.Rotation);
+            }
+            return true;
+        }
+
+        private static bool IsFinite(float value)
+        {
+            return !float.IsNaN(value) && !float.IsInfinity(value);
+        }
+
+        // ---- P11A detached deep-copy helpers ----
+
+        private static SectEconomyState CloneEconomy(SectEconomyState source)
+        {
+            var copy = new SectEconomyState();
+            if (source == null) return copy;
+
+            if (source.Disciples != null)
+            {
+                for (int i = 0; i < source.Disciples.Count; i++)
+                    copy.Disciples.Add(CloneDisciple(source.Disciples[i]));
+            }
+
+            if (source.Stockpile != null)
+            {
+                copy.Stockpile.RawResources = source.Stockpile.RawResources != null
+                    ? new Dictionary<string, int>(source.Stockpile.RawResources)
+                    : new Dictionary<string, int>();
+
+                if (source.Stockpile.CraftedGoods != null)
+                {
+                    for (int i = 0; i < source.Stockpile.CraftedGoods.Count; i++)
+                        copy.Stockpile.CraftedGoods.Add(CloneItem(source.Stockpile.CraftedGoods[i]));
+                }
+            }
+
+            if (source.PlacedBuildings != null)
+            {
+                for (int i = 0; i < source.PlacedBuildings.Count; i++)
+                {
+                    var b = source.PlacedBuildings[i];
+                    copy.PlacedBuildings.Add(b == null ? null : new PlacedBuildingState
+                    {
+                        InstanceId = b.InstanceId,
+                        DefId = b.DefId,
+                        GridX = b.GridX,
+                        GridZ = b.GridZ,
+                        Rotation = b.Rotation,
+                    });
+                }
+            }
+
+            if (source.ViewerRegistry != null)
+            {
+                if (source.ViewerRegistry.Records != null)
+                {
+                    for (int i = 0; i < source.ViewerRegistry.Records.Count; i++)
+                    {
+                        var r = source.ViewerRegistry.Records[i];
+                        copy.ViewerRegistry.Records.Add(r == null ? null : new ViewerRecord
+                        {
+                            ViewerId = r.ViewerId,
+                            DisplayName = r.DisplayName,
+                            BoundDiscipleId = r.BoundDiscipleId,
+                            Status = r.Status,
+                            LastActiveAtUtc = r.LastActiveAtUtc,
+                        });
+                    }
+                }
+                if (source.ViewerRegistry.PendingApplications != null)
+                {
+                    for (int i = 0; i < source.ViewerRegistry.PendingApplications.Count; i++)
+                    {
+                        var p = source.ViewerRegistry.PendingApplications[i];
+                        copy.ViewerRegistry.PendingApplications.Add(p == null ? null : new PendingViewerApplication
+                        {
+                            ViewerId = p.ViewerId,
+                            DisplayName = p.DisplayName,
+                            AppliedAtUtc = p.AppliedAtUtc,
+                        });
+                    }
+                }
+            }
+
+            return copy;
+        }
+
+        private static DiscipleState CloneDisciple(DiscipleState source)
+        {
+            if (source == null) return null;
+
+            var copy = new DiscipleState
+            {
+                DiscipleId = source.DiscipleId,
+                DisplayName = source.DisplayName,
+                Rank = source.Rank,
+                Sex = source.Sex,
+                ChibiBackend = source.ChibiBackend,
+                OwnerType = source.OwnerType,
+                OwnerId = source.OwnerId,
+                ControlMode = source.ControlMode,
+                CurrentTask = source.CurrentTask,
+                Wallet = new CurrencyWallet
+                {
+                    SpiritStones = source.Wallet != null ? source.Wallet.SpiritStones : 0L,
+                    Contribution = source.Wallet != null ? source.Wallet.Contribution : 0L,
+                },
+                Avatar = source.Avatar != null ? source.Avatar.Clone() : new AvatarAppearance(),
+                Attributes = source.Attributes != null ? source.Attributes.Clone() : new DiscipleAttributes(),
+            };
+
+            if (source.PersonalInventory != null)
+            {
+                for (int i = 0; i < source.PersonalInventory.Count; i++)
+                    copy.PersonalInventory.Add(CloneItem(source.PersonalInventory[i]));
+            }
+
+            return copy;
+        }
+
+        private static InventoryItem CloneItem(InventoryItem source)
+        {
+            if (source == null) return null;
+            return new InventoryItem
+            {
+                ItemDefId = source.ItemDefId,
+                Quantity = source.Quantity,
+                Grade = source.Grade,
+                OwnerScope = source.OwnerScope,
+            };
+        }
+
         // ---------- Task building-requirement gate (§6 addendum, Phase 2 static-data step) ----------
         // Public so UI / ghost-preview callers (and TryAssignTask) can check the
         // requirement without permission checks or mutation. Deliberately plain

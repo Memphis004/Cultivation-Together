@@ -15,10 +15,12 @@ namespace Xianxia.Sect
     public class PurchaseItemHandler : IAsyncRequestHandler<PurchaseItemRequest, PurchaseItemResponse>
     {
         private readonly ISectStateProvider _stateProvider;
+        private readonly ISessionGate _session;
 
-        public PurchaseItemHandler(ISectStateProvider stateProvider)
+        public PurchaseItemHandler(ISectStateProvider stateProvider, ISessionGate session = null)
         {
             _stateProvider = stateProvider;
+            _session = session;
         }
 
         public UniTask<PurchaseItemResponse> InvokeAsync(PurchaseItemRequest request, CancellationToken cancellationToken = default)
@@ -26,8 +28,10 @@ namespace Xianxia.Sect
             return MainThreadDispatch.RunAsync(
                 nameof(PurchaseItemHandler),
                 $"disciple={request?.DiscipleId} item={request?.ItemDefId} grade={request?.Grade} qty={request?.Quantity}",
-                () => _stateProvider.TryPurchaseItem(
-                    request.DiscipleId, request.ItemDefId, request.Grade, request.Quantity),
+                () => _session != null && !_session.IsPlaying
+                    ? new PurchaseItemResponse { Success = false, Message = SessionGate.NoActiveSessionReason }
+                    : _stateProvider.TryPurchaseItem(
+                        request.DiscipleId, request.ItemDefId, request.Grade, request.Quantity),
                 reason => new PurchaseItemResponse
                 {
                     Success = false,

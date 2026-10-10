@@ -72,12 +72,54 @@ namespace Xianxia.Sect.Installers
             // would miss every change before the first query). Read-only.
             builder.RegisterEntryPoint<TaskChangeObservabilityBuffer>(Lifetime.Singleton).AsSelf();
 
+            // P11A — the single orchestration owner of full-session restore. Registered
+            // as ISessionRestoreAuthority so the membership-slice persistence below can
+            // refuse its automatic import once a full session is authoritative (one
+            // owner; no competing automatic restore). No save file I/O here — P11B adds
+            // the storage layer on top of the same envelope.
+            builder.Register<ISessionRestoreAuthority, SessionSnapshotService>(Lifetime.Singleton);
+
+            // P11B — the local save slot. RegisterGameplaySystems() runs from
+            // GameLifetimeScope.Configure (i.e. Awake), so this is the UNITY MAIN THREAD:
+            // Application.persistentDataPath is resolved exactly here, once, and handed in
+            // as data — the repository itself is plain C#/System.IO and runs on a worker
+            // thread (Common-Rules 4: background I/O sees detached data only).
+            // MVP scope: ONE manual slot + ONE backup + metadata for Continue (no
+            // multi-slot browser, no cloud sync, no autosave, no Title UI yet).
+            builder.RegisterInstance(SaveSlotPaths.UnderPersistentDataPath());
+            builder.RegisterInstance<ISaveFileSystem>(new SystemSaveFileSystem());
+            builder.Register<SaveSlotRepository>(Lifetime.Singleton);
+            builder.Register<SessionTransitionTracker>(Lifetime.Singleton);
+            builder.Register<SaveOperationGate>(Lifetime.Singleton);
+            builder.Register<ISaveWorkScheduler, UnitySaveWorkScheduler>(Lifetime.Singleton);
+
+            // P11B — the application service the (future) save/Continue UI calls. Lazy
+            // singleton: nothing is read or written until something asks it to.
+            builder.Register<SaveSessionService>(Lifetime.Singleton);
+
             // P5B persistence: restores the viewer-membership slice on Start and
             // re-saves it periodically + on scope dispose, so membership status and
             // LastActiveAtUtc survive a session. ENTRY POINT so the load happens at
             // container build (before anything can query protection). Local file
             // only — no MCP tool, nothing on the interprocess wire.
+            // P11A: its import is gated by ISessionRestoreAuthority — a full-session
+            // load always wins and the slice can never overwrite it.
             builder.RegisterEntryPoint<ViewerMembershipPersistenceSystem>(Lifetime.Singleton).AsSelf();
+
+            // P12A — explicit game-session lifecycle (Title / StartingNewGame / LoadingGame /
+            // Playing / ReturningToTitle) layered on the EXISTING SceneLoader and persistence
+            // services. It does not create a second composition root or message bus.
+            //
+            // Registered LAST so every entry point it resets (AutoTaskScheduler) and every
+            // buffer it clears is already constructed + subscribed before its own Start()
+            // drives the boot session. Exposed as ISessionGate so the MCP mutation handlers
+            // (registered above) can refuse calls outside Playing.
+            builder.Register<IStarterStateFactory, PrototypeStarterStateFactory>(Lifetime.Singleton);
+            builder.Register<ISessionUiCloser, SessionUiCloser>(Lifetime.Singleton);
+            builder.RegisterEntryPoint<GameSessionCoordinator>(Lifetime.Singleton)
+                   .AsSelf()
+                   .As<IGameSessionCoordinator>()
+                   .As<ISessionGate>();
         }
     }
 }

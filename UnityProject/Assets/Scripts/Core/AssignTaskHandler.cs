@@ -21,10 +21,12 @@ namespace Xianxia.Sect
     public class AssignTaskHandler : IAsyncRequestHandler<AssignTaskRequest, AssignTaskResponse>
     {
         private readonly ISectStateProvider _stateProvider;
+        private readonly ISessionGate _session;
 
-        public AssignTaskHandler(ISectStateProvider stateProvider)
+        public AssignTaskHandler(ISectStateProvider stateProvider, ISessionGate session = null)
         {
             _stateProvider = stateProvider;
+            _session = session;
         }
 
         public UniTask<AssignTaskResponse> InvokeAsync(AssignTaskRequest request, CancellationToken cancellationToken = default)
@@ -34,6 +36,11 @@ namespace Xianxia.Sect
                 $"requester={request?.RequesterId} disciple={request?.DiscipleId} task={request?.TaskId}",
                 () =>
                 {
+                    // P12A — a mutation outside a Playing session is refused with a clear
+                    // result; the check runs AFTER the main-thread hop so it reads the live phase.
+                    if (_session != null && !_session.IsPlaying)
+                        return new AssignTaskResponse { Success = false, FailReason = SessionGate.NoActiveSessionReason };
+
                     string failReason;
                     var success = _stateProvider.TryAssignTask(
                         request.RequesterId, request.DiscipleId, request.TaskId, out failReason);

@@ -1,11 +1,11 @@
 # Cultivation-Together Context Pack
 
 - Repository: Memphis004/Cultivation-Together
-- Commit: 5d53bc9
+- Commit: daa0b86
 - Branch: main
 - Generated: 2026-10-10
-- Uncommitted changes in working tree: 28 file(s) (ไฟล์ที่แนบมาอ่านจาก working tree ไม่ใช่จาก commit — ถ้า > 0 อาจต่างจาก commit)
-- Files after .aiignore filter: 2055
+- Uncommitted changes in working tree: 58 file(s) (ไฟล์ที่แนบมาอ่านจาก working tree ไม่ใช่จาก commit — ถ้า > 0 อาจต่างจาก commit)
+- Files after .aiignore filter: 2057
 
 ## Ground Rules (สำคัญมาก — บังคับ AI)
 
@@ -50,12 +50,12 @@
 
 - `McpBridge/Program.cs`: static class SectQueryTools, static class SectActionTools
 - `McpBridge/Shared/DiscipleAttributes.cs`: static class DiscipleAttributesConfig, class DiscipleAttributes
-- `McpBridge/Shared/GameMessages.cs`: class DiscipleRecruitedMessage, class DiscipleRankChangedMessage, class SectResourceChangedMessage, class ContributionEarnedMessage, class SceneLoadedMessage, class WorldEventTriggeredMessage, class TimeSpeedChangedMessage, class SectStateQuery, class SectStateSnapshot, class AwaitWorldEventRequest, class AwaitWorldEventResponse, class EventChoiceInfo, class ExecuteDecisionMessage, class DecisionExecutedMessage, class BuildModeStartedMessage, class BuildModeEndedMessage, class PurchaseItemRequest, class PurchaseItemResponse, class BuildingPlacedMessage, class DiscipleChibiBackendChangedMessage, class DiscipleSelectedMessage, class AvatarEquipmentChangedMessage, class ChangeAvatarPartRequest, class ChangeAvatarPartResponse, class AssignTaskRequest, class AssignTaskResponse, class DiscipleTaskChangedMessage, class DiscipleOwnerChangedMessage, class DiscipleControlModeChangedMessage, class OwnershipObservabilityQuery, class OwnershipObservabilitySnapshot, class TaskChangeObservabilityQuery, class TaskChangeObservabilitySnapshot, class TaskProtectionQuery, class TaskProtectionEntry, class TaskProtectionSnapshot, class SectViewerMembershipSave, class SectSavedOwnership, static class InterprocessTopics
+- `McpBridge/Shared/GameMessages.cs`: class DiscipleRecruitedMessage, class DiscipleRankChangedMessage, class SectResourceChangedMessage, class ContributionEarnedMessage, class SceneLoadedMessage, class WorldEventTriggeredMessage, class TimeSpeedChangedMessage, class SectStateQuery, class SectStateSnapshot, class AwaitWorldEventRequest, class AwaitWorldEventResponse, class EventChoiceInfo, class ExecuteDecisionMessage, class DecisionExecutedMessage, class BuildModeStartedMessage, class BuildModeEndedMessage, class PurchaseItemRequest, class PurchaseItemResponse, class BuildingPlacedMessage, class DiscipleChibiBackendChangedMessage, class DiscipleSelectedMessage, class AvatarEquipmentChangedMessage, class ChangeAvatarPartRequest, class ChangeAvatarPartResponse, class AssignTaskRequest, class AssignTaskResponse, class DiscipleTaskChangedMessage, class DiscipleOwnerChangedMessage, class DiscipleControlModeChangedMessage, class OwnershipObservabilityQuery, class OwnershipObservabilitySnapshot, class TaskChangeObservabilityQuery, class TaskChangeObservabilitySnapshot, class TaskProtectionQuery, class TaskProtectionEntry, class TaskProtectionSnapshot, class SectViewerMembershipSave, class SectSavedOwnership, class SessionRestoredMessage, static class InterprocessTopics
 - `McpBridge/Shared/MockSectData.cs`: static class MockSectData
 - `McpBridge/Shared/SectEconomyState.cs`: enum OwnerScope, enum DiscipleRank, enum DiscipleSex, enum DiscipleOwnerType, enum DiscipleControlMode, enum ChibiBackend, class CurrencyWallet, class InventoryItem, class DiscipleState, class SectStockpile, class PlacedBuildingState, class SectEconomyState, struct SlotPart, sealed class AvatarAppearance, static class AvatarSlots
 - `McpBridge/Shared/ViewerMembership.cs`: enum ViewerMembershipStatus, class ViewerRecord, class PendingViewerApplication, interface IClock, sealed class UtcClock, class SectViewerRegistry
 - `Shared/DiscipleAttributes.cs`: static class DiscipleAttributesConfig, class DiscipleAttributes
-- `Shared/GameMessages.cs`: class DiscipleRecruitedMessage, class DiscipleRankChangedMessage, class SectResourceChangedMessage, class ContributionEarnedMessage, class SceneLoadedMessage, class WorldEventTriggeredMessage, class TimeSpeedChangedMessage, class SectStateQuery, class SectStateSnapshot, class AwaitWorldEventRequest, class AwaitWorldEventResponse, class EventChoiceInfo, class ExecuteDecisionMessage, class DecisionExecutedMessage, class BuildModeStartedMessage, class BuildModeEndedMessage, class PurchaseItemRequest, class PurchaseItemResponse, class BuildingPlacedMessage, class DiscipleChibiBackendChangedMessage, class DiscipleSelectedMessage, class AvatarEquipmentChangedMessage, class ChangeAvatarPartRequest, class ChangeAvatarPartResponse, class AssignTaskRequest, class AssignTaskResponse, class DiscipleTaskChangedMessage, class DiscipleOwnerChangedMessage, class DiscipleControlModeChangedMessage, class OwnershipObservabilityQuery, class OwnershipObservabilitySnapshot, class TaskChangeObservabilityQuery, class TaskChangeObservabilitySnapshot, class TaskProtectionQuery, class TaskProtectionEntry, class TaskProtectionSnapshot, class SectViewerMembershipSave, class SectSavedOwnership, static class InterprocessTopics
+- `Shared/GameMessages.cs`: class DiscipleRecruitedMessage, class DiscipleRankChangedMessage, class SectResourceChangedMessage, class ContributionEarnedMessage, class SceneLoadedMessage, class WorldEventTriggeredMessage, class TimeSpeedChangedMessage, class SectStateQuery, class SectStateSnapshot, class AwaitWorldEventRequest, class AwaitWorldEventResponse, class EventChoiceInfo, class ExecuteDecisionMessage, class DecisionExecutedMessage, class BuildModeStartedMessage, class BuildModeEndedMessage, class PurchaseItemRequest, class PurchaseItemResponse, class BuildingPlacedMessage, class DiscipleChibiBackendChangedMessage, class DiscipleSelectedMessage, class AvatarEquipmentChangedMessage, class ChangeAvatarPartRequest, class ChangeAvatarPartResponse, class AssignTaskRequest, class AssignTaskResponse, class DiscipleTaskChangedMessage, class DiscipleOwnerChangedMessage, class DiscipleControlModeChangedMessage, class OwnershipObservabilityQuery, class OwnershipObservabilitySnapshot, class TaskChangeObservabilityQuery, class TaskChangeObservabilitySnapshot, class TaskProtectionQuery, class TaskProtectionEntry, class TaskProtectionSnapshot, class SectViewerMembershipSave, class SectSavedOwnership, class SessionRestoredMessage, static class InterprocessTopics
 - `Shared/MockSectData.cs`: static class MockSectData
 - `Shared/SectEconomyState.cs`: enum OwnerScope, enum DiscipleRank, enum DiscipleSex, enum DiscipleOwnerType, enum DiscipleControlMode, enum ChibiBackend, class CurrencyWallet, class InventoryItem, class DiscipleState, class SectStockpile, class PlacedBuildingState, class SectEconomyState, struct SlotPart, sealed class AvatarAppearance, static class AvatarSlots
 - `Shared/ViewerMembership.cs`: enum ViewerMembershipStatus, class ViewerRecord, class PendingViewerApplication, interface IClock, sealed class UtcClock, class SectViewerRegistry
@@ -74,6 +74,7 @@
 - `UnityProject/Assets/Scripts/Core/Installers/InterprocessInstaller.cs`: static class InterprocessInstaller
 - `UnityProject/Assets/Scripts/Core/Installers/UIInstaller.cs`: static class UIInstaller
 - `UnityProject/Assets/Scripts/Core/Installers/VisualInstaller.cs`: static class VisualInstaller
+- `UnityProject/Assets/Scripts/Core/MainThreadDispatch.cs`: static class MainThreadDispatch, sealed class MainThreadUnavailableException
 - `UnityProject/Assets/Scripts/Core/OwnershipObservability.cs`: class OwnershipObservabilityBuffer, class OwnershipObservabilityHandler
 - `UnityProject/Assets/Scripts/Core/PurchaseItemHandler.cs`: class PurchaseItemHandler
 - `UnityProject/Assets/Scripts/Core/SceneLoader.cs`: class SceneLoader
@@ -88,7 +89,7 @@
 - `UnityProject/Assets/Scripts/Data/LubanEventPool.cs`: class LubanEventPool
 - `UnityProject/Assets/Scripts/Scenes/SectScene/SectSceneLifetimeScope.cs`: sealed class SectSceneLifetimeScope
 - `UnityProject/Assets/Scripts/Shared/DiscipleAttributes.cs`: static class DiscipleAttributesConfig, class DiscipleAttributes
-- `UnityProject/Assets/Scripts/Shared/GameMessages.cs`: class DiscipleRecruitedMessage, class DiscipleRankChangedMessage, class SectResourceChangedMessage, class ContributionEarnedMessage, class SceneLoadedMessage, class WorldEventTriggeredMessage, class TimeSpeedChangedMessage, class SectStateQuery, class SectStateSnapshot, class AwaitWorldEventRequest, class AwaitWorldEventResponse, class EventChoiceInfo, class ExecuteDecisionMessage, class DecisionExecutedMessage, class BuildModeStartedMessage, class BuildModeEndedMessage, class PurchaseItemRequest, class PurchaseItemResponse, class BuildingPlacedMessage, class DiscipleChibiBackendChangedMessage, class DiscipleSelectedMessage, class AvatarEquipmentChangedMessage, class ChangeAvatarPartRequest, class ChangeAvatarPartResponse, class AssignTaskRequest, class AssignTaskResponse, class DiscipleTaskChangedMessage, class DiscipleOwnerChangedMessage, class DiscipleControlModeChangedMessage, class OwnershipObservabilityQuery, class OwnershipObservabilitySnapshot, class TaskChangeObservabilityQuery, class TaskChangeObservabilitySnapshot, class TaskProtectionQuery, class TaskProtectionEntry, class TaskProtectionSnapshot, class SectViewerMembershipSave, class SectSavedOwnership, static class InterprocessTopics
+- `UnityProject/Assets/Scripts/Shared/GameMessages.cs`: class DiscipleRecruitedMessage, class DiscipleRankChangedMessage, class SectResourceChangedMessage, class ContributionEarnedMessage, class SceneLoadedMessage, class WorldEventTriggeredMessage, class TimeSpeedChangedMessage, class SectStateQuery, class SectStateSnapshot, class AwaitWorldEventRequest, class AwaitWorldEventResponse, class EventChoiceInfo, class ExecuteDecisionMessage, class DecisionExecutedMessage, class BuildModeStartedMessage, class BuildModeEndedMessage, class PurchaseItemRequest, class PurchaseItemResponse, class BuildingPlacedMessage, class DiscipleChibiBackendChangedMessage, class DiscipleSelectedMessage, class AvatarEquipmentChangedMessage, class ChangeAvatarPartRequest, class ChangeAvatarPartResponse, class AssignTaskRequest, class AssignTaskResponse, class DiscipleTaskChangedMessage, class DiscipleOwnerChangedMessage, class DiscipleControlModeChangedMessage, class OwnershipObservabilityQuery, class OwnershipObservabilitySnapshot, class TaskChangeObservabilityQuery, class TaskChangeObservabilitySnapshot, class TaskProtectionQuery, class TaskProtectionEntry, class TaskProtectionSnapshot, class SectViewerMembershipSave, class SectSavedOwnership, class SessionRestoredMessage, static class InterprocessTopics
 - `UnityProject/Assets/Scripts/Shared/MockSectData.cs`: static class MockSectData
 - `UnityProject/Assets/Scripts/Shared/SectEconomyState.cs`: enum OwnerScope, enum DiscipleRank, enum DiscipleSex, enum DiscipleOwnerType, enum DiscipleControlMode, enum ChibiBackend, class CurrencyWallet, class InventoryItem, class DiscipleState, class SectStockpile, class PlacedBuildingState, class SectEconomyState, struct SlotPart, sealed class AvatarAppearance, static class AvatarSlots
 - `UnityProject/Assets/Scripts/Shared/ViewerMembership.cs`: enum ViewerMembershipStatus, class ViewerRecord, class PendingViewerApplication, interface IClock, sealed class UtcClock, class SectViewerRegistry
@@ -211,7 +212,7 @@
     22	echo "  $BRIDGE_DEST"
 ````
 
-### Shared/GameMessages.cs (20969 bytes)
+### Shared/GameMessages.cs (22478 bytes)
 ````
      1	using System;
      2	using System.Collections.Generic;
@@ -660,18 +661,45 @@
    445	        [Key(2)] public string OwnerId { get; set; } = string.Empty;
    446	    }
    447	
-   448	    // Topic keys for the keyed (IDistributedPublisher<TKey,TMessage>) channels.
-   449	    public static class InterprocessTopics
-   450	    {
-   451	        public const string DiscipleRecruited = "sect.disciple_recruited";
-   452	        public const string DiscipleRankChanged = "sect.disciple_rank_changed";
-   453	        public const string ResourceChanged = "sect.resource_changed";
-   454	        public const string ContributionEarned = "sect.contribution_earned";
-   455	        public const string WorldEvent = "sect.world_event";
-   456	        public const string ExecuteDecision = "sect.execute_decision";
-   457	        public const string AvatarEquipmentChanged = "sect.avatar_equipment_changed";
-   458	    }
-   459	}
+   448	    // ---------- P11A — session restored notification ----------
+   449	    // Published in-memory AFTER a full-session snapshot has been committed to live
+   450	    // state (SectStateProvider + TimeSystem). Derived systems react by rebuilding
+   451	    // caches and dropping stale session references:
+   452	    //   - BuildingSystem       rebuilds grid occupancy + placed markers
+   453	    //   - DiscipleVisualSystem reconciles (despawn gone / spawn restored)
+   454	    //   - AutoTaskScheduler    clears its simulation-time scheduling maps
+   455	    //   - WalletHudPresenter   re-reads the authoritative wallet/stockpile
+   456	    // ⚠️ Deliberately NOT added to InterprocessTopics — session load is a local
+   457	    // player concern; the bridge observes state via SectStateQuery, not this.
+   458	    // Never published on a failed restore (invalid data leaves the session unchanged).
+   459	    [MessagePackObject]
+   460	    public class SessionRestoredMessage
+   461	    {
+   462	        /// <summary>True when a full-session snapshot was committed (as opposed to a legacy slice).</summary>
+   463	        [Key(0)] public bool FullSession { get; set; }
+   464	
+   465	        /// <summary>UTC time the restore committed.</summary>
+   466	        [Key(1)] public DateTime RestoredAtUtc { get; set; }
+   467	
+   468	        /// <summary>Roster size after the restore (diagnostic / UI priming).</summary>
+   469	        [Key(2)] public int DiscipleCount { get; set; }
+   470	
+   471	        /// <summary>Placed-building count after the restore (diagnostic / UI priming).</summary>
+   472	        [Key(3)] public int BuildingCount { get; set; }
+   473	    }
+   474	
+   475	    // Topic keys for the keyed (IDistributedPublisher<TKey,TMessage>) channels.
+   476	    public static class InterprocessTopics
+   477	    {
+   478	        public const string DiscipleRecruited = "sect.disciple_recruited";
+   479	        public const string DiscipleRankChanged = "sect.disciple_rank_changed";
+   480	        public const string ResourceChanged = "sect.resource_changed";
+   481	        public const string ContributionEarned = "sect.contribution_earned";
+   482	        public const string WorldEvent = "sect.world_event";
+   483	        public const string ExecuteDecision = "sect.execute_decision";
+   484	        public const string AvatarEquipmentChanged = "sect.avatar_equipment_changed";
+   485	    }
+   486	}
 ````
 
 ### Shared/SectEconomyState.cs (12696 bytes)
@@ -1291,7 +1319,7 @@
    179	}
 ````
 
-### UnityProject/Assets/Scripts/Core/GameLifetimeScope.cs (3896 bytes)
+### UnityProject/Assets/Scripts/Core/GameLifetimeScope.cs (4173 bytes)
 ````
      1	using UnityEngine;
      2	using VContainer;
@@ -1346,29 +1374,33 @@
     51	        protected override void Configure(IContainerBuilder builder)
     52	        {
     53	            // Scene management
-    54	            // Entry point = โหลดฉากเกมเพลย์เริ่มต้น (SectScene) อัตโนมัติ
-    55	            // ทันทีที่ composition root พร้อม — .AsSelf() ให้ยัง inject เป็น concrete ได้
-    56	            builder.RegisterEntryPoint<SceneLoader>(Lifetime.Singleton).AsSelf();
-    57	            builder.RegisterComponentInHierarchy<AdditiveSceneTest>();
-    58	            // Design-time data now sourced from Luban (see DataTables/ at
-    59	            // the workspace root and Assets/Scripts/Data/LubanEventPool.cs),
-    60	            // not a ScriptableObject dragged into the Inspector - so this is
-    61	            // constructed directly rather than serialized.
-    62	            builder.RegisterInstance(new LubanEventPool());
-    63	
-    64	            // Avatar part definitions loaded from Resources/Data/avatar_parts.json
-    65	            builder.Register<AvatarPartPool>(Lifetime.Singleton);
-    66	
-    67	            // ลำดับด้านล่าง = ลำดับ registration เดิมทุกบรรทัด (Building → Visual → UI →
-    68	            // interprocess → rig ports/gameplay entries) — ห้ามสลับ (ดูหัวไฟล์)
-    69	            builder.RegisterBuildingSystem();
-    70	            builder.RegisterVisualSystem();
-    71	            builder.RegisterUI(uiRoot, uiPanelCatalog);
-    72	            builder.RegisterInterprocess(interprocessHost, interprocessPort);
-    73	            builder.RegisterGameplaySystems();
-    74	        }
-    75	    }
-    76	}
+    54	            // P12A — SceneLoader ไม่ auto-load เองอีกต่อไป (GameSessionCoordinator เป็น
+    55	            // เจ้าของ lifecycle). ยัง register เป็น entry point + AsSelf (Editor verify
+    56	            // runners resolve concrete) และเพิ่ม As<IGameplaySceneLoader> ให้ coordinator
+    57	            // ฉีด seam เดียวกัน — ยังมี loader ตัวเดียวในโปรเจกต์
+    58	            builder.RegisterEntryPoint<SceneLoader>(Lifetime.Singleton)
+    59	                   .AsSelf()
+    60	                   .As<IGameplaySceneLoader>();
+    61	            builder.RegisterComponentInHierarchy<AdditiveSceneTest>();
+    62	            // Design-time data now sourced from Luban (see DataTables/ at
+    63	            // the workspace root and Assets/Scripts/Data/LubanEventPool.cs),
+    64	            // not a ScriptableObject dragged into the Inspector - so this is
+    65	            // constructed directly rather than serialized.
+    66	            builder.RegisterInstance(new LubanEventPool());
+    67	
+    68	            // Avatar part definitions loaded from Resources/Data/avatar_parts.json
+    69	            builder.Register<AvatarPartPool>(Lifetime.Singleton);
+    70	
+    71	            // ลำดับด้านล่าง = ลำดับ registration เดิมทุกบรรทัด (Building → Visual → UI →
+    72	            // interprocess → rig ports/gameplay entries) — ห้ามสลับ (ดูหัวไฟล์)
+    73	            builder.RegisterBuildingSystem();
+    74	            builder.RegisterVisualSystem();
+    75	            builder.RegisterUI(uiRoot, uiPanelCatalog);
+    76	            builder.RegisterInterprocess(interprocessHost, interprocessPort);
+    77	            builder.RegisterGameplaySystems();
+    78	        }
+    79	    }
+    80	}
 ````
 
 ### UnityProject/Assets/Scripts/Core/Installers/InterprocessInstaller.cs (7356 bytes)
@@ -1547,7 +1579,7 @@
     59	}
 ````
 
-### UnityProject/Assets/Scripts/Core/TimeSystem.cs (31211 bytes)
+### UnityProject/Assets/Scripts/Core/TimeSystem.cs (38284 bytes)
 ````
      1	using System.Collections.Generic;
      2	using System.Threading;
@@ -1599,583 +1631,724 @@
     48	        private int _speed = 1;
     49	        private TimePauseReason _reasons = TimePauseReason.None;
     50	
-    51	        // Completed (and replaced with a fresh one) every time a world
-    52	        // event fires - see WaitForNextWorldEventAsync()/RaiseWorldEvent().
-    53	        private UniTaskCompletionSource<AwaitWorldEventResponse> _pendingEventSource =
-    54	            new UniTaskCompletionSource<AwaitWorldEventResponse>();
-    55	
-    56	        // If a decision-requiring event fired before anyone called
-    57	        // await_next_world_event, hand it back immediately on the next call
-    58	        // instead of making a late caller wait for a completely new event.
-    59	        // Cleared once handed out - a second call with nothing new pending
-    60	        // goes back to waiting normally.
-    61	        //
-    62	        // NOTE (E2-lite): this cache is the BRIDGE's handoff and its semantics are
-    63	        // deliberately unchanged (cleared on read). The authoritative pending
-    64	        // decision below is a SEPARATE concern and is never cleared by a read.
-    65	        private AwaitWorldEventResponse _cachedPendingEvent;
-    66	
-    67	        // E2-lite — authoritative pending decision state (at most ONE at a time).
-    68	        // Set when a decision-requiring event is raised, cleared when a valid
-    69	        // decision is applied. The UI and the decision validator read THIS, so it
-    70	        // does not depend on anyone having consumed the bridge cache.
-    71	        private string _pendingEventId;
-    72	        private string _pendingDescription;
-    73	        private List<EventChoiceInfo> _pendingChoices = new List<EventChoiceInfo>();
+    51	        // P12A — whether a live gameplay session is active. Deliberately a SEPARATE fact
+    52	        // from the pause reasons: "no active game" (Title / session transition) is not a
+    53	        // player pause and not a pending-decision pause, so SimulationDelta freezes for
+    54	        // either, while IsPaused / IsUserPaused / IsPendingDecisionPaused stay honest.
+    55	        // Defaults to active so a TimeSystem built outside the session coordinator
+    56	        // (tests / legacy construction) keeps its previous behaviour.
+    57	        private bool _sessionActive = true;
+    58	
+    59	        // Completed (and replaced with a fresh one) every time a world
+    60	        // event fires - see WaitForNextWorldEventAsync()/RaiseWorldEvent().
+    61	        private UniTaskCompletionSource<AwaitWorldEventResponse> _pendingEventSource =
+    62	            new UniTaskCompletionSource<AwaitWorldEventResponse>();
+    63	
+    64	        // If a decision-requiring event fired before anyone called
+    65	        // await_next_world_event, hand it back immediately on the next call
+    66	        // instead of making a late caller wait for a completely new event.
+    67	        // Cleared once handed out - a second call with nothing new pending
+    68	        // goes back to waiting normally.
+    69	        //
+    70	        // NOTE (E2-lite): this cache is the BRIDGE's handoff and its semantics are
+    71	        // deliberately unchanged (cleared on read). The authoritative pending
+    72	        // decision below is a SEPARATE concern and is never cleared by a read.
+    73	        private AwaitWorldEventResponse _cachedPendingEvent;
     74	
-    75	        public TimeSystem(
-    76	            IPublisher<TimeSpeedChangedMessage> speedPublisher,
-    77	            IPublisher<WorldEventTriggeredMessage> worldEventPublisher,
-    78	            TimeRuntimeConfig config = null)
-    79	        {
-    80	            _speedPublisher = speedPublisher;
-    81	            _worldEventPublisher = worldEventPublisher;
-    82	            _config = config ?? TimeRuntimeConfig.Instance;
-    83	        }
-    84	
-    85	        public void Start()
-    86	        {
-    87	            // Unconditional initial publish so any listener that subscribes after
-    88	            // Start still gets one refresh cue (the HUD also reads state on bind).
-    89	            PublishState();
-    90	        }
-    91	
-    92	        /// <summary>Adds a pause reason (idempotent). Publishes only on a real change.</summary>
-    93	        public void Pause(TimePauseReason reason) => SetReason(reason, true);
-    94	
-    95	        /// <summary>Clears a pause reason. Never touches any other reason.</summary>
-    96	        public void Resume(TimePauseReason reason) => SetReason(reason, false);
-    97	
-    98	        /// <summary>
-    99	        /// Player "Play": clears BOTH User and PendingDecision. This is what the HUD
-   100	        /// Play button / Space hotkey call, so the player can never be locked out by a
-   101	        /// missing decision popup.
-   102	        /// </summary>
-   103	        public void ResumeByPlayer() => SetReasons(TimePauseReason.None);
-   104	
-   105	        /// <summary>Legacy single-flag API — maps to the User reason (not a decision pause).</summary>
-   106	        public void SetPaused(bool paused)
-   107	        {
-   108	            if (paused) Pause(TimePauseReason.User);
-   109	            else Resume(TimePauseReason.User);
-   110	        }
-   111	
-   112	        /// <summary>
-   113	        /// E2-lite — the SINGLE decision-validation path, reused by the in-game UI
-   114	        /// click (EventPopupPresenter) and by the bridge decision (DecisionLogger ->
-   115	        /// DecisionExecutor). The decision is valid only when a decision is pending,
-   116	        /// <paramref name="eventId"/> equals the pending event id, and
-   117	        /// <paramref name="choiceId"/> is one of the pending choices. On success the
-   118	        /// pending state is cleared, so a duplicate/stale/unknown decision can never
-   119	        /// be applied twice. On any failure nothing changes, false is returned, and
-   120	        /// <paramref name="reason"/> says why.
-   121	        /// </summary>
-   122	        public bool TryResolvePendingDecision(string eventId, string choiceId, out string reason)
-   123	        {
-   124	            if (!HasPendingDecision)
-   125	            {
-   126	                reason = "no decision event is pending";
-   127	                return false;
-   128	            }
-   129	            if (eventId != _pendingEventId)
-   130	            {
-   131	                reason = $"eventId '{eventId}' is not the pending event ('{_pendingEventId}')";
-   132	                return false;
-   133	            }
-   134	
-   135	            bool knownChoice = false;
-   136	            for (int i = 0; i < _pendingChoices.Count; i++)
-   137	            {
-   138	                var choice = _pendingChoices[i];
-   139	                if (choice != null && choice.ChoiceId == choiceId)
-   140	                {
-   141	                    knownChoice = true;
-   142	                    break;
-   143	                }
-   144	            }
-   145	            if (!knownChoice)
-   146	            {
-   147	                reason = $"choiceId '{choiceId}' is not one of the pending choices";
-   148	                return false;
-   149	            }
-   150	
-   151	            ClearPendingDecision();
-   152	            reason = null;
-   153	            return true;
-   154	        }
-   155	
-   156	        /// <summary>Clears the authoritative pending decision state (E2-lite).</summary>
-   157	        public void ClearPendingDecision()
-   158	        {
-   159	            _pendingEventId = null;
-   160	            _pendingDescription = null;
-   161	            _pendingChoices = new List<EventChoiceInfo>();
-   162	        }
-   163	
-   164	        /// <summary>Sets the simulation speed, validated to <see cref="MinSpeed"/>..<see cref="MaxSpeed"/>.</summary>
-   165	        public void SetSpeed(int speed)
-   166	        {
-   167	            int clamped = ClampSpeed(speed);
-   168	            if (clamped == _speed) return; // effective change only
-   169	            _speed = clamped;
-   170	            PublishState();
-   171	        }
-   172	
-   173	        /// <summary>True while ANY pause reason is active.</summary>
-   174	        public bool IsPaused => _reasons != TimePauseReason.None;
-   175	
-   176	        /// <summary>True when the player has paused (User reason).</summary>
-   177	        public bool IsUserPaused => HasReason(TimePauseReason.User);
-   178	
-   179	        /// <summary>True when a decision-requiring event is outstanding (the pause reason).</summary>
-   180	        public bool IsPendingDecisionPaused => HasReason(TimePauseReason.PendingDecision);
-   181	
-   182	        // ---------- E2-lite: authoritative pending-decision state ----------
-   183	        // Separate from IsPendingDecisionPaused: the player can clear the pause
-   184	        // (ResumeByPlayer) while the event is still pending and undecided.
-   185	
-   186	        /// <summary>True while a decision-requiring event is outstanding and undecided.</summary>
-   187	        public bool HasPendingDecision => _pendingEventId != null;
-   188	
-   189	        /// <summary>Authoritative id of the pending decision event, or null when none.</summary>
-   190	        public string PendingEventId => _pendingEventId;
+    75	        // E2-lite — authoritative pending decision state (at most ONE at a time).
+    76	        // Set when a decision-requiring event is raised, cleared when a valid
+    77	        // decision is applied. The UI and the decision validator read THIS, so it
+    78	        // does not depend on anyone having consumed the bridge cache.
+    79	        private string _pendingEventId;
+    80	        private string _pendingDescription;
+    81	        private List<EventChoiceInfo> _pendingChoices = new List<EventChoiceInfo>();
+    82	
+    83	        public TimeSystem(
+    84	            IPublisher<TimeSpeedChangedMessage> speedPublisher,
+    85	            IPublisher<WorldEventTriggeredMessage> worldEventPublisher,
+    86	            TimeRuntimeConfig config = null)
+    87	        {
+    88	            _speedPublisher = speedPublisher;
+    89	            _worldEventPublisher = worldEventPublisher;
+    90	            _config = config ?? TimeRuntimeConfig.Instance;
+    91	        }
+    92	
+    93	        public void Start()
+    94	        {
+    95	            // Unconditional initial publish so any listener that subscribes after
+    96	            // Start still gets one refresh cue (the HUD also reads state on bind).
+    97	            PublishState();
+    98	        }
+    99	
+   100	        /// <summary>Adds a pause reason (idempotent). Publishes only on a real change.</summary>
+   101	        public void Pause(TimePauseReason reason) => SetReason(reason, true);
+   102	
+   103	        /// <summary>Clears a pause reason. Never touches any other reason.</summary>
+   104	        public void Resume(TimePauseReason reason) => SetReason(reason, false);
+   105	
+   106	        /// <summary>
+   107	        /// Player "Play": clears BOTH User and PendingDecision. This is what the HUD
+   108	        /// Play button / Space hotkey call, so the player can never be locked out by a
+   109	        /// missing decision popup.
+   110	        /// </summary>
+   111	        public void ResumeByPlayer() => SetReasons(TimePauseReason.None);
+   112	
+   113	        /// <summary>Legacy single-flag API — maps to the User reason (not a decision pause).</summary>
+   114	        public void SetPaused(bool paused)
+   115	        {
+   116	            if (paused) Pause(TimePauseReason.User);
+   117	            else Resume(TimePauseReason.User);
+   118	        }
+   119	
+   120	        /// <summary>
+   121	        /// P12A — toggles whether a live gameplay session is active (set by
+   122	        /// <see cref="GameSessionCoordinator"/> on every phase change). Publishing on the
+   123	        /// effective change keeps any speed/pause listener refreshed without a new bus.
+   124	        /// </summary>
+   125	        public void SetSessionActive(bool active)
+   126	        {
+   127	            if (_sessionActive == active) return;
+   128	            _sessionActive = active;
+   129	            PublishState();
+   130	        }
+   131	
+   132	        /// <summary>
+   133	        /// P12A — end the current session's simulation clock exactly once at the seam
+   134	        /// between two sessions: freeze simulation (session inactive), clear every pause
+   135	        /// reason (a fresh session starts unpaused), clear the authoritative pending
+   136	        /// decision, and complete any outstanding world-event awaiter with a defined
+   137	        /// "session ended" response. Real-time (UTC) viewer/cooldown clocks are
+   138	        /// independent of this class and are not affected.
+   139	        /// </summary>
+   140	        public void EndSession(string reason)
+   141	        {
+   142	            SetSessionActive(false);
+   143	            ClearPendingDecision();
+   144	            SetReasons(TimePauseReason.None);
+   145	            CancelPendingWorldEventWait(reason);
+   146	        }
+   147	
+   148	        /// <summary>
+   149	        /// P12A — never retain a stale cached world-event response from a prior session,
+   150	        /// and never strand an existing awaiter: the handoff cache is dropped and the
+   151	        /// current wait is completed with an empty event id (the response contract's
+   152	        /// clearest "no event" answer) plus an explicit reason.
+   153	        /// </summary>
+   154	        public void CancelPendingWorldEventWait(string reason)
+   155	        {
+   156	            _cachedPendingEvent = null;
+   157	
+   158	            var previous = _pendingEventSource;
+   159	            _pendingEventSource = new UniTaskCompletionSource<AwaitWorldEventResponse>();
+   160	            previous.TrySetResult(new AwaitWorldEventResponse
+   161	            {
+   162	                EventId = string.Empty,
+   163	                Description = string.IsNullOrEmpty(reason)
+   164	                    ? "session ended before a world event fired"
+   165	                    : "session ended before a world event fired: " + reason,
+   166	            });
+   167	        }
+   168	
+   169	        /// <summary>
+   170	        /// E2-lite — the SINGLE decision-validation path, reused by the in-game UI
+   171	        /// click (EventPopupPresenter) and by the bridge decision (DecisionLogger ->
+   172	        /// DecisionExecutor). The decision is valid only when a decision is pending,
+   173	        /// <paramref name="eventId"/> equals the pending event id, and
+   174	        /// <paramref name="choiceId"/> is one of the pending choices. On success the
+   175	        /// pending state is cleared, so a duplicate/stale/unknown decision can never
+   176	        /// be applied twice. On any failure nothing changes, false is returned, and
+   177	        /// <paramref name="reason"/> says why.
+   178	        /// </summary>
+   179	        public bool TryResolvePendingDecision(string eventId, string choiceId, out string reason)
+   180	        {
+   181	            if (!HasPendingDecision)
+   182	            {
+   183	                reason = "no decision event is pending";
+   184	                return false;
+   185	            }
+   186	            if (eventId != _pendingEventId)
+   187	            {
+   188	                reason = $"eventId '{eventId}' is not the pending event ('{_pendingEventId}')";
+   189	                return false;
+   190	            }
    191	
-   192	        /// <summary>Authoritative description of the pending decision event, or null.</summary>
-   193	        public string PendingDescription => _pendingDescription;
-   194	
-   195	        /// <summary>Authoritative choices of the pending decision event (never null).</summary>
-   196	        public IReadOnlyList<EventChoiceInfo> PendingChoices => _pendingChoices;
-   197	
-   198	        /// <summary>Current (validated) simulation speed.</summary>
-   199	        public int Speed => _speed;
-   200	
-   201	        private bool HasReason(TimePauseReason reason) => (_reasons & reason) == reason;
-   202	
-   203	        private void SetReason(TimePauseReason reason, bool active)
-   204	        {
-   205	            if (reason == TimePauseReason.None) return;
-   206	            SetReasons(active ? (_reasons | reason) : (_reasons & ~reason));
-   207	        }
-   208	
-   209	        private void SetReasons(TimePauseReason next)
-   210	        {
-   211	            if (next == _reasons) return; // no effective change - no message
-   212	            _reasons = next;
-   213	            PublishState();
-   214	        }
-   215	
-   216	        // Refresh trigger only (Paused = IsPaused). The HUD reads reasons/speed
-   217	        // directly from TimeSystem; it never infers them from this message.
-   218	        private void PublishState()
-   219	        {
-   220	            _speedPublisher.Publish(new TimeSpeedChangedMessage { Speed = _speed, Paused = IsPaused });
-   221	        }
-   222	
-   223	        /// <summary>
-   224	        /// Simulation delta for gameplay progression, in seconds — the ONLY place game
-   225	        /// speed is applied. Returns 0 while paused, so a paused game freezes every
-   226	        /// consumer without each one having to re-implement the pause rule.
-   227	        /// <para>Main thread only: reads <see cref="UnityEngine.Time.deltaTime"/>.</para>
-   228	        /// </summary>
-   229	        /// <remarks>
-   230	        /// Time.timeScale is deliberately never written by this class: it is already
-   231	        /// folded into Time.deltaTime, so multiplying by speed here as well would apply
-   232	        /// game speed twice. Speed below <see cref="MinSpeed"/> is clamped up to 1x and
-   233	        /// above <see cref="MaxSpeed"/> down to 3x, so a stale/out-of-range speed (or a
-   234	        /// forgotten SetSpeed) can never yield a zero or unbounded delta while unpaused.
-   235	        /// </remarks>
-   236	        public float SimulationDelta
-   237	        {
-   238	            get { return ComputeSimulationDelta(IsPaused, _speed, Time.deltaTime); }
-   239	        }
-   240	
-   241	        /// <summary>
-   242	        /// Pure core of <see cref="SimulationDelta"/> — the single speed application,
-   243	        /// split out so the multiplier can be asserted without a rendered frame.
-   244	        /// </summary>
-   245	        public static float ComputeSimulationDelta(bool paused, int speed, float frameDelta)
-   246	        {
-   247	            if (paused) return 0f;
-   248	            return ClampSpeed(speed) * frameDelta;
-   249	        }
-   250	
-   251	        private static int ClampSpeed(int speed)
-   252	        {
-   253	            if (speed < MinSpeed) return MinSpeed;
-   254	            if (speed > MaxSpeed) return MaxSpeed;
-   255	            return speed;
-   256	        }
-   257	
-   258	        // Resolved by AwaitWorldEventHandler - the bridge's await_next_world_event
-   259	        // tool call blocks on this until the next RaiseWorldEvent(), unless
-   260	        // there's already a cached one waiting (see _cachedPendingEvent).
-   261	        //
-   262	        // Remember: while a pause reason is active (e.g. a decision-requiring
-   263	        // event is outstanding), RaiseWorldEvent never fires again -
-   264	        // WorldEventSystem checks IsPaused and skips. Resolve the decision (or
-   265	        // ResumeByPlayer) first, or this will time out waiting for an event that
-   266	        // can't happen yet.
-   267	        public UniTask<AwaitWorldEventResponse> WaitForNextWorldEventAsync()
-   268	        {
-   269	            if (_cachedPendingEvent != null)
-   270	            {
-   271	                Debug.Log("[TimeSystem] Returning cached world event immediately.");
-   272	                var cached = _cachedPendingEvent;
-   273	                _cachedPendingEvent = null;
-   274	                return UniTask.FromResult(cached);
-   275	            }
-   276	
-   277	            return _pendingEventSource.Task;
-   278	        }
-   279	
-   280	        // Called by whatever system decides a world event fired (new
-   281	        // applicant, monster incursion, ...). requiresDecision auto-pauses -
-   282	        // this is the "checkpoint" the AI GM / vote window waits on, and
-   283	        // stays paused until execute_decision is called.
-   284	        //
-   285	        // Not sent over the interprocess bus as pub/sub (see the comment on
-   286	        // AwaitWorldEventRequest in GameMessages.cs for why) - completing
-   287	        // _pendingEventSource is what actually delivers this to the bridge,
-   288	        // via the request-response AwaitWorldEventHandler below. The
-   289	        // in-memory Publish() call is just for any other in-Unity listener.
-   290	        public void RaiseWorldEvent(string eventId, string description, bool requiresDecision, List<EventChoiceInfo> choices)
-   291	        {
-   292	            Debug.Log($"[TimeSystem] World event raised: {eventId} (requiresDecision={requiresDecision})");
-   293	
-   294	            if (requiresDecision)
-   295	            {
-   296	                // E2-lite: store the authoritative pending state (a single slot).
-   297	                // The pause reason is added only for a NEWLY pending event - if one
-   298	                // is already pending (e.g. the player pressed Play but has not decided
-   299	                // yet), raising further events must NOT re-add the pause.
-   300	                bool alreadyPending = HasPendingDecision;
-   301	                _pendingEventId = eventId;
-   302	                _pendingDescription = description;
-   303	                _pendingChoices = choices ?? new List<EventChoiceInfo>();
-   304	
-   305	                if (!alreadyPending && _config.AutoPauseOnDecisionEvent)
-   306	                    Pause(TimePauseReason.PendingDecision);
-   307	            }
-   308	
-   309	            _worldEventPublisher.Publish(new WorldEventTriggeredMessage
-   310	            {
-   311	                EventId = eventId,
-   312	                RequiresDecision = requiresDecision,
-   313	                Description = description,
-   314	                Choices = choices ?? new List<EventChoiceInfo>(),
-   315	            });
-   316	
-   317	            var response = new AwaitWorldEventResponse
-   318	            {
-   319	                EventId = eventId,
-   320	                RequiresDecision = requiresDecision,
-   321	                Description = description,
-   322	                Choices = choices ?? new List<EventChoiceInfo>(),
-   323	            };
-   324	
-   325	            if (requiresDecision)
-   326	            {
-   327	                _cachedPendingEvent = response;
-   328	            }
-   329	
-   330	            var previous = _pendingEventSource;
-   331	            _pendingEventSource = new UniTaskCompletionSource<AwaitWorldEventResponse>();
-   332	            previous.TrySetResult(response);
-   333	        }
-   334	    }
-   335	
-   336	    // Answers AwaitWorldEventRequest coming in over the interprocess bus.
-   337	    // Request-response, not pub/sub - see the comment on AwaitWorldEventRequest
-   338	    // in GameMessages.cs for why.
-   339	    //
-   340	    // THREADING (T1): InvokeAsync runs on the MessagePipe.Interprocess TCP background
-   341	    // thread, and both things it touches - the one-slot cache (_cachedPendingEvent) and
-   342	    // the UniTaskCompletionSource - are main-thread state. It therefore hops FIRST and
-   343	    // then runs the existing wait unchanged: a cached event is consumed on the main
-   344	    // thread, and a genuinely pending wait is only resumed when RaiseWorldEvent
-   345	    // completes the source on the main thread. Awaiting never blocks the main thread.
-   346	    public class AwaitWorldEventHandler : IAsyncRequestHandler<AwaitWorldEventRequest, AwaitWorldEventResponse>
-   347	    {
-   348	        private readonly TimeSystem _timeSystem;
-   349	
-   350	        public AwaitWorldEventHandler(TimeSystem timeSystem)
-   351	        {
-   352	            _timeSystem = timeSystem;
-   353	        }
-   354	
-   355	        public UniTask<AwaitWorldEventResponse> InvokeAsync(AwaitWorldEventRequest request, CancellationToken cancellationToken = default)
-   356	        {
-   357	            return MainThreadDispatch.RunAwaitingAsync(
-   358	                nameof(AwaitWorldEventHandler),
-   359	                $"requestId={request?.RequestId}",
-   360	                WaitOnMainThreadAsync,
-   361	                reason => new AwaitWorldEventResponse
-   362	                {
-   363	                    // The response contract has no failure field: an empty event id is the
-   364	                    // clearest available answer (the reason is in the Console log line).
-   365	                    EventId = string.Empty,
-   366	                    Description = "unavailable: " + reason,
-   367	                });
-   368	        }
-   369	
-   370	        /// <summary>
-   371	        /// The existing wait, unchanged, entered on the main thread: cache check first, then the
-   372	        /// pending completion source. Kept as its own method so the kept-open await is explicit.
-   373	        /// </summary>
-   374	        private async UniTask<AwaitWorldEventResponse> WaitOnMainThreadAsync()
-   375	        {
-   376	            var waitForEvent = _timeSystem.WaitForNextWorldEventAsync();
-   377	            return await waitForEvent;
-   378	        }
-   379	    }
-   380	
-   381	    // Answers SectStateQuery requests coming in over the interprocess bus
-   382	    // from the MCP bridge. Aggregates whatever the subsystems currently hold
-   383	    // into the SectEconomyState shape from economy.proto.
-   384	    //
-   385	    // THREADING (T1): InvokeAsync runs on the MessagePipe.Interprocess TCP background
-   386	    // thread, and BuildSectEconomyState() enumerates every live disciple/resource while
-   387	    // the main thread keeps ticking (ToByteArray() then serializes that graph). That is
-   388	    // a read race, so the snapshot is produced after a hop to the Unity main thread.
-   389	    public class SectStateQueryHandler : IAsyncRequestHandler<SectStateQuery, SectStateSnapshot>
-   390	    {
-   391	        private readonly ISectStateProvider _stateProvider;
-   392	
-   393	        public SectStateQueryHandler(ISectStateProvider stateProvider)
-   394	        {
-   395	            _stateProvider = stateProvider;
+   192	            bool knownChoice = false;
+   193	            for (int i = 0; i < _pendingChoices.Count; i++)
+   194	            {
+   195	                var choice = _pendingChoices[i];
+   196	                if (choice != null && choice.ChoiceId == choiceId)
+   197	                {
+   198	                    knownChoice = true;
+   199	                    break;
+   200	                }
+   201	            }
+   202	            if (!knownChoice)
+   203	            {
+   204	                reason = $"choiceId '{choiceId}' is not one of the pending choices";
+   205	                return false;
+   206	            }
+   207	
+   208	            ClearPendingDecision();
+   209	            reason = null;
+   210	            return true;
+   211	        }
+   212	
+   213	        /// <summary>Clears the authoritative pending decision state (E2-lite).</summary>
+   214	        public void ClearPendingDecision()
+   215	        {
+   216	            _pendingEventId = null;
+   217	            _pendingDescription = null;
+   218	            _pendingChoices = new List<EventChoiceInfo>();
+   219	        }
+   220	
+   221	        /// <summary>
+   222	        /// P11A — restore simulation state from a validated session snapshot, on the
+   223	        /// Unity main thread. Sets the (pre-validated) speed, then re-establishes or
+   224	        /// clears the authoritative pending decision. A restored pending decision is
+   225	        /// re-published as a world-event message so the UI/AI can react; the bridge
+   226	        /// handoff cache is deliberately NOT restored (it is consumed-on-read
+   227	        /// transport state — see SectSessionSnapshot.cs classification). Nothing here
+   228	        /// touches gameplay state; SectStateProvider owns that half.
+   229	        /// </summary>
+   230	        public void RestoreSimulationState(int speed, string pendingEventId, string pendingDescription,
+   231	                                           List<EventChoiceInfo> pendingChoices, bool pendingDecisionPaused)
+   232	        {
+   233	            SetSpeed(speed);
+   234	
+   235	            if (string.IsNullOrEmpty(pendingEventId))
+   236	            {
+   237	                ClearPendingDecision();
+   238	                Resume(TimePauseReason.PendingDecision); // a fresh session is not decision-paused
+   239	                return;
+   240	            }
+   241	
+   242	            _pendingEventId = pendingEventId;
+   243	            _pendingDescription = pendingDescription;
+   244	            _pendingChoices = pendingChoices != null
+   245	                ? new List<EventChoiceInfo>(pendingChoices)
+   246	                : new List<EventChoiceInfo>();
+   247	
+   248	            if (pendingDecisionPaused) Pause(TimePauseReason.PendingDecision);
+   249	
+   250	            _worldEventPublisher.Publish(new WorldEventTriggeredMessage
+   251	            {
+   252	                EventId = _pendingEventId,
+   253	                RequiresDecision = true,
+   254	                Description = _pendingDescription,
+   255	                Choices = _pendingChoices,
+   256	            });
+   257	        }
+   258	
+   259	        /// <summary>Sets the simulation speed, validated to <see cref="MinSpeed"/>..<see cref="MaxSpeed"/>.</summary>
+   260	        public void SetSpeed(int speed)
+   261	        {
+   262	            int clamped = ClampSpeed(speed);
+   263	            if (clamped == _speed) return; // effective change only
+   264	            _speed = clamped;
+   265	            PublishState();
+   266	        }
+   267	
+   268	        /// <summary>True while ANY pause reason is active.</summary>
+   269	        public bool IsPaused => _reasons != TimePauseReason.None;
+   270	
+   271	        /// <summary>
+   272	        /// P12A — true while a live gameplay session is active. When false (Title or a
+   273	        /// session transition) <see cref="SimulationDelta"/> is exactly 0, but that is NOT
+   274	        /// reported as a pause (see <see cref="IsPaused"/>). UTC/viewer clocks are
+   275	        /// unaffected — they never read simulation time.
+   276	        /// </summary>
+   277	        public bool IsSessionActive => _sessionActive;
+   278	
+   279	        /// <summary>True when the player has paused (User reason).</summary>
+   280	        public bool IsUserPaused => HasReason(TimePauseReason.User);
+   281	
+   282	        /// <summary>True when a decision-requiring event is outstanding (the pause reason).</summary>
+   283	        public bool IsPendingDecisionPaused => HasReason(TimePauseReason.PendingDecision);
+   284	
+   285	        // ---------- E2-lite: authoritative pending-decision state ----------
+   286	        // Separate from IsPendingDecisionPaused: the player can clear the pause
+   287	        // (ResumeByPlayer) while the event is still pending and undecided.
+   288	
+   289	        /// <summary>True while a decision-requiring event is outstanding and undecided.</summary>
+   290	        public bool HasPendingDecision => _pendingEventId != null;
+   291	
+   292	        /// <summary>Authoritative id of the pending decision event, or null when none.</summary>
+   293	        public string PendingEventId => _pendingEventId;
+   294	
+   295	        /// <summary>Authoritative description of the pending decision event, or null.</summary>
+   296	        public string PendingDescription => _pendingDescription;
+   297	
+   298	        /// <summary>Authoritative choices of the pending decision event (never null).</summary>
+   299	        public IReadOnlyList<EventChoiceInfo> PendingChoices => _pendingChoices;
+   300	
+   301	        /// <summary>Current (validated) simulation speed.</summary>
+   302	        public int Speed => _speed;
+   303	
+   304	        private bool HasReason(TimePauseReason reason) => (_reasons & reason) == reason;
+   305	
+   306	        private void SetReason(TimePauseReason reason, bool active)
+   307	        {
+   308	            if (reason == TimePauseReason.None) return;
+   309	            SetReasons(active ? (_reasons | reason) : (_reasons & ~reason));
+   310	        }
+   311	
+   312	        private void SetReasons(TimePauseReason next)
+   313	        {
+   314	            if (next == _reasons) return; // no effective change - no message
+   315	            _reasons = next;
+   316	            PublishState();
+   317	        }
+   318	
+   319	        // Refresh trigger only (Paused = IsPaused). The HUD reads reasons/speed
+   320	        // directly from TimeSystem; it never infers them from this message.
+   321	        private void PublishState()
+   322	        {
+   323	            _speedPublisher.Publish(new TimeSpeedChangedMessage { Speed = _speed, Paused = IsPaused });
+   324	        }
+   325	
+   326	        /// <summary>
+   327	        /// Simulation delta for gameplay progression, in seconds — the ONLY place game
+   328	        /// speed is applied. Returns 0 while paused, so a paused game freezes every
+   329	        /// consumer without each one having to re-implement the pause rule.
+   330	        /// <para>Main thread only: reads <see cref="UnityEngine.Time.deltaTime"/>.</para>
+   331	        /// </summary>
+   332	        /// <remarks>
+   333	        /// Time.timeScale is deliberately never written by this class: it is already
+   334	        /// folded into Time.deltaTime, so multiplying by speed here as well would apply
+   335	        /// game speed twice. Speed below <see cref="MinSpeed"/> is clamped up to 1x and
+   336	        /// above <see cref="MaxSpeed"/> down to 3x, so a stale/out-of-range speed (or a
+   337	        /// forgotten SetSpeed) can never yield a zero or unbounded delta while unpaused.
+   338	        /// </remarks>
+   339	        public float SimulationDelta
+   340	        {
+   341	            // P12A — gameplay progression requires BOTH an unpaused clock and an active
+   342	            // Playing session. The two are independent: a stale "no session" state can
+   343	            // never be mistaken for, or clear, a player/decision pause.
+   344	            get { return ComputeSimulationDelta(IsPaused || !_sessionActive, _speed, Time.deltaTime); }
+   345	        }
+   346	
+   347	        /// <summary>
+   348	        /// Pure core of <see cref="SimulationDelta"/> — the single speed application,
+   349	        /// split out so the multiplier can be asserted without a rendered frame.
+   350	        /// </summary>
+   351	        public static float ComputeSimulationDelta(bool paused, int speed, float frameDelta)
+   352	        {
+   353	            if (paused) return 0f;
+   354	            return ClampSpeed(speed) * frameDelta;
+   355	        }
+   356	
+   357	        private static int ClampSpeed(int speed)
+   358	        {
+   359	            if (speed < MinSpeed) return MinSpeed;
+   360	            if (speed > MaxSpeed) return MaxSpeed;
+   361	            return speed;
+   362	        }
+   363	
+   364	        // Resolved by AwaitWorldEventHandler - the bridge's await_next_world_event
+   365	        // tool call blocks on this until the next RaiseWorldEvent(), unless
+   366	        // there's already a cached one waiting (see _cachedPendingEvent).
+   367	        //
+   368	        // Remember: while a pause reason is active (e.g. a decision-requiring
+   369	        // event is outstanding), RaiseWorldEvent never fires again -
+   370	        // WorldEventSystem checks IsPaused and skips. Resolve the decision (or
+   371	        // ResumeByPlayer) first, or this will time out waiting for an event that
+   372	        // can't happen yet.
+   373	        public UniTask<AwaitWorldEventResponse> WaitForNextWorldEventAsync()
+   374	        {
+   375	            // P12A — outside a Playing session there is no event stream to wait on, so a
+   376	            // new awaiter is answered immediately with a clear "no active session" result
+   377	            // instead of being parked until some future session fires an event.
+   378	            if (!_sessionActive)
+   379	            {
+   380	                return UniTask.FromResult(new AwaitWorldEventResponse
+   381	                {
+   382	                    EventId = string.Empty,
+   383	                    Description = "no active session: gameplay is not in a Playing state",
+   384	                });
+   385	            }
+   386	
+   387	            if (_cachedPendingEvent != null)
+   388	            {
+   389	                Debug.Log("[TimeSystem] Returning cached world event immediately.");
+   390	                var cached = _cachedPendingEvent;
+   391	                _cachedPendingEvent = null;
+   392	                return UniTask.FromResult(cached);
+   393	            }
+   394	
+   395	            return _pendingEventSource.Task;
    396	        }
    397	
-   398	        public UniTask<SectStateSnapshot> InvokeAsync(SectStateQuery request, CancellationToken cancellationToken = default)
-   399	        {
-   400	            return MainThreadDispatch.RunAsync(
-   401	                nameof(SectStateQueryHandler),
-   402	                $"requestId={request?.RequestId}",
-   403	                () =>
-   404	                {
-   405	                    var state = _stateProvider.BuildSectEconomyState();
-   406	                    return new SectStateSnapshot
-   407	                    {
-   408	                        RequestId = request.RequestId,
-   409	                        // MessagePack, committed choice (not a protobuf stub
-   410	                        // anymore - see project_summary.md for why).
-   411	                        EconomyStateBytes = state.ToByteArray()
-   412	                    };
-   413	                },
-   414	                reason => new SectStateSnapshot
-   415	                {
-   416	                    // The snapshot contract has no failure field: no bytes means "no state"
-   417	                    // (the bridge's decode fails loudly) and the reason is in the log line.
-   418	                    RequestId = request?.RequestId,
-   419	                    EconomyStateBytes = null
-   420	                });
-   421	        }
-   422	    }
-   423	
-   424	    // ---------- P5B (Hybrid Permissions) — read-only permission contract ----------
-   425	    // The UI must never infer permission from OwnerType != Npc on its own; it asks
-   426	    // the authority (SectStateProvider) and renders the answer. Same evaluation the
-   427	    // mutation path revalidates, so display and commit can never disagree.
-   428	
-   429	    /// <summary>Three-way outcome of a task permission evaluation.</summary>
-   430	    public enum TaskPermissionOutcome
-   431	    {
-   432	        /// <summary>Requester may control this disciple right now.</summary>
-   433	        Allowed = 0,
-   434	        /// <summary>Requester is a known identity that simply does not have permission.</summary>
-   435	        Denied = 1,
-   436	        /// <summary>Membership/ownership data is missing or contradictory — fail closed, NEVER permission.</summary>
-   437	        ConsistencyError = 2,
-   438	    }
-   439	
-   440	    /// <summary>
-   441	    /// P5B — read-only result of a task permission evaluation. Never mutates state;
-   442	    /// the mutation path (TryAssignTask) revalidates the same rules before writing.
-   443	    /// </summary>
-   444	    public sealed class TaskPermissionResult
-   445	    {
-   446	        public TaskPermissionOutcome Outcome { get; private set; }
-   447	        public string Reason { get; private set; } = string.Empty;
-   448	
-   449	        /// <summary>True when the requested task already is the disciple's current task (a valid no-op).</summary>
-   450	        public bool IsNoOp { get; private set; }
-   451	
-   452	        /// <summary>True when a viewer owner is inside the protection window (SectMaster override not yet allowed).</summary>
-   453	        public bool OwnerProtected { get; private set; }
-   454	
-   455	        /// <summary>Seconds left in the owner protection window (0 unless OwnerProtected).</summary>
-   456	        public float OwnerProtectionRemainingSeconds { get; private set; }
-   457	
-   458	        public bool Allowed => Outcome == TaskPermissionOutcome.Allowed;
-   459	
-   460	        public static TaskPermissionResult Allow()
-   461	            => new TaskPermissionResult { Outcome = TaskPermissionOutcome.Allowed };
-   462	
-   463	        public static TaskPermissionResult Denied(string reason)
-   464	            => new TaskPermissionResult { Outcome = TaskPermissionOutcome.Denied, Reason = reason ?? string.Empty };
-   465	
-   466	        public static TaskPermissionResult ConsistencyError(string reason)
-   467	            => new TaskPermissionResult { Outcome = TaskPermissionOutcome.ConsistencyError, Reason = reason ?? string.Empty };
-   468	
-   469	        internal TaskPermissionResult WithNoOp(bool isNoOp) { IsNoOp = isNoOp; return this; }
-   470	
-   471	        internal TaskPermissionResult WithProtection(float remainingSeconds)
-   472	        {
-   473	            OwnerProtected = true;
-   474	            OwnerProtectionRemainingSeconds = remainingSeconds < 0f ? 0f : remainingSeconds;
-   475	            return this;
-   476	        }
-   477	    }
-   478	
-   479	    // Thin seam so SectStateQueryHandler doesn't need to know about every
-   480	    // subsystem directly - implement this on a small aggregator class that
-   481	    // does hold references (it's allowed to, it's not part of the bus).
-   482	    public interface ISectStateProvider
-   483	    {
-   484	        SectEconomyState BuildSectEconomyState();
-   485	        void ApplyDecisionConsequence(string eventId, string choiceId);
-   486	        void TickGathering(float deltaTimeSeconds);
-   487	        void TickCrafting(float deltaTimeSeconds);
-   488	        void RecruitOuterDisciple(DiscipleSex sex = DiscipleSex.Unspecified);
-   489	        PurchaseItemResponse TryPurchaseItem(string discipleId, string itemDefId, int grade, int quantity);
-   490	        bool TryChangeAvatarPart(string discipleId, string slot, string partId,
-   491	                                out string failReason, out AvatarAppearance result);
-   492	
-   493	        /// <summary>
-   494	        /// Task System v2 (§6) + P5B — assign a task to a disciple after a permission
-   495	        /// and validity check. Permission follows CheckTaskPermission (revalidated
-   496	        /// here): "SECT_MASTER" may control unowned NPCs and player-controlled
-   497	        /// disciples, and may override a Viewer disciple only when the owner has been
-   498	        /// inactive for strictly more than 10 real-time minutes; any other requester
-   499	        /// only their own valid active membership. Empty/invalid requesters and
-   500	        /// missing/conflicting membership data fail closed. A request for the task
-   501	        /// already assigned is a no-op — no event, no progress reset (it may refresh
-   502	        /// the requester's own activity). Actual task changes honour the configurable
-   503	        /// cooldown. Unknown disciple or task fails closed with a reason. On success
-   504	        /// sets CurrentTask and publishes DiscipleTaskChangedMessage (in-memory only).
-   505	        /// </summary>
-   506	        bool TryAssignTask(string requesterId, string discipleId, string taskId, out string failReason);
-   507	
-   508	        /// <summary>
-   509	        /// P9A — explicitly set a disciple's Manual/Auto control mode. Ownership and
-   510	        /// autonomy are different: this never changes ownership, and only an Npc-owned
-   511	        /// disciple is eligible for Auto in this MVP. A Player/Viewer-owned disciple is
-   512	        /// rejected even when its owner has been inactive past the protection window —
-   513	        /// hybrid inactivity only lets the SectMaster override a task, it does not
-   514	        /// authorize a brain. Empty/unknown disciple and undefined enum fail closed;
-   515	        /// idempotent (no message when the mode is already set). Publishes
-   516	        /// DiscipleControlModeChangedMessage (in-memory only) on a real change.
-   517	        /// </summary>
-   518	        bool TrySetDiscipleControlMode(string discipleId, DiscipleControlMode mode, out string failReason);
-   519	
-   520	        /// <summary>
-   521	        /// P9A — dedicated authoritative entry point for the future DiscipleBrain. NOT
-   522	        /// TryAssignTask(SectMasterRequesterId, ...): it takes no requester identity, so
-   523	        /// the brain can never impersonate the player or inherit the SectMaster
-   524	        /// override. Rechecks NPC ownership AND Auto mode immediately before commit, then
-   525	        /// shares TryAssignTask's known-task/building/cooldown validation and mutation
-   526	        /// (one implementation). Fails closed with a reason when either eligibility
-   527	        /// precondition no longer holds.
-   528	        /// </summary>
-   529	        bool TryAutoAssignTask(string discipleId, string taskId, out string failReason);
-   530	
-   531	        /// <summary>
-   532	        /// P5B (Hybrid Permissions) — read-only permission query for UI. Evaluates the
-   533	        /// SAME rules TryAssignTask revalidates on mutation, and never mutates state:
-   534	        /// a valid requester may control its own active membership; "SECT_MASTER" may
-   535	        /// control unowned NPCs and player-controlled disciples, and may override a
-   536	        /// Viewer disciple only when the owner has been inactive for STRICTLY more than
-   537	        /// 10 real-time minutes (injected clock). Empty/invalid requesters fail closed;
-   538	        /// missing or conflicting membership data returns a ConsistencyError — never
-   539	        /// automatic permission.
-   540	        /// </summary>
-   541	        TaskPermissionResult CheckTaskPermission(string requesterId, string discipleId, string taskId);
-   542	
-   543	        /// <summary>
-   544	        /// P5B persistence — the membership slice worth surviving a session: the
-   545	        /// viewer registry (status / binding / LastActiveAtUtc) TOGETHER with each
-   546	        /// disciple's ownership, so the registry ⇄ ownership invariants hold after a
-   547	        /// load. Read-only — the live state is not modified by exporting.
-   548	        /// </summary>
-   549	        Xianxia.Sect.Messages.SectViewerMembershipSave ExportViewerMembership();
-   550	
-   551	        /// <summary>
-   552	        /// P5B persistence — restore a previously exported slice. Fully validated
-   553	        /// BEFORE any mutation (version, unknown disciples, registry internal
-   554	        /// consistency, and registry ⇄ ownership agreement); anything invalid fails
-   555	        /// closed with the mock start state still in place. Ownership and registry are
-   556	        /// applied together, so a half-restored state can never exist.
-   557	        /// </summary>
-   558	        bool TryImportViewerMembership(Xianxia.Sect.Messages.SectViewerMembershipSave save, out string failReason);
-   559	
-   560	        /// <summary>
-   561	        /// Task building-requirement gate (§6 addendum). Reads the live
-   562	        /// PlacedBuildings list — true when the task is known and either has no
-   563	        /// required building or that building def id already exists in state.
-   564	        /// Unknown task fails with its usual reason; failClosed — never mutates.
-   565	        /// </summary>
-   566	        bool IsTaskAvailable(string taskId, out string failReason);
-   567	
-   568	        /// <summary>
-   569	        /// P3 (Task Assignment UI) — the known-task set TryAssignTask validates
-   570	        /// against, in stable order (gathering, crafting, meditation). The SAME
-   571	        /// source of truth as the assignment gate — the UI lists these directly,
-   572	        /// so no second task list can drift from what assignment accepts.
-   573	        /// Read-only; never mutates.
-   574	        /// </summary>
-   575	        System.Collections.Generic.IReadOnlyList<string> GetKnownTaskIds();
-   576	
-   577	        /// <summary>
-   578	        /// P9B (utility AI) — read-only metadata for a known task, derived from the SAME
-   579	        /// gathering/crafting tables the assignment gate validates against
-   580	        /// (gathering: produced resource + rate; crafting: produced item + input costs;
-   581	        /// otherwise the no-production meditation fallback). False for an unknown/empty
-   582	        /// task. Never mutates; no second task-definition pipeline.
-   583	        /// </summary>
-   584	        bool TryGetTaskInfo(string taskId, out SectTaskInfo info);
-   585	
-   586	        /// <summary>
-   587	        /// P4 (local ownership test harness) — dev-only ownership assignment.
-   588	        /// NOT exposed as a public viewer command or MCP tool; the intended caller
-   589	        /// is the Editor debug harness / test fixtures. Validates fully before any
-   590	        /// mutation (fail-closed): disciple exists, enum value defined, Npc
-   591	        /// normalizes OwnerId to empty, non-Npc identities satisfy the identity
-   592	        /// convention, and a Viewer identity cannot bind to two disciples.
-   593	        /// Publishes DiscipleOwnerChangedMessage (in-memory) only on a real change.
-   594	        /// P5B: bind/release keeps SectViewerRegistry in lock-step with the disciple
-   595	        /// row (active viewer ⇔ matching active record, invariant #1/#2/#3) and
-   596	        /// refreshes the owner's LastActiveAtUtc on a successful bind/reclaim.
-   597	        /// </summary>
-   598	        bool TrySetDiscipleOwner(string discipleId, Xianxia.Sect.DiscipleOwnerType ownerType,
-   599	                                 string ownerId, out string failReason);
-   600	
-   601	        /// <summary>
-   602	        /// Mutate DiscipleState.ChibiBackend (entitlement) + publish
-   603	        /// DiscipleChibiBackendChangedMessage (in-memory). DiscipleVisualSystem respawns
-   604	        /// the visual in place on that message — position/activity/facing preserved (§7).
-   605	        /// </summary>
-   606	        bool TrySetChibiBackend(string discipleId, ChibiBackend backend, out string failReason);
-   607	
-   608	        /// <summary>
-   609	        /// Building Phase 1 — place a building on the sect grid (player-only, §8 Q3 default).
-   610	        /// Validation order per building-system.md §3.2: def lookup → occupancy → cost,
-   611	        /// then all-or-nothing resource deduction through the AdjustAndNotify choke point,
-   612	        /// state append, and BuildingPlacedMessage publish (in-memory only).
-   613	        /// Caller must call CanAffordBuilding / grid.CanPlace first for ghost preview;
-   614	        /// this re-validates everything and fails closed with a reason.
-   615	        /// </summary>
-   616	        bool TryPlaceBuilding(string defId, int gridX, int gridZ, int rotation,
-   617	                              BuildingGrid grid, out string failReason,
-   618	                              out PlacedBuildingState placed);
-   619	
-   620	        /// <summary>Ghost preview check: can the sect pay this def's cost right now?
-   621	        /// Read-only — no state mutation (occupied-cells check lives on BuildingGrid).</summary>
-   622	        bool CanAffordBuilding(BuildingDef def);
-   623	    }
-   624	}
+   398	        // Called by whatever system decides a world event fired (new
+   399	        // applicant, monster incursion, ...). requiresDecision auto-pauses -
+   400	        // this is the "checkpoint" the AI GM / vote window waits on, and
+   401	        // stays paused until execute_decision is called.
+   402	        //
+   403	        // Not sent over the interprocess bus as pub/sub (see the comment on
+   404	        // AwaitWorldEventRequest in GameMessages.cs for why) - completing
+   405	        // _pendingEventSource is what actually delivers this to the bridge,
+   406	        // via the request-response AwaitWorldEventHandler below. The
+   407	        // in-memory Publish() call is just for any other in-Unity listener.
+   408	        public void RaiseWorldEvent(string eventId, string description, bool requiresDecision, List<EventChoiceInfo> choices)
+   409	        {
+   410	            Debug.Log($"[TimeSystem] World event raised: {eventId} (requiresDecision={requiresDecision})");
+   411	
+   412	            if (requiresDecision)
+   413	            {
+   414	                // E2-lite: store the authoritative pending state (a single slot).
+   415	                // The pause reason is added only for a NEWLY pending event - if one
+   416	                // is already pending (e.g. the player pressed Play but has not decided
+   417	                // yet), raising further events must NOT re-add the pause.
+   418	                bool alreadyPending = HasPendingDecision;
+   419	                _pendingEventId = eventId;
+   420	                _pendingDescription = description;
+   421	                _pendingChoices = choices ?? new List<EventChoiceInfo>();
+   422	
+   423	                if (!alreadyPending && _config.AutoPauseOnDecisionEvent)
+   424	                    Pause(TimePauseReason.PendingDecision);
+   425	            }
+   426	
+   427	            _worldEventPublisher.Publish(new WorldEventTriggeredMessage
+   428	            {
+   429	                EventId = eventId,
+   430	                RequiresDecision = requiresDecision,
+   431	                Description = description,
+   432	                Choices = choices ?? new List<EventChoiceInfo>(),
+   433	            });
+   434	
+   435	            var response = new AwaitWorldEventResponse
+   436	            {
+   437	                EventId = eventId,
+   438	                RequiresDecision = requiresDecision,
+   439	                Description = description,
+   440	                Choices = choices ?? new List<EventChoiceInfo>(),
+   441	            };
+   442	
+   443	            if (requiresDecision)
+   444	            {
+   445	                _cachedPendingEvent = response;
+   446	            }
+   447	
+   448	            var previous = _pendingEventSource;
+   449	            _pendingEventSource = new UniTaskCompletionSource<AwaitWorldEventResponse>();
+   450	            previous.TrySetResult(response);
+   451	        }
+   452	    }
+   453	
+   454	    // Answers AwaitWorldEventRequest coming in over the interprocess bus.
+   455	    // Request-response, not pub/sub - see the comment on AwaitWorldEventRequest
+   456	    // in GameMessages.cs for why.
+   457	    //
+   458	    // THREADING (T1): InvokeAsync runs on the MessagePipe.Interprocess TCP background
+   459	    // thread, and both things it touches - the one-slot cache (_cachedPendingEvent) and
+   460	    // the UniTaskCompletionSource - are main-thread state. It therefore hops FIRST and
+   461	    // then runs the existing wait unchanged: a cached event is consumed on the main
+   462	    // thread, and a genuinely pending wait is only resumed when RaiseWorldEvent
+   463	    // completes the source on the main thread. Awaiting never blocks the main thread.
+   464	    public class AwaitWorldEventHandler : IAsyncRequestHandler<AwaitWorldEventRequest, AwaitWorldEventResponse>
+   465	    {
+   466	        private readonly TimeSystem _timeSystem;
+   467	
+   468	        public AwaitWorldEventHandler(TimeSystem timeSystem)
+   469	        {
+   470	            _timeSystem = timeSystem;
+   471	        }
+   472	
+   473	        public UniTask<AwaitWorldEventResponse> InvokeAsync(AwaitWorldEventRequest request, CancellationToken cancellationToken = default)
+   474	        {
+   475	            return MainThreadDispatch.RunAwaitingAsync(
+   476	                nameof(AwaitWorldEventHandler),
+   477	                $"requestId={request?.RequestId}",
+   478	                WaitOnMainThreadAsync,
+   479	                reason => new AwaitWorldEventResponse
+   480	                {
+   481	                    // The response contract has no failure field: an empty event id is the
+   482	                    // clearest available answer (the reason is in the Console log line).
+   483	                    EventId = string.Empty,
+   484	                    Description = "unavailable: " + reason,
+   485	                });
+   486	        }
+   487	
+   488	        /// <summary>
+   489	        /// The existing wait, unchanged, entered on the main thread: cache check first, then the
+   490	        /// pending completion source. Kept as its own method so the kept-open await is explicit.
+   491	        /// </summary>
+   492	        private async UniTask<AwaitWorldEventResponse> WaitOnMainThreadAsync()
+   493	        {
+   494	            var waitForEvent = _timeSystem.WaitForNextWorldEventAsync();
+   495	            return await waitForEvent;
+   496	        }
+   497	    }
+   498	
+   499	    // Answers SectStateQuery requests coming in over the interprocess bus
+   500	    // from the MCP bridge. Aggregates whatever the subsystems currently hold
+   501	    // into the SectEconomyState shape from economy.proto.
+   502	    //
+   503	    // THREADING (T1): InvokeAsync runs on the MessagePipe.Interprocess TCP background
+   504	    // thread, and BuildSectEconomyState() enumerates every live disciple/resource while
+   505	    // the main thread keeps ticking (ToByteArray() then serializes that graph). That is
+   506	    // a read race, so the snapshot is produced after a hop to the Unity main thread.
+   507	    public class SectStateQueryHandler : IAsyncRequestHandler<SectStateQuery, SectStateSnapshot>
+   508	    {
+   509	        private readonly ISectStateProvider _stateProvider;
+   510	
+   511	        public SectStateQueryHandler(ISectStateProvider stateProvider)
+   512	        {
+   513	            _stateProvider = stateProvider;
+   514	        }
+   515	
+   516	        public UniTask<SectStateSnapshot> InvokeAsync(SectStateQuery request, CancellationToken cancellationToken = default)
+   517	        {
+   518	            return MainThreadDispatch.RunAsync(
+   519	                nameof(SectStateQueryHandler),
+   520	                $"requestId={request?.RequestId}",
+   521	                () =>
+   522	                {
+   523	                    var state = _stateProvider.BuildSectEconomyState();
+   524	                    return new SectStateSnapshot
+   525	                    {
+   526	                        RequestId = request.RequestId,
+   527	                        // MessagePack, committed choice (not a protobuf stub
+   528	                        // anymore - see project_summary.md for why).
+   529	                        EconomyStateBytes = state.ToByteArray()
+   530	                    };
+   531	                },
+   532	                reason => new SectStateSnapshot
+   533	                {
+   534	                    // The snapshot contract has no failure field: no bytes means "no state"
+   535	                    // (the bridge's decode fails loudly) and the reason is in the log line.
+   536	                    RequestId = request?.RequestId,
+   537	                    EconomyStateBytes = null
+   538	                });
+   539	        }
+   540	    }
+   541	
+   542	    // ---------- P5B (Hybrid Permissions) — read-only permission contract ----------
+   543	    // The UI must never infer permission from OwnerType != Npc on its own; it asks
+   544	    // the authority (SectStateProvider) and renders the answer. Same evaluation the
+   545	    // mutation path revalidates, so display and commit can never disagree.
+   546	
+   547	    /// <summary>Three-way outcome of a task permission evaluation.</summary>
+   548	    public enum TaskPermissionOutcome
+   549	    {
+   550	        /// <summary>Requester may control this disciple right now.</summary>
+   551	        Allowed = 0,
+   552	        /// <summary>Requester is a known identity that simply does not have permission.</summary>
+   553	        Denied = 1,
+   554	        /// <summary>Membership/ownership data is missing or contradictory — fail closed, NEVER permission.</summary>
+   555	        ConsistencyError = 2,
+   556	    }
+   557	
+   558	    /// <summary>
+   559	    /// P5B — read-only result of a task permission evaluation. Never mutates state;
+   560	    /// the mutation path (TryAssignTask) revalidates the same rules before writing.
+   561	    /// </summary>
+   562	    public sealed class TaskPermissionResult
+   563	    {
+   564	        public TaskPermissionOutcome Outcome { get; private set; }
+   565	        public string Reason { get; private set; } = string.Empty;
+   566	
+   567	        /// <summary>True when the requested task already is the disciple's current task (a valid no-op).</summary>
+   568	        public bool IsNoOp { get; private set; }
+   569	
+   570	        /// <summary>True when a viewer owner is inside the protection window (SectMaster override not yet allowed).</summary>
+   571	        public bool OwnerProtected { get; private set; }
+   572	
+   573	        /// <summary>Seconds left in the owner protection window (0 unless OwnerProtected).</summary>
+   574	        public float OwnerProtectionRemainingSeconds { get; private set; }
+   575	
+   576	        public bool Allowed => Outcome == TaskPermissionOutcome.Allowed;
+   577	
+   578	        public static TaskPermissionResult Allow()
+   579	            => new TaskPermissionResult { Outcome = TaskPermissionOutcome.Allowed };
+   580	
+   581	        public static TaskPermissionResult Denied(string reason)
+   582	            => new TaskPermissionResult { Outcome = TaskPermissionOutcome.Denied, Reason = reason ?? string.Empty };
+   583	
+   584	        public static TaskPermissionResult ConsistencyError(string reason)
+   585	            => new TaskPermissionResult { Outcome = TaskPermissionOutcome.ConsistencyError, Reason = reason ?? string.Empty };
+   586	
+   587	        internal TaskPermissionResult WithNoOp(bool isNoOp) { IsNoOp = isNoOp; return this; }
+   588	
+   589	        internal TaskPermissionResult WithProtection(float remainingSeconds)
+   590	        {
+   591	            OwnerProtected = true;
+   592	            OwnerProtectionRemainingSeconds = remainingSeconds < 0f ? 0f : remainingSeconds;
+   593	            return this;
+   594	        }
+   595	    }
+   596	
+   597	    // Thin seam so SectStateQueryHandler doesn't need to know about every
+   598	    // subsystem directly - implement this on a small aggregator class that
+   599	    // does hold references (it's allowed to, it's not part of the bus).
+   600	    public interface ISectStateProvider
+   601	    {
+   602	        SectEconomyState BuildSectEconomyState();
+   603	        void ApplyDecisionConsequence(string eventId, string choiceId);
+   604	        void TickGathering(float deltaTimeSeconds);
+   605	        void TickCrafting(float deltaTimeSeconds);
+   606	        void RecruitOuterDisciple(DiscipleSex sex = DiscipleSex.Unspecified);
+   607	        PurchaseItemResponse TryPurchaseItem(string discipleId, string itemDefId, int grade, int quantity);
+   608	        bool TryChangeAvatarPart(string discipleId, string slot, string partId,
+   609	                                out string failReason, out AvatarAppearance result);
+   610	
+   611	        /// <summary>
+   612	        /// Task System v2 (§6) + P5B — assign a task to a disciple after a permission
+   613	        /// and validity check. Permission follows CheckTaskPermission (revalidated
+   614	        /// here): "SECT_MASTER" may control unowned NPCs and player-controlled
+   615	        /// disciples, and may override a Viewer disciple only when the owner has been
+   616	        /// inactive for strictly more than 10 real-time minutes; any other requester
+   617	        /// only their own valid active membership. Empty/invalid requesters and
+   618	        /// missing/conflicting membership data fail closed. A request for the task
+   619	        /// already assigned is a no-op — no event, no progress reset (it may refresh
+   620	        /// the requester's own activity). Actual task changes honour the configurable
+   621	        /// cooldown. Unknown disciple or task fails closed with a reason. On success
+   622	        /// sets CurrentTask and publishes DiscipleTaskChangedMessage (in-memory only).
+   623	        /// </summary>
+   624	        bool TryAssignTask(string requesterId, string discipleId, string taskId, out string failReason);
+   625	
+   626	        /// <summary>
+   627	        /// P9A — explicitly set a disciple's Manual/Auto control mode. Ownership and
+   628	        /// autonomy are different: this never changes ownership, and only an Npc-owned
+   629	        /// disciple is eligible for Auto in this MVP. A Player/Viewer-owned disciple is
+   630	        /// rejected even when its owner has been inactive past the protection window —
+   631	        /// hybrid inactivity only lets the SectMaster override a task, it does not
+   632	        /// authorize a brain. Empty/unknown disciple and undefined enum fail closed;
+   633	        /// idempotent (no message when the mode is already set). Publishes
+   634	        /// DiscipleControlModeChangedMessage (in-memory only) on a real change.
+   635	        /// </summary>
+   636	        bool TrySetDiscipleControlMode(string discipleId, DiscipleControlMode mode, out string failReason);
+   637	
+   638	        /// <summary>
+   639	        /// P9A — dedicated authoritative entry point for the future DiscipleBrain. NOT
+   640	        /// TryAssignTask(SectMasterRequesterId, ...): it takes no requester identity, so
+   641	        /// the brain can never impersonate the player or inherit the SectMaster
+   642	        /// override. Rechecks NPC ownership AND Auto mode immediately before commit, then
+   643	        /// shares TryAssignTask's known-task/building/cooldown validation and mutation
+   644	        /// (one implementation). Fails closed with a reason when either eligibility
+   645	        /// precondition no longer holds.
+   646	        /// </summary>
+   647	        bool TryAutoAssignTask(string discipleId, string taskId, out string failReason);
+   648	
+   649	        /// <summary>
+   650	        /// P5B (Hybrid Permissions) — read-only permission query for UI. Evaluates the
+   651	        /// SAME rules TryAssignTask revalidates on mutation, and never mutates state:
+   652	        /// a valid requester may control its own active membership; "SECT_MASTER" may
+   653	        /// control unowned NPCs and player-controlled disciples, and may override a
+   654	        /// Viewer disciple only when the owner has been inactive for STRICTLY more than
+   655	        /// 10 real-time minutes (injected clock). Empty/invalid requesters fail closed;
+   656	        /// missing or conflicting membership data returns a ConsistencyError — never
+   657	        /// automatic permission.
+   658	        /// </summary>
+   659	        TaskPermissionResult CheckTaskPermission(string requesterId, string discipleId, string taskId);
+   660	
+   661	        /// <summary>
+   662	        /// P5B persistence — the membership slice worth surviving a session: the
+   663	        /// viewer registry (status / binding / LastActiveAtUtc) TOGETHER with each
+   664	        /// disciple's ownership, so the registry ⇄ ownership invariants hold after a
+   665	        /// load. Read-only — the live state is not modified by exporting.
+   666	        /// </summary>
+   667	        Xianxia.Sect.Messages.SectViewerMembershipSave ExportViewerMembership();
+   668	
+   669	        /// <summary>
+   670	        /// P5B persistence — restore a previously exported slice. Fully validated
+   671	        /// BEFORE any mutation (version, unknown disciples, registry internal
+   672	        /// consistency, and registry ⇄ ownership agreement); anything invalid fails
+   673	        /// closed with the mock start state still in place. Ownership and registry are
+   674	        /// applied together, so a half-restored state can never exist.
+   675	        /// </summary>
+   676	        bool TryImportViewerMembership(Xianxia.Sect.Messages.SectViewerMembershipSave save, out string failReason);
+   677	
+   678	        /// <summary>
+   679	        /// P11A — capture a detached full-session snapshot of the authoritative
+   680	        /// economy + work accumulators (roster/economy/buildings/appearance/
+   681	        /// attributes/ownership/membership). Read-only; the returned object never
+   682	        /// aliases live state. Simulation speed / pending decision live in TimeSystem
+   683	        /// and are merged by SessionSnapshotService.
+   684	        /// </summary>
+   685	        SectSessionSnapshot CaptureSessionSnapshot();
+   686	
+   687	        /// <summary>
+   688	        /// P11A — validate a candidate full-session snapshot BEFORE any live state is
+   689	        /// replaced. Fail-closed: invalid data returns false with a reason and leaves
+   690	        /// the running session unchanged. Never mutates the candidate or live state.
+   691	        /// </summary>
+   692	        bool TryValidateSessionSnapshot(SectSessionSnapshot snapshot, out string failReason);
+   693	
+   694	        /// <summary>
+   695	        /// P11A — atomically replace live economy + work accumulators from a snapshot
+   696	        /// that already passed TryValidateSessionSnapshot. The candidate is deep-cloned
+   697	        /// on the way in, so the caller's object never aliases live state.
+   698	        /// </summary>
+   699	        bool TryApplySessionSnapshot(SectSessionSnapshot snapshot);
+   700	
+   701	        /// <summary>
+   702	        /// Task building-requirement gate (§6 addendum). Reads the live
+   703	        /// PlacedBuildings list — true when the task is known and either has no
+   704	        /// required building or that building def id already exists in state.
+   705	        /// Unknown task fails with its usual reason; failClosed — never mutates.
+   706	        /// </summary>
+   707	        bool IsTaskAvailable(string taskId, out string failReason);
+   708	
+   709	        /// <summary>
+   710	        /// P3 (Task Assignment UI) — the known-task set TryAssignTask validates
+   711	        /// against, in stable order (gathering, crafting, meditation). The SAME
+   712	        /// source of truth as the assignment gate — the UI lists these directly,
+   713	        /// so no second task list can drift from what assignment accepts.
+   714	        /// Read-only; never mutates.
+   715	        /// </summary>
+   716	        System.Collections.Generic.IReadOnlyList<string> GetKnownTaskIds();
+   717	
+   718	        /// <summary>
+   719	        /// P9B (utility AI) — read-only metadata for a known task, derived from the SAME
+   720	        /// gathering/crafting tables the assignment gate validates against
+   721	        /// (gathering: produced resource + rate; crafting: produced item + input costs;
+   722	        /// otherwise the no-production meditation fallback). False for an unknown/empty
+   723	        /// task. Never mutates; no second task-definition pipeline.
+   724	        /// </summary>
+   725	        bool TryGetTaskInfo(string taskId, out SectTaskInfo info);
+   726	
+   727	        /// <summary>
+   728	        /// P4 (local ownership test harness) — dev-only ownership assignment.
+   729	        /// NOT exposed as a public viewer command or MCP tool; the intended caller
+   730	        /// is the Editor debug harness / test fixtures. Validates fully before any
+   731	        /// mutation (fail-closed): disciple exists, enum value defined, Npc
+   732	        /// normalizes OwnerId to empty, non-Npc identities satisfy the identity
+   733	        /// convention, and a Viewer identity cannot bind to two disciples.
+   734	        /// Publishes DiscipleOwnerChangedMessage (in-memory) only on a real change.
+   735	        /// P5B: bind/release keeps SectViewerRegistry in lock-step with the disciple
+   736	        /// row (active viewer ⇔ matching active record, invariant #1/#2/#3) and
+   737	        /// refreshes the owner's LastActiveAtUtc on a successful bind/reclaim.
+   738	        /// </summary>
+   739	        bool TrySetDiscipleOwner(string discipleId, Xianxia.Sect.DiscipleOwnerType ownerType,
+   740	                                 string ownerId, out string failReason);
+   741	
+   742	        /// <summary>
+   743	        /// Mutate DiscipleState.ChibiBackend (entitlement) + publish
+   744	        /// DiscipleChibiBackendChangedMessage (in-memory). DiscipleVisualSystem respawns
+   745	        /// the visual in place on that message — position/activity/facing preserved (§7).
+   746	        /// </summary>
+   747	        bool TrySetChibiBackend(string discipleId, ChibiBackend backend, out string failReason);
+   748	
+   749	        /// <summary>
+   750	        /// Building Phase 1 — place a building on the sect grid (player-only, §8 Q3 default).
+   751	        /// Validation order per building-system.md §3.2: def lookup → occupancy → cost,
+   752	        /// then all-or-nothing resource deduction through the AdjustAndNotify choke point,
+   753	        /// state append, and BuildingPlacedMessage publish (in-memory only).
+   754	        /// Caller must call CanAffordBuilding / grid.CanPlace first for ghost preview;
+   755	        /// this re-validates everything and fails closed with a reason.
+   756	        /// </summary>
+   757	        bool TryPlaceBuilding(string defId, int gridX, int gridZ, int rotation,
+   758	                              BuildingGrid grid, out string failReason,
+   759	                              out PlacedBuildingState placed);
+   760	
+   761	        /// <summary>Ghost preview check: can the sect pay this def's cost right now?
+   762	        /// Read-only — no state mutation (occupied-cells check lives on BuildingGrid).</summary>
+   763	        bool CanAffordBuilding(BuildingDef def);
+   764	    }
+   765	}
 ````
 
-### UnityProject/Assets/Scripts/Systems/SectStateProvider.cs (90219 bytes)
+### UnityProject/Assets/Scripts/Systems/SectStateProvider.cs (110740 bytes)
 ````
      1	using System;
      2	using System.Collections.Generic;
@@ -2961,7 +3134,7 @@
    782	
    783	            // 5. a Viewer identity must not control a different active disciple
    784	            if (ownerType == DiscipleOwnerType.Viewer && !string.IsNullOrE
-... [TRUNCATED: แสดง 40000 จาก 90219 bytes — ขอส่วนที่เหลือผ่าน need_files]
+... [TRUNCATED: แสดง 40000 จาก 110740 bytes — ขอส่วนที่เหลือผ่าน need_files]
 ````
 
 ### DataTables/luban.conf (287 bytes)
@@ -4191,7 +4364,7 @@
     1  UnityProject/Assets/Scenes/VisualDemo
     2  UnityProject/Assets/Scripts
     5  UnityProject/Assets/Scripts/Building
-   15  UnityProject/Assets/Scripts/Core
+   16  UnityProject/Assets/Scripts/Core
     5  UnityProject/Assets/Scripts/Core/Installers
     2  UnityProject/Assets/Scripts/Data
     9  UnityProject/Assets/Scripts/Data/Gen
@@ -4248,7 +4421,7 @@
     1  UnityProject/Assets/Spine/Runtime
    42  UnityProject/Assets/Spine/Runtime/spine-csharp
   116  UnityProject/Assets/Spine/Runtime/spine-unity
-   40  UnityProject/Assets/Tests/EditMode
+   41  UnityProject/Assets/Tests/EditMode
     2  UnityProject/Assets/TextMesh Pro/Fonts
     3  UnityProject/Assets/TextMesh Pro/Resources
     4  UnityProject/Assets/TextMesh Pro/Resources/Fonts & Materials
@@ -4767,6 +4940,7 @@
   UnityProject/Assets/Scripts/Core/Installers/InterprocessInstaller.cs
   UnityProject/Assets/Scripts/Core/Installers/UIInstaller.cs
   UnityProject/Assets/Scripts/Core/Installers/VisualInstaller.cs
+  UnityProject/Assets/Scripts/Core/MainThreadDispatch.cs
   UnityProject/Assets/Scripts/Core/OwnershipObservability.cs
   UnityProject/Assets/Scripts/Core/PurchaseItemHandler.cs
   UnityProject/Assets/Scripts/Core/SceneLoader.cs
@@ -5152,8 +5326,7 @@
   UnityProject/Assets/Tests/EditMode/BuildingMenuPresenterTests.cs
   UnityProject/Assets/Tests/EditMode/BuildingPlacementTests.cs
   UnityProject/Assets/Tests/EditMode/CameraFramingMathTests.cs
-  UnityProject/Assets/Tests/EditMode/CameraRigControllerTests.cs
-  ... [163 more files truncated — ปรับ TREE_MAX_LINES หรือ .aiignore]
+  ... [165 more files truncated — ปรับ TREE_MAX_LINES หรือ .aiignore]
 ```
 
 ## Recent Wiki Log (last 15 entries, each cut to 400 chars)

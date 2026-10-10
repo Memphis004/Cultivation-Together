@@ -43,6 +43,7 @@ namespace Xianxia.Sect
         private readonly ISubscriber<BuildingPlacedMessage> _placedSubscriber;
         private readonly ISubscriber<BuildModeStartedMessage> _buildStartedSubscriber;
         private readonly ISubscriber<BuildModeEndedMessage> _buildEndedSubscriber;
+        private readonly ISubscriber<SessionRestoredMessage> _sessionRestoredSubscriber;
         private readonly CameraFramingConfig _framing;
 
         private Transform _ghostRoot;
@@ -63,6 +64,7 @@ namespace Xianxia.Sect
             ISubscriber<BuildingPlacedMessage> placedSubscriber,
             ISubscriber<BuildModeStartedMessage> buildStartedSubscriber,
             ISubscriber<BuildModeEndedMessage> buildEndedSubscriber,
+            ISubscriber<SessionRestoredMessage> sessionRestoredSubscriber,
             CameraFramingConfig framing)
         {
             // fallback (grid ไม่ถูก inject — ทดสอบ/edge case): ขนาด+origin ตรง overlay
@@ -75,6 +77,7 @@ namespace Xianxia.Sect
             _placedSubscriber = placedSubscriber;
             _buildStartedSubscriber = buildStartedSubscriber;
             _buildEndedSubscriber = buildEndedSubscriber;
+            _sessionRestoredSubscriber = sessionRestoredSubscriber;
             _framing = framing;
         }
 
@@ -88,6 +91,19 @@ namespace Xianxia.Sect
             _placedSubscriber.Subscribe(OnBuildingPlaced);
             _buildStartedSubscriber.Subscribe(OnBuildModeStarted);
             _buildEndedSubscriber.Subscribe(OnBuildModeEnded);
+            _sessionRestoredSubscriber.Subscribe(OnSessionRestored); // P11A
+        }
+
+        /// <summary>
+        /// P11A — a full session was restored: the derived grid occupancy (and the
+        /// placeholder markers) belong to the previous session. Rebuild both from the
+        /// restored PlacedBuildings so no stale occupant id survives the load.
+        /// </summary>
+        private void OnSessionRestored(SessionRestoredMessage message)
+        {
+            RebuildGridFromState();
+            ApplyPlaceableLandMask(); // mask is scene-derived; re-apply after the rebuild
+            RefreshPlacedMarkers();
         }
 
         /// <summary>เข้า build mode → marker ของอาคารที่วางไว้ต้องโชว์ครบ
