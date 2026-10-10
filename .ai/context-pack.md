@@ -1,11 +1,11 @@
 # Cultivation-Together Context Pack
 
 - Repository: Memphis004/Cultivation-Together
-- Commit: b04e006
+- Commit: 8f529dc
 - Branch: main
 - Generated: 2026-10-10
-- Uncommitted changes in working tree: 1 file(s) (ไฟล์ที่แนบมาอ่านจาก working tree ไม่ใช่จาก commit — ถ้า > 0 อาจต่างจาก commit)
-- Files after .aiignore filter: 2078
+- Uncommitted changes in working tree: 0 file(s) (ไฟล์ที่แนบมาอ่านจาก working tree ไม่ใช่จาก commit — ถ้า > 0 อาจต่างจาก commit)
+- Files after .aiignore filter: 2079
 
 ## Ground Rules (สำคัญมาก — บังคับ AI)
 
@@ -4440,7 +4440,7 @@
     1  UnityProject/Assets/Spine/Runtime
    42  UnityProject/Assets/Spine/Runtime/spine-csharp
   116  UnityProject/Assets/Spine/Runtime/spine-unity
-   44  UnityProject/Assets/Tests/EditMode
+   45  UnityProject/Assets/Tests/EditMode
     2  UnityProject/Assets/TextMesh Pro/Fonts
     3  UnityProject/Assets/TextMesh Pro/Resources
     4  UnityProject/Assets/TextMesh Pro/Resources/Fonts & Materials
@@ -5345,7 +5345,7 @@
   UnityProject/Assets/Spine/Runtime/spine-unity/Utility/MaterialChecks.cs
   UnityProject/Assets/Spine/Runtime/spine-unity/Utility/SkeletonExtensions.cs
   UnityProject/Assets/Spine/Runtime/spine-unity/Utility/SkinUtilities.cs
-  ... [186 more files truncated — ปรับ TREE_MAX_LINES หรือ .aiignore]
+  ... [187 more files truncated — ปรับ TREE_MAX_LINES หรือ .aiignore]
 ```
 
 ## Recent Wiki Log (last 15 entries, each cut to 400 chars)
