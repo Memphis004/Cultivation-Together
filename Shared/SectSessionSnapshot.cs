@@ -19,8 +19,13 @@
 //     SectStateProvider._gatherAccumulators  sub-unit gathering progress
 //     SectStateProvider._craftProgress       per-disciple craft progress
 //     TimeSystem.Speed                     simulation speed (1x..3x)
-//     TimeSystem pending decision          event id / description / choices /
-//                                          pause flag (captured safely — §6)
+//     TimeSystem pending decisions         P13B — the WHOLE outstanding queue, each
+//                                          occurrence with its instance id, event id,
+//                                          description, choices, optional speaker and
+//                                          the pending-decision pause flag (§6). No
+//                                          instance-specific payload is left behind:
+//                                          anything a decision needs after a load is in
+//                                          PendingEventSnapshot.
 //
 //   DERIVED / REBUILT (never serialized; recomputed on load)
 //     DiscipleAttributes.SkillLevel        pure fn of SkillXp
@@ -45,19 +50,15 @@
 //         above IS restored.
 //     TimeSystem pause reasons                a fresh session is unpaused; the
 //         pending-decision pause is re-derived from the restored pending state.
-//     TimeSystem pending-decision INSTANCE id  (P13A) an instance id names a LIVE
-//         occurrence, so it is not persisted: a restore re-mints one for the
-//         restored pending decision. A decision addressed to a pre-save instance
-//         id is therefore STALE after a load and is refused rather than applied to
-//         the restored event, while the restored event itself stays answerable
-//         under its new id.
-//     TimeSystem pending decisions past the CURRENT one  (P13A) the capture takes
-//         the CURRENT (oldest undecided) decision only. The live pending state is a
-//         bounded queue, but a session save carries one: extra outstanding decisions
-//         are NOT silently dropped - the capture logs a warning naming the count.
-//         In production the spawner cannot raise a second decision event while one
-//         is outstanding (WorldEventSystem excludes them), so the queue only exceeds
-//         one through a direct/dev raise.
+//     TimeSystem._nextEventInstanceNumber      P13B — the instance-id counter is
+//         re-seeded PAST every restored instance id, so a restored occurrence keeps
+//         its own id (a decision already addressed to it stays valid across the
+//         save/load) while a NEWLY raised event can never collide with one that was
+//         saved. SessionRestored subscribers rebuild the decision UI, not the state.
+//     TimeSystem._pendingEventSource / _cachedPendingEvent   live waiter + bridge
+//         handoff. Never serialized (§4): writing a UniTaskCompletionSource to disk
+//         would resurrect a delivery that already happened. The awaiter is rebuilt
+//         fresh by the constructor and the cache stays cleared on load.
 //     WorldEventSystem._timer/_grace/_started spawn cadence restarts with its
 //         grace window; events are not scheduled state.
 //     AutoTaskScheduler scheduling maps       evaluation cadence/dwell is a
@@ -135,8 +136,64 @@ namespace Xianxia.Sect
         /// <summary>True when the PendingDecision pause was engaged when captured.</summary>
         [Key(7)] public bool PendingDecisionPaused { get; set; }
 
+        /// <summary>
+        /// P13B — the FULL outstanding pending-decision queue in arrival order (oldest
+        /// first), each entry carrying its own instance id and instance-specific payload.
+        ///
+        /// APPENDED key: an older save reads back an empty list, and the restore then
+        /// falls back to the Keys 4-7 summary below as a single occurrence (see
+        /// <see cref="SectSessionSnapshot.PendingEventId"/>), so an old save still restores
+        /// its pending event instead of silently dropping it.
+        ///
+        /// When this list is non-empty it is AUTHORITATIVE and Keys 4-7 are only a
+        /// convenience mirror for readers that predate this key.
+        /// </summary>
+        [Key(8)] public List<PendingEventSnapshot> PendingEvents { get; set; } = new List<PendingEventSnapshot>();
+
         /// <summary>True when a decision-requiring event was outstanding and undecided. Derived, never serialized.</summary>
         [IgnoreMember]
-        public bool HasPendingDecision => !string.IsNullOrEmpty(PendingEventId);
+        public bool HasPendingDecision =>
+            (PendingEvents != null && PendingEvents.Count > 0) || !string.IsNullOrEmpty(PendingEventId);
+    }
+
+    /// <summary>
+    /// P13B — ONE persisted outstanding pending decision: the occurrence's identity plus
+    /// everything needed to REBUILD its decision UI after a load, and nothing else.
+    ///
+    /// What is deliberately absent (P13B §4): the live UniTaskCompletionSource waiter, the
+    /// bridge hand-off cache, MessagePipe subscriptions and every Unity object. Those are
+    /// rebuilt by the systems that own them on <see cref="SessionRestoredMessage"/>, never
+    /// serialized here.
+    ///
+    /// The instance id IS persisted (P13B reverses the earlier P13A reset): a decision
+    /// addressed to an occurrence survives a save/load, so a click that was in flight, or an
+    /// AI GM that decided while the player was saving, still lands exactly once. Applying a
+    /// restored decision never re-applies its consequence — the consequence is applied by
+    /// the decision, not by the restore (see TimeSystem.TryResolvePendingDecision).
+    /// </summary>
+    [MessagePackObject]
+    public class PendingEventSnapshot
+    {
+        /// <summary>Unique per raised occurrence (<c>evt_000001</c>); stable across a save/load.</summary>
+        [Key(0)] public string InstanceId { get; set; }
+
+        /// <summary>The authored event definition id (<c>cfg.game.EventDef.Id</c>).</summary>
+        [Key(1)] public string EventId { get; set; }
+
+        /// <summary>Authoring text the player / the AI GM is shown.</summary>
+        [Key(2)] public string Description { get; set; }
+
+        /// <summary>The choices THIS occurrence offered — captured so a decision is never silently lost.</summary>
+        [Key(3)] public List<EventChoiceInfo> Choices { get; set; } = new List<EventChoiceInfo>();
+
+        /// <summary>Optional speaker (the disciple whose portrait the popup renders); empty = no speaker.</summary>
+        [Key(4)] public string SpeakerDiscipleId { get; set; }
+
+        /// <summary>Display name for <see cref="SpeakerDiscipleId"/>; empty when there is no speaker.</summary>
+        [Key(5)] public string SpeakerDisplayName { get; set; }
+
+        /// <summary>True when this occurrence has a speaker portrait to draw. Derived, never serialized.</summary>
+        [IgnoreMember]
+        public bool HasSpeaker => !string.IsNullOrEmpty(SpeakerDiscipleId);
     }
 }

@@ -78,6 +78,17 @@ namespace Xianxia.Sect.Messages
         /// decide).
         /// </summary>
         [Key(4)] public string InstanceId { get; set; }
+
+        /// <summary>
+        /// P13B (APPENDED field — an old reader ignores it and an old payload reads back
+        /// empty, which means "no speaker"): the disciple whose portrait the popup renders
+        /// for this occurrence. Optional by design — an event with no speaker draws no
+        /// portrait area at all, rather than a blank one.
+        /// </summary>
+        [Key(5)] public string SpeakerDiscipleId { get; set; }
+
+        /// <summary>Display name shown beside the speaker portrait; empty when there is no speaker.</summary>
+        [Key(6)] public string SpeakerDisplayName { get; set; }
     }
 
     // Internal-only (not registered on the interprocess bus) - the UI and
@@ -139,6 +150,16 @@ namespace Xianxia.Sect.Messages
         /// by the time a decision arrives is refused, never re-applied.
         /// </summary>
         [Key(4)] public string InstanceId { get; set; }
+
+        /// <summary>
+        /// P13B (APPENDED field — an old reader ignores it, an old payload reads back empty):
+        /// the optional speaker of this occurrence, so the AI GM knows who is talking rather
+        /// than only what is being asked. Empty = the event has no speaker.
+        /// </summary>
+        [Key(5)] public string SpeakerDiscipleId { get; set; }
+
+        /// <summary>Display name matching <see cref="SpeakerDiscipleId"/>; empty when there is none.</summary>
+        [Key(6)] public string SpeakerDisplayName { get; set; }
     }
 
     // One selectable option for a world event - authored per-event in the

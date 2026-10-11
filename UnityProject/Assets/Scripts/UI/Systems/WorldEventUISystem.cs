@@ -120,6 +120,14 @@ namespace Xianxia.Sect.UI
                                  && !DiscipleModalScope.IsOpen                // never over a modal
                                  && _hiddenInstanceId != currentInstanceId;   // the player hid this one
                 if (needsOpen) OpenPopup();
+
+                // P13B — the panel is the AUTHORITATIVE view of the current occurrence: it
+                // re-derives itself from the pending state rather than trusting the args it was
+                // opened with, so a description/choice change under it (or a resolution it was
+                // not told about) cannot leave a stale event on screen. A no-op unless the
+                // current instance actually changed.
+                if (_popup != null && _popup.Presenter is EventPopupPresenter popupPresenter)
+                    popupPresenter.RefreshFromAuthority();
             }
 
             RefreshChip(pending);
@@ -187,12 +195,22 @@ namespace Xianxia.Sect.UI
             try
             {
                 string instanceId = _timeSystem.PendingInstanceId;
+
+                // P13B — the instance-specific payload rides with the open: the optional speaker
+                // is what makes a restored event render the same panel (portrait + name) instead
+                // of a generic one. The portrait ITSELF is not carried anywhere — the presenter
+                // re-derives it from the roster.
+                PendingWorldEvent pending;
+                _timeSystem.TryGetPendingDecision(instanceId, out pending);
+
                 _popup = _uiService.Open(PopupPanelId, new EventPopupOpenArgs
                 {
                     InstanceId = instanceId,
                     EventId = _timeSystem.PendingEventId,
                     Description = _timeSystem.PendingDescription,
                     Choices = new List<EventChoiceInfo>(_timeSystem.PendingChoices),
+                    SpeakerDiscipleId = pending?.SpeakerDiscipleId,
+                    SpeakerDisplayName = pending?.SpeakerDisplayName,
                     CloseCallback = OnPopupCloseRequested,
                 });
                 _popupInstanceId = instanceId;

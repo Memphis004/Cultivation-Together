@@ -37,6 +37,13 @@ namespace Xianxia.Sect.UI
         [SerializeField] private Button choiceButtonPrefab;
         [SerializeField] private Button hideButton;
 
+        // P13B — optional speaker. The whole area hides when the event names nobody, so an
+        // event with no speaker never shows an empty portrait frame. This reuses the existing
+        // AvatarRenderer (Bust framing) — there is no separate dialogue-portrait system.
+        [SerializeField] private GameObject speakerRoot;
+        [SerializeField] private TMP_Text speakerNameText;
+        [SerializeField] private AvatarRenderer speakerRenderer;
+
         /// <summary>A visible choice button was pressed (carries the choice id).</summary>
         public event Action<string> ChoiceClicked;
         /// <summary>The player asked to hide the popup ("ซ่อน" or Escape). Never a decision.</summary>
@@ -95,6 +102,36 @@ namespace Xianxia.Sect.UI
         {
             if (titleText != null) titleText.text = eventId;
             if (descriptionText != null) descriptionText.text = description;
+        }
+
+        /// <summary>
+        /// P13B — show the optional speaker. <paramref name="appearance"/> null (or no speaker
+        /// renderer wired) hides the whole area, so "no speaker" and "speaker whose appearance
+        /// is missing" both render as nothing rather than as an empty portrait.
+        /// </summary>
+        public void SetSpeaker(string displayName, AvatarAppearance appearance)
+        {
+            bool show = appearance != null;
+
+            if (speakerRoot != null) speakerRoot.SetActive(show);
+            if (speakerNameText != null) speakerNameText.text = show ? (displayName ?? string.Empty) : string.Empty;
+            if (!show || speakerRenderer == null) return;
+
+            // Same wiring as DiscipleListView's card: the renderer is a MonoBehaviour on the
+            // prefab and cannot resolve DI itself, so the view hands it the (read-only) part
+            // pool. Cached statically because the pool only loads JSON once per instance and
+            // the popup can reopen many times per session.
+            speakerRenderer.Initialize(PartPool());
+            speakerRenderer.SetFraming(AvatarFraming.Bust); // dialogue portrait framing
+            speakerRenderer.SetAppearance(appearance);
+        }
+
+        private static AvatarPartPool s_PartPool;
+
+        private static AvatarPartPool PartPool()
+        {
+            if (s_PartPool == null) s_PartPool = new AvatarPartPool();
+            return s_PartPool;
         }
 
         public void SetChoices(List<EventChoiceViewData> choices)
@@ -261,6 +298,9 @@ namespace Xianxia.Sect.UI
 
         public string ChoiceIdAtForTest(int index) =>
             index >= 0 && index < _spawned.Count ? _spawned[index].ChoiceId : null;
+
+        public bool SpeakerVisibleForTest => speakerRoot != null && speakerRoot.activeSelf;
+        public string SpeakerNameForTest => speakerNameText != null ? speakerNameText.text : null;
 
         public bool IsChoiceInteractableForTest(string choiceId)
         {

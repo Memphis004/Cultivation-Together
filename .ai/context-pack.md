@@ -1,11 +1,11 @@
 # Cultivation-Together Context Pack
 
 - Repository: Memphis004/Cultivation-Together
-- Commit: 880fc41
+- Commit: 2a30d99
 - Branch: main
 - Generated: 2026-10-11
-- Uncommitted changes in working tree: 36 file(s) (ไฟล์ที่แนบมาอ่านจาก working tree ไม่ใช่จาก commit — ถ้า > 0 อาจต่างจาก commit)
-- Files after .aiignore filter: 2091
+- Uncommitted changes in working tree: 31 file(s) (ไฟล์ที่แนบมาอ่านจาก working tree ไม่ใช่จาก commit — ถ้า > 0 อาจต่างจาก commit)
+- Files after .aiignore filter: 2092
 
 ## Ground Rules (สำคัญมาก — บังคับ AI)
 
@@ -53,13 +53,13 @@
 - `McpBridge/Shared/GameMessages.cs`: class DiscipleRecruitedMessage, class DiscipleRankChangedMessage, class SectResourceChangedMessage, class ContributionEarnedMessage, class SceneLoadedMessage, class WorldEventTriggeredMessage, class TimeSpeedChangedMessage, class SectStateQuery, class SectStateSnapshot, class AwaitWorldEventRequest, class AwaitWorldEventResponse, class EventChoiceInfo, class ExecuteDecisionMessage, class DecisionExecutedMessage, class BuildModeStartedMessage, class BuildModeEndedMessage, class PurchaseItemRequest, class PurchaseItemResponse, class BuildingPlacedMessage, class DiscipleChibiBackendChangedMessage, class DiscipleSelectedMessage, class AvatarEquipmentChangedMessage, class ChangeAvatarPartRequest, class ChangeAvatarPartResponse, class AssignTaskRequest, class AssignTaskResponse, class DiscipleTaskChangedMessage, class DiscipleOwnerChangedMessage, class DiscipleControlModeChangedMessage, class OwnershipObservabilityQuery, class OwnershipObservabilitySnapshot, class TaskChangeObservabilityQuery, class TaskChangeObservabilitySnapshot, class TaskProtectionQuery, class TaskProtectionEntry, class TaskProtectionSnapshot, class SectViewerMembershipSave, class SectSavedOwnership, class SessionRestoredMessage, static class InterprocessTopics
 - `McpBridge/Shared/MockSectData.cs`: static class MockSectData
 - `McpBridge/Shared/SectEconomyState.cs`: enum OwnerScope, enum DiscipleRank, enum DiscipleSex, enum DiscipleOwnerType, enum DiscipleControlMode, enum ChibiBackend, class CurrencyWallet, class InventoryItem, class DiscipleState, class SectStockpile, class PlacedBuildingState, class SectEconomyState, struct SlotPart, sealed class AvatarAppearance, static class AvatarSlots
-- `McpBridge/Shared/SectSessionSnapshot.cs`: class SectSessionSnapshotEnvelope, class SectSessionSnapshot
+- `McpBridge/Shared/SectSessionSnapshot.cs`: class SectSessionSnapshotEnvelope, class SectSessionSnapshot, class PendingEventSnapshot
 - `McpBridge/Shared/ViewerMembership.cs`: enum ViewerMembershipStatus, class ViewerRecord, class PendingViewerApplication, interface IClock, sealed class UtcClock, class SectViewerRegistry
 - `Shared/DiscipleAttributes.cs`: static class DiscipleAttributesConfig, class DiscipleAttributes
 - `Shared/GameMessages.cs`: class DiscipleRecruitedMessage, class DiscipleRankChangedMessage, class SectResourceChangedMessage, class ContributionEarnedMessage, class SceneLoadedMessage, class WorldEventTriggeredMessage, class TimeSpeedChangedMessage, class SectStateQuery, class SectStateSnapshot, class AwaitWorldEventRequest, class AwaitWorldEventResponse, class EventChoiceInfo, class ExecuteDecisionMessage, class DecisionExecutedMessage, class BuildModeStartedMessage, class BuildModeEndedMessage, class PurchaseItemRequest, class PurchaseItemResponse, class BuildingPlacedMessage, class DiscipleChibiBackendChangedMessage, class DiscipleSelectedMessage, class AvatarEquipmentChangedMessage, class ChangeAvatarPartRequest, class ChangeAvatarPartResponse, class AssignTaskRequest, class AssignTaskResponse, class DiscipleTaskChangedMessage, class DiscipleOwnerChangedMessage, class DiscipleControlModeChangedMessage, class OwnershipObservabilityQuery, class OwnershipObservabilitySnapshot, class TaskChangeObservabilityQuery, class TaskChangeObservabilitySnapshot, class TaskProtectionQuery, class TaskProtectionEntry, class TaskProtectionSnapshot, class SectViewerMembershipSave, class SectSavedOwnership, class SessionRestoredMessage, static class InterprocessTopics
 - `Shared/MockSectData.cs`: static class MockSectData
 - `Shared/SectEconomyState.cs`: enum OwnerScope, enum DiscipleRank, enum DiscipleSex, enum DiscipleOwnerType, enum DiscipleControlMode, enum ChibiBackend, class CurrencyWallet, class InventoryItem, class DiscipleState, class SectStockpile, class PlacedBuildingState, class SectEconomyState, struct SlotPart, sealed class AvatarAppearance, static class AvatarSlots
-- `Shared/SectSessionSnapshot.cs`: class SectSessionSnapshotEnvelope, class SectSessionSnapshot
+- `Shared/SectSessionSnapshot.cs`: class SectSessionSnapshotEnvelope, class SectSessionSnapshot, class PendingEventSnapshot
 - `Shared/ViewerMembership.cs`: enum ViewerMembershipStatus, class ViewerRecord, class PendingViewerApplication, interface IClock, sealed class UtcClock, class SectViewerRegistry
 - `UnityProject/Assets/Scripts/Building/BuildingDef.cs`: enum BuildingCategory, class BuildingDef, class BuildingCostEntry
 - `UnityProject/Assets/Scripts/Building/BuildingDefPool.cs`: class BuildingDefTable, class BuildingDefPool
@@ -109,7 +109,7 @@
 - `UnityProject/Assets/Scripts/Shared/GameMessages.cs`: class DiscipleRecruitedMessage, class DiscipleRankChangedMessage, class SectResourceChangedMessage, class ContributionEarnedMessage, class SceneLoadedMessage, class WorldEventTriggeredMessage, class TimeSpeedChangedMessage, class SectStateQuery, class SectStateSnapshot, class AwaitWorldEventRequest, class AwaitWorldEventResponse, class EventChoiceInfo, class ExecuteDecisionMessage, class DecisionExecutedMessage, class BuildModeStartedMessage, class BuildModeEndedMessage, class PurchaseItemRequest, class PurchaseItemResponse, class BuildingPlacedMessage, class DiscipleChibiBackendChangedMessage, class DiscipleSelectedMessage, class AvatarEquipmentChangedMessage, class ChangeAvatarPartRequest, class ChangeAvatarPartResponse, class AssignTaskRequest, class AssignTaskResponse, class DiscipleTaskChangedMessage, class DiscipleOwnerChangedMessage, class DiscipleControlModeChangedMessage, class OwnershipObservabilityQuery, class OwnershipObservabilitySnapshot, class TaskChangeObservabilityQuery, class TaskChangeObservabilitySnapshot, class TaskProtectionQuery, class TaskProtectionEntry, class TaskProtectionSnapshot, class SectViewerMembershipSave, class SectSavedOwnership, class SessionRestoredMessage, static class InterprocessTopics
 - `UnityProject/Assets/Scripts/Shared/MockSectData.cs`: static class MockSectData
 - `UnityProject/Assets/Scripts/Shared/SectEconomyState.cs`: enum OwnerScope, enum DiscipleRank, enum DiscipleSex, enum DiscipleOwnerType, enum DiscipleControlMode, enum ChibiBackend, class CurrencyWallet, class InventoryItem, class DiscipleState, class SectStockpile, class PlacedBuildingState, class SectEconomyState, struct SlotPart, sealed class AvatarAppearance, static class AvatarSlots
-- `UnityProject/Assets/Scripts/Shared/SectSessionSnapshot.cs`: class SectSessionSnapshotEnvelope, class SectSessionSnapshot
+- `UnityProject/Assets/Scripts/Shared/SectSessionSnapshot.cs`: class SectSessionSnapshotEnvelope, class SectSessionSnapshot, class PendingEventSnapshot
 - `UnityProject/Assets/Scripts/Shared/ViewerMembership.cs`: enum ViewerMembershipStatus, class ViewerRecord, class PendingViewerApplication, interface IClock, sealed class UtcClock, class SectViewerRegistry
 - `UnityProject/Assets/Scripts/Systems/AutoTaskScheduler.cs`: sealed class AutoEvaluationOutcome, class AutoTaskScheduler
 - `UnityProject/Assets/Scripts/Systems/AutoTaskScoring.cs`: enum SectTaskKind, sealed class SectTaskInfo, sealed class AutoTaskFacts, sealed class AutoTaskScore, enum AutoRecoveryState, sealed class AutoTaskDecision, static class AutoTaskWeights, static class AutoTaskTargets, static class AutoTaskScoring
@@ -234,7 +234,7 @@
     22	echo "  $BRIDGE_DEST"
 ````
 
-### Shared/GameMessages.cs (24414 bytes)
+### Shared/GameMessages.cs (25586 bytes)
 ````
      1	using System;
      2	using System.Collections.Generic;
@@ -316,446 +316,467 @@
     78	        /// decide).
     79	        /// </summary>
     80	        [Key(4)] public string InstanceId { get; set; }
-    81	    }
-    82	
-    83	    // Internal-only (not registered on the interprocess bus) - the UI and
-    84	    // other in-Unity systems care about this, the MCP bridge doesn't.
-    85	    [MessagePackObject]
-    86	    public class TimeSpeedChangedMessage
-    87	    {
-    88	        [Key(0)] public int Speed { get; set; }
-    89	        [Key(1)] public bool Paused { get; set; }
-    90	    }
-    91	
-    92	    // Request/response pair: the MCP bridge asks Unity for a full state
-    93	    // snapshot on demand (e.g. when the AI GM calls the get_sect_state tool).
-    94	    [MessagePackObject]
-    95	    public class SectStateQuery
-    96	    {
-    97	        [Key(0)] public string RequestId { get; set; }
-    98	    }
-    99	
-   100	    [MessagePackObject]
-   101	    public class SectStateSnapshot
-   102	    {
-   103	        [Key(0)] public string RequestId { get; set; }
-   104	        [Key(1)] public byte[] EconomyStateBytes { get; set; } // SectEconomyState, MessagePack-serialized
-   105	    }
-   106	
-   107	    // Request/response pair for await_next_world_event.
-   108	    //
-   109	    // This is deliberately request-response, not pub/sub, even though
-   110	    // conceptually it's "wait for the next event". Confirmed root cause:
-   111	    // MessagePipe.Interprocess's TcpDistributedSubscriber unconditionally
-   112	    // calls worker.StartReceiver() (binds its own listening socket)
-   113	    // regardless of HostAsServer - so a non-hub process (the bridge) can
-   114	    // never safely use IDistributedSubscriber over this TCP transport, it
-   115	    // collides with the hub's (Unity's) already-bound port. Request-response
-   116	    // only ever uses the client connection (Connect, not Listen), which is
-   117	    // exactly what get_sect_state already proved works fine. The handler on
-   118	    // the Unity side just holds the response open (via a UniTaskCompletionSource)
-   119	    // until an event actually fires - same observed behavior as a
-   120	    // subscription, without the broken transport.
-   121	    [MessagePackObject]
-   122	    public class AwaitWorldEventRequest
-   123	    {
-   124	        [Key(0)] public string RequestId { get; set; }
-   125	    }
-   126	
-   127	    [MessagePackObject]
-   128	    public class AwaitWorldEventResponse
-   129	    {
-   130	        [Key(0)] public string EventId { get; set; }
-   131	        [Key(1)] public bool RequiresDecision { get; set; }
-   132	        [Key(2)] public string Description { get; set; }
-   133	        [Key(3)] public List<EventChoiceInfo> Choices { get; set; } = new List<EventChoiceInfo>();
-   134	
-   135	        /// <summary>
-   136	        /// P13A (APPENDED field — an old reader ignores it, an old payload reads back
-   137	        /// empty): the instance id of the event being handed over, which is what a decision
-   138	        /// must name. Empty for a non-decision event. An event whose id is no longer pending
-   139	        /// by the time a decision arrives is refused, never re-applied.
-   140	        /// </summary>
-   141	        [Key(4)] public string InstanceId { get; set; }
-   142	    }
-   143	
-   144	    // One selectable option for a world event - authored per-event in the
-   145	    // EventData ScriptableObject, carried over the wire so the AI GM sees
-   146	    // real choices instead of just a bare event id.
-   147	    [MessagePackObject]
-   148	    public class EventChoiceInfo
-   149	    {
-   150	        [Key(0)] public string ChoiceId { get; set; }
-   151	        [Key(1)] public string Label { get; set; }
-   152	    }
+    81	
+    82	        /// <summary>
+    83	        /// P13B (APPENDED field — an old reader ignores it and an old payload reads back
+    84	        /// empty, which means "no speaker"): the disciple whose portrait the popup renders
+    85	        /// for this occurrence. Optional by design — an event with no speaker draws no
+    86	        /// portrait area at all, rather than a blank one.
+    87	        /// </summary>
+    88	        [Key(5)] public string SpeakerDiscipleId { get; set; }
+    89	
+    90	        /// <summary>Display name shown beside the speaker portrait; empty when there is no speaker.</summary>
+    91	        [Key(6)] public string SpeakerDisplayName { get; set; }
+    92	    }
+    93	
+    94	    // Internal-only (not registered on the interprocess bus) - the UI and
+    95	    // other in-Unity systems care about this, the MCP bridge doesn't.
+    96	    [MessagePackObject]
+    97	    public class TimeSpeedChangedMessage
+    98	    {
+    99	        [Key(0)] public int Speed { get; set; }
+   100	        [Key(1)] public bool Paused { get; set; }
+   101	    }
+   102	
+   103	    // Request/response pair: the MCP bridge asks Unity for a full state
+   104	    // snapshot on demand (e.g. when the AI GM calls the get_sect_state tool).
+   105	    [MessagePackObject]
+   106	    public class SectStateQuery
+   107	    {
+   108	        [Key(0)] public string RequestId { get; set; }
+   109	    }
+   110	
+   111	    [MessagePackObject]
+   112	    public class SectStateSnapshot
+   113	    {
+   114	        [Key(0)] public string RequestId { get; set; }
+   115	        [Key(1)] public byte[] EconomyStateBytes { get; set; } // SectEconomyState, MessagePack-serialized
+   116	    }
+   117	
+   118	    // Request/response pair for await_next_world_event.
+   119	    //
+   120	    // This is deliberately request-response, not pub/sub, even though
+   121	    // conceptually it's "wait for the next event". Confirmed root cause:
+   122	    // MessagePipe.Interprocess's TcpDistributedSubscriber unconditionally
+   123	    // calls worker.StartReceiver() (binds its own listening socket)
+   124	    // regardless of HostAsServer - so a non-hub process (the bridge) can
+   125	    // never safely use IDistributedSubscriber over this TCP transport, it
+   126	    // collides with the hub's (Unity's) already-bound port. Request-response
+   127	    // only ever uses the client connection (Connect, not Listen), which is
+   128	    // exactly what get_sect_state already proved works fine. The handler on
+   129	    // the Unity side just holds the response open (via a UniTaskCompletionSource)
+   130	    // until an event actually fires - same observed behavior as a
+   131	    // subscription, without the broken transport.
+   132	    [MessagePackObject]
+   133	    public class AwaitWorldEventRequest
+   134	    {
+   135	        [Key(0)] public string RequestId { get; set; }
+   136	    }
+   137	
+   138	    [MessagePackObject]
+   139	    public class AwaitWorldEventResponse
+   140	    {
+   141	        [Key(0)] public string EventId { get; set; }
+   142	        [Key(1)] public bool RequiresDecision { get; set; }
+   143	        [Key(2)] public string Description { get; set; }
+   144	        [Key(3)] public List<EventChoiceInfo> Choices { get; set; } = new List<EventChoiceInfo>();
+   145	
+   146	        /// <summary>
+   147	        /// P13A (APPENDED field — an old reader ignores it, an old payload reads back
+   148	        /// empty): the instance id of the event being handed over, which is what a decision
+   149	        /// must name. Empty for a non-decision event. An event whose id is no longer pending
+   150	        /// by the time a decision arrives is refused, never re-applied.
+   151	        /// </summary>
+   152	        [Key(4)] public string InstanceId { get; set; }
    153	
-   154	    // Sent from the MCP bridge back into Unity when the AI GM (or a vote
-   155	    // result) picks an option for the current world event. Completes the
-   156	    // write path that SectActionTools.ExecuteDecision was a stub for.
-   157	    [MessagePackObject]
-   158	    public class ExecuteDecisionMessage
-   159	    {
-   160	        [Key(0)] public string EventId { get; set; }
-   161	        [Key(1)] public string ChoiceId { get; set; }
-   162	
-   163	        /// <summary>
-   164	        /// P13A (APPENDED field — deliberately optional so the existing bridge contract keeps
-   165	        /// working unchanged): the instance the decision targets. An old/naive sender leaves
-   166	        /// it empty and the decision is matched by <see cref="EventId"/> alone — accepted only
-   167	        /// while EXACTLY ONE pending instance has that definition id, and refused as ambiguous
-   168	        /// otherwise (never silently applied to whichever one happens to be current).
-   169	        /// </summary>
-   170	        [Key(2)] public string InstanceId { get; set; }
-   171	    }
-   172	
-   173	    // Published in-memory by DecisionExecutor (not sent over interprocess -
-   174	    // this is the "it already happened" notification for local listeners
-   175	    // like the in-game log window, distinct from ExecuteDecisionMessage
-   176	    // which is the incoming command from the bridge). Whether the decision
-   177	    // originated from the bridge or from clicking a choice in the UI,
-   178	    // DecisionExecutor is the single place both paths funnel through, so
-   179	    // this fires exactly once per decision regardless of source.
-   180	    [MessagePackObject]
-   181	    public class DecisionExecutedMessage
-   182	    {
-   183	        [Key(0)] public string EventId { get; set; }
-   184	        [Key(1)] public string ChoiceId { get; set; }
-   185	
-   186	        /// <summary>
-   187	        /// P13A (APPENDED field): which occurrence was decided, so a listener can tell two
-   188	        /// instances of one definition apart. Empty when the decision came from a caller that
-   189	        /// only knew the definition id (legacy/bridge caller) — such a listener falls back to
-   190	        /// <see cref="EventId"/>.
-   191	        /// </summary>
-   192	        [Key(2)] public string InstanceId { get; set; }
-   193	    }
-   194	
-   195	    // Internal-only: entering build (placement) mode. CameraRigController
-   196	    // zooms to the Placement preset and GridOverlayRenderer shows the grid;
-   197	    // Payload carries the ghost transform when one exists (may be null).
-   198	    [MessagePackObject]
-   199	    public class BuildModeStartedMessage
-   200	    {
-   201	        [Key(0)] public string SourceId { get; set; }
-   202	        [Key(1)] public string GhostId { get; set; }
-   203	    }
-   204	
-   205	    // Internal-only: leaving build mode (confirm, cancel, or system stop).
-   206	    [MessagePackObject]
-   207	    public class BuildModeEndedMessage
-   208	    {
-   209	        [Key(0)] public string SourceId { get; set; }
-   210	        [Key(1)] public bool Confirmed { get; set; }
-   211	    }
-   212	
-   213	    // Request/response pair: a disciple buying an item from the sect
-   214	    // stockpile (CraftedGoods) with their own contribution. Request-response
-   215	    // rather than a fire-and-forget message because the bridge needs to
-   216	    // know immediately whether the purchase actually succeeded (enough
-   217	    // contribution, enough stock) - same reasoning as SectStateQuery.
-   218	    [MessagePackObject]
-   219	    public class PurchaseItemRequest
-   220	    {
-   221	        [Key(0)] public string DiscipleId { get; set; }
-   222	        [Key(1)] public string ItemDefId { get; set; }
-   223	        [Key(2)] public int Grade { get; set; }
-   224	        [Key(3)] public int Quantity { get; set; }
-   225	    }
-   226	
+   154	        /// <summary>
+   155	        /// P13B (APPENDED field — an old reader ignores it, an old payload reads back empty):
+   156	        /// the optional speaker of this occurrence, so the AI GM knows who is talking rather
+   157	        /// than only what is being asked. Empty = the event has no speaker.
+   158	        /// </summary>
+   159	        [Key(5)] public string SpeakerDiscipleId { get; set; }
+   160	
+   161	        /// <summary>Display name matching <see cref="SpeakerDiscipleId"/>; empty when there is none.</summary>
+   162	        [Key(6)] public string SpeakerDisplayName { get; set; }
+   163	    }
+   164	
+   165	    // One selectable option for a world event - authored per-event in the
+   166	    // EventData ScriptableObject, carried over the wire so the AI GM sees
+   167	    // real choices instead of just a bare event id.
+   168	    [MessagePackObject]
+   169	    public class EventChoiceInfo
+   170	    {
+   171	        [Key(0)] public string ChoiceId { get; set; }
+   172	        [Key(1)] public string Label { get; set; }
+   173	    }
+   174	
+   175	    // Sent from the MCP bridge back into Unity when the AI GM (or a vote
+   176	    // result) picks an option for the current world event. Completes the
+   177	    // write path that SectActionTools.ExecuteDecision was a stub for.
+   178	    [MessagePackObject]
+   179	    public class ExecuteDecisionMessage
+   180	    {
+   181	        [Key(0)] public string EventId { get; set; }
+   182	        [Key(1)] public string ChoiceId { get; set; }
+   183	
+   184	        /// <summary>
+   185	        /// P13A (APPENDED field — deliberately optional so the existing bridge contract keeps
+   186	        /// working unchanged): the instance the decision targets. An old/naive sender leaves
+   187	        /// it empty and the decision is matched by <see cref="EventId"/> alone — accepted only
+   188	        /// while EXACTLY ONE pending instance has that definition id, and refused as ambiguous
+   189	        /// otherwise (never silently applied to whichever one happens to be current).
+   190	        /// </summary>
+   191	        [Key(2)] public string InstanceId { get; set; }
+   192	    }
+   193	
+   194	    // Published in-memory by DecisionExecutor (not sent over interprocess -
+   195	    // this is the "it already happened" notification for local listeners
+   196	    // like the in-game log window, distinct from ExecuteDecisionMessage
+   197	    // which is the incoming command from the bridge). Whether the decision
+   198	    // originated from the bridge or from clicking a choice in the UI,
+   199	    // DecisionExecutor is the single place both paths funnel through, so
+   200	    // this fires exactly once per decision regardless of source.
+   201	    [MessagePackObject]
+   202	    public class DecisionExecutedMessage
+   203	    {
+   204	        [Key(0)] public string EventId { get; set; }
+   205	        [Key(1)] public string ChoiceId { get; set; }
+   206	
+   207	        /// <summary>
+   208	        /// P13A (APPENDED field): which occurrence was decided, so a listener can tell two
+   209	        /// instances of one definition apart. Empty when the decision came from a caller that
+   210	        /// only knew the definition id (legacy/bridge caller) — such a listener falls back to
+   211	        /// <see cref="EventId"/>.
+   212	        /// </summary>
+   213	        [Key(2)] public string InstanceId { get; set; }
+   214	    }
+   215	
+   216	    // Internal-only: entering build (placement) mode. CameraRigController
+   217	    // zooms to the Placement preset and GridOverlayRenderer shows the grid;
+   218	    // Payload carries the ghost transform when one exists (may be null).
+   219	    [MessagePackObject]
+   220	    public class BuildModeStartedMessage
+   221	    {
+   222	        [Key(0)] public string SourceId { get; set; }
+   223	        [Key(1)] public string GhostId { get; set; }
+   224	    }
+   225	
+   226	    // Internal-only: leaving build mode (confirm, cancel, or system stop).
    227	    [MessagePackObject]
-   228	    public class PurchaseItemResponse
+   228	    public class BuildModeEndedMessage
    229	    {
-   230	        [Key(0)] public bool Success { get; set; }
-   231	        [Key(1)] public string Message { get; set; }
-   232	        [Key(2)] public long RemainingContribution { get; set; }
-   233	    }
-   234	
-   235	    // ---------- Building placed (Phase 1 — grid placement engine) ----------
-   236	    // Published in-memory by SectStateProvider.TryPlaceBuilding after a
-   237	    // successful commit. BuildingSystem listens and rebuilds grid occupancy +
-   238	    // visuals. ⚠️ Deliberately NOT added to InterprocessTopics — building
-   239	    // placement is player-only in Phase 1 (building-system.md §8 Q3 default),
-   240	    // so the MCP bridge never needs it on the wire.
-   241	    [MessagePackObject]
-   242	    public class BuildingPlacedMessage
-   243	    {
-   244	        [Key(0)] public string InstanceId { get; set; } = string.Empty;
-   245	        [Key(1)] public string DefId { get; set; } = string.Empty;
-   246	        [Key(2)] public int GridX { get; set; }
-   247	        [Key(3)] public int GridZ { get; set; }
-   248	        [Key(4)] public int Rotation { get; set; }
-   249	    }
-   250	
-   251	    // ---------- Chibi backend entitlement change (Phase 3) ----------
-   252	    // Published in-memory by SectStateProvider.TrySetChibiBackend after mutating
-   253	    // DiscipleState.ChibiBackend. DiscipleVisualSystem respawns the visual IN PLACE
-   254	    // (same position/activity/facing) on this message.
-   255	    // ⚠️ Deliberately NOT added to InterprocessTopics — visual-tier churn is
-   256	    // irrelevant to the MCP bridge; keep it off the TCP broker (same rule as
-   257	    // every DiscipleVisualSystem message).
-   258	    [MessagePackObject]
-   259	    public class DiscipleChibiBackendChangedMessage
-   260	    {
-   261	        [Key(0)] public string DiscipleId { get; set; } = string.Empty;
-   262	        [Key(1)] public ChibiBackend Old { get; set; }
-   263	        [Key(2)] public ChibiBackend New { get; set; }
-   264	    }
-   265	
-   266	    // ---------- Disciple selected (Phase 4 — chibi click) ----------
-   267	    // Published in-memory by ChibiClickTarget when the player clicks a chibi
-   268	    // in the gameplay scene. DiscipleDetailUISystem opens the DiscipleDetail
-   269	    // panel on this message. ⚠️ Deliberately NOT added to InterprocessTopics —
-   270	    // same in-memory-only rule as every DiscipleVisualSystem message.
-   271	    [MessagePackObject]
-   272	    public class DiscipleSelectedMessage
-   273	    {
-   274	        [Key(0)] public string DiscipleId { get; set; } = string.Empty;
-   275	    }
-   276	
-   277	    // ---------- Avatar equipment change ----------
-   278	    // Broadcast after a successful avatar part change (pub/sub, goes to UI + MCP client)
+   230	        [Key(0)] public string SourceId { get; set; }
+   231	        [Key(1)] public bool Confirmed { get; set; }
+   232	    }
+   233	
+   234	    // Request/response pair: a disciple buying an item from the sect
+   235	    // stockpile (CraftedGoods) with their own contribution. Request-response
+   236	    // rather than a fire-and-forget message because the bridge needs to
+   237	    // know immediately whether the purchase actually succeeded (enough
+   238	    // contribution, enough stock) - same reasoning as SectStateQuery.
+   239	    [MessagePackObject]
+   240	    public class PurchaseItemRequest
+   241	    {
+   242	        [Key(0)] public string DiscipleId { get; set; }
+   243	        [Key(1)] public string ItemDefId { get; set; }
+   244	        [Key(2)] public int Grade { get; set; }
+   245	        [Key(3)] public int Quantity { get; set; }
+   246	    }
+   247	
+   248	    [MessagePackObject]
+   249	    public class PurchaseItemResponse
+   250	    {
+   251	        [Key(0)] public bool Success { get; set; }
+   252	        [Key(1)] public string Message { get; set; }
+   253	        [Key(2)] public long RemainingContribution { get; set; }
+   254	    }
+   255	
+   256	    // ---------- Building placed (Phase 1 — grid placement engine) ----------
+   257	    // Published in-memory by SectStateProvider.TryPlaceBuilding after a
+   258	    // successful commit. BuildingSystem listens and rebuilds grid occupancy +
+   259	    // visuals. ⚠️ Deliberately NOT added to InterprocessTopics — building
+   260	    // placement is player-only in Phase 1 (building-system.md §8 Q3 default),
+   261	    // so the MCP bridge never needs it on the wire.
+   262	    [MessagePackObject]
+   263	    public class BuildingPlacedMessage
+   264	    {
+   265	        [Key(0)] public string InstanceId { get; set; } = string.Empty;
+   266	        [Key(1)] public string DefId { get; set; } = string.Empty;
+   267	        [Key(2)] public int GridX { get; set; }
+   268	        [Key(3)] public int GridZ { get; set; }
+   269	        [Key(4)] public int Rotation { get; set; }
+   270	    }
+   271	
+   272	    // ---------- Chibi backend entitlement change (Phase 3) ----------
+   273	    // Published in-memory by SectStateProvider.TrySetChibiBackend after mutating
+   274	    // DiscipleState.ChibiBackend. DiscipleVisualSystem respawns the visual IN PLACE
+   275	    // (same position/activity/facing) on this message.
+   276	    // ⚠️ Deliberately NOT added to InterprocessTopics — visual-tier churn is
+   277	    // irrelevant to the MCP bridge; keep it off the TCP broker (same rule as
+   278	    // every DiscipleVisualSystem message).
    279	    [MessagePackObject]
-   280	    public class AvatarEquipmentChangedMessage
+   280	    public class DiscipleChibiBackendChangedMessage
    281	    {
    282	        [Key(0)] public string DiscipleId { get; set; } = string.Empty;
-   283	        [Key(1)] public string Slot { get; set; } = string.Empty;   // AvatarSlots.*
-   284	        [Key(2)] public string OldPartId { get; set; } = string.Empty;
-   285	        [Key(3)] public string NewPartId { get; set; } = string.Empty;
-   286	    }
-   287	
-   288	    // Request/response pair for changing an avatar part.
-   289	    // Request-response (not fire-and-forget) because the bridge needs
-   290	    // to know immediately whether the PartId is valid or the disciple
-   291	    // id is wrong - same reasoning as PurchaseItemRequest.
+   283	        [Key(1)] public ChibiBackend Old { get; set; }
+   284	        [Key(2)] public ChibiBackend New { get; set; }
+   285	    }
+   286	
+   287	    // ---------- Disciple selected (Phase 4 — chibi click) ----------
+   288	    // Published in-memory by ChibiClickTarget when the player clicks a chibi
+   289	    // in the gameplay scene. DiscipleDetailUISystem opens the DiscipleDetail
+   290	    // panel on this message. ⚠️ Deliberately NOT added to InterprocessTopics —
+   291	    // same in-memory-only rule as every DiscipleVisualSystem message.
    292	    [MessagePackObject]
-   293	    public class ChangeAvatarPartRequest
+   293	    public class DiscipleSelectedMessage
    294	    {
    295	        [Key(0)] public string DiscipleId { get; set; } = string.Empty;
-   296	        [Key(1)] public string Slot { get; set; } = string.Empty;
-   297	        [Key(2)] public string PartId { get; set; } = string.Empty;   // "" = back to default
-   298	    }
-   299	
+   296	    }
+   297	
+   298	    // ---------- Avatar equipment change ----------
+   299	    // Broadcast after a successful avatar part change (pub/sub, goes to UI + MCP client)
    300	    [MessagePackObject]
-   301	    public class ChangeAvatarPartResponse
+   301	    public class AvatarEquipmentChangedMessage
    302	    {
-   303	        [Key(0)] public bool Success { get; set; }
-   304	        [Key(1)] public string FailReason { get; set; } = string.Empty;
-   305	        [Key(2)] public AvatarAppearance ResultAvatar { get; set; }
-   306	    }
-   307	
-   308	    // ---------- Task assignment (task-system-v2.md §6) ----------
-   309	    // Request/response pair: the MCP bridge (or AI GM) asks Unity to assign a
-   310	    // task to a disciple. Request-response because the caller needs the
-   311	    // permission/validity verdict immediately - same reasoning as
-   312	    // PurchaseItemRequest. RequesterId drives the ownership check
-   313	    // ("SECT_MASTER" may assign anyone; others only their own disciples).
-   314	    [MessagePackObject]
-   315	    public class AssignTaskRequest
-   316	    {
-   317	        [Key(0)] public string RequesterId { get; set; } = string.Empty;
-   318	        [Key(1)] public string DiscipleId { get; set; } = string.Empty;
-   319	        [Key(2)] public string TaskId { get; set; } = string.Empty;
-   320	    }
-   321	
-   322	    [MessagePackObject]
-   323	    public class AssignTaskResponse
-   324	    {
-   325	        [Key(0)] public bool Success { get; set; }
-   326	        [Key(1)] public string FailReason { get; set; } = string.Empty;
+   303	        [Key(0)] public string DiscipleId { get; set; } = string.Empty;
+   304	        [Key(1)] public string Slot { get; set; } = string.Empty;   // AvatarSlots.*
+   305	        [Key(2)] public string OldPartId { get; set; } = string.Empty;
+   306	        [Key(3)] public string NewPartId { get; set; } = string.Empty;
+   307	    }
+   308	
+   309	    // Request/response pair for changing an avatar part.
+   310	    // Request-response (not fire-and-forget) because the bridge needs
+   311	    // to know immediately whether the PartId is valid or the disciple
+   312	    // id is wrong - same reasoning as PurchaseItemRequest.
+   313	    [MessagePackObject]
+   314	    public class ChangeAvatarPartRequest
+   315	    {
+   316	        [Key(0)] public string DiscipleId { get; set; } = string.Empty;
+   317	        [Key(1)] public string Slot { get; set; } = string.Empty;
+   318	        [Key(2)] public string PartId { get; set; } = string.Empty;   // "" = back to default
+   319	    }
+   320	
+   321	    [MessagePackObject]
+   322	    public class ChangeAvatarPartResponse
+   323	    {
+   324	        [Key(0)] public bool Success { get; set; }
+   325	        [Key(1)] public string FailReason { get; set; } = string.Empty;
+   326	        [Key(2)] public AvatarAppearance ResultAvatar { get; set; }
    327	    }
    328	
-   329	    // Published in-memory by SectStateProvider.TryAssignTask after a successful
-   330	    // commit. TaskActivityMapper / visual systems react to the new task.
-   331	    // ⚠️ Deliberately NOT added to InterprocessTopics — same in-memory-only
-   332	    // rule as DecisionExecutedMessage / BuildingPlacedMessage.
-   333	    [MessagePackObject]
-   334	    public class DiscipleTaskChangedMessage
-   335	    {
-   336	        [Key(0)] public string DiscipleId { get; set; } = string.Empty;
-   337	        [Key(1)] public string TaskId { get; set; } = string.Empty;
-   338	    }
-   339	
-   340	    // ---------- Disciple ownership change (P4 — local ownership test harness) ----------
-   341	    // Published in-memory by SectStateProvider.TrySetDiscipleOwner after a real
-   342	    // successful change (no-op when the values are already identical). The local
-   343	    // dev harness is the only intended caller — there is no public viewer command.
-   344	    // ⚠️ Deliberately NOT added to InterprocessTopics — ownership assignment is a
-   345	    // development/debug concern until real account linking exists (P5B+).
-   346	    // Observability: the MCP bridge can READ the change log via the
-   347	    // OwnershipObservabilityQuery/Snapshot request-response pair below (same
-   348	    // mechanism as SectStateQuery — IDistributedSubscriber is unusable from the
-   349	    // bridge, see AwaitWorldEventRequest). The bridge can never WRITE ownership:
-   350	    // no assignment request/response or tool exists on the wire.
-   351	    [MessagePackObject]
-   352	    public class DiscipleOwnerChangedMessage
-   353	    {
-   354	        [Key(0)] public string DiscipleId { get; set; } = string.Empty;
-   355	        [Key(1)] public DiscipleOwnerType OldType { get; set; }
-   356	        [Key(2)] public string OldOwnerId { get; set; } = string.Empty;
-   357	        [Key(3)] public DiscipleOwnerType NewType { get; set; }
-   358	        [Key(4)] public string NewOwnerId { get; set; } = string.Empty;
+   329	    // ---------- Task assignment (task-system-v2.md §6) ----------
+   330	    // Request/response pair: the MCP bridge (or AI GM) asks Unity to assign a
+   331	    // task to a disciple. Request-response because the caller needs the
+   332	    // permission/validity verdict immediately - same reasoning as
+   333	    // PurchaseItemRequest. RequesterId drives the ownership check
+   334	    // ("SECT_MASTER" may assign anyone; others only their own disciples).
+   335	    [MessagePackObject]
+   336	    public class AssignTaskRequest
+   337	    {
+   338	        [Key(0)] public string RequesterId { get; set; } = string.Empty;
+   339	        [Key(1)] public string DiscipleId { get; set; } = string.Empty;
+   340	        [Key(2)] public string TaskId { get; set; } = string.Empty;
+   341	    }
+   342	
+   343	    [MessagePackObject]
+   344	    public class AssignTaskResponse
+   345	    {
+   346	        [Key(0)] public bool Success { get; set; }
+   347	        [Key(1)] public string FailReason { get; set; } = string.Empty;
+   348	    }
+   349	
+   350	    // Published in-memory by SectStateProvider.TryAssignTask after a successful
+   351	    // commit. TaskActivityMapper / visual systems react to the new task.
+   352	    // ⚠️ Deliberately NOT added to InterprocessTopics — same in-memory-only
+   353	    // rule as DecisionExecutedMessage / BuildingPlacedMessage.
+   354	    [MessagePackObject]
+   355	    public class DiscipleTaskChangedMessage
+   356	    {
+   357	        [Key(0)] public string DiscipleId { get; set; } = string.Empty;
+   358	        [Key(1)] public string TaskId { get; set; } = string.Empty;
    359	    }
    360	
-   361	    // ---------- P9A — explicit Manual/Auto control-mode change ----------
-   362	    // Published in-memory by SectStateProvider when a disciple's ControlMode actually
-   363	    // changes: an explicit player toggle, an ownership change that invalidates Auto,
-   364	    // or a successful manual task assignment taking a disciple out of Auto.
-   365	    // ⚠️ Deliberately NOT added to InterprocessTopics — autonomy is a local
-   366	    // player/UI concern, same in-memory-only rule as DiscipleOwnerChangedMessage.
-   367	    [MessagePackObject]
-   368	    public class DiscipleControlModeChangedMessage
-   369	    {
-   370	        [Key(0)] public string DiscipleId { get; set; } = string.Empty;
-   371	        [Key(1)] public DiscipleControlMode OldMode { get; set; }
-   372	        [Key(2)] public DiscipleControlMode NewMode { get; set; }
-   373	    }
-   374	
-   375	    // Request/response pair: the MCP bridge reads the disciples' ownership-change
-   376	    // log (filled by OwnershipObservabilityBuffer, one entry per real change).
-   377	    // Observability ONLY — deliberately no request/response pair or MCP tool that
-   378	    // assigns ownership: the only writer stays the local dev harness / fixtures.
-   379	    [MessagePackObject]
-   380	    public class OwnershipObservabilityQuery
-   381	    {
-   382	        [Key(0)] public string RequestId { get; set; }
-   383	    }
-   384	
-   385	    [MessagePackObject]
-   386	    public class OwnershipObservabilitySnapshot
-   387	    {
-   388	        [Key(0)] public string RequestId { get; set; }
-   389	        [Key(1)] public List<DiscipleOwnerChangedMessage> Events { get; set; } = new List<DiscipleOwnerChangedMessage>();
-   390	    }
-   391	
-   392	    // ---------- P5B observability: task-change log + protection state (READ-ONLY) ----------
-   393	    // Both pairs are pulled on demand by the MCP bridge (request-response, same
-   394	    // mechanism as OwnershipObservabilityQuery — the bridge cannot
-   395	    // IDistributedSubscriber over the TCP transport). Neither pair has a write
-   396	    // path: task assignment keeps its own AssignTaskRequest/Response, and these
-   397	    // are observation only. DiscipleTaskChangedMessage stays in-memory-only; the
-   398	    // bridge pulls the buffered log instead.
-   399	    [MessagePackObject]
-   400	    public class TaskChangeObservabilityQuery
-   401	    {
-   402	        [Key(0)] public string RequestId { get; set; }
-   403	    }
-   404	
-   405	    [MessagePackObject]
-   406	    public class TaskChangeObservabilitySnapshot
-   407	    {
-   408	        [Key(0)] public string RequestId { get; set; }
-   409	        [Key(1)] public List<DiscipleTaskChangedMessage> Events { get; set; } = new List<DiscipleTaskChangedMessage>();
-   410	    }
-   411	
-   412	    [MessagePackObject]
-   413	    public class TaskProtectionQuery
-   414	    {
-   415	        [Key(0)] public string RequestId { get; set; }
-   416	    }
-   417	
-   418	    /// <summary>
-   419	    /// One Viewer-owned disciple (the set the hybrid protection policy governs),
-   420	    /// with the read-only answers the bridge needs: is the owner still protected,
-   421	    /// how long is left, is the membership data consistent, and may the SectMaster
-   422	    /// / the owner change its task right now (with the authority's reason).
-   423	    /// Computed from ISectStateProvider.CheckTaskPermission — the same authority
-   424	    /// TryAssignTask revalidates, so this view can never disagree with a commit.
-   425	    /// </summary>
+   361	    // ---------- Disciple ownership change (P4 — local ownership test harness) ----------
+   362	    // Published in-memory by SectStateProvider.TrySetDiscipleOwner after a real
+   363	    // successful change (no-op when the values are already identical). The local
+   364	    // dev harness is the only intended caller — there is no public viewer command.
+   365	    // ⚠️ Deliberately NOT added to InterprocessTopics — ownership assignment is a
+   366	    // development/debug concern until real account linking exists (P5B+).
+   367	    // Observability: the MCP bridge can READ the change log via the
+   368	    // OwnershipObservabilityQuery/Snapshot request-response pair below (same
+   369	    // mechanism as SectStateQuery — IDistributedSubscriber is unusable from the
+   370	    // bridge, see AwaitWorldEventRequest). The bridge can never WRITE ownership:
+   371	    // no assignment request/response or tool exists on the wire.
+   372	    [MessagePackObject]
+   373	    public class DiscipleOwnerChangedMessage
+   374	    {
+   375	        [Key(0)] public string DiscipleId { get; set; } = string.Empty;
+   376	        [Key(1)] public DiscipleOwnerType OldType { get; set; }
+   377	        [Key(2)] public string OldOwnerId { get; set; } = string.Empty;
+   378	        [Key(3)] public DiscipleOwnerType NewType { get; set; }
+   379	        [Key(4)] public string NewOwnerId { get; set; } = string.Empty;
+   380	    }
+   381	
+   382	    // ---------- P9A — explicit Manual/Auto control-mode change ----------
+   383	    // Published in-memory by SectStateProvider when a disciple's ControlMode actually
+   384	    // changes: an explicit player toggle, an ownership change that invalidates Auto,
+   385	    // or a successful manual task assignment taking a disciple out of Auto.
+   386	    // ⚠️ Deliberately NOT added to InterprocessTopics — autonomy is a local
+   387	    // player/UI concern, same in-memory-only rule as DiscipleOwnerChangedMessage.
+   388	    [MessagePackObject]
+   389	    public class DiscipleControlModeChangedMessage
+   390	    {
+   391	        [Key(0)] public string DiscipleId { get; set; } = string.Empty;
+   392	        [Key(1)] public DiscipleControlMode OldMode { get; set; }
+   393	        [Key(2)] public DiscipleControlMode NewMode { get; set; }
+   394	    }
+   395	
+   396	    // Request/response pair: the MCP bridge reads the disciples' ownership-change
+   397	    // log (filled by OwnershipObservabilityBuffer, one entry per real change).
+   398	    // Observability ONLY — deliberately no request/response pair or MCP tool that
+   399	    // assigns ownership: the only writer stays the local dev harness / fixtures.
+   400	    [MessagePackObject]
+   401	    public class OwnershipObservabilityQuery
+   402	    {
+   403	        [Key(0)] public string RequestId { get; set; }
+   404	    }
+   405	
+   406	    [MessagePackObject]
+   407	    public class OwnershipObservabilitySnapshot
+   408	    {
+   409	        [Key(0)] public string RequestId { get; set; }
+   410	        [Key(1)] public List<DiscipleOwnerChangedMessage> Events { get; set; } = new List<DiscipleOwnerChangedMessage>();
+   411	    }
+   412	
+   413	    // ---------- P5B observability: task-change log + protection state (READ-ONLY) ----------
+   414	    // Both pairs are pulled on demand by the MCP bridge (request-response, same
+   415	    // mechanism as OwnershipObservabilityQuery — the bridge cannot
+   416	    // IDistributedSubscriber over the TCP transport). Neither pair has a write
+   417	    // path: task assignment keeps its own AssignTaskRequest/Response, and these
+   418	    // are observation only. DiscipleTaskChangedMessage stays in-memory-only; the
+   419	    // bridge pulls the buffered log instead.
+   420	    [MessagePackObject]
+   421	    public class TaskChangeObservabilityQuery
+   422	    {
+   423	        [Key(0)] public string RequestId { get; set; }
+   424	    }
+   425	
    426	    [MessagePackObject]
-   427	    public class TaskProtectionEntry
+   427	    public class TaskChangeObservabilitySnapshot
    428	    {
-   429	        [Key(0)] public string DiscipleId { get; set; } = string.Empty;
-   430	        [Key(1)] public string CurrentTask { get; set; } = string.Empty;
-   431	        [Key(2)] public DiscipleOwnerType OwnerType { get; set; }
-   432	        [Key(3)] public string OwnerId { get; set; } = string.Empty;
-   433	        [Key(4)] public bool OwnerProtected { get; set; }
-   434	        [Key(5)] public float OwnerProtectionRemainingSeconds { get; set; }
-   435	        [Key(6)] public DateTime LastActiveAtUtc { get; set; }
-   436	        [Key(7)] public bool MembershipConsistent { get; set; }
-   437	        [Key(8)] public bool SectMasterMayChange { get; set; }
-   438	        [Key(9)] public string SectMasterReason { get; set; } = string.Empty;
-   439	        [Key(10)] public bool OwnerMayChange { get; set; }
-   440	        [Key(11)] public string OwnerReason { get; set; } = string.Empty;
-   441	    }
-   442	
-   443	    [MessagePackObject]
-   444	    public class TaskProtectionSnapshot
-   445	    {
-   446	        [Key(0)] public string RequestId { get; set; }
-   447	        [Key(1)] public List<TaskProtectionEntry> Entries { get; set; } = new List<TaskProtectionEntry>();
-   448	    }
-   449	
-   450	    // ---------- P5B persistence: viewer membership slice (local disk, not on the wire) ----------
-   451	    // Persisted together so the registry ⇄ disciple ownership pair can never be
-   452	    // restored half-way (invariants #1/#2/#3 hold across sessions). Deliberately
-   453	    // a SLICE, not the whole SectEconomyState: only membership + ownership +
-   454	    // activity survive; economy/roster still come from MockSectData.
-   455	    [MessagePackObject]
-   456	    public class SectViewerMembershipSave
-   457	    {
-   458	        /// <summary>Only this shape is accepted; anything else is ignored on load (fail-closed to mock start).</summary>
-   459	        public const int CurrentVersion = 1;
-   460	
-   461	        /// <summary>Bumped only if the shape changes incompatibly; a mismatch is ignored on load (fail-closed to mock start).</summary>
-   462	        [Key(0)] public int Version { get; set; } = CurrentVersion;
+   429	        [Key(0)] public string RequestId { get; set; }
+   430	        [Key(1)] public List<DiscipleTaskChangedMessage> Events { get; set; } = new List<DiscipleTaskChangedMessage>();
+   431	    }
+   432	
+   433	    [MessagePackObject]
+   434	    public class TaskProtectionQuery
+   435	    {
+   436	        [Key(0)] public string RequestId { get; set; }
+   437	    }
+   438	
+   439	    /// <summary>
+   440	    /// One Viewer-owned disciple (the set the hybrid protection policy governs),
+   441	    /// with the read-only answers the bridge needs: is the owner still protected,
+   442	    /// how long is left, is the membership data consistent, and may the SectMaster
+   443	    /// / the owner change its task right now (with the authority's reason).
+   444	    /// Computed from ISectStateProvider.CheckTaskPermission — the same authority
+   445	    /// TryAssignTask revalidates, so this view can never disagree with a commit.
+   446	    /// </summary>
+   447	    [MessagePackObject]
+   448	    public class TaskProtectionEntry
+   449	    {
+   450	        [Key(0)] public string DiscipleId { get; set; } = string.Empty;
+   451	        [Key(1)] public string CurrentTask { get; set; } = string.Empty;
+   452	        [Key(2)] public DiscipleOwnerType OwnerType { get; set; }
+   453	        [Key(3)] public string OwnerId { get; set; } = string.Empty;
+   454	        [Key(4)] public bool OwnerProtected { get; set; }
+   455	        [Key(5)] public float OwnerProtectionRemainingSeconds { get; set; }
+   456	        [Key(6)] public DateTime LastActiveAtUtc { get; set; }
+   457	        [Key(7)] public bool MembershipConsistent { get; set; }
+   458	        [Key(8)] public bool SectMasterMayChange { get; set; }
+   459	        [Key(9)] public string SectMasterReason { get; set; } = string.Empty;
+   460	        [Key(10)] public bool OwnerMayChange { get; set; }
+   461	        [Key(11)] public string OwnerReason { get; set; } = string.Empty;
+   462	    }
    463	
-   464	        /// <summary>When the file was written (UTC) — informational.</summary>
-   465	        [Key(1)] public DateTime SavedAtUtc { get; set; }
-   466	
-   467	        [Key(2)] public List<ViewerRecord> Records { get; set; } = new List<ViewerRecord>();
-   468	        [Key(3)] public List<PendingViewerApplication> PendingApplications { get; set; } = new List<PendingViewerApplication>();
-   469	
-   470	        /// <summary>discipleId → owner, captured in the SAME snapshot so ownership and registry agree on load.</summary>
-   471	        [Key(4)] public List<SectSavedOwnership> OwnerByDisciple { get; set; } = new List<SectSavedOwnership>();
-   472	    }
-   473	
-   474	    [MessagePackObject]
-   475	    public class SectSavedOwnership
-   476	    {
-   477	        [Key(0)] public string DiscipleId { get; set; } = string.Empty;
-   478	        [Key(1)] public DiscipleOwnerType OwnerType { get; set; }
-   479	        [Key(2)] public string OwnerId { get; set; } = string.Empty;
-   480	    }
+   464	    [MessagePackObject]
+   465	    public class TaskProtectionSnapshot
+   466	    {
+   467	        [Key(0)] public string RequestId { get; set; }
+   468	        [Key(1)] public List<TaskProtectionEntry> Entries { get; set; } = new List<TaskProtectionEntry>();
+   469	    }
+   470	
+   471	    // ---------- P5B persistence: viewer membership slice (local disk, not on the wire) ----------
+   472	    // Persisted together so the registry ⇄ disciple ownership pair can never be
+   473	    // restored half-way (invariants #1/#2/#3 hold across sessions). Deliberately
+   474	    // a SLICE, not the whole SectEconomyState: only membership + ownership +
+   475	    // activity survive; economy/roster still come from MockSectData.
+   476	    [MessagePackObject]
+   477	    public class SectViewerMembershipSave
+   478	    {
+   479	        /// <summary>Only this shape is accepted; anything else is ignored on load (fail-closed to mock start).</summary>
+   480	        public const int CurrentVersion = 1;
    481	
-   482	    // ---------- P11A — session restored notification ----------
-   483	    // Published in-memory AFTER a full-session snapshot has been committed to live
-   484	    // state (SectStateProvider + TimeSystem). Derived systems react by rebuilding
-   485	    // caches and dropping stale session references:
-   486	    //   - BuildingSystem       rebuilds grid occupancy + placed markers
-   487	    //   - DiscipleVisualSystem reconciles (despawn gone / spawn restored)
-   488	    //   - AutoTaskScheduler    clears its simulation-time scheduling maps
-   489	    //   - WalletHudPresenter   re-reads the authoritative wallet/stockpile
-   490	    // ⚠️ Deliberately NOT added to InterprocessTopics — session load is a local
-   491	    // player concern; the bridge observes state via SectStateQuery, not this.
-   492	    // Never published on a failed restore (invalid data leaves the session unchanged).
-   493	    [MessagePackObject]
-   494	    public class SessionRestoredMessage
-   495	    {
-   496	        /// <summary>True when a full-session snapshot was committed (as opposed to a legacy slice).</summary>
-   497	        [Key(0)] public bool FullSession { get; set; }
-   498	
-   499	        /// <summary>UTC time the restore committed.</summary>
-   500	        [Key(1)] public DateTime RestoredAtUtc { get; set; }
-   501	
-   502	        /// <summary>Roster size after the restore (diagnostic / UI priming).</summary>
-   503	        [Key(2)] public int DiscipleCount { get; set; }
-   504	
-   505	        /// <summary>Placed-building count after the restore (diagnostic / UI priming).</summary>
-   506	        [Key(3)] public int BuildingCount { get; set; }
-   507	    }
-   508	
-   509	    // Topic keys for the keyed (IDistributedPublisher<TKey,TMessage>) channels.
-   510	    public static class InterprocessTopics
-   511	    {
-   512	        public const string DiscipleRecruited = "sect.disciple_recruited";
-   513	        public const string DiscipleRankChanged = "sect.disciple_rank_changed";
-   514	        public const string ResourceChanged = "sect.resource_changed";
-   515	        public const string ContributionEarned = "sect.contribution_earned";
-   516	        public const string WorldEvent = "sect.world_event";
-   517	        public const string ExecuteDecision = "sect.execute_decision";
-   518	        public const string AvatarEquipmentChanged = "sect.avatar_equipment_changed";
-   519	    }
-   520	}
+   482	        /// <summary>Bumped only if the shape changes incompatibly; a mismatch is ignored on load (fail-closed to mock start).</summary>
+   483	        [Key(0)] public int Version { get; set; } = CurrentVersion;
+   484	
+   485	        /// <summary>When the file was written (UTC) — informational.</summary>
+   486	        [Key(1)] public DateTime SavedAtUtc { get; set; }
+   487	
+   488	        [Key(2)] public List<ViewerRecord> Records { get; set; } = new List<ViewerRecord>();
+   489	        [Key(3)] public List<PendingViewerApplication> PendingApplications { get; set; } = new List<PendingViewerApplication>();
+   490	
+   491	        /// <summary>discipleId → owner, captured in the SAME snapshot so ownership and registry agree on load.</summary>
+   492	        [Key(4)] public List<SectSavedOwnership> OwnerByDisciple { get; set; } = new List<SectSavedOwnership>();
+   493	    }
+   494	
+   495	    [MessagePackObject]
+   496	    public class SectSavedOwnership
+   497	    {
+   498	        [Key(0)] public string DiscipleId { get; set; } = string.Empty;
+   499	        [Key(1)] public DiscipleOwnerType OwnerType { get; set; }
+   500	        [Key(2)] public string OwnerId { get; set; } = string.Empty;
+   501	    }
+   502	
+   503	    // ---------- P11A — session restored notification ----------
+   504	    // Published in-memory AFTER a full-session snapshot has been committed to live
+   505	    // state (SectStateProvider + TimeSystem). Derived systems react by rebuilding
+   506	    // caches and dropping stale session references:
+   507	    //   - BuildingSystem       rebuilds grid occupancy + placed markers
+   508	    //   - DiscipleVisualSystem reconciles (despawn gone / spawn restored)
+   509	    //   - AutoTaskScheduler    clears its simulation-time scheduling maps
+   510	    //   - WalletHudPresenter   re-reads the authoritative wallet/stockpile
+   511	    // ⚠️ Deliberately NOT added to InterprocessTopics — session load is a local
+   512	    // player concern; the bridge observes state via SectStateQuery, not this.
+   513	    // Never published on a failed restore (invalid data leaves the session unchanged).
+   514	    [MessagePackObject]
+   515	    public class SessionRestoredMessage
+   516	    {
+   517	        /// <summary>True when a full-session snapshot was committed (as opposed to a legacy slice).</summary>
+   518	        [Key(0)] public bool FullSession { get; set; }
+   519	
+   520	        /// <summary>UTC time the restore committed.</summary>
+   521	        [Key(1)] public DateTime RestoredAtUtc { get; set; }
+   522	
+   523	        /// <summary>Roster size after the restore (diagnostic / UI priming).</summary>
+   524	        [Key(2)] public int DiscipleCount { get; set; }
+   525	
+   526	        /// <summary>Placed-building count after the restore (diagnostic / UI priming).</summary>
+   527	        [Key(3)] public int BuildingCount { get; set; }
+   528	    }
+   529	
+   530	    // Topic keys for the keyed (IDistributedPublisher<TKey,TMessage>) channels.
+   531	    public static class InterprocessTopics
+   532	    {
+   533	        public const string DiscipleRecruited = "sect.disciple_recruited";
+   534	        public const string DiscipleRankChanged = "sect.disciple_rank_changed";
+   535	        public const string ResourceChanged = "sect.resource_changed";
+   536	        public const string ContributionEarned = "sect.contribution_earned";
+   537	        public const string WorldEvent = "sect.world_event";
+   538	        public const string ExecuteDecision = "sect.execute_decision";
+   539	        public const string AvatarEquipmentChanged = "sect.avatar_equipment_changed";
+   540	    }
+   541	}
 ````
 
 ### Shared/SectEconomyState.cs (12696 bytes)
@@ -1641,7 +1662,7 @@
     59	}
 ````
 
-### UnityProject/Assets/Scripts/Core/TimeSystem.cs (49296 bytes)
+### UnityProject/Assets/Scripts/Core/TimeSystem.cs (57202 bytes)
 ````
      1	using System.Collections.Generic;
      2	using System.Threading;
@@ -1696,771 +1717,754 @@
     51	    /// </summary>
     52	    public sealed class PendingWorldEvent
     53	    {
-    54	        public PendingWorldEvent(string instanceId, string eventId, string description, List<EventChoiceInfo> choices)
-    55	        {
-    56	            InstanceId = instanceId;
-    57	            EventId = eventId;
-    58	            Description = description;
-    59	            Choices = choices ?? new List<EventChoiceInfo>();
-    60	        }
-    61	
-    62	        /// <summary>Unique per raised occurrence (never reused), e.g. <c>evt_000001</c>.</summary>
-    63	        public string InstanceId { get; }
+    54	        public PendingWorldEvent(string instanceId, string eventId, string description, List<EventChoiceInfo> choices,
+    55	                                 string speakerDiscipleId = null, string speakerDisplayName = null)
+    56	        {
+    57	            InstanceId = instanceId;
+    58	            EventId = eventId;
+    59	            Description = description;
+    60	            Choices = choices ?? new List<EventChoiceInfo>();
+    61	            SpeakerDiscipleId = speakerDiscipleId ?? string.Empty;
+    62	            SpeakerDisplayName = speakerDisplayName ?? string.Empty;
+    63	        }
     64	
-    65	        /// <summary>The authored event definition id (<c>cfg.game.EventDef.Id</c>).</summary>
-    66	        public string EventId { get; }
+    65	        /// <summary>Unique per raised occurrence (never reused within a session; stable across a save/load).</summary>
+    66	        public string InstanceId { get; }
     67	
-    68	        /// <summary>Authoring text shown to the player / the AI GM.</summary>
-    69	        public string Description { get; }
+    68	        /// <summary>The authored event definition id (<c>cfg.game.EventDef.Id</c>).</summary>
+    69	        public string EventId { get; }
     70	
-    71	        /// <summary>The choices this occurrence offers (never null).</summary>
-    72	        public IReadOnlyList<EventChoiceInfo> Choices { get; }
+    71	        /// <summary>Authoring text shown to the player / the AI GM.</summary>
+    72	        public string Description { get; }
     73	
-    74	        /// <summary>
-    75	        /// Exact choice-id match against THIS occurrence's choices — never a substring or
-    76	        /// prefix test, and never a lookup into the definition's authored rows, so a choice
-    77	        /// that was not offered here can never be accepted.
-    78	        /// </summary>
-    79	        public bool HasChoice(string choiceId)
-    80	        {
-    81	            for (int i = 0; i < Choices.Count; i++)
-    82	            {
-    83	                var choice = Choices[i];
-    84	                if (choice != null && choice.ChoiceId == choiceId) return true;
-    85	            }
-    86	            return false;
-    87	        }
-    88	
-    89	        public override string ToString() => $"{InstanceId}({EventId})";
-    90	    }
-    91	
-    92	    public class TimeSystem : IStartable
-    93	    {
-    94	        private readonly IPublisher<TimeSpeedChangedMessage> _speedPublisher;
-    95	        private readonly IPublisher<WorldEventTriggeredMessage> _worldEventPublisher;
-    96	        private readonly TimeRuntimeConfig _config;
-    97	
-    98	        /// <summary>Lowest supported simulation speed (1x).</summary>
-    99	        public const int MinSpeed = 1;
-   100	        /// <summary>Highest supported simulation speed (3x).</summary>
-   101	        public const int MaxSpeed = 3;
-   102	
-   103	        // Initialised to 1x (SetSpeed only publishes the UI-facing change message).
-   104	        private int _speed = 1;
-   105	        private TimePauseReason _reasons = TimePauseReason.None;
-   106	
-   107	        // P12A — whether a live gameplay session is active. Deliberately a SEPARATE fact
-   108	        // from the pause reasons: "no active game" (Title / session transition) is not a
-   109	        // player pause and not a pending-decision pause, so SimulationDelta freezes for
-   110	        // either, while IsPaused / IsUserPaused / IsPendingDecisionPaused stay honest.
-   111	        // Defaults to active so a TimeSystem built outside the session coordinator
-   112	        // (tests / legacy construction) keeps its previous behaviour.
-   113	        private bool _sessionActive = true;
+    74	        /// <summary>The choices this occurrence offers (never null).</summary>
+    75	        public IReadOnlyList<EventChoiceInfo> Choices { get; }
+    76	
+    77	        /// <summary>
+    78	        /// P13B — optional speaker: the disciple whose portrait the popup renders. Empty for an
+    79	        /// event with no speaker (the popup then draws no portrait at all rather than a blank one).
+    80	        /// This is the instance-specific payload that has to survive a save, and it is the ONLY
+    81	        /// part of the popup a restore needs — the portrait itself is rebuilt from the roster.
+    82	        /// </summary>
+    83	        public string SpeakerDiscipleId { get; }
+    84	
+    85	        /// <summary>Display name shown beside the portrait; empty when <see cref="SpeakerDiscipleId"/> is.</summary>
+    86	        public string SpeakerDisplayName { get; }
+    87	
+    88	        /// <summary>True when this occurrence names a speaker to render.</summary>
+    89	        public bool HasSpeaker => !string.IsNullOrEmpty(SpeakerDiscipleId);
+    90	
+    91	        /// <summary>
+    92	        /// Exact choice-id match against THIS occurrence's choices — never a substring or
+    93	        /// prefix test, and never a lookup into the definition's authored rows, so a choice
+    94	        /// that was not offered here can never be accepted.
+    95	        /// </summary>
+    96	        public bool HasChoice(string choiceId)
+    97	        {
+    98	            for (int i = 0; i < Choices.Count; i++)
+    99	            {
+   100	                var choice = Choices[i];
+   101	                if (choice != null && choice.ChoiceId == choiceId) return true;
+   102	            }
+   103	            return false;
+   104	        }
+   105	
+   106	        public override string ToString() => $"{InstanceId}({EventId})";
+   107	    }
+   108	
+   109	    public class TimeSystem : IStartable
+   110	    {
+   111	        private readonly IPublisher<TimeSpeedChangedMessage> _speedPublisher;
+   112	        private readonly IPublisher<WorldEventTriggeredMessage> _worldEventPublisher;
+   113	        private readonly TimeRuntimeConfig _config;
    114	
-   115	        // Completed (and replaced with a fresh one) every time a world
-   116	        // event fires - see WaitForNextWorldEventAsync()/RaiseWorldEvent().
-   117	        private UniTaskCompletionSource<AwaitWorldEventResponse> _pendingEventSource =
-   118	            new UniTaskCompletionSource<AwaitWorldEventResponse>();
+   115	        /// <summary>Lowest supported simulation speed (1x).</summary>
+   116	        public const int MinSpeed = 1;
+   117	        /// <summary>Highest supported simulation speed (3x).</summary>
+   118	        public const int MaxSpeed = 3;
    119	
-   120	        // If a decision-requiring event fired before anyone called
-   121	        // await_next_world_event, hand it back immediately on the next call
-   122	        // instead of making a late caller wait for a completely new event.
-   123	        // Cleared once handed out - a second call with nothing new pending
-   124	        // goes back to waiting normally.
-   125	        //
-   126	        // NOTE (E2-lite): this cache is the BRIDGE's handoff and its semantics are
-   127	        // deliberately unchanged (cleared on read). The authoritative pending
-   128	        // decision below is a SEPARATE concern and is never cleared by a read.
-   129	        //
-   130	        // P13A: this stays a single slot ON PURPOSE. It is "the newest event to hand a
-   131	        // late awaiter", not pending-state storage — that is _pendingDecisions below,
-   132	        // which is bounded and whose entries are never overwritten.
-   133	        private AwaitWorldEventResponse _cachedPendingEvent;
-   134	
-   135	        /// <summary>
-   136	        /// P13A — how many undecided events may be outstanding at once. The bound is
-   137	        /// deliberate: the pending state is authoritative and must not grow without limit.
-   138	        /// At the cap a further decision event is REFUSED, loudly (see
-   139	        /// <see cref="RaiseWorldEvent"/>); an already-pending decision is never evicted,
-   140	        /// replaced or overwritten to make room for a newer one.
-   141	        /// </summary>
-   142	        public const int MaxPendingDecisions = 8;
-   143	
-   144	        // P13A — authoritative pending decisions in ARRIVAL ORDER (oldest first). The head
-   145	        // (index 0) is the CURRENT event: it is what the UI opens, what the bridge handoff
-   146	        // cache carries, and what a snapshot captures. Any pending instance may be resolved
-   147	        // by its own instance id, which removes exactly that one.
-   148	        //
-   149	        // This replaces E2-lite's single-slot fields, which silently overwrote an
-   150	        // outstanding decision as soon as a second one was raised.
-   151	        private readonly List<PendingWorldEvent> _pendingDecisions = new List<PendingWorldEvent>();
-   152	        private int _nextEventInstanceNumber = 1;
-   153	        private static readonly List<EventChoiceInfo> NoChoices = new List<EventChoiceInfo>();
-   154	
-   155	        public TimeSystem(
-   156	            IPublisher<TimeSpeedChangedMessage> speedPublisher,
-   157	            IPublisher<WorldEventTriggeredMessage> worldEventPublisher,
-   158	            TimeRuntimeConfig config = null)
-   159	        {
-   160	            _speedPublisher = speedPublisher;
-   161	            _worldEventPublisher = worldEventPublisher;
-   162	            _config = config ?? TimeRuntimeConfig.Instance;
-   163	        }
-   164	
-   165	        public void Start()
-   166	        {
-   167	            // Unconditional initial publish so any listener that subscribes after
-   168	            // Start still gets one refresh cue (the HUD also reads state on bind).
-   169	            PublishState();
-   170	        }
+   120	        // Initialised to 1x (SetSpeed only publishes the UI-facing change message).
+   121	        private int _speed = 1;
+   122	        private TimePauseReason _reasons = TimePauseReason.None;
+   123	
+   124	        // P12A — whether a live gameplay session is active. Deliberately a SEPARATE fact
+   125	        // from the pause reasons: "no active game" (Title / session transition) is not a
+   126	        // player pause and not a pending-decision pause, so SimulationDelta freezes for
+   127	        // either, while IsPaused / IsUserPaused / IsPendingDecisionPaused stay honest.
+   128	        // Defaults to active so a TimeSystem built outside the session coordinator
+   129	        // (tests / legacy construction) keeps its previous behaviour.
+   130	        private bool _sessionActive = true;
+   131	
+   132	        // Completed (and replaced with a fresh one) every time a world
+   133	        // event fires - see WaitForNextWorldEventAsync()/RaiseWorldEvent().
+   134	        private UniTaskCompletionSource<AwaitWorldEventResponse> _pendingEventSource =
+   135	            new UniTaskCompletionSource<AwaitWorldEventResponse>();
+   136	
+   137	        // If a decision-requiring event fired before anyone called
+   138	        // await_next_world_event, hand it back immediately on the next call
+   139	        // instead of making a late caller wait for a completely new event.
+   140	        // Cleared once handed out - a second call with nothing new pending
+   141	        // goes back to waiting normally.
+   142	        //
+   143	        // NOTE (E2-lite): this cache is the BRIDGE's handoff and its semantics are
+   144	        // deliberately unchanged (cleared on read). The authoritative pending
+   145	        // decision below is a SEPARATE concern and is never cleared by a read.
+   146	        //
+   147	        // P13A: this stays a single slot ON PURPOSE. It is "the newest event to hand a
+   148	        // late awaiter", not pending-state storage — that is _pendingDecisions below,
+   149	        // which is bounded and whose entries are never overwritten.
+   150	        private AwaitWorldEventResponse _cachedPendingEvent;
+   151	
+   152	        /// <summary>
+   153	        /// P13A — how many undecided events may be outstanding at once. The bound is
+   154	        /// deliberate: the pending state is authoritative and must not grow without limit.
+   155	        /// At the cap a further decision event is REFUSED, loudly (see
+   156	        /// <see cref="RaiseWorldEvent"/>); an already-pending decision is never evicted,
+   157	        /// replaced or overwritten to make room for a newer one.
+   158	        /// </summary>
+   159	        public const int MaxPendingDecisions = 8;
+   160	
+   161	        // P13A — authoritative pending decisions in ARRIVAL ORDER (oldest first). The head
+   162	        // (index 0) is the CURRENT event: it is what the UI opens, what the bridge handoff
+   163	        // cache carries, and what a snapshot captures. Any pending instance may be resolved
+   164	        // by its own instance id, which removes exactly that one.
+   165	        //
+   166	        // This replaces E2-lite's single-slot fields, which silently overwrote an
+   167	        // outstanding decision as soon as a second one was raised.
+   168	        private readonly List<PendingWorldEvent> _pendingDecisions = new List<PendingWorldEvent>();
+   169	        private int _nextEventInstanceNumber = 1;
+   170	        private static readonly List<EventChoiceInfo> NoChoices = new List<EventChoiceInfo>();
    171	
-   172	        /// <summary>Adds a pause reason (idempotent). Publishes only on a real change.</summary>
-   173	        public void Pause(TimePauseReason reason) => SetReason(reason, true);
+   172	        /// <summary>Prefix of a minted instance id; the numeric suffix is what a restore re-seeds past.</summary>
+   173	        private const string InstanceIdPrefix = "evt_";
    174	
-   175	        /// <summary>Clears a pause reason. Never touches any other reason.</summary>
-   176	        public void Resume(TimePauseReason reason) => SetReason(reason, false);
-   177	
-   178	        /// <summary>
-   179	        /// Player "Play": clears BOTH User and PendingDecision. This is what the HUD
-   180	        /// Play button / Space hotkey call, so the player can never be locked out by a
-   181	        /// missing decision popup.
-   182	        /// </summary>
-   183	        public void ResumeByPlayer() => SetReasons(TimePauseReason.None);
+   175	        public TimeSystem(
+   176	            IPublisher<TimeSpeedChangedMessage> speedPublisher,
+   177	            IPublisher<WorldEventTriggeredMessage> worldEventPublisher,
+   178	            TimeRuntimeConfig config = null)
+   179	        {
+   180	            _speedPublisher = speedPublisher;
+   181	            _worldEventPublisher = worldEventPublisher;
+   182	            _config = config ?? TimeRuntimeConfig.Instance;
+   183	        }
    184	
-   185	        /// <summary>Legacy single-flag API — maps to the User reason (not a decision pause).</summary>
-   186	        public void SetPaused(bool paused)
-   187	        {
-   188	            if (paused) Pause(TimePauseReason.User);
-   189	            else Resume(TimePauseReason.User);
+   185	        public void Start()
+   186	        {
+   187	            // Unconditional initial publish so any listener that subscribes after
+   188	            // Start still gets one refresh cue (the HUD also reads state on bind).
+   189	            PublishState();
    190	        }
    191	
-   192	        /// <summary>
-   193	        /// P12A — toggles whether a live gameplay session is active (set by
-   194	        /// <see cref="GameSessionCoordinator"/> on every phase change). Publishing on the
-   195	        /// effective change keeps any speed/pause listener refreshed without a new bus.
-   196	        /// </summary>
-   197	        public void SetSessionActive(bool active)
-   198	        {
-   199	            if (_sessionActive == active) return;
-   200	            _sessionActive = active;
-   201	            PublishState();
-   202	        }
-   203	
-   204	        /// <summary>
-   205	        /// P12A — end the current session's simulation clock exactly once at the seam
-   206	        /// between two sessions: freeze simulation (session inactive), clear every pause
-   207	        /// reason (a fresh session starts unpaused), clear the authoritative pending
-   208	        /// decision, and complete any outstanding world-event awaiter with a defined
-   209	        /// "session ended" response. Real-time (UTC) viewer/cooldown clocks are
-   210	        /// independent of this class and are not affected.
-   211	        /// </summary>
-   212	        public void EndSession(string reason)
-   213	        {
-   214	            SetSessionActive(false);
-   215	            ClearPendingDecisions();
-   216	
-   217	            // P13A — clear exactly the reasons a session boundary OWNS: the player pause
-   218	            // (a fresh session starts unpaused) and the decision pause (its events are
-   219	            // gone). A SessionTransition pause is PRESERVED: the transition that holds it
-   220	            // is the very caller of this method and is still in flight, so ending the
-   221	            // session must not resume a transition that has not finished.
-   222	            SetReasons(_reasons & TimePauseReason.SessionTransition);
-   223	            CancelPendingWorldEventWait(reason);
-   224	        }
-   225	
-   226	        /// <summary>
-   227	        /// P12A — never retain a stale cached world-event response from a prior session,
-   228	        /// and never strand an existing awaiter: the handoff cache is dropped and the
-   229	        /// current wait is completed with an empty event id (the response contract's
-   230	        /// clearest "no event" answer) plus an explicit reason.
+   192	        /// <summary>Adds a pause reason (idempotent). Publishes only on a real change.</summary>
+   193	        public void Pause(TimePauseReason reason) => SetReason(reason, true);
+   194	
+   195	        /// <summary>Clears a pause reason. Never touches any other reason.</summary>
+   196	        public void Resume(TimePauseReason reason) => SetReason(reason, false);
+   197	
+   198	        /// <summary>
+   199	        /// Player "Play": clears BOTH User and PendingDecision. This is what the HUD
+   200	        /// Play button / Space hotkey call, so the player can never be locked out by a
+   201	        /// missing decision popup.
+   202	        /// </summary>
+   203	        public void ResumeByPlayer() => SetReasons(TimePauseReason.None);
+   204	
+   205	        /// <summary>Legacy single-flag API — maps to the User reason (not a decision pause).</summary>
+   206	        public void SetPaused(bool paused)
+   207	        {
+   208	            if (paused) Pause(TimePauseReason.User);
+   209	            else Resume(TimePauseReason.User);
+   210	        }
+   211	
+   212	        /// <summary>
+   213	        /// P12A — toggles whether a live gameplay session is active (set by
+   214	        /// <see cref="GameSessionCoordinator"/> on every phase change). Publishing on the
+   215	        /// effective change keeps any speed/pause listener refreshed without a new bus.
+   216	        /// </summary>
+   217	        public void SetSessionActive(bool active)
+   218	        {
+   219	            if (_sessionActive == active) return;
+   220	            _sessionActive = active;
+   221	            PublishState();
+   222	        }
+   223	
+   224	        /// <summary>
+   225	        /// P12A — end the current session's simulation clock exactly once at the seam
+   226	        /// between two sessions: freeze simulation (session inactive), clear every pause
+   227	        /// reason (a fresh session starts unpaused), clear the authoritative pending
+   228	        /// decision, and complete any outstanding world-event awaiter with a defined
+   229	        /// "session ended" response. Real-time (UTC) viewer/cooldown clocks are
+   230	        /// independent of this class and are not affected.
    231	        /// </summary>
-   232	        public void CancelPendingWorldEventWait(string reason)
+   232	        public void EndSession(string reason)
    233	        {
-   234	            _cachedPendingEvent = null;
-   235	
-   236	            var previous = _pendingEventSource;
-   237	            _pendingEventSource = new UniTaskCompletionSource<AwaitWorldEventResponse>();
-   238	            previous.TrySetResult(new AwaitWorldEventResponse
-   239	            {
-   240	                EventId = string.Empty,
-   241	                Description = string.IsNullOrEmpty(reason)
-   242	                    ? "session ended before a world event fired"
-   243	                    : "session ended before a world event fired: " + reason,
-   244	            });
-   245	        }
-   246	
-   247	        /// <summary>
-   248	        /// P13A — the SINGLE decision-validation path, reused by the in-game UI click
-   249	        /// (EventPopupPresenter) and by the bridge decision (DecisionLogger ->
-   250	        /// DecisionExecutor). A decision is valid only when a decision is pending, it names
-   251	        /// that pending INSTANCE, <paramref name="eventId"/> agrees with the instance's
-   252	        /// definition, and <paramref name="choiceId"/> is one of the choices THAT INSTANCE
-   253	        /// offered (exact id match). On success exactly that instance is removed, so a
-   254	        /// duplicate / replayed / stale / unknown decision can never be applied twice. On any
-   255	        /// failure nothing changes (not even the current event), false is returned, and
-   256	        /// <paramref name="reason"/> says why.
-   257	        /// </summary>
-   258	        /// <param name="instanceId">
-   259	        /// The target occurrence. Null/empty is accepted for a legacy caller that only knows
-   260	        /// the definition id: the decision then applies only when EXACTLY ONE pending instance
-   261	        /// has that definition id. An ambiguous match is refused rather than guessed at, so a
-   262	        /// bare event id can never resolve the wrong occurrence of a repeated event.
-   263	        /// </param>
-   264	        public bool TryResolvePendingDecision(string instanceId, string eventId, string choiceId, out string reason)
-   265	        {
-   266	            if (!HasPendingDecision)
-   267	            {
-   268	                // P13A — a duplicate/replayed decision lands here once its occurrence is gone, so
-   269	                // the rejection still names what was asked for instead of a bare "nothing pending".
-   270	                reason = string.IsNullOrEmpty(instanceId)
-   271	                    ? "no decision event is pending"
-   272	                    : $"instanceId '{instanceId}' is not a pending decision (none is pending)";
-   273	                return false;
-   274	            }
-   275	
-   276	            PendingWorldEvent target;
-   277	            if (!string.IsNullOrEmpty(instanceId))
-   278	            {
-   279	                if (!TryGetPendingDecision(instanceId, out target))
-   280	                {
-   281	                    reason = $"instanceId '{instanceId}' is not a pending decision";
-   282	                    return false;
-   283	                }
-   284	                if (eventId != target.EventId)
-   285	                {
-   286	                    reason = $"instanceId '{instanceId}' is event '{target.EventId}', not '{eventId}'";
-   287	                    return false;
-   288	                }
-   289	            }
-   290	            else
-   291	            {
-   292	                target = null;
-   293	                int matches = 0;
-   294	                for (int i = 0; i < _pendingDecisions.Count; i++)
-   295	                {
-   296	                    if (_pendingDecisions[i].EventId != eventId) continue;
-   297	                    target = _pendingDecisions[i];
-   298	                    matches++;
-   299	                }
-   300	                if (matches == 0)
-   301	                {
-   302	                    reason = $"eventId '{eventId}' is not a pending event";
-   303	                    return false;
-   304	                }
-   305	                if (matches > 1)
-   306	                {
-   307	                    reason = $"eventId '{eventId}' matches {matches} pending instances - " +
-   308	                             "a decision must name the instance id";
-   309	                    return false;
-   310	                }
-   311	            }
-   312	
-   313	            if (!target.HasChoice(choiceId))
-   314	            {
-   315	                reason = $"choiceId '{choiceId}' is not one of the choices of {target}";
-   316	                return false;
-   317	            }
-   318	
-   319	            _pendingDecisions.Remove(target);
-   320	            reason = null;
-   321	            return true;
-   322	        }
-   323	
-   324	        /// <summary>
-   325	        /// Legacy two-argument form (definition id only) — see the four-argument overload for
-   326	        /// the compatibility rule it follows.
-   327	        /// </summary>
-   328	        public bool TryResolvePendingDecision(string eventId, string choiceId, out string reason)
-   329	            => TryResolvePendingDecision(null, eventId, choiceId, out reason);
-   330	
-   331	        /// <summary>
-   332	        /// P13A — drop every outstanding pending decision. Used at a session boundary and by a
-   333	        /// restore (which replaces the pending state outright); never by a decision.
-   334	        /// </summary>
-   335	        public void ClearPendingDecisions() => _pendingDecisions.Clear();
-   336	
-   337	        /// <summary>
-   338	        /// P13A — look up one outstanding pending decision by its instance id. Read-only; a
-   339	        /// null/empty id never matches (instance ids are never empty).
-   340	        /// </summary>
-   341	        public bool TryGetPendingDecision(string instanceId, out PendingWorldEvent pending)
-   342	        {
-   343	            if (!string.IsNullOrEmpty(instanceId))
-   344	            {
-   345	                for (int i = 0; i < _pendingDecisions.Count; i++)
-   346	                {
-   347	                    if (_pendingDecisions[i].InstanceId != instanceId) continue;
-   348	                    pending = _pendingDecisions[i];
-   349	                    return true;
-   350	                }
-   351	            }
-   352	
-   353	            pending = null;
-   354	            return false;
-   355	        }
+   234	            SetSessionActive(false);
+   235	            ClearPendingDecisions();
+   236	
+   237	            // P13A — clear exactly the reasons a session boundary OWNS: the player pause
+   238	            // (a fresh session starts unpaused) and the decision pause (its events are
+   239	            // gone). A SessionTransition pause is PRESERVED: the transition that holds it
+   240	            // is the very caller of this method and is still in flight, so ending the
+   241	            // session must not resume a transition that has not finished.
+   242	            SetReasons(_reasons & TimePauseReason.SessionTransition);
+   243	            CancelPendingWorldEventWait(reason);
+   244	        }
+   245	
+   246	        /// <summary>
+   247	        /// P12A — never retain a stale cached world-event response from a prior session,
+   248	        /// and never strand an existing awaiter: the handoff cache is dropped and the
+   249	        /// current wait is completed with an empty event id (the response contract's
+   250	        /// clearest "no event" answer) plus an explicit reason.
+   251	        /// </summary>
+   252	        public void CancelPendingWorldEventWait(string reason)
+   253	        {
+   254	            _cachedPendingEvent = null;
+   255	
+   256	            var previous = _pendingEventSource;
+   257	            _pendingEventSource = new UniTaskCompletionSource<AwaitWorldEventResponse>();
+   258	            previous.TrySetResult(new AwaitWorldEventResponse
+   259	            {
+   260	                EventId = string.Empty,
+   261	                Description = string.IsNullOrEmpty(reason)
+   262	                    ? "session ended before a world event fired"
+   263	                    : "session ended before a world event fired: " + reason,
+   264	            });
+   265	        }
+   266	
+   267	        /// <summary>
+   268	        /// P13A — the SINGLE decision-validation path, reused by the in-game UI click
+   269	        /// (EventPopupPresenter) and by the bridge decision (DecisionLogger ->
+   270	        /// DecisionExecutor). A decision is valid only when a decision is pending, it names
+   271	        /// that pending INSTANCE, <paramref name="eventId"/> agrees with the instance's
+   272	        /// definition, and <paramref name="choiceId"/> is one of the choices THAT INSTANCE
+   273	        /// offered (exact id match). On success exactly that instance is removed, so a
+   274	        /// duplicate / replayed / stale / unknown decision can never be applied twice. On any
+   275	        /// failure nothing changes (not even the current event), false is returned, and
+   276	        /// <paramref name="reason"/> says why.
+   277	        /// </summary>
+   278	        /// <param name="instanceId">
+   279	        /// The target occurrence. Null/empty is accepted for a legacy caller that only knows
+   280	        /// the definition id: the decision then applies only when EXACTLY ONE pending instance
+   281	        /// has that definition id. An ambiguous match is refused rather than guessed at, so a
+   282	        /// bare event id can never resolve the wrong occurrence of a repeated event.
+   283	        /// </param>
+   284	        public bool TryResolvePendingDecision(string instanceId, string eventId, string choiceId, out string reason)
+   285	        {
+   286	            if (!HasPendingDecision)
+   287	            {
+   288	                // P13A — a duplicate/replayed decision lands here once its occurrence is gone, so
+   289	                // the rejection still names what was asked for instead of a bare "nothing pending".
+   290	                reason = string.IsNullOrEmpty(instanceId)
+   291	                    ? "no decision event is pending"
+   292	                    : $"instanceId '{instanceId}' is not a pending decision (none is pending)";
+   293	                return false;
+   294	            }
+   295	
+   296	            PendingWorldEvent target;
+   297	            if (!string.IsNullOrEmpty(instanceId))
+   298	            {
+   299	                if (!TryGetPendingDecision(instanceId, out target))
+   300	                {
+   301	                    reason = $"instanceId '{instanceId}' is not a pending decision";
+   302	                    return false;
+   303	                }
+   304	                if (eventId != target.EventId)
+   305	                {
+   306	                    reason = $"instanceId '{instanceId}' is event '{target.EventId}', not '{eventId}'";
+   307	                    return false;
+   308	                }
+   309	            }
+   310	            else
+   311	            {
+   312	                target = null;
+   313	                int matches = 0;
+   314	                for (int i = 0; i < _pendingDecisions.Count; i++)
+   315	                {
+   316	                    if (_pendingDecisions[i].EventId != eventId) continue;
+   317	                    target = _pendingDecisions[i];
+   318	                    matches++;
+   319	                }
+   320	                if (matches == 0)
+   321	                {
+   322	                    reason = $"eventId '{eventId}' is not a pending event";
+   323	                    return false;
+   324	                }
+   325	                if (matches > 1)
+   326	                {
+   327	                    reason = $"eventId '{eventId}' matches {matches} pending instances - " +
+   328	                             "a decision must name the instance id";
+   329	                    return false;
+   330	                }
+   331	            }
+   332	
+   333	            if (!target.HasChoice(choiceId))
+   334	            {
+   335	                reason = $"choiceId '{choiceId}' is not one of the choices of {target}";
+   336	                return false;
+   337	            }
+   338	
+   339	            _pendingDecisions.Remove(target);
+   340	            reason = null;
+   341	            return true;
+   342	        }
+   343	
+   344	        /// <summary>
+   345	        /// Legacy two-argument form (definition id only) — see the four-argument overload for
+   346	        /// the compatibility rule it follows.
+   347	        /// </summary>
+   348	        public bool TryResolvePendingDecision(string eventId, string choiceId, out string reason)
+   349	            => TryResolvePendingDecision(null, eventId, choiceId, out reason);
+   350	
+   351	        /// <summary>
+   352	        /// P13A — drop every outstanding pending decision. Used at a session boundary and by a
+   353	        /// restore (which replaces the pending state outright); never by a decision.
+   354	        /// </summary>
+   355	        public void ClearPendingDecisions() => _pendingDecisions.Clear();
    356	
    357	        /// <summary>
-   358	        /// P13A — store one newly raised pending decision and mint its instance id. Returns
-   359	        /// null when <see cref="MaxPendingDecisions"/> is already reached: the raise is then
-   360	        /// refused (logged here) and NOTHING was stored — no pending decision is ever replaced
-   361	        /// or evicted, and the caller must not report the event as pending.
-   362	        /// </summary>
-   363	        private PendingWorldEvent EnqueuePendingDecision(string eventId, string description, List<EventChoiceInfo> choices)
-   364	        {
-   365	            if (_pendingDecisions.Count >= MaxPendingDecisions)
-   366	            {
-   367	                Debug.LogWarning(
-   368	                    $"[TimeSystem] Refused to queue world event '{eventId}': {_pendingDecisions.Count} decisions are " +
-   369	                    $"already outstanding (cap {MaxPendingDecisions}). The oldest pending decision " +
-   370	                    $"('{PendingInstanceId}') is kept - an outstanding decision is never overwritten to make room.");
-   371	                return null;
-   372	            }
-   373	
-   374	            var pending = new PendingWorldEvent($"evt_{_nextEventInstanceNumber++:000000}", eventId, description, choices);
-   375	            _pendingDecisions.Add(pending);
-   376	            return pending;
-   377	        }
-   378	
-   379	        /// <summary>
-   380	        /// P11A — restore simulation state from a validated session snapshot, on the
-   381	        /// Unity main thread. Sets the (pre-validated) speed, then re-establishes or
-   382	        /// clears the authoritative pending decision. A restored pending decision is
-   383	        /// re-published as a world-event message so the UI/AI can react; the bridge
-   384	        /// handoff cache is deliberately NOT restored (it is consumed-on-read
-   385	        /// transport state — see SectSessionSnapshot.cs classification). Nothing here
-   386	        /// touches gameplay state; SectStateProvider owns that half.
-   387	        /// </summary>
-   388	        public void RestoreSimulationState(int speed, string pendingEventId, string pendingDescription,
-   389	                                           List<EventChoiceInfo> pendingChoices, bool pendingDecisionPaused)
-   390	        {
-   391	            SetSpeed(speed);
-   392	
-   393	            // P13A — a restore replaces the pending state outright (it describes the
-   394	            // session being loaded), so whatever the session being left had queued goes first.
-   395	            ClearPendingDecisions();
-   396	
-   397	            if (string.IsNullOrEmpty(pendingEventId))
-   398	            {
-   399	                Resume(TimePauseReason.PendingDecision); // a fresh session is not decision-paused
-   400	                return;
-   401	            }
-   402	
-   403	            // P13A — the restored decision is stored under a FRESH instance id. Instance ids
-   404	            // identify a LIVE occurrence and are deliberately not persisted (see the reset
-   405	            // list in SectSessionSnapshot.cs): a decision addressed to a pre-save instance is
-   406	            // stale after a load and is refused, while the restored event itself stays fully
-   407	            // answerable under its new id.
-   408	            var restored = EnqueuePendingDecision(pendingEventId, pendingDescription,
-   409	                                                  pendingChoices != null ? new List<EventChoiceInfo>(pendingChoices) : null);
-   410	            if (restored == null) return; // capped state cannot occur from a validated snapshot
-   411	
-   412	            // The snapshot's pause flag is authoritative: a restore that says "not paused"
-   413	            // must not leave the clock frozen on a pause whose event no longer exists.
-   414	            if (pendingDecisionPaused) Pause(TimePauseReason.PendingDecision);
-   415	            else Resume(TimePauseReason.PendingDecision);
-   416	
-   417	            _worldEventPublisher.Publish(new WorldEventTriggeredMessage
-   418	            {
-   419	                EventId = restored.EventId,
-   420	                InstanceId = restored.InstanceId,
-   421	                RequiresDecision = true,
-   422	                Description = restored.Description,
-   423	                Choices = new List<EventChoiceInfo>(restored.Choices),
-   424	            });
-   425	        }
-   426	
-   427	        /// <summary>Sets the simulation speed, validated to <see cref="MinSpeed"/>..<see cref="MaxSpeed"/>.</summary>
-   428	        public void SetSpeed(int speed)
-   429	        {
-   430	            int clamped = ClampSpeed(speed);
-   431	            if (clamped == _speed) return; // effective change only
-   432	            _speed = clamped;
-   433	            PublishState();
-   434	        }
-   435	
-   436	        /// <summary>True while ANY pause reason is active.</summary>
-   437	        public bool IsPaused => _reasons != TimePauseReason.None;
-   438	
-   439	        /// <summary>
-   440	        /// P12A — true while a live gameplay session is active. When false (Title or a
-   441	        /// session transition) <see cref="SimulationDelta"/> is exactly 0, but that is NOT
-   442	        /// reported as a pause (see <see cref="IsPaused"/>). UTC/viewer clocks are
-   443	        /// unaffected — they never read simulation time.
-   444	        /// </summary>
-   445	        public bool IsSessionActive => _sessionActive;
-   446	
-   447	        /// <summary>True when the player has paused (User reason).</summary>
-   448	        public bool IsUserPaused => HasReason(TimePauseReason.User);
-   449	
-   450	        /// <summary>True when a decision-requiring event is outstanding (the pause reason).</summary>
-   451	        public bool IsPendingDecisionPaused => HasReason(TimePauseReason.PendingDecision);
-   452	
-   453	        // ---------- P13A: authoritative pending-decision state ----------
-   454	        // Separate from IsPendingDecisionPaused: the player can clear the pause
-   455	        // (ResumeByPlayer) while the event is still pending and undecided.
-   456	
-   457	        /// <summary>True while at least one decision-requiring event is outstanding and undecided.</summary>
-   458	        public bool HasPendingDecision => _pendingDecisions.Count > 0;
-   459	
-   460	        /// <summary>How many decisions are outstanding right now (0..<see cref="MaxPendingDecisions"/>).</summary>
-   461	        public int PendingDecisionCount => _pendingDecisions.Count;
-   462	
-   463	        /// <summary>
-   464	        /// The CURRENT pending decision — the OLDEST undecided one — or null when none. This is
-   465	        /// the single ordering every consumer reads (UI, bridge handoff, snapshot), so "which
-   466	        /// event am I looking at" can never differ between them.
-   467	        /// </summary>
-   468	        public PendingWorldEvent PendingDecision =>
-   469	            _pendingDecisions.Count > 0 ? _pendingDecisions[0] : null;
-   470	
-   471	        /// <summary>Instance id of the current pending decision, or null when none.</summary>
-   472	        public string PendingInstanceId => PendingDecision?.InstanceId;
-   473	
-   474	        /// <summary>Authored definition id of the current pending decision, or null when none.</summary>
-   475	        public string PendingEventId => PendingDecision?.EventId;
-   476	
-   477	        /// <summary>Description of the current pending decision, or null when none.</summary>
-   478	        public string PendingDescription => PendingDecision?.Description;
-   479	
-   480	        /// <summary>Choices of the current pending decision (never null; empty when none).</summary>
-   481	        public IReadOnlyList<EventChoiceInfo> PendingChoices =>
-   482	            PendingDecision?.Choices ?? (IReadOnlyList<EventChoiceInfo>)NoChoices;
-   483	
-   484	        /// <summary>Current (validated) simulation speed.</summary>
-   485	        public int Speed => _speed;
+   358	        /// P13A — look up one outstanding pending decision by its instance id. Read-only; a
+   359	        /// null/empty id never matches (instance ids are never empty).
+   360	        /// </summary>
+   361	        public bool TryGetPendingDecision(string instanceId, out PendingWorldEvent pending)
+   362	        {
+   363	            if (!string.IsNullOrEmpty(instanceId))
+   364	            {
+   365	                for (int i = 0; i < _pendingDecisions.Count; i++)
+   366	                {
+   367	                    if (_pendingDecisions[i].InstanceId != instanceId) continue;
+   368	                    pending = _pendingDecisions[i];
+   369	                    return true;
+   370	                }
+   371	            }
+   372	
+   373	            pending = null;
+   374	            return false;
+   375	        }
+   376	
+   377	        /// <summary>
+   378	        /// P13A — store one newly raised pending decision and mint its instance id. Returns
+   379	        /// null when <see cref="MaxPendingDecisions"/> is already reached: the raise is then
+   380	        /// refused (logged here) and NOTHING was stored — no pending decision is ever replaced
+   381	        /// or evicted, and the caller must not report the event as pending.
+   382	        /// </summary>
+   383	        private PendingWorldEvent EnqueuePendingDecision(string eventId, string description, List<EventChoiceInfo> choices,
+   384	                                                         string speakerDiscipleId = null, string speakerDisplayName = null,
+   385	                                                         string explicitInstanceId = null)
+   386	        {
+   387	            if (_pendingDecisions.Count >= MaxPendingDecisions)
+   388	            {
+   389	                Debug.LogWarning(
+   390	                    $"[TimeSystem] Refused to queue world event '{eventId}': {_pendingDecisions.Count} decisions are " +
+   391	                    $"already outstanding (cap {MaxPendingDecisions}). The oldest pending decision " +
+   392	                    $"('{PendingInstanceId}') is kept - an outstanding decision is never overwritten to make room.");
+   393	                return null;
+   394	            }
+   395	
+   396	            // P13B — a restore supplies the id the occurrence already had, so a decision in
+   397	            // flight across a save/load still names a live instance. A fresh raise always mints one.
+   398	            string instanceId = explicitInstanceId;
+   399	            if (string.IsNullOrEmpty(instanceId))
+   400	            {
+   401	                instanceId = $"{InstanceIdPrefix}{_nextEventInstanceNumber:000000}";
+   402	                _nextEventInstanceNumber++;
+   403	            }
+   404	
+   405	            var pending = new PendingWorldEvent(instanceId, eventId, description, choices,
+   406	                                                speakerDiscipleId, speakerDisplayName);
+   407	            _pendingDecisions.Add(pending);
+   408	            return pending;
+   409	        }
+   410	
+   411	        /// <summary>
+   412	        /// P13B — the outstanding pending decisions to persist, oldest first. PLAIN DATA only:
+   413	        /// the snapshot contract holds no waiter, no subscription and no Unity object, so this
+   414	        /// copies across the serializable fields and nothing else. Returns a fresh list.
+   415	        /// </summary>
+   416	        public List<PendingEventSnapshot> CapturePendingDecisions()
+   417	        {
+   418	            var captured = new List<PendingEventSnapshot>(_pendingDecisions.Count);
+   419	            for (int i = 0; i < _pendingDecisions.Count; i++)
+   420	            {
+   421	                var pending = _pendingDecisions[i];
+   422	                captured.Add(new PendingEventSnapshot
+   423	                {
+   424	                    InstanceId = pending.InstanceId,
+   425	                    EventId = pending.EventId,
+   426	                    Description = pending.Description,
+   427	                    Choices = new List<EventChoiceInfo>(pending.Choices),
+   428	                    SpeakerDiscipleId = pending.SpeakerDiscipleId,
+   429	                    SpeakerDisplayName = pending.SpeakerDisplayName,
+   430	                });
+   431	            }
+   432	            return captured;
+   433	        }
+   434	
+   435	        /// <summary>
+   436	        /// P13B — re-seed the instance-id counter PAST every restored id, so a newly raised event
+   437	        /// can never be minted with an id an outstanding restored occurrence already owns.
+   438	        /// An unrecognisable id (a hand-authored or future-format one) leaves the counter alone
+   439	        /// rather than parsing loosely.
+   440	        /// </summary>
+   441	        private void ReserveInstanceId(string instanceId)
+   442	        {
+   443	            if (string.IsNullOrEmpty(instanceId)) return;
+   444	            if (!instanceId.StartsWith(InstanceIdPrefix, System.StringComparison.Ordinal)) return;
+   445	
+   446	            int number;
+   447	            if (!int.TryParse(instanceId.Substring(InstanceIdPrefix.Length),
+   448	                              System.Globalization.NumberStyles.None,
+   449	                              System.Globalization.CultureInfo.InvariantCulture, out number))
+   450	                return;
+   451	
+   452	            int candidate = number + 1; // numbers are only compared, never formatted back
+   453	            if (candidate > _nextEventInstanceNumber) _nextEventInstanceNumber = candidate;
+   454	        }
+   455	
+   456	        /// <summary>
+   457	        /// P11A — restore simulation state from a validated session snapshot, on the
+   458	        /// Unity main thread. Sets the (pre-validated) speed, then re-establishes or
+   459	        /// clears the authoritative pending decision. A restored pending decision is
+   460	        /// re-published as a world-event message so the UI/AI can react; the bridge
+   461	        /// handoff cache is deliberately NOT restored (it is consumed-on-read
+   462	        /// transport state — see SectSessionSnapshot.cs classification). Nothing here
+   463	        /// touches gameplay state; SectStateProvider owns that half.
+   464	        /// </summary>
+   465	        public void RestoreSimulationState(int speed, string pendingEventId, string pendingDescription,
+   466	                                           List<EventChoiceInfo> pendingChoices, bool pendingDecisionPaused)
+   467	        {
+   468	            // Compatibility path for a caller / an older save that carries only the single
+   469	            // pending-decision summary (no instance id): it becomes one occurrence under a
+   470	            // FRESH id, which is the best that can be done without an id to restore.
+   471	            RestorePendingDecisions(speed, string.IsNullOrEmpty(pendingEventId)
+   472	                ? NoPendingEvents
+   473	                : new List<PendingEventSnapshot>
+   474	                {
+   475	                    new PendingEventSnapshot
+   476	                    {
+   477	                        EventId = pendingEventId,
+   478	                        Description = pendingDescription,
+   479	                        Choices = pendingChoices != null ? new List<EventChoiceInfo>(pendingChoices) : new List<EventChoiceInfo>(),
+   480	                    },
+   481	                },
+   482	                pendingDecisionPaused);
+   483	        }
+   484	
+   485	        private static readonly List<PendingEventSnapshot> NoPendingEvents = new List<PendingEventSnapshot>();
    486	
-   487	        private bool HasReason(TimePauseReason reason) => (_reasons & reason) == reason;
-   488	
-   489	        private void SetReason(TimePauseReason reason, bool active)
-   490	        {
-   491	            if (reason == TimePauseReason.None) return;
-   492	            SetReasons(active ? (_reasons | reason) : (_reasons & ~reason));
-   493	        }
-   494	
-   495	        private void SetReasons(TimePauseReason next)
-   496	        {
-   497	            if (next == _reasons) return; // no effective change - no message
-   498	            _reasons = next;
-   499	            PublishState();
-   500	        }
-   501	
-   502	        // Refresh trigger only (Paused = IsPaused). The HUD reads reasons/speed
-   503	        // directly from TimeSystem; it never infers them from this message.
-   504	        private void PublishState()
-   505	        {
-   506	            _speedPublisher.Publish(new TimeSpeedChangedMessage { Speed = _speed, Paused = IsPaused });
-   507	        }
-   508	
-   509	        /// <summary>
-   510	        /// Simulation delta for gameplay progression, in seconds — the ONLY place game
-   511	        /// speed is applied. Returns 0 while paused, so a paused game freezes every
-   512	        /// consumer without each one having to re-implement the pause rule.
-   513	        /// <para>Main thread only: reads <see cref="UnityEngine.Time.deltaTime"/>.</para>
-   514	        /// </summary>
-   515	        /// <remarks>
-   516	        /// Time.timeScale is deliberately never written by this class: it is already
-   517	        /// folded into Time.deltaTime, so multiplying by speed here as well would apply
-   518	        /// game speed twice. Speed below <see cref="MinSpeed"/> is clamped up to 1x and
-   519	        /// above <see cref="MaxSpeed"/> down to 3x, so a stale/out-of-range speed (or a
-   520	        /// forgotten SetSpeed) can never yield a zero or unbounded delta while unpaused.
-   521	        /// </remarks>
-   522	        public float SimulationDelta
-   523	        {
-   524	            // P12A — gameplay progression requires BOTH an unpaused clock and an active
-   525	            // Playing session. The two are independent: a stale "no session" state can
-   526	            // never be mistaken for, or clear, a player/decision pause.
-   527	            get { return ComputeSimulationDelta(IsPaused || !_sessionActive, _speed, Time.deltaTime); }
-   528	        }
+   487	        /// <summary>
+   488	        /// P13B — restore the WHOLE pending-decision queue from a validated snapshot, on the
+   489	        /// Unity main thread. A restored occurrence keeps the instance id it was saved under
+   490	        /// (so a decision already addressed to it is still valid), and its instance-specific
+   491	        /// payload (description, choices, optional speaker) comes back with it.
+   492	        ///
+   493	        /// Nothing here APPLIES a consequence: this only re-establishes what is still
+   494	        /// outstanding. Applying is the decision's job, and a decision can only ever be applied
+   495	        /// once, so restoring the same save twice cannot pay twice.
+   496	        ///
+   497	        /// The restored occurrence is re-published as a world-event message so the UI, the chip
+   498	        /// and the bridge can react — the UI is REBUILT from this authoritative state rather than
+   499	        /// from anything serialized (§4). The bridge hand-off cache is deliberately NOT restored
+   500	        /// (it is consumed-on-read transport state).
+   501	        /// </summary>
+   502	        public void RestorePendingDecisions(int speed, List<PendingEventSnapshot> pendingEvents,
+   503	                                            bool pendingDecisionPaused)
+   504	        {
+   505	            SetSpeed(speed);
+   506	
+   507	            // A restore replaces the pending state outright (it describes the session being
+   508	            // loaded), so whatever the session being left had queued goes first.
+   509	            ClearPendingDecisions();
+   510	
+   511	            int restored = 0;
+   512	            if (pendingEvents != null)
+   513	            {
+   514	                for (int i = 0; i < pendingEvents.Count && restored < MaxPendingDecisions; i++)
+   515	                {
+   516	                    var entry = pendingEvents[i];
+   517	                    if (entry == null || string.IsNullOrEmpty(entry.EventId)) continue;
+   518	
+   519	                    // A duplicate id would make two live occurrences indistinguishable and let
+   520	                    // one decision apply twice — skip it rather than store an ambiguous queue.
+   521	                    PendingWorldEvent existing;
+   522	                    if (!string.IsNullOrEmpty(entry.InstanceId) && TryGetPendingDecision(entry.InstanceId, out existing))
+   523	                    {
+   524	                        Debug.LogWarning($"[TimeSystem] Restore skipped pending event '{entry.EventId}': instance id " +
+   525	                                         $"'{entry.InstanceId}' is already restored — a duplicate id would make the " +
+   526	                                         "occurrences indistinguishable.");
+   527	                        continue;
+   528	                    }
    529	
-   530	        /// <summary>
-   531	        /// Pure core of <see cref="SimulationDelta"/> — the single speed application,
-   532	        /// split out so the multiplier can be asserted without a rendered frame.
-   533	        /// </summary>
-   534	        public static float ComputeSimulationDelta(bool paused, int speed, float frameDelta)
-   535	        {
-   536	            if (paused) return 0f;
-   537	            return ClampSpeed(speed) * frameDelta;
-   538	        }
+   530	                    var stored = EnqueuePendingDecision(entry.EventId, entry.Description, entry.Choices,
+   531	                                                        entry.SpeakerDiscipleId, entry.SpeakerDisplayName,
+   532	                                                        entry.InstanceId);
+   533	                    if (stored == null) break;
+   534	
+   535	                    ReserveInstanceId(stored.InstanceId);
+   536	                    restored++;
+   537	                }
+   538	            }
    539	
-   540	        private static int ClampSpeed(int speed)
-   541	        {
-   542	            if (speed < MinSpeed) return MinSpeed;
-   543	            if (speed > MaxSpeed) return MaxSpeed;
-   544	            return speed;
-   545	        }
-   546	
-   547	        // Resolved by AwaitWorldEventHandler - the bridge's await_next_world_event
-   548	        // tool call blocks on this until the next RaiseWorldEvent(), unless
-   549	        // there's already a cached one waiting (see _cachedPendingEvent).
-   550	        //
-   551	        // Remember: while a pause reason is active (e.g. a decision-requiring
-   552	        // event is outstanding), RaiseWorldEvent never fires again -
-   553	        // WorldEventSystem checks IsPaused and skips. Resolve the decision (or
-   554	        // ResumeByPlayer) first, or this will time out waiting for an event that
-   555	        // can't happen yet.
-   556	        public UniTask<AwaitWorldEventResponse> WaitForNextWorldEventAsync()
-   557	        {
-   558	            // P12A — outside a Playing session there is no event stream to wait on, so a
-   559	            // new awaiter is answered immediately with a clear "no active session" result
-   560	            // instead of being parked until some future session fires an event.
-   561	            if (!_sessionActive)
-   562	            {
-   563	                return UniTask.FromResult(new AwaitWorldEventResponse
-   564	                {
-   565	                    EventId = string.Empty,
-   566	                    Description = "no active session: gameplay is not in a Playing state",
-   567	                });
-   568	            }
-   569	
-   570	            if (_cachedPendingEvent != null)
-   571	            {
-   572	                Debug.Log("[TimeSystem] Returning cached world event immediately.");
-   573	                var cached = _cachedPendingEvent;
-   574	                _cachedPendingEvent = null;
-   575	                return UniTask.FromResult(cached);
-   576	            }
-   577	
-   578	            return _pendingEventSource.Task;
-   579	        }
-   580	
-   581	        // Called by whatever system decides a world event fired (new
-   582	        // applicant, monster incursion, ...). requiresDecision auto-pauses -
-   583	        // this is the "checkpoint" the AI GM / vote window waits on, and
-   584	        // stays paused until execute_decision is called.
-   585	        //
-   586	        // Not sent over the interprocess bus as pub/sub (see the comment on
-   587	        // AwaitWorldEventRequest in GameMessages.cs for why) - completing
-   588	        // _pendingEventSource is what actually delivers this to the bridge,
-   589	        // via the request-response AwaitWorldEventHandler below. The
-   590	        // in-memory Publish() call is just for any other in-Unity listener.
-   591	        //
-   592	        // P13A: a decision-requiring event is stored as its OWN pending instance,
-   593	        // queued behind anything already outstanding and identified by a unique id.
-   594	        /// <returns>
-   595	        /// False only when a decision-requiring event could not be stored because
-   596	        /// <see cref="MaxPendingDecisions"/> is reached: nothing is pending for it then, no
-   597	        /// message is published, no awaiter is completed, and no outstanding decision was
-   598	        /// touched. Always true for a non-decision event.
-   599	        /// </returns>
-   600	        public bool RaiseWorldEvent(string eventId, string description, bool requiresDecision, List<EventChoiceInfo> choices)
-   601	        {
-   602	            Debug.Log($"[TimeSystem] World event raised: {eventId} (requiresDecision={requiresDecision})");
-   603	
-   604	            var effectiveChoices = choices ?? new List<EventChoiceInfo>();
-   605	            string instanceId = null;
+   540	            // The snapshot's pause flag is authoritative: a restore that says "not paused"
+   541	            // must not leave the clock frozen on a pause whose event no longer exists.
+   542	            if (restored == 0 || !pendingDecisionPaused) Resume(TimePauseReason.PendingDecision);
+   543	            else Pause(TimePauseReason.PendingDecision);
+   544	
+   545	            // Re-announce each restored occurrence, oldest first, so derived UI/bridge state is
+   546	            // rebuilt from the authoritative pending queue instead of from the save.
+   547	            for (int i = 0; i < _pendingDecisions.Count; i++)
+   548	            {
+   549	                var pending = _pendingDecisions[i];
+   550	                _worldEventPublisher.Publish(new WorldEventTriggeredMessage
+   551	                {
+   552	                    EventId = pending.EventId,
+   553	                    InstanceId = pending.InstanceId,
+   554	                    RequiresDecision = true,
+   555	                    Description = pending.Description,
+   556	                    Choices = new List<EventChoiceInfo>(pending.Choices),
+   557	                    SpeakerDiscipleId = pending.SpeakerDiscipleId,
+   558	                    SpeakerDisplayName = pending.SpeakerDisplayName,
+   559	                });
+   560	            }
+   561	        }
+   562	
+   563	        /// <summary>Sets the simulation speed, validated to <see cref="MinSpeed"/>..<see cref="MaxSpeed"/>.</summary>
+   564	        public void SetSpeed(int speed)
+   565	        {
+   566	            int clamped = ClampSpeed(speed);
+   567	            if (clamped == _speed) return; // effective change only
+   568	            _speed = clamped;
+   569	            PublishState();
+   570	        }
+   571	
+   572	        /// <summary>True while ANY pause reason is active.</summary>
+   573	        public bool IsPaused => _reasons != TimePauseReason.None;
+   574	
+   575	        /// <summary>
+   576	        /// P12A — true while a live gameplay session is active. When false (Title or a
+   577	        /// session transition) <see cref="SimulationDelta"/> is exactly 0, but that is NOT
+   578	        /// reported as a pause (see <see cref="IsPaused"/>). UTC/viewer clocks are
+   579	        /// unaffected — they never read simulation time.
+   580	        /// </summary>
+   581	        public bool IsSessionActive => _sessionActive;
+   582	
+   583	        /// <summary>True when the player has paused (User reason).</summary>
+   584	        public bool IsUserPaused => HasReason(TimePauseReason.User);
+   585	
+   586	        /// <summary>True when a decision-requiring event is outstanding (the pause reason).</summary>
+   587	        public bool IsPendingDecisionPaused => HasReason(TimePauseReason.PendingDecision);
+   588	
+   589	        // ---------- P13A: authoritative pending-decision state ----------
+   590	        // Separate from IsPendingDecisionPaused: the player can clear the pause
+   591	        // (ResumeByPlayer) while the event is still pending and undecided.
+   592	
+   593	        /// <summary>True while at least one decision-requiring event is outstanding and undecided.</summary>
+   594	        public bool HasPendingDecision => _pendingDecisions.Count > 0;
+   595	
+   596	        /// <summary>How many decisions are outstanding right now (0..<see cref="MaxPendingDecisions"/>).</summary>
+   597	        public int PendingDecisionCount => _pendingDecisions.Count;
+   598	
+   599	        /// <summary>
+   600	        /// The CURRENT pending decision — the OLDEST undecided one — or null when none. This is
+   601	        /// the single ordering every consumer reads (UI, bridge handoff, snapshot), so "which
+   602	        /// event am I looking at" can never differ between them.
+   603	        /// </summary>
+   604	        public PendingWorldEvent PendingDecision =>
+   605	            _pendingDecisions.Count > 0 ? _pendingDecisions[0] : null;
    606	
-   607	            if (requiresDecision)
-   608	            {
-   609	                bool alreadyPending = HasPendingDecision;
-   610	
-   611	                var pending = EnqueuePendingDecision(eventId, description, effectiveChoices);
-   612	                if (pending == null) return false; // cap reached - nothing was stored, nothing changed
-   613	
-   614	                instanceId = pending.InstanceId;
-   615	                effectiveChoices = new List<EventChoiceInfo>(pending.Choices);
-   616	
-   617	                // E2-lite/P13A: the pause reason is added only for the event that turns an
-   618	                // EMPTY pending state into a non-empty one - if any decision is still
-   619	                // outstanding (e.g. the player pressed Play but has not decided yet),
-   620	                // raising further events must NOT re-add the pause...
-   621	                if (!alreadyPending && _config.AutoPauseOnDecisionEvent)
-   622	                    Pause(TimePauseReason.PendingDecision);
-   623	                // ...and must never clear it either: another instance is still undecided.
-   624	            }
-   625	
-   626	            _worldEventPublisher.Publish(new WorldEventTriggeredMessage
-   627	            {
-   628	                EventId = eventId,
-   629	                InstanceId = instanceId,
-   630	                RequiresDecision = requiresDecision,
-   631	                Description = description,
-   632	                Choices = effectiveChoices,
-   633	            });
-   634	
-   635	            var response = new AwaitWorldEventResponse
-   636	            {
-   637	                EventId = eventId,
-   638	                InstanceId = instanceId,
-   639	                RequiresDecision = requiresDecision,
-   640	                Description = description,
-   641	                Choices = effectiveChoices,
-   642	            };
-   643	
-   644	            if (requiresDecision)
-   645	            {
-   646	                _cachedPendingEvent = response;
-   647	            }
-   648	
-   649	            var previous = _pendingEventSource;
-   650	            _pendingEventSource = new UniTaskCompletionSource<AwaitWorldEventResponse>();
-   651	            previous.TrySetResult(response);
-   652	            return true;
-   653	        }
-   654	    }
-   655	
-   656	    // Answers AwaitWorldEventRequest coming in over the interprocess bus.
-   657	    // Request-response, not pub/sub - see the comment on AwaitWorldEventRequest
-   658	    // in GameMessages.cs for why.
-   659	    //
-   660	    // THREADING (T1): InvokeAsync runs on the MessagePipe.Interprocess TCP background
-   661	    // thread, and both things it touches - the one-slot cache (_cachedPendingEvent) and
-   662	    // the UniTaskCompletionSource - are main-thread state. It therefore hops FIRST and
-   663	    // then runs the existing wait unchanged: a cached event is consumed on the main
-   664	    // thread, and a genuinely pending wait is only resumed when RaiseWorldEvent
-   665	    // completes the source on the main thread. Awaiting never blocks the main thread.
-   666	    public class AwaitWorldEventHandler : IAsyncRequestHandler<AwaitWorldEventRequest, AwaitWorldEventResponse>
-   667	    {
-   668	        private readonly TimeSystem _timeSystem;
-   669	
-   670	        public AwaitWorldEventHandler(TimeSystem timeSystem)
+   607	        /// <summary>Instance id of the current pending decision, or null when none.</summary>
+   608	        public string PendingInstanceId => PendingDecision?.InstanceId;
+   609	
+   610	        /// <summary>Authored definition id of the current pending decision, or null when none.</summary>
+   611	        public string PendingEventId => PendingDecision?.EventId;
+   612	
+   613	        /// <summary>Description of the current pending decision, or null when none.</summary>
+   614	        public string PendingDescription => PendingDecision?.Description;
+   615	
+   616	        /// <summary>Choices of the current pending decision (never null; empty when none).</summary>
+   617	        public IReadOnlyList<EventChoiceInfo> PendingChoices =>
+   618	            PendingDecision?.Choices ?? (IReadOnlyList<EventChoiceInfo>)NoChoices;
+   619	
+   620	        /// <summary>Current (validated) simulation speed.</summary>
+   621	        public int Speed => _speed;
+   622	
+   623	        private bool HasReason(TimePauseReason reason) => (_reasons & reason) == reason;
+   624	
+   625	        private void SetReason(TimePauseReason reason, bool active)
+   626	        {
+   627	            if (reason == TimePauseReason.None) return;
+   628	            SetReasons(active ? (_reasons | reason) : (_reasons & ~reason));
+   629	        }
+   630	
+   631	        private void SetReasons(TimePauseReason next)
+   632	        {
+   633	            if (next == _reasons) return; // no effective change - no message
+   634	            _reasons = next;
+   635	            PublishState();
+   636	        }
+   637	
+   638	        // Refresh trigger only (Paused = IsPaused). The HUD reads reasons/speed
+   639	        // directly from TimeSystem; it never infers them from this message.
+   640	        private void PublishState()
+   641	        {
+   642	            _speedPublisher.Publish(new TimeSpeedChangedMessage { Speed = _speed, Paused = IsPaused });
+   643	        }
+   644	
+   645	        /// <summary>
+   646	        /// Simulation delta for gameplay progression, in seconds — the ONLY place game
+   647	        /// speed is applied. Returns 0 while paused, so a paused game freezes every
+   648	        /// consumer without each one having to re-implement the pause rule.
+   649	        /// <para>Main thread only: reads <see cref="UnityEngine.Time.deltaTime"/>.</para>
+   650	        /// </summary>
+   651	        /// <remarks>
+   652	        /// Time.timeScale is deliberately never written by this class: it is already
+   653	        /// folded into Time.deltaTime, so multiplying by speed here as well would apply
+   654	        /// game speed twice. Speed below <see cref="MinSpeed"/> is clamped up to 1x and
+   655	        /// above <see cref="MaxSpeed"/> down to 3x, so a stale/out-of-range speed (or a
+   656	        /// forgotten SetSpeed) can never yield a zero or unbounded delta while unpaused.
+   657	        /// </remarks>
+   658	        public float SimulationDelta
+   659	        {
+   660	            // P12A — gameplay progression requires BOTH an unpaused clock and an active
+   661	            // Playing session. The two are independent: a stale "no session" state can
+   662	            // never be mistaken for, or clear, a player/decision pause.
+   663	            get { return ComputeSimulationDelta(IsPaused || !_sessionActive, _speed, Time.deltaTime); }
+   664	        }
+   665	
+   666	        /// <summary>
+   667	        /// Pure core of <see cref="SimulationDelta"/> — the single speed application,
+   668	        /// split out so the multiplier can be asserted without a rendered frame.
+   669	        /// </summary>
+   670	        public static float ComputeSimulationDelta(bool paused, int speed, float frameDelta)
    671	        {
-   672	            _timeSystem = timeSystem;
-   673	        }
-   674	
-   675	        public UniTask<AwaitWorldEventResponse> InvokeAsync(AwaitWorldEventRequest request, CancellationToken cancellationToken = default)
-   676	        {
-   677	            return MainThreadDispatch.RunAwaitingAsync(
-   678	                nameof(AwaitWorldEventHandler),
-   679	                $"requestId={request?.RequestId}",
-   680	                WaitOnMainThreadAsync,
-   681	                reason => new AwaitWorldEventResponse
-   682	                {
-   683	                    // The response contract has no failure field: an empty event id is the
-   684	                    // clearest available answer (the reason is in the Console log line).
-   685	                    EventId = string.Empty,
-   686	                    Description = "unavailable: " + reason,
-   687	                });
-   688	        }
-   689	
-   690	        /// <summary>
-   691	        /// The existing wait, unchanged, entered on the main thread: cache check first, then the
-   692	        /// pending completion source. Kept as its own method so the kept-open await is explicit.
-   693	        /// </summary>
-   694	        private async UniTask<AwaitWorldEventResponse> WaitOnMainThreadAsync()
-   695	        {
-   696	            var waitForEvent = _timeSystem.WaitForNextWorldEventAsync();
-   697	            return await waitForEvent;
-   698	        }
-   699	    }
-   700	
-   701	    // Answers SectStateQuery requests coming in over the interprocess bus
-   702	    // from the MCP bridge. Aggregates whatever the subsystems currently hold
-   703	    // into the SectEconomyState shape from economy.proto.
-   704	    //
-   705	    // THREADING (T1): InvokeAsync runs on the MessagePipe.Interprocess TCP background
-   706	    // thread, and BuildSectEconomyState() enumerates every live disciple/resource while
-   707	    // the main thread keeps ticking (ToByteArray() then serializes that graph). That is
-   708	    // a read race, so the snapshot is produced after a hop to the Unity main thread.
-   709	    public class SectStateQueryHandler : IAsyncRequestHandler<SectStateQuery, SectStateSnapshot>
-   710	    {
-   711	        private readonly ISectStateProvider _stateProvider;
-   712	
-   713	        public SectStateQueryHandler(ISectStateProvider stateProvider)
-   714	        {
-   715	            _stateProvider = stateProvider;
-   716	        }
-   717	
-   718	        public UniTask<SectStateSnapshot> InvokeAsync(SectStateQuery request, CancellationToken cancellationToken = default)
-   719	        {
-   720	            return MainThreadDispatch.RunAsync(
-   721	                nameof(SectStateQueryHandler),
-   722	                $"requestId={request?.RequestId}",
-   723	                () =>
-   724	                {
-   725	                    var state = _stateProvider.BuildSectEconomyState();
-   726	                    return new SectStateSnapshot
-   727	                    {
-   728	                        RequestId = request.RequestId,
-   729	                        // MessagePack, committed choice (not a protobuf stub
-   730	                        // anymore - see project_summary.md for why).
-   731	                        EconomyStateBytes = state.ToByteArray()
-   732	                    };
-   733	                },
-   734	                reason => new SectStateSnapshot
-   735	                {
-   736	                    // The snapshot contract has no failure field: no bytes means "no state"
-   737	                    // (the bridge's decode fails loudly) and the reason is in the log line.
-   738	                    RequestId = request?.RequestId,
-   739	                    EconomyStateBytes = null
-   740	                });
-   741	        }
-   742	    }
+   672	            if (paused) return 0f;
+   673	            return ClampSpeed(speed) * frameDelta;
+   674	        }
+   675	
+   676	        private static int ClampSpeed(int speed)
+   677	        {
+   678	            if (speed < MinSpeed) return MinSpeed;
+   679	            if (speed > MaxSpeed) return MaxSpeed;
+   680	            return speed;
+   681	        }
+   682	
+   683	        // Resolved by AwaitWorldEventHandler - the bridge's await_next_world_event
+   684	        // tool call blocks on this until the next RaiseWorldEvent(), unless
+   685	        // there's already a cached one waiting (see _cachedPendingEvent).
+   686	        //
+   687	        // Remember: while a pause reason is active (e.g. a decision-requiring
+   688	        // event is outstanding), RaiseWorldEvent never fires again -
+   689	        // WorldEventSystem checks IsPaused and skips. Resolve the decision (or
+   690	        // ResumeByPlayer) first, or this will time out waiting for an event that
+   691	        // can't happen yet.
+   692	        public UniTask<AwaitWorldEventResponse> WaitForNextWorldEventAsync()
+   693	        {
+   694	            // P12A — outside a Playing session there is no event stream to wait on, so a
+   695	            // new awaiter is answered immediately with a clear "no active session" result
+   696	            // instead of being parked until some future session fires an event.
+   697	            if (!_sessionActive)
+   698	            {
+   699	                return UniTask.FromResult(new AwaitWorldEventResponse
+   700	                {
+   701	                    EventId = string.Empty,
+   702	                    Description = "no active session: gameplay is not in a Playing state",
+   703	                });
+   704	            }
+   705	
+   706	            if (_cachedPendingEvent != null)
+   707	            {
+   708	                Debug.Log("[TimeSystem] Returning cached world event immediately.");
+   709	                var cached = _cachedPendingEvent;
+   710	                _cachedPendingEvent = null;
+   711	                return UniTask.FromResult(cached);
+   712	            }
+   713	
+   714	            return _pendingEventSource.Task;
+   715	        }
+   716	
+   717	        // Called by whatever system decides a world event fired (new
+   718	        // applicant, monster incursion, ...). requiresDecision auto-pauses -
+   719	        // this is the "checkpoint" the AI GM / vote window waits on, and
+   720	        // stays paused until execute_decision is called.
+   721	        //
+   722	        // Not sent over the interprocess bus as pub/sub (see the comment on
+   723	        // AwaitWorldEventRequest in GameMessages.cs for why) - completing
+   724	        // _pendingEventSource is what actually delivers this to the bridge,
+   725	        // via the request-response AwaitWorldEventHandler below. The
+   726	        // in-memory Publish() call is just for any other in-Unity listener.
+   727	        //
+   728	        // P13A: a decision-requiring event is stored as its OWN pending instance,
+   729	        // queued behind anything already outstanding and identified by a unique id.
+   730	        /// <returns>
+   731	        /// False only when a decision-requiring event could not be stored because
+   732	        /// <see cref="MaxPendingDecisions"/> is reached: nothing is pending for it then, no
+   733	        /// message is published, no awaiter is completed, and no outstanding decision was
+   734	        /// touched. Always true for a non-decision event.
+   735	        /// </returns>
+   736	        public bool RaiseWorldEvent(string eventId, string description, bool requiresDecision, List<EventChoiceInfo> choices,
+   737	                                    string speakerDiscipleId = null, string speakerDisplayName = null)
+   738	        {
+   739	            Debug.Log($"[TimeSystem] World event raised: {eventId} (requiresDecision={requiresDecision})");
+   740	
+   741	            var effectiveChoices = choices ?? new List<EventChoiceInfo>();
+   742	            string instanceId = null;
    743	
-   744	    // ---------- P5B (Hybrid Permissions) — read-only permission contract ----------
-   745	    // The UI must never infer permission from OwnerType != Npc on its own; it asks
-   746	    // the authority (SectStateProvider) and renders the answer. Same evaluation the
-   747	    // mutation path revalidates, so display and commit can never disagree.
-   748	
-   749	    /// <summary>Three-way outcome of a task permission evaluation.</summary>
-   750	    public enum TaskPermissionOutcome
-   751	    {
-   752	        /// <summary>Requester may control this disciple right now.</summary>
-   753	        Allowed = 0,
-   754	        /// <summary>Requester is a known identity that simply does not have permission.</summary>
-   755	        Denied = 1,
-   756	        /// <summary>Membership/ownership data is missing or contradictory — fail closed, NEVER permission.</summary>
-   757	        ConsistencyError = 2,
-   758	    }
-   759	
-   760	    /// <summary>
-   761	    /// P5B — read-only result of a task permission evaluation. Never mutates state;
-   762	    /// the mutation path (TryAssignTask) revalidates the same rules before writing.
-   763	    /// </summary>
-   764	    public sealed class TaskPermissionResult
-   765	    {
-   766	        public TaskPermissionOutcome Outcome { get; private set; }
-   767	        public string Reason { get; private set; } = string.Empty;
-   768	
-   769	        /// <summary>True when the requested task already is the disciple's current task (a valid no-op).</summary>
-   770	        public bool IsNoOp { get; private set; }
-   771	
-   772	        /// <summary>True when a viewer owner is inside the protection window (SectMaster override not yet allowed).</summary>
-   773	        public bool OwnerProtected { get; private set; }
+   744	            if (requiresDecision)
+   745	            {
+   746	                bool alreadyPending = HasPendingDecision;
+   747	
+   748	                var pending = EnqueuePendingDecision(eventId, description, effectiveChoices,
+   749	                                                    speakerDiscipleId, speakerDisplayName);
+   750	                if (pending == null) return false; // cap reached - nothing was stored, nothing changed
+   751	
+   752	                instanceId = pending.InstanceId;
+   753	                effectiveChoices = new List<EventChoiceInfo>(pending.Choices);
+   754	
+   755	                // E2-lite/P13A: the pause reason is added only for the event that turns an
+   756	                // EMPTY pending state into a non-empty one - if any decision is still
+   757	                // outstanding (e.g. the player pressed Play but has not decided yet),
+   758	                // raising further events must NOT re-add the pause...
+   759	                if (!alreadyPending && _config.AutoPauseOnDecisionEvent)
+   760	                    Pause(TimePauseReason.PendingDecision);
+   761	                // ...and must never clear it either: another instance is still undecided.
+   762	            }
+   763	
+   764	            _worldEventPublisher.Publish(new WorldEventTriggeredMessage
+   765	            {
+   766	                EventId = eventId,
+   767	                InstanceId = instanceId,
+   768	                RequiresDecision = requiresDecision,
+   769	                Description = description,
+   770	                Choices = effectiveChoices,
+   771	                SpeakerDiscipleId = speakerDiscipleId,
+   772	                SpeakerDisplayName = speakerDisplayName,
+   773	            });
    774	
-   775	        /// <summary>Seconds left in the owner protection window (0 unless OwnerProtected).</summary>
-   776	        public float OwnerProtectionRemainingSeconds { get; private set; }
-   777	
-   778	        public bool Allowed => Outcome == TaskPermissionOutcome.Allowed;
-   779	
-   780	        public static TaskPermissionResult Allow()
-   781	            => new TaskPermissionResult { Outcome = TaskPermissionOutcome.Allowed };
-   782	
-   783	        public static TaskPermissionResult Denied(string reason)
-   784	            => new TaskPermissionResult { Outcome = TaskPermissionOutcome.Denied, Reason = reason ?? string.Empty };
+   775	            var response = new AwaitWorldEventResponse
+   776	            {
+   777	                EventId = eventId,
+   778	                InstanceId = instanceId,
+   779	                RequiresDecision = requiresDecision,
+   780	                Description = description,
+   781	                Choices = effectiveChoices,
+   782	                SpeakerDiscipleId = speakerDiscipleId,
+   783	                SpeakerDisplayName = speakerDisplayName,
+   784	            };
    785	
-   786	        public static TaskPermissionResult ConsistencyError(string reason)
-   787	            => new TaskPermissionResult { Outcome = TaskPermissionOutcome.ConsistencyError, Reason = reason ?? string.Empty };
-   788	
-   789	        internal TaskPermissionResult WithNoOp(bool isNoOp) { IsNoOp = isNoOp; return this; }
+   786	            if (requiresDecision)
+   787	            {
+   788	                _cachedPendingEvent = response;
+   789	            }
    790	
-   791	        internal TaskPermissionResult WithProtection(float remainingSeconds)
-   792	        {
-   793	            OwnerProtected = true;
-   794	            OwnerProtectionRemainingSeconds = remainingSeconds < 0f ? 0f : remainingSeconds;
-   795	            return this;
-   796	        }
-   797	    }
-   798	
-   799	    // Thin seam so SectStateQueryHandler doesn't need to know about every
-   800	    // subsystem directly - implement this on a small aggregator class that
-   801	    // does hold references (it's allowed to, it's not part of the bus).
-   802	    public interface ISectStateProvider
-   803	    {
-   804	        SectEconomyState BuildSectEconomyState();
-   805	        void ApplyDecisionConsequence(string eventId, string choiceId);
-   806	        void TickGathering(float deltaTimeSeconds);
-   807	        void TickCrafting(float deltaTimeSeconds);
-   808	        void RecruitOuterDisciple(DiscipleSex sex = DiscipleSex.Unspecified);
-   809	        PurchaseItemResponse TryPurchaseItem(string discipleId, string itemDefId, int grade, int quantity);
-   810	        bool TryChangeAvatarPart(string discipleId, string slot, string partId,
-   811	                                out string failReason, out AvatarAppearance result);
-   812	
-   813	        /// <summary>
-   814	        /// Task System v2 (§6) + P5B — assign a task to a disciple after a permission
-   815	        /// and validity check. Permission follows CheckTaskPermission (revalidated
-   816	        /// here): "SECT_MASTER" may control unowned NPCs and player-controlled
-   817	        /// disciples, and may override a Vi
-... [TRUNCATED: แสดง 40000 จาก 49296 bytes — ขอส่วนที่เหลือผ่าน need_files]
+   791	            var previous = _pendingEventSource;
+   792	            _pendingEventSource = new UniTaskCompletionSource<AwaitWorldEventResponse>();
+   793	            previous.TrySetResult(response);
+   794	            return true;
+   795	        }
+   796	    }
+   797	
+   798	    // Answers AwaitWorldEventRequest coming in over the interprocess bus.
+   799	    // Request-response, not pub/sub - see the comment on AwaitWorldEventRequest
+   800	    // in GameMessages.cs for wh
+... [TRUNCATED: แสดง 40000 จาก 57202 bytes — ขอส่วนที่เหลือผ่าน need_files]
 ````
 
 ### UnityProject/Assets/Scripts/Systems/SectStateProvider.cs (113534 bytes)
@@ -4538,7 +4542,7 @@
     1  UnityProject/Assets/Spine/Runtime
    42  UnityProject/Assets/Spine/Runtime/spine-csharp
   116  UnityProject/Assets/Spine/Runtime/spine-unity
-   48  UnityProject/Assets/Tests/EditMode
+   49  UnityProject/Assets/Tests/EditMode
     2  UnityProject/Assets/TextMesh Pro/Fonts
     3  UnityProject/Assets/TextMesh Pro/Resources
     4  UnityProject/Assets/TextMesh Pro/Resources/Fonts & Materials
@@ -5443,7 +5447,7 @@
   UnityProject/Assets/Spine/Runtime/spine-unity/Modules/TK2D/SpriteCollectionAttachmentLoader.cs
   UnityProject/Assets/Spine/Runtime/spine-unity/Shaders/Sprite/README.md
   UnityProject/Assets/Spine/Runtime/spine-unity/SkeletonDataModifierAssets/BlendModeMaterials/BlendModeMaterialsAsset.cs
-  ... [197 more files truncated — ปรับ TREE_MAX_LINES หรือ .aiignore]
+  ... [198 more files truncated — ปรับ TREE_MAX_LINES หรือ .aiignore]
 ```
 
 ## Recent Wiki Log (last 15 entries, each cut to 400 chars)

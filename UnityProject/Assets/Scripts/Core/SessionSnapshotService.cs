@@ -96,9 +96,9 @@ namespace Xianxia.Sect
         // ---------- capture ----------
 
         /// <summary>
-        /// P11A — capture a detached full-session snapshot (economy + accumulators
-        /// from the state authority, simulation speed + pending decision from
-        /// TimeSystem). Read-only; main-thread only.
+        /// P11A/P13B — capture a detached full-session snapshot (economy + accumulators
+        /// from the state authority, simulation speed + EVERY outstanding pending decision
+        /// from TimeSystem). Read-only; main-thread only.
         /// </summary>
         public SectSessionSnapshot CaptureSnapshot()
         {
@@ -107,19 +107,17 @@ namespace Xianxia.Sect
 
             snapshot.SimulationSpeed = _timeSystem != null ? _timeSystem.Speed : 1;
 
-            // P13A — a session save carries the CURRENT (oldest undecided) pending decision.
-            // The live pending state is a bounded queue, so more than one can be outstanding
-            // (only through a direct raise: the spawner excludes decision events while one is
-            // pending). The extra ones cannot ride along in this envelope, so say so loudly
-            // instead of dropping them silently - see SectSessionSnapshot's reset list.
-            if (_timeSystem != null && _timeSystem.PendingDecisionCount > 1)
-            {
-                Debug.LogWarning(
-                    $"[SessionSnapshotService] {_timeSystem.PendingDecisionCount} world-event decisions are " +
-                    $"outstanding; only the current one ('{_timeSystem.PendingInstanceId}') is captured. " +
-                    "The other(s) are not saved.");
-            }
+            // P13B — the WHOLE pending queue is captured, in arrival order, each occurrence
+            // keeping its instance id and its instance-specific payload (description, choices,
+            // optional speaker). Nothing is dropped and nothing is merged: the snapshot only
+            // carries plain data (no waiter, no subscription, no Unity object), and restoring
+            // one re-establishes what is still outstanding without applying any consequence.
+            snapshot.PendingEvents = _timeSystem != null
+                ? _timeSystem.CapturePendingDecisions()
+                : new List<PendingEventSnapshot>();
 
+            // Keys 4-7 remain a mirror of the CURRENT (oldest undecided) occurrence so a reader
+            // that predates PendingEvents still sees something. PendingEvents is authoritative.
             snapshot.PendingEventId = _timeSystem != null ? _timeSystem.PendingEventId : null;
             snapshot.PendingDescription = _timeSystem != null ? _timeSystem.PendingDescription : null;
             snapshot.PendingChoices = _timeSystem != null
@@ -335,12 +333,27 @@ namespace Xianxia.Sect
 
                 // 3. commit — neither step can fail after the validation above.
                 _stateProvider.TryApplySessionSnapshot(snapshot);
-                _timeSystem.RestoreSimulationState(
-                    snapshot.SimulationSpeed,
-                    snapshot.PendingEventId,
-                    snapshot.PendingDescription,
-                    snapshot.PendingChoices,
-                    snapshot.PendingDecisionPaused);
+                // P13B — restore the pending-decision QUEUE (each occurrence with its own
+                // instance id and payload), not just a single summary. An old save whose
+                // PendingEvents list is empty falls back to the Keys 4-7 summary inside
+                // RestoreSimulationState. Nothing is re-applied: a consequence belongs to a
+                // DECISION, and TimeSystem refuses to apply one twice.
+                if (snapshot.PendingEvents != null && snapshot.PendingEvents.Count > 0)
+                {
+                    _timeSystem.RestorePendingDecisions(
+                        snapshot.SimulationSpeed,
+                        snapshot.PendingEvents,
+                        snapshot.PendingDecisionPaused);
+                }
+                else
+                {
+                    _timeSystem.RestoreSimulationState(
+                        snapshot.SimulationSpeed,
+                        snapshot.PendingEventId,
+                        snapshot.PendingDescription,
+                        snapshot.PendingChoices,
+                        snapshot.PendingDecisionPaused);
+                }
             }
             finally
             {
@@ -414,6 +427,51 @@ namespace Xianxia.Sect
                         failReason = $"Session snapshot pending decision '{snapshot.PendingEventId}' has an " +
                                      $"invalid choice at index {i}.";
                         return false;
+                    }
+                }
+            }
+
+            // P13B — the persisted pending-instance queue is validated in FULL before anything is
+            // replaced: an entry with no event id cannot be restored as a decision, and a repeated
+            // instance id would make two occurrences indistinguishable (and let one decision apply
+            // twice). Both are refused outright, as is more instances than the live queue can hold.
+            var pendingEvents = snapshot.PendingEvents;
+            if (pendingEvents != null)
+            {
+                if (pendingEvents.Count > TimeSystem.MaxPendingDecisions)
+                {
+                    failReason = $"Session snapshot has {pendingEvents.Count} pending world events, more than " +
+                                 $"the live queue can hold ({TimeSystem.MaxPendingDecisions}).";
+                    return false;
+                }
+
+                var seenInstanceIds = new HashSet<string>(StringComparer.Ordinal);
+                for (int i = 0; i < pendingEvents.Count; i++)
+                {
+                    var entry = pendingEvents[i];
+                    if (entry == null || string.IsNullOrEmpty(entry.EventId))
+                    {
+                        failReason = $"Session snapshot pending event at index {i} has no event id.";
+                        return false;
+                    }
+
+                    if (!string.IsNullOrEmpty(entry.InstanceId) && !seenInstanceIds.Add(entry.InstanceId))
+                    {
+                        failReason = $"Session snapshot repeats pending event instance id '{entry.InstanceId}'; " +
+                                     "two occurrences with one id could each be decided.";
+                        return false;
+                    }
+
+                    if (entry.Choices == null) continue;
+                    for (int c = 0; c < entry.Choices.Count; c++)
+                    {
+                        var choice = entry.Choices[c];
+                        if (choice == null || string.IsNullOrEmpty(choice.ChoiceId))
+                        {
+                            failReason = $"Session snapshot pending event '{entry.EventId}' has an invalid " +
+                                         $"choice at index {c}.";
+                            return false;
+                        }
                     }
                 }
             }

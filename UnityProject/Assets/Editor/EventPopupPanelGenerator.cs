@@ -45,6 +45,14 @@ namespace Xianxia.Sect.EditorTools
         private const float TitleStripHeight = 56f;
         private const float ChoiceMinHeight = 56f;
 
+        // P13B — the reserved speaker column on the left of the panel. The description and the
+        // choices are inset past it whether or not the event names a speaker, so a panel with a
+        // portrait and one without have the SAME text layout (no reflow when the area hides).
+        private const float SpeakerColumnLeft = 20f;
+        private const float SpeakerColumnWidth = 160f;
+        private const float SpeakerPortraitHeight = 210f;
+        private const float SpeakerAreaHeight = 266f;
+
         private static readonly Color Cream = new Color(0.93f, 0.88f, 0.78f, 1f);
         private static readonly Color TitleBrown = new Color(0.42f, 0.30f, 0.20f, 1f);
         private static readonly Color ButtonNormal = new Color(0.85f, 0.82f, 0.76f, 1f);
@@ -147,13 +155,61 @@ namespace Xianxia.Sect.EditorTools
             hideRt.sizeDelta = new Vector2(110f, 36f);
             hideRt.anchoredPosition = new Vector2(-10f, 0f);
 
+            // ── P13B optional speaker column (left) ──
+            // The whole area is toggled by EventPopupView.SetSpeaker; when the event names no
+            // speaker it is simply inactive and the panel reads as before. It reuses the existing
+            // AvatarRenderer (Bust framing) — no separate dialogue-portrait system.
+            var speakerRoot = CreateChild(panel.transform, "SpeakerRoot", typeof(RectTransform));
+            var speakerRt = speakerRoot.GetComponent<RectTransform>();
+            speakerRt.anchorMin = speakerRt.anchorMax = new Vector2(0f, 1f);
+            speakerRt.pivot = new Vector2(0f, 1f);
+            speakerRt.sizeDelta = new Vector2(SpeakerColumnWidth, SpeakerAreaHeight);
+            speakerRt.anchoredPosition = new Vector2(SpeakerColumnLeft, -(TitleStripHeight + 8f));
+
+            // Portrait viewport: the renderer and its layer prototype live here.
+            var portrait = CreateChild(speakerRoot.transform, "SpeakerPortrait",
+                typeof(CanvasGroup), typeof(AvatarRenderer));
+            var portraitRt = portrait.GetComponent<RectTransform>();
+            portraitRt.anchorMin = new Vector2(0f, 1f);
+            portraitRt.anchorMax = new Vector2(1f, 1f);
+            portraitRt.pivot = new Vector2(0.5f, 1f);
+            portraitRt.sizeDelta = new Vector2(0f, SpeakerPortraitHeight);
+            portraitRt.anchoredPosition = Vector2.zero;
+
+            var layerRoot = CreateChild(portrait.transform, "LayerRoot", typeof(RectTransform));
+            StretchFull(layerRoot.GetComponent<RectTransform>());
+
+            // Blank prototype every layer Image is cloned from (stored INACTIVE, like the
+            // choice-button template), stretched to fill the viewport and aspect-preserving so
+            // the 1024x1536 part canvas is never stretched non-uniformly.
+            var layerPrefab = CreateChild(portrait.transform, "LayerPrototype", typeof(Image));
+            StretchFull(layerPrefab.GetComponent<RectTransform>());
+            var layerPrefabImage = layerPrefab.GetComponent<Image>();
+            layerPrefabImage.color = Color.white;
+            layerPrefabImage.preserveAspect = true;
+            layerPrefabImage.raycastTarget = false;
+            layerPrefab.SetActive(false);
+
+            var speakerName = CreateText(speakerRoot.transform, "SpeakerNameText", string.Empty, font);
+            var speakerNameRt = speakerName.rectTransform;
+            speakerNameRt.anchorMin = new Vector2(0f, 0f);
+            speakerNameRt.anchorMax = new Vector2(1f, 0f);
+            speakerNameRt.pivot = new Vector2(0.5f, 0f);
+            speakerNameRt.sizeDelta = new Vector2(0f, 48f);
+            speakerNameRt.anchoredPosition = Vector2.zero;
+            speakerName.color = UiPalette.Text;
+            speakerName.alignment = TextAlignmentOptions.Center;
+            speakerName.fontSize = 26;
+
             var description = CreateText(panel.transform, "DescriptionText", string.Empty, font);
             var descRt = description.rectTransform;
             descRt.anchorMin = new Vector2(0f, 1f);
             descRt.anchorMax = new Vector2(1f, 1f);
             descRt.pivot = new Vector2(0.5f, 1f);
-            descRt.sizeDelta = new Vector2(-40f, 150f);
-            descRt.anchoredPosition = new Vector2(0f, -(TitleStripHeight + 10f));
+            // Inset past the speaker column (+20 gutter) and re-centred in what is left, so the
+            // text sits in the same place whether or not a portrait is drawn.
+            descRt.sizeDelta = new Vector2(-(SpeakerColumnWidth + 40f), 150f);
+            descRt.anchoredPosition = new Vector2(SpeakerColumnWidth * 0.5f, -(TitleStripHeight + 10f));
             description.color = UiPalette.Text;
             description.alignment = TextAlignmentOptions.TopLeft;
             description.fontSize = 34;   // larger than the title (spec §2)
@@ -164,7 +220,7 @@ namespace Xianxia.Sect.EditorTools
             var choicesRt = choicesRoot.GetComponent<RectTransform>();
             choicesRt.anchorMin = new Vector2(0f, 0f);
             choicesRt.anchorMax = new Vector2(1f, 1f);
-            choicesRt.offsetMin = new Vector2(20f, 56f);
+            choicesRt.offsetMin = new Vector2(20f + SpeakerColumnWidth, 56f);
             choicesRt.offsetMax = new Vector2(-20f, -(TitleStripHeight + 10f + 150f));
             var vlg = choicesRoot.GetComponent<VerticalLayoutGroup>();
             vlg.padding = new RectOffset(0, 0, 0, 0);
@@ -210,6 +266,17 @@ namespace Xianxia.Sect.EditorTools
             status.alignment = TextAlignmentOptions.MidlineLeft;
             status.fontSize = 26;
 
+            // Wire the AvatarRenderer the same way DiscipleListView does: it is a MonoBehaviour on
+            // the prefab and cannot resolve DI itself, so the view hands it the part pool at
+            // runtime — the prefab only stores where its layers go.
+            var rendererSo = new SerializedObject(portrait.GetComponent<AvatarRenderer>());
+            rendererSo.FindProperty("layerRoot").objectReferenceValue = layerRoot.GetComponent<RectTransform>();
+            rendererSo.FindProperty("layerPrefab").objectReferenceValue = layerPrefabImage;
+            // Bust = the dialogue-drawing the runtime asks for; stored so the prefab also looks
+            // right in the editor before the presenter ever calls SetFraming.
+            rendererSo.FindProperty("framing").enumValueIndex = (int)AvatarFraming.Bust;
+            rendererSo.ApplyModifiedPropertiesWithoutUndo();
+
             var view = root.AddComponent<EventPopupView>();
             var so = new SerializedObject(view);
             so.FindProperty("titleText").objectReferenceValue = title;
@@ -218,7 +285,14 @@ namespace Xianxia.Sect.EditorTools
             so.FindProperty("choicesRoot").objectReferenceValue = choicesRt;
             so.FindProperty("choiceButtonPrefab").objectReferenceValue = templateButton;
             so.FindProperty("hideButton").objectReferenceValue = hideButton;
+            so.FindProperty("speakerRoot").objectReferenceValue = speakerRoot;
+            so.FindProperty("speakerNameText").objectReferenceValue = speakerName;
+            so.FindProperty("speakerRenderer").objectReferenceValue = portrait.GetComponent<AvatarRenderer>();
             so.ApplyModifiedPropertiesWithoutUndo();
+
+            // No speaker in the generated default: the area starts hidden and the presenter turns
+            // it on for an event that names one.
+            speakerRoot.SetActive(false);
 
             return SavePrefab(root, RootFolder, PrefabName);
         }

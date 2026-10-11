@@ -51,15 +51,18 @@ namespace Xianxia.Sect
     /// </summary>
     public sealed class PendingWorldEvent
     {
-        public PendingWorldEvent(string instanceId, string eventId, string description, List<EventChoiceInfo> choices)
+        public PendingWorldEvent(string instanceId, string eventId, string description, List<EventChoiceInfo> choices,
+                                 string speakerDiscipleId = null, string speakerDisplayName = null)
         {
             InstanceId = instanceId;
             EventId = eventId;
             Description = description;
             Choices = choices ?? new List<EventChoiceInfo>();
+            SpeakerDiscipleId = speakerDiscipleId ?? string.Empty;
+            SpeakerDisplayName = speakerDisplayName ?? string.Empty;
         }
 
-        /// <summary>Unique per raised occurrence (never reused), e.g. <c>evt_000001</c>.</summary>
+        /// <summary>Unique per raised occurrence (never reused within a session; stable across a save/load).</summary>
         public string InstanceId { get; }
 
         /// <summary>The authored event definition id (<c>cfg.game.EventDef.Id</c>).</summary>
@@ -70,6 +73,20 @@ namespace Xianxia.Sect
 
         /// <summary>The choices this occurrence offers (never null).</summary>
         public IReadOnlyList<EventChoiceInfo> Choices { get; }
+
+        /// <summary>
+        /// P13B — optional speaker: the disciple whose portrait the popup renders. Empty for an
+        /// event with no speaker (the popup then draws no portrait at all rather than a blank one).
+        /// This is the instance-specific payload that has to survive a save, and it is the ONLY
+        /// part of the popup a restore needs — the portrait itself is rebuilt from the roster.
+        /// </summary>
+        public string SpeakerDiscipleId { get; }
+
+        /// <summary>Display name shown beside the portrait; empty when <see cref="SpeakerDiscipleId"/> is.</summary>
+        public string SpeakerDisplayName { get; }
+
+        /// <summary>True when this occurrence names a speaker to render.</summary>
+        public bool HasSpeaker => !string.IsNullOrEmpty(SpeakerDiscipleId);
 
         /// <summary>
         /// Exact choice-id match against THIS occurrence's choices — never a substring or
@@ -151,6 +168,9 @@ namespace Xianxia.Sect
         private readonly List<PendingWorldEvent> _pendingDecisions = new List<PendingWorldEvent>();
         private int _nextEventInstanceNumber = 1;
         private static readonly List<EventChoiceInfo> NoChoices = new List<EventChoiceInfo>();
+
+        /// <summary>Prefix of a minted instance id; the numeric suffix is what a restore re-seeds past.</summary>
+        private const string InstanceIdPrefix = "evt_";
 
         public TimeSystem(
             IPublisher<TimeSpeedChangedMessage> speedPublisher,
@@ -360,7 +380,9 @@ namespace Xianxia.Sect
         /// refused (logged here) and NOTHING was stored — no pending decision is ever replaced
         /// or evicted, and the caller must not report the event as pending.
         /// </summary>
-        private PendingWorldEvent EnqueuePendingDecision(string eventId, string description, List<EventChoiceInfo> choices)
+        private PendingWorldEvent EnqueuePendingDecision(string eventId, string description, List<EventChoiceInfo> choices,
+                                                         string speakerDiscipleId = null, string speakerDisplayName = null,
+                                                         string explicitInstanceId = null)
         {
             if (_pendingDecisions.Count >= MaxPendingDecisions)
             {
@@ -371,9 +393,64 @@ namespace Xianxia.Sect
                 return null;
             }
 
-            var pending = new PendingWorldEvent($"evt_{_nextEventInstanceNumber++:000000}", eventId, description, choices);
+            // P13B — a restore supplies the id the occurrence already had, so a decision in
+            // flight across a save/load still names a live instance. A fresh raise always mints one.
+            string instanceId = explicitInstanceId;
+            if (string.IsNullOrEmpty(instanceId))
+            {
+                instanceId = $"{InstanceIdPrefix}{_nextEventInstanceNumber:000000}";
+                _nextEventInstanceNumber++;
+            }
+
+            var pending = new PendingWorldEvent(instanceId, eventId, description, choices,
+                                                speakerDiscipleId, speakerDisplayName);
             _pendingDecisions.Add(pending);
             return pending;
+        }
+
+        /// <summary>
+        /// P13B — the outstanding pending decisions to persist, oldest first. PLAIN DATA only:
+        /// the snapshot contract holds no waiter, no subscription and no Unity object, so this
+        /// copies across the serializable fields and nothing else. Returns a fresh list.
+        /// </summary>
+        public List<PendingEventSnapshot> CapturePendingDecisions()
+        {
+            var captured = new List<PendingEventSnapshot>(_pendingDecisions.Count);
+            for (int i = 0; i < _pendingDecisions.Count; i++)
+            {
+                var pending = _pendingDecisions[i];
+                captured.Add(new PendingEventSnapshot
+                {
+                    InstanceId = pending.InstanceId,
+                    EventId = pending.EventId,
+                    Description = pending.Description,
+                    Choices = new List<EventChoiceInfo>(pending.Choices),
+                    SpeakerDiscipleId = pending.SpeakerDiscipleId,
+                    SpeakerDisplayName = pending.SpeakerDisplayName,
+                });
+            }
+            return captured;
+        }
+
+        /// <summary>
+        /// P13B — re-seed the instance-id counter PAST every restored id, so a newly raised event
+        /// can never be minted with an id an outstanding restored occurrence already owns.
+        /// An unrecognisable id (a hand-authored or future-format one) leaves the counter alone
+        /// rather than parsing loosely.
+        /// </summary>
+        private void ReserveInstanceId(string instanceId)
+        {
+            if (string.IsNullOrEmpty(instanceId)) return;
+            if (!instanceId.StartsWith(InstanceIdPrefix, System.StringComparison.Ordinal)) return;
+
+            int number;
+            if (!int.TryParse(instanceId.Substring(InstanceIdPrefix.Length),
+                              System.Globalization.NumberStyles.None,
+                              System.Globalization.CultureInfo.InvariantCulture, out number))
+                return;
+
+            int candidate = number + 1; // numbers are only compared, never formatted back
+            if (candidate > _nextEventInstanceNumber) _nextEventInstanceNumber = candidate;
         }
 
         /// <summary>
@@ -388,40 +465,99 @@ namespace Xianxia.Sect
         public void RestoreSimulationState(int speed, string pendingEventId, string pendingDescription,
                                            List<EventChoiceInfo> pendingChoices, bool pendingDecisionPaused)
         {
+            // Compatibility path for a caller / an older save that carries only the single
+            // pending-decision summary (no instance id): it becomes one occurrence under a
+            // FRESH id, which is the best that can be done without an id to restore.
+            RestorePendingDecisions(speed, string.IsNullOrEmpty(pendingEventId)
+                ? NoPendingEvents
+                : new List<PendingEventSnapshot>
+                {
+                    new PendingEventSnapshot
+                    {
+                        EventId = pendingEventId,
+                        Description = pendingDescription,
+                        Choices = pendingChoices != null ? new List<EventChoiceInfo>(pendingChoices) : new List<EventChoiceInfo>(),
+                    },
+                },
+                pendingDecisionPaused);
+        }
+
+        private static readonly List<PendingEventSnapshot> NoPendingEvents = new List<PendingEventSnapshot>();
+
+        /// <summary>
+        /// P13B — restore the WHOLE pending-decision queue from a validated snapshot, on the
+        /// Unity main thread. A restored occurrence keeps the instance id it was saved under
+        /// (so a decision already addressed to it is still valid), and its instance-specific
+        /// payload (description, choices, optional speaker) comes back with it.
+        ///
+        /// Nothing here APPLIES a consequence: this only re-establishes what is still
+        /// outstanding. Applying is the decision's job, and a decision can only ever be applied
+        /// once, so restoring the same save twice cannot pay twice.
+        ///
+        /// The restored occurrence is re-published as a world-event message so the UI, the chip
+        /// and the bridge can react — the UI is REBUILT from this authoritative state rather than
+        /// from anything serialized (§4). The bridge hand-off cache is deliberately NOT restored
+        /// (it is consumed-on-read transport state).
+        /// </summary>
+        public void RestorePendingDecisions(int speed, List<PendingEventSnapshot> pendingEvents,
+                                            bool pendingDecisionPaused)
+        {
             SetSpeed(speed);
 
-            // P13A — a restore replaces the pending state outright (it describes the
-            // session being loaded), so whatever the session being left had queued goes first.
+            // A restore replaces the pending state outright (it describes the session being
+            // loaded), so whatever the session being left had queued goes first.
             ClearPendingDecisions();
 
-            if (string.IsNullOrEmpty(pendingEventId))
+            int restored = 0;
+            if (pendingEvents != null)
             {
-                Resume(TimePauseReason.PendingDecision); // a fresh session is not decision-paused
-                return;
-            }
+                for (int i = 0; i < pendingEvents.Count && restored < MaxPendingDecisions; i++)
+                {
+                    var entry = pendingEvents[i];
+                    if (entry == null || string.IsNullOrEmpty(entry.EventId)) continue;
 
-            // P13A — the restored decision is stored under a FRESH instance id. Instance ids
-            // identify a LIVE occurrence and are deliberately not persisted (see the reset
-            // list in SectSessionSnapshot.cs): a decision addressed to a pre-save instance is
-            // stale after a load and is refused, while the restored event itself stays fully
-            // answerable under its new id.
-            var restored = EnqueuePendingDecision(pendingEventId, pendingDescription,
-                                                  pendingChoices != null ? new List<EventChoiceInfo>(pendingChoices) : null);
-            if (restored == null) return; // capped state cannot occur from a validated snapshot
+                    // A duplicate id would make two live occurrences indistinguishable and let
+                    // one decision apply twice — skip it rather than store an ambiguous queue.
+                    PendingWorldEvent existing;
+                    if (!string.IsNullOrEmpty(entry.InstanceId) && TryGetPendingDecision(entry.InstanceId, out existing))
+                    {
+                        Debug.LogWarning($"[TimeSystem] Restore skipped pending event '{entry.EventId}': instance id " +
+                                         $"'{entry.InstanceId}' is already restored — a duplicate id would make the " +
+                                         "occurrences indistinguishable.");
+                        continue;
+                    }
+
+                    var stored = EnqueuePendingDecision(entry.EventId, entry.Description, entry.Choices,
+                                                        entry.SpeakerDiscipleId, entry.SpeakerDisplayName,
+                                                        entry.InstanceId);
+                    if (stored == null) break;
+
+                    ReserveInstanceId(stored.InstanceId);
+                    restored++;
+                }
+            }
 
             // The snapshot's pause flag is authoritative: a restore that says "not paused"
             // must not leave the clock frozen on a pause whose event no longer exists.
-            if (pendingDecisionPaused) Pause(TimePauseReason.PendingDecision);
-            else Resume(TimePauseReason.PendingDecision);
+            if (restored == 0 || !pendingDecisionPaused) Resume(TimePauseReason.PendingDecision);
+            else Pause(TimePauseReason.PendingDecision);
 
-            _worldEventPublisher.Publish(new WorldEventTriggeredMessage
+            // Re-announce each restored occurrence, oldest first, so derived UI/bridge state is
+            // rebuilt from the authoritative pending queue instead of from the save.
+            for (int i = 0; i < _pendingDecisions.Count; i++)
             {
-                EventId = restored.EventId,
-                InstanceId = restored.InstanceId,
-                RequiresDecision = true,
-                Description = restored.Description,
-                Choices = new List<EventChoiceInfo>(restored.Choices),
-            });
+                var pending = _pendingDecisions[i];
+                _worldEventPublisher.Publish(new WorldEventTriggeredMessage
+                {
+                    EventId = pending.EventId,
+                    InstanceId = pending.InstanceId,
+                    RequiresDecision = true,
+                    Description = pending.Description,
+                    Choices = new List<EventChoiceInfo>(pending.Choices),
+                    SpeakerDiscipleId = pending.SpeakerDiscipleId,
+                    SpeakerDisplayName = pending.SpeakerDisplayName,
+                });
+            }
         }
 
         /// <summary>Sets the simulation speed, validated to <see cref="MinSpeed"/>..<see cref="MaxSpeed"/>.</summary>
@@ -597,7 +733,8 @@ namespace Xianxia.Sect
         /// message is published, no awaiter is completed, and no outstanding decision was
         /// touched. Always true for a non-decision event.
         /// </returns>
-        public bool RaiseWorldEvent(string eventId, string description, bool requiresDecision, List<EventChoiceInfo> choices)
+        public bool RaiseWorldEvent(string eventId, string description, bool requiresDecision, List<EventChoiceInfo> choices,
+                                    string speakerDiscipleId = null, string speakerDisplayName = null)
         {
             Debug.Log($"[TimeSystem] World event raised: {eventId} (requiresDecision={requiresDecision})");
 
@@ -608,7 +745,8 @@ namespace Xianxia.Sect
             {
                 bool alreadyPending = HasPendingDecision;
 
-                var pending = EnqueuePendingDecision(eventId, description, effectiveChoices);
+                var pending = EnqueuePendingDecision(eventId, description, effectiveChoices,
+                                                    speakerDiscipleId, speakerDisplayName);
                 if (pending == null) return false; // cap reached - nothing was stored, nothing changed
 
                 instanceId = pending.InstanceId;
@@ -630,6 +768,8 @@ namespace Xianxia.Sect
                 RequiresDecision = requiresDecision,
                 Description = description,
                 Choices = effectiveChoices,
+                SpeakerDiscipleId = speakerDiscipleId,
+                SpeakerDisplayName = speakerDisplayName,
             });
 
             var response = new AwaitWorldEventResponse
@@ -639,6 +779,8 @@ namespace Xianxia.Sect
                 RequiresDecision = requiresDecision,
                 Description = description,
                 Choices = effectiveChoices,
+                SpeakerDiscipleId = speakerDiscipleId,
+                SpeakerDisplayName = speakerDisplayName,
             };
 
             if (requiresDecision)

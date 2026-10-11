@@ -20,6 +20,16 @@ namespace Xianxia.Sect.UI
         public List<EventChoiceInfo> Choices;
 
         /// <summary>
+        /// P13B — optional speaker (the disciple whose portrait the panel renders). Empty for an
+        /// event that has no speaker; carried through so a restored event rebuilds the same
+        /// portrait instead of a generic panel.
+        /// </summary>
+        public string SpeakerDiscipleId;
+
+        /// <summary>Display name shown beside the speaker portrait; empty when there is no speaker.</summary>
+        public string SpeakerDisplayName;
+
+        /// <summary>
         /// Supplied by the opener (<see cref="WorldEventUISystem"/>) so the panel never
         /// needs a UIService reference of its own — same shape as
         /// <see cref="DiscipleListArgs.CloseCallback"/>. Invoked both when the player
@@ -52,6 +62,13 @@ namespace Xianxia.Sect.UI
         private readonly TimeSystem _timeSystem;
         private readonly ISubscriber<DecisionExecutedMessage> _decisionExecutedSubscriber;
 
+        /// <summary>
+        /// P13B — used ONLY to resolve the optional speaker's appearance (the same roster read
+        /// DiscipleDetailPresenter does). Null in a construction site that wires no roster: the
+        /// panel then renders no portrait rather than failing to open.
+        /// </summary>
+        private readonly ISectStateProvider _stateProvider;
+
         private IDisposable _subscription;
         private Action _closeCallback;
         private string _currentInstanceId;
@@ -61,11 +78,13 @@ namespace Xianxia.Sect.UI
         public EventPopupPresenter(
             DecisionExecutor decisionExecutor,
             TimeSystem timeSystem,
-            ISubscriber<DecisionExecutedMessage> decisionExecutedSubscriber)
+            ISubscriber<DecisionExecutedMessage> decisionExecutedSubscriber,
+            ISectStateProvider stateProvider = null)
         {
             _decisionExecutor = decisionExecutor;
             _timeSystem = timeSystem;
             _decisionExecutedSubscriber = decisionExecutedSubscriber;
+            _stateProvider = stateProvider;
         }
 
         protected override void OnViewBound()
@@ -83,18 +102,91 @@ namespace Xianxia.Sect.UI
         {
             var openArgs = args as EventPopupOpenArgs;
             _closeCallback = openArgs?.CloseCallback;
-            _currentInstanceId = openArgs?.InstanceId;
-            _currentEventId = openArgs?.EventId;
+
+            // What the OPENER handed over is what this panel shows, deliberately: the opener is
+            // the authority on the current event (WorldEventUISystem reads TimeSystem, never a
+            // message payload), and if it ever hands over content that contradicts the pending
+            // state the click is REJECTED with the reason shown inline rather than silently
+            // reconciled. Re-deriving here would hide that contradiction from the player.
+            //
+            // Re-derivation happens instead on every orchestrator sweep, through
+            // RefreshFromAuthority, which re-targets the panel when the CURRENT occurrence is no
+            // longer the one on screen.
+            Show(openArgs?.InstanceId, openArgs?.EventId, openArgs?.Description,
+                 openArgs?.Choices ?? new List<EventChoiceInfo>(),
+                 openArgs?.SpeakerDiscipleId, openArgs?.SpeakerDisplayName);
+        }
+
+        /// <summary>
+        /// P13B — re-derive the WHOLE panel from the authoritative pending state. Called by the
+        /// orchestrator on its per-frame sweep, so the panel can never keep showing an occurrence
+        /// that has been resolved or superseded: this is a no-op unless the CURRENT pending
+        /// instance differs from the one on screen, so it does not rebuild the choice buttons
+        /// every frame.
+        ///
+        /// This is the ONLY place the panel adopts authoritative content on its own — see
+        /// <see cref="OnOpen"/> for why an open deliberately trusts the opener instead.
+        /// </summary>
+        public void RefreshFromAuthority()
+        {
+            if (!_timeSystem.HasPendingDecision) return;
+
+            string currentInstanceId = _timeSystem.PendingInstanceId;
+            if (string.IsNullOrEmpty(currentInstanceId) || currentInstanceId == _currentInstanceId) return;
+
+            PendingWorldEvent pending;
+            if (!_timeSystem.TryGetPendingDecision(currentInstanceId, out pending)) return;
+
+            Show(pending.InstanceId, pending.EventId, pending.Description,
+                 new List<EventChoiceInfo>(pending.Choices),
+                 pending.SpeakerDiscipleId, pending.SpeakerDisplayName);
+        }
+
+        /// <summary>
+        /// Render one occurrence (identity + instance-specific payload). Re-enables the choices
+        /// and clears any stale status: whatever was on screen before belongs to a DIFFERENT
+        /// occurrence, so carrying its error text over would be a lie about this one.
+        /// </summary>
+        private void Show(string instanceId, string eventId, string description, List<EventChoiceInfo> choices,
+                          string speakerDiscipleId, string speakerDisplayName)
+        {
+            _currentInstanceId = instanceId;
+            _currentEventId = eventId;
             _processing = false;
 
-            View.SetEvent(openArgs?.EventId, openArgs?.Description);
+            View.SetEvent(eventId, description);
             View.ClearStatus();
 
-            var choices = (openArgs?.Choices ?? new List<EventChoiceInfo>())
+            var viewChoices = (choices ?? new List<EventChoiceInfo>())
+                .Where(c => c != null)
                 .Select(c => new EventChoiceViewData { ChoiceId = c.ChoiceId, Label = c.Label })
                 .ToList();
-            View.SetChoices(choices);
+            View.SetChoices(viewChoices);
             View.SetChoicesEnabled(true);
+
+            View.SetSpeaker(speakerDisplayName, ResolveSpeakerAppearance(speakerDiscipleId));
+        }
+
+        /// <summary>
+        /// The speaker's appearance, from the authoritative roster — the portrait is RE-DERIVED on
+        /// load, never serialized (§4). No speaker, an unknown disciple, or no roster wired all
+        /// resolve to null, which the view renders as "no speaker area".
+        /// </summary>
+        private AvatarAppearance ResolveSpeakerAppearance(string discipleId)
+        {
+            if (string.IsNullOrEmpty(discipleId) || _stateProvider == null) return null;
+
+            var disciples = _stateProvider.BuildSectEconomyState()?.Disciples;
+            if (disciples == null) return null;
+
+            for (int i = 0; i < disciples.Count; i++)
+            {
+                var d = disciples[i];
+                if (d == null || d.DiscipleId != discipleId) continue;
+                return d.Avatar != null ? d.Avatar.Clone() : new AvatarAppearance();
+            }
+
+            return null; // the speaker is not in the roster (left / not spawned) - no portrait
         }
 
         private void OnChoiceClicked(string choiceId)
@@ -128,6 +220,15 @@ namespace Xianxia.Sect.UI
             View.SetStatus(result.Reason);
             View.SetChoicesEnabled(_timeSystem.HasPendingDecision);
         }
+
+        /// <summary>
+        /// The instance this panel is currently showing (null when none). Lets the orchestrator
+        /// tell "the panel is already on this occurrence" from "the panel is stale".
+        /// </summary>
+        public string ShownInstanceId => _currentInstanceId;
+
+        /// <summary>True while a decision is in flight (choices are locked).</summary>
+        public bool IsProcessing => _processing;
 
         /// <summary>The player hid the popup: no decision, no resume, no clearing of the event.</summary>
         private void OnHideRequested()
