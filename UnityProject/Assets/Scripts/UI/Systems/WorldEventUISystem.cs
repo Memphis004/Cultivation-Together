@@ -35,8 +35,12 @@ namespace Xianxia.Sect.UI
         private IDisposable _phaseSubscription;
 
         private UIPanelHandle _popup;
+        private string _popupInstanceId;  // the pending INSTANCE the open popup is showing
         private UIPanelHandle _chip;
-        private string _hiddenEventId;   // the player hid the popup for THIS event
+
+        // P13A — the player hides the popup for a specific OCCURRENCE, not for a definition:
+        // hiding one bandit raid must not keep the popup closed for the next one.
+        private string _hiddenInstanceId;
         private bool _chipRaised;
         private bool _chipHidden;
         private bool _chipOpenAttempted;
@@ -83,7 +87,7 @@ namespace Xianxia.Sect.UI
             if (!SessionPlaying)
             {
                 if (_popup != null) ClosePopup();
-                _hiddenEventId = null;
+                _hiddenInstanceId = null;
                 _chipRaised = false;
                 SetChipHidden(true);
                 return;
@@ -95,17 +99,27 @@ namespace Xianxia.Sect.UI
             SetChipHidden(false);
 
             bool pending = _timeSystem.HasPendingDecision;
+            // P13A — the CURRENT event is the oldest undecided one; every decision below is
+            // keyed on its instance id, never on the definition id.
+            string currentInstanceId = _timeSystem.PendingInstanceId;
 
             if (!pending)
             {
                 if (_popup != null) ClosePopup();
-                _hiddenEventId = null;   // the event ended - nothing is "hidden" any more
+                _hiddenInstanceId = null;   // the event ended - nothing is "hidden" any more
             }
-            else if (_popup == null
-                     && !DiscipleModalScope.IsOpen                                         // never over a modal
-                     && _hiddenEventId != _timeSystem.PendingEventId)                     // the player hid this one
+            else
             {
-                OpenPopup();
+                // P13A — while several decisions are outstanding the popup must always show the
+                // CURRENT (oldest undecided) instance. `_popup != null` for a DIFFERENT instance
+                // means a stale event is still on screen, so this re-targets it: UIService.Open
+                // feeds the existing panel instance the new args. That keeps the resolved
+                // event's choices from lingering (a click from them could only be rejected)
+                // without destroying and rebuilding the panel.
+                bool needsOpen = (_popup == null || _popupInstanceId != currentInstanceId)
+                                 && !DiscipleModalScope.IsOpen                // never over a modal
+                                 && _hiddenInstanceId != currentInstanceId;   // the player hid this one
+                if (needsOpen) OpenPopup();
             }
 
             RefreshChip(pending);
@@ -172,13 +186,16 @@ namespace Xianxia.Sect.UI
         {
             try
             {
+                string instanceId = _timeSystem.PendingInstanceId;
                 _popup = _uiService.Open(PopupPanelId, new EventPopupOpenArgs
                 {
+                    InstanceId = instanceId,
                     EventId = _timeSystem.PendingEventId,
                     Description = _timeSystem.PendingDescription,
                     Choices = new List<EventChoiceInfo>(_timeSystem.PendingChoices),
                     CloseCallback = OnPopupCloseRequested,
                 });
+                _popupInstanceId = instanceId;
             }
             catch (Exception ex)
             {
@@ -198,13 +215,14 @@ namespace Xianxia.Sect.UI
         /// </summary>
         private void OnPopupCloseRequested()
         {
-            if (_timeSystem.HasPendingDecision) _hiddenEventId = _timeSystem.PendingEventId;
+            if (_timeSystem.HasPendingDecision) _hiddenInstanceId = _timeSystem.PendingInstanceId;
             ClosePopup();
         }
 
         private void ClosePopup()
         {
             _popup = null;
+            _popupInstanceId = null;
             try
             {
                 _uiService.Close(PopupPanelId);
@@ -239,7 +257,7 @@ namespace Xianxia.Sect.UI
         {
             // The player asked for the popup back: clear "hidden" and let Refresh open it
             // (still blocked by a modal? then it opens as soon as the modal closes).
-            _hiddenEventId = null;
+            _hiddenInstanceId = null;
             Refresh();
         }
 

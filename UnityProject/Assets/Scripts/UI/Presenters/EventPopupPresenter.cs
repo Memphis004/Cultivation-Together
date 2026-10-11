@@ -8,6 +8,13 @@ namespace Xianxia.Sect.UI
 {
     public class EventPopupOpenArgs
     {
+        /// <summary>
+        /// P13A — the pending INSTANCE this popup is showing. A decision always targets it, so
+        /// a popup left open for an occurrence that is no longer pending can only produce a
+        /// rejection, never a wrong decision.
+        /// </summary>
+        public string InstanceId;
+
         public string EventId;
         public string Description;
         public List<EventChoiceInfo> Choices;
@@ -47,6 +54,7 @@ namespace Xianxia.Sect.UI
 
         private IDisposable _subscription;
         private Action _closeCallback;
+        private string _currentInstanceId;
         private string _currentEventId;
         private bool _processing;
 
@@ -75,6 +83,7 @@ namespace Xianxia.Sect.UI
         {
             var openArgs = args as EventPopupOpenArgs;
             _closeCallback = openArgs?.CloseCallback;
+            _currentInstanceId = openArgs?.InstanceId;
             _currentEventId = openArgs?.EventId;
             _processing = false;
 
@@ -97,7 +106,9 @@ namespace Xianxia.Sect.UI
             DecisionResult result;
             try
             {
-                result = _decisionExecutor.Execute(_currentEventId, choiceId);
+                // P13A — the decision names the instance this popup is showing, so a click can
+                // only ever resolve THAT occurrence (a stale popup is rejected, not guessed at).
+                result = _decisionExecutor.Execute(_currentInstanceId, _currentEventId, choiceId);
             }
             finally
             {
@@ -134,7 +145,15 @@ namespace Xianxia.Sect.UI
             // Ignore our own click: Execute publishes synchronously, and that path
             // already handled the close above.
             if (_processing) return;
-            if (message.EventId != _currentEventId) return;
+
+            // P13A — match the INSTANCE the message names (exact identity, so two occurrences
+            // of one definition are never confused). A publisher that only knew the definition
+            // id sends no instance id; then the event id is the only thing to compare.
+            bool isOurs = !string.IsNullOrEmpty(message.InstanceId)
+                ? message.InstanceId == _currentInstanceId
+                : message.EventId == _currentEventId;
+            if (!isOurs) return;
+
             if (_timeSystem.HasPendingDecision) return; // still waiting on something else
 
             View.ShowResolvedElsewhereNote(ResolvedNoteSeconds);
@@ -153,6 +172,7 @@ namespace Xianxia.Sect.UI
             }
 
             _closeCallback = null;
+            _currentInstanceId = null;
             _currentEventId = null;
             _processing = false;
         }

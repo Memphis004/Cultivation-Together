@@ -2072,11 +2072,16 @@ namespace Xianxia.Sect
             return $"b{next:000}";
         }
 
-        // Placeholder consequence rules keyed by event id - not real game
-        // balance, just enough to prove ExecuteDecision actually mutates
-        // state instead of only logging. Real weighted/authored
-        // consequences belong with the EventData ScriptableObject work
-        // (deferred - see project_summary.md).
+        // Placeholder consequence rules. Dispatched on EXPLICIT identifiers only - the
+        // authored event definition id plus the authored choice id - never on a
+        // substring/prefix test and never on a label. A choice that has no rule here
+        // changes NOTHING: the choice was already validated against the pending instance's
+        // own choices before this is reached, so a missing row is a content gap, not a
+        // licence to apply some other choice's outcome.
+        //
+        // The numbers are NOT balance - they are carried over from the E2-lite placeholder
+        // switch so the pipeline stays provable end to end. Real weighted/authored
+        // consequences belong with the EventData content pass.
         public void ApplyDecisionConsequence(string eventId, string choiceId)
         {
             var resources = _state.Stockpile.RawResources;
@@ -2084,30 +2089,71 @@ namespace Xianxia.Sect
             switch (eventId)
             {
                 case "bandit_raid_001":
-                    AdjustAndNotify(resources, "provisions", -20);
-                    break;
+                    switch (choiceId)
+                    {
+                        case "send_inner_disciples":
+                            AdjustAndNotify(resources, "provisions", -20);
+                            break;
 
-                case "herb_garden_bloom":
-                    AdjustAndNotify(resources, "herb", 30);
+                        case "pay_tribute":
+                            // Deliberately the SAME placeholder outcome as repelling the raid:
+                            // splitting these two outcomes is a balance decision, and P13A only
+                            // makes the per-choice mapping explicit (it used to apply the
+                            // event-level rule to whichever choice arrived).
+                            AdjustAndNotify(resources, "provisions", -20);
+                            break;
+
+                        default:
+                            WarnUnknownChoice(eventId, choiceId);
+                            return;
+                    }
                     break;
 
                 case "wandering_merchant":
-                    AdjustAndNotify(resources, "ore", -20);
-                    AdjustAndNotify(resources, "provisions", 40);
+                    switch (choiceId)
+                    {
+                        case "trade":
+                            AdjustAndNotify(resources, "ore", -20);
+                            AdjustAndNotify(resources, "provisions", 40);
+                            break;
+
+                        case "decline":
+                            // Declining is chosen precisely to avoid the exchange, so the
+                            // event-level cost/benefit must NOT apply. (Before P13A this event
+                            // ignored its choice id, so declining still paid out.)
+                            Debug.Log("[SectStateProvider] Trade declined - no goods exchanged.");
+                            return;
+
+                        default:
+                            WarnUnknownChoice(eventId, choiceId);
+                            return;
+                    }
                     break;
 
                 case "new_disciple_applicant":
-                    // E2-lite: explicit choice id, not a substring match - the
-                    // choice is already validated against the pending choices.
-                    if (choiceId == "accept")
+                    switch (choiceId)
                     {
-                        RecruitOuterDisciple();
+                        case "accept":
+                            RecruitOuterDisciple();
+                            return; // recruiting already logged its own outcome
+
+                        case "reject":
+                            Debug.Log($"[SectStateProvider] Applicant rejected (choice={choiceId}) - no disciple added.");
+                            return;
+
+                        default:
+                            WarnUnknownChoice(eventId, choiceId);
+                            return;
                     }
-                    else
-                    {
-                        Debug.Log($"[SectStateProvider] Applicant rejected (choice={choiceId}) - no disciple added.");
-                    }
-                    return; // recruiting already logged its own outcome
+
+                case "herb_garden_bloom":
+                    // Authored with requiresDecision=false and no choice rows at all
+                    // (EventDef.csv / EventChoiceDef.csv), so it has no per-choice outcome and
+                    // its effect is the event-level one. This is not a choice test: there are
+                    // no choices to dispatch on. A decision event with choices always takes one
+                    // of the explicit branches above.
+                    AdjustAndNotify(resources, "herb", 30);
+                    break;
 
                 default:
                     Debug.LogWarning($"[SectStateProvider] No consequence rule for event '{eventId}' - state unchanged.");
@@ -2116,6 +2162,13 @@ namespace Xianxia.Sect
 
             Debug.Log($"[SectStateProvider] Applied consequence for event={eventId} choice={choiceId}. " +
                       $"Stockpile now: {string.Join(", ", resources.Keys.Select(k => $"{k}={resources[k]}"))}");
+        }
+
+        private static void WarnUnknownChoice(string eventId, string choiceId)
+        {
+            Debug.LogWarning(
+                $"[SectStateProvider] No consequence rule for event '{eventId}' choice '{choiceId}' - " +
+                "state unchanged (the choice itself was already validated against the pending event).");
         }
 
         private static void Adjust(Dictionary<string, int> resources, string key, int delta)

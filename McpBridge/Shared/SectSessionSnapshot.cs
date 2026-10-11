@@ -45,6 +45,19 @@
 //         above IS restored.
 //     TimeSystem pause reasons                a fresh session is unpaused; the
 //         pending-decision pause is re-derived from the restored pending state.
+//     TimeSystem pending-decision INSTANCE id  (P13A) an instance id names a LIVE
+//         occurrence, so it is not persisted: a restore re-mints one for the
+//         restored pending decision. A decision addressed to a pre-save instance
+//         id is therefore STALE after a load and is refused rather than applied to
+//         the restored event, while the restored event itself stays answerable
+//         under its new id.
+//     TimeSystem pending decisions past the CURRENT one  (P13A) the capture takes
+//         the CURRENT (oldest undecided) decision only. The live pending state is a
+//         bounded queue, but a session save carries one: extra outstanding decisions
+//         are NOT silently dropped - the capture logs a warning naming the count.
+//         In production the spawner cannot raise a second decision event while one
+//         is outstanding (WorldEventSystem excludes them), so the queue only exceeds
+//         one through a direct/dev raise.
 //     WorldEventSystem._timer/_grace/_started spawn cadence restarts with its
 //         grace window; events are not scheduled state.
 //     AutoTaskScheduler scheduling maps       evaluation cadence/dwell is a

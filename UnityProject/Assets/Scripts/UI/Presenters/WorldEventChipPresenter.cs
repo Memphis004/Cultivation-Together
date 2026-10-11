@@ -24,7 +24,10 @@ namespace Xianxia.Sect.UI
         private readonly TimeSystem _timeSystem;
 
         private WorldEventChipArgs _args;
-        private string _lastSeenEventId;
+
+        // P13A — the announcement is remembered per OCCURRENCE, so a second instance of an
+        // event definition the chip has already announced still flashes.
+        private string _lastSeenInstanceId;
 
         public WorldEventChipPresenter(TimeSystem timeSystem)
         {
@@ -59,7 +62,7 @@ namespace Xianxia.Sect.UI
 
             if (!pending)
             {
-                _lastSeenEventId = null; // the event ended - forget it
+                _lastSeenInstanceId = null; // the event ended - forget it
                 View.SetShown(false);
                 return;
             }
@@ -69,9 +72,10 @@ namespace Xianxia.Sect.UI
             // An event is remembered as "announced" only once the chip was actually the
             // visible signal. One that arrived while the popup was up (nothing to flash)
             // therefore still flashes the moment it becomes the chip's job.
-            if (!show || _timeSystem.PendingEventId == _lastSeenEventId) return;
+            string currentInstanceId = _timeSystem.PendingInstanceId;
+            if (!show || currentInstanceId == _lastSeenInstanceId) return;
 
-            _lastSeenEventId = _timeSystem.PendingEventId;
+            _lastSeenInstanceId = currentInstanceId;
             View.FlashHighlight(HighlightSeconds);
         }
 
@@ -81,7 +85,7 @@ namespace Xianxia.Sect.UI
         {
             if (View != null) View.Clicked -= OnChipClicked;
             _args = null;
-            _lastSeenEventId = null;
+            _lastSeenInstanceId = null;
         }
     }
 }

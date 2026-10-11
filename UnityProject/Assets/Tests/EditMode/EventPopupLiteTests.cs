@@ -174,6 +174,8 @@ namespace Xianxia.Sect.Tests
         {
             _presenter.OnOpen(new EventPopupOpenArgs
             {
+                // P13A — the popup targets the pending INSTANCE, exactly like production.
+                InstanceId = _time.PendingInstanceId,
                 EventId = _time.PendingEventId,
                 Description = _time.PendingDescription,
                 Choices = overrideChoices ?? new List<EventChoiceInfo>(_time.PendingChoices),
@@ -324,6 +326,7 @@ namespace Xianxia.Sect.Tests
             var secondView = BuildView("EventPopupTestRoot2", secondPresenter);
             secondPresenter.OnOpen(new EventPopupOpenArgs
             {
+                InstanceId = _time.PendingInstanceId,
                 EventId = _time.PendingEventId,
                 Description = _time.PendingDescription,
                 Choices = new List<EventChoiceInfo>(_time.PendingChoices),

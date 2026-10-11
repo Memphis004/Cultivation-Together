@@ -38,6 +38,13 @@ namespace Xianxia.Sect
     // against TimeSystem's authoritative pending state before touching anything,
     // so a duplicate, stale, unknown or invalid-choice decision changes nothing -
     // there is no unvalidated bypass left for production code.
+    //
+    // P13A: a decision targets a specific pending INSTANCE (see
+    // TimeSystem.TryResolvePendingDecision). Validating and applying happen on the Unity
+    // main thread for both production callers - the in-game UI click (already main thread)
+    // and the bridge path (DecisionLogger pumps onto the main thread before calling this);
+    // Execute itself stays synchronous and thread-agnostic, so it must only ever be called
+    // from one of those two paths.
     public class DecisionExecutor
     {
         private readonly ISectStateProvider _stateProvider;
@@ -55,15 +62,24 @@ namespace Xianxia.Sect
         }
 
         /// <summary>
-        /// Applies a decision to the currently pending world event, at most once.
-        /// Valid only when a decision is pending, <paramref name="eventId"/> equals
-        /// the pending event id, and <paramref name="choiceId"/> is one of the pending
-        /// choices; otherwise nothing changes and the rejection (with its reason) is
-        /// logged as a warning. After a valid decision: apply the consequence, clear
-        /// the pending state, and resume <see cref="TimePauseReason.PendingDecision"/>
-        /// ONLY (a player pause survives).
+        /// Legacy form: decide <paramref name="eventId"/> without naming an instance. Follows
+        /// the compatibility rule of <see cref="TimeSystem.TryResolvePendingDecision"/> —
+        /// accepted only when exactly one outstanding instance has that definition id.
         /// </summary>
         public DecisionResult Execute(string eventId, string choiceId)
+            => Execute(null, eventId, choiceId);
+
+        /// <summary>
+        /// Applies a decision to ONE pending world event instance, at most once. Valid only
+        /// when a decision is outstanding, <paramref name="instanceId"/> names it (when
+        /// supplied), <paramref name="eventId"/> agrees with that instance's definition, and
+        /// <paramref name="choiceId"/> is one of the choices THAT instance offered; otherwise
+        /// nothing changes and the rejection (with its reason) is logged as a warning. After a
+        /// valid decision: apply the consequence, drop exactly that instance, and resume
+        /// <see cref="TimePauseReason.PendingDecision"/> ONLY when no decision is left
+        /// outstanding (a player pause and a session-transition pause always survive).
+        /// </summary>
+        public DecisionResult Execute(string instanceId, string eventId, string choiceId)
         {
             // P12A — a decision is a mutation: outside a Playing session nothing is
             // pending that a decision could legitimately resolve, so refuse clearly.
@@ -82,25 +98,39 @@ namespace Xianxia.Sect
             }
 
             // Single validation path (shared by the UI click and the bridge path).
-            // Clearing the pending state on success is what makes a duplicate a
-            // rejection: the second call finds nothing pending.
-            if (!_timeSystem.TryResolvePendingDecision(eventId, choiceId, out string reason))
+            // Removing exactly the named instance on success is what makes a duplicate (or a
+            // replay of an id whose occurrence is gone) a rejection: the second call finds no
+            // such instance pending.
+            if (!_timeSystem.TryResolvePendingDecision(instanceId, eventId, choiceId, out string reason))
             {
                 Debug.LogWarning(
-                    $"[DecisionExecutor] Rejected decision - eventId={eventId} choiceId={choiceId}: {reason}");
+                    $"[DecisionExecutor] Rejected decision - instanceId={instanceId} eventId={eventId} " +
+                    $"choiceId={choiceId}: {reason}");
                 return DecisionResult.Reject(reason);
             }
 
             _stateProvider.ApplyDecisionConsequence(eventId, choiceId);
-            // E1 — resolving a decision clears ONLY the PendingDecision reason; a
-            // player pause (User) is preserved.
-            _timeSystem.Resume(TimePauseReason.PendingDecision);
+
+            // E1/P13A — resolving a decision clears ONLY the PendingDecision reason, and only
+            // once NOTHING is left undecided: while another instance is still outstanding the
+            // event pause is still its pause. A player pause (User) and a session-transition
+            // pause are never touched here.
+            if (!_timeSystem.HasPendingDecision)
+                _timeSystem.Resume(TimePauseReason.PendingDecision);
 
             // Both DecisionLogger (bridge) and EventPopupPresenter (UI)
             // funnel through here, so anything that wants to react to "a
             // decision just happened" - like the log window - only needs
             // to listen here once, regardless of where the decision came from.
-            _decisionExecutedPublisher.Publish(new DecisionExecutedMessage { EventId = eventId, ChoiceId = choiceId });
+            // P13A: InstanceId is carried so a listener can tell which occurrence was decided;
+            // it is empty when the caller only knew the definition id (legacy/bridge caller),
+            // and such a listener falls back to EventId.
+            _decisionExecutedPublisher.Publish(new DecisionExecutedMessage
+            {
+                InstanceId = instanceId,
+                EventId = eventId,
+                ChoiceId = choiceId,
+            });
             return DecisionResult.Accept();
         }
     }

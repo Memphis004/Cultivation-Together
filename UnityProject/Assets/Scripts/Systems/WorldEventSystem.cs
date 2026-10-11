@@ -84,7 +84,11 @@ namespace Xianxia.Sect
                 .Select(c => new EventChoiceInfo { ChoiceId = c.ChoiceId, Label = c.Label })
                 .ToList();
 
-            _timeSystem.RaiseWorldEvent(eventRow.Id, eventRow.Description, eventRow.RequiresDecision, choices);
+            // P13A — RaiseWorldEvent returns false when the pending-decision cap refused the
+            // event (TimeSystem already logged why). Nothing is pending for it then, so the
+            // spawner simply skips: no pause was taken and no awaiter was completed.
+            if (!_timeSystem.RaiseWorldEvent(eventRow.Id, eventRow.Description, eventRow.RequiresDecision, choices))
+                return;
         }
     }
 }

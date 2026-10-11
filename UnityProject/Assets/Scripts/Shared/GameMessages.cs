@@ -69,6 +69,15 @@ namespace Xianxia.Sect.Messages
         [Key(1)] public bool RequiresDecision { get; set; }
         [Key(2)] public string Description { get; set; }
         [Key(3)] public List<EventChoiceInfo> Choices { get; set; } = new List<EventChoiceInfo>();
+
+        /// <summary>
+        /// P13A (APPENDED field — old payloads simply read back null/empty and every
+        /// existing consumer keeps working): the unique id of THIS occurrence of the event.
+        /// Two occurrences of the same definition differ only here, and only an id that is
+        /// still pending can be decided. Empty for a non-decision event (there is nothing to
+        /// decide).
+        /// </summary>
+        [Key(4)] public string InstanceId { get; set; }
     }
 
     // Internal-only (not registered on the interprocess bus) - the UI and
@@ -122,6 +131,14 @@ namespace Xianxia.Sect.Messages
         [Key(1)] public bool RequiresDecision { get; set; }
         [Key(2)] public string Description { get; set; }
         [Key(3)] public List<EventChoiceInfo> Choices { get; set; } = new List<EventChoiceInfo>();
+
+        /// <summary>
+        /// P13A (APPENDED field — an old reader ignores it, an old payload reads back
+        /// empty): the instance id of the event being handed over, which is what a decision
+        /// must name. Empty for a non-decision event. An event whose id is no longer pending
+        /// by the time a decision arrives is refused, never re-applied.
+        /// </summary>
+        [Key(4)] public string InstanceId { get; set; }
     }
 
     // One selectable option for a world event - authored per-event in the
@@ -142,6 +159,15 @@ namespace Xianxia.Sect.Messages
     {
         [Key(0)] public string EventId { get; set; }
         [Key(1)] public string ChoiceId { get; set; }
+
+        /// <summary>
+        /// P13A (APPENDED field — deliberately optional so the existing bridge contract keeps
+        /// working unchanged): the instance the decision targets. An old/naive sender leaves
+        /// it empty and the decision is matched by <see cref="EventId"/> alone — accepted only
+        /// while EXACTLY ONE pending instance has that definition id, and refused as ambiguous
+        /// otherwise (never silently applied to whichever one happens to be current).
+        /// </summary>
+        [Key(2)] public string InstanceId { get; set; }
     }
 
     // Published in-memory by DecisionExecutor (not sent over interprocess -
@@ -156,6 +182,14 @@ namespace Xianxia.Sect.Messages
     {
         [Key(0)] public string EventId { get; set; }
         [Key(1)] public string ChoiceId { get; set; }
+
+        /// <summary>
+        /// P13A (APPENDED field): which occurrence was decided, so a listener can tell two
+        /// instances of one definition apart. Empty when the decision came from a caller that
+        /// only knew the definition id (legacy/bridge caller) — such a listener falls back to
+        /// <see cref="EventId"/>.
+        /// </summary>
+        [Key(2)] public string InstanceId { get; set; }
     }
 
     // Internal-only: entering build (placement) mode. CameraRigController

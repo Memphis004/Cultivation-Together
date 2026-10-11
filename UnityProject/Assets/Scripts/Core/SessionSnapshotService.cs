@@ -106,6 +106,20 @@ namespace Xianxia.Sect
             if (snapshot == null) snapshot = new SectSessionSnapshot();
 
             snapshot.SimulationSpeed = _timeSystem != null ? _timeSystem.Speed : 1;
+
+            // P13A — a session save carries the CURRENT (oldest undecided) pending decision.
+            // The live pending state is a bounded queue, so more than one can be outstanding
+            // (only through a direct raise: the spawner excludes decision events while one is
+            // pending). The extra ones cannot ride along in this envelope, so say so loudly
+            // instead of dropping them silently - see SectSessionSnapshot's reset list.
+            if (_timeSystem != null && _timeSystem.PendingDecisionCount > 1)
+            {
+                Debug.LogWarning(
+                    $"[SessionSnapshotService] {_timeSystem.PendingDecisionCount} world-event decisions are " +
+                    $"outstanding; only the current one ('{_timeSystem.PendingInstanceId}') is captured. " +
+                    "The other(s) are not saved.");
+            }
+
             snapshot.PendingEventId = _timeSystem != null ? _timeSystem.PendingEventId : null;
             snapshot.PendingDescription = _timeSystem != null ? _timeSystem.PendingDescription : null;
             snapshot.PendingChoices = _timeSystem != null

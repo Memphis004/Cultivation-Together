@@ -127,17 +127,23 @@ public static class SectQueryTools
 [McpServerToolType]
 public static class SectActionTools
 {
-    [McpServerTool, Description("Execute a decision for the current world event.")]
+    [McpServerTool, Description("Execute a decision for a world event. The decision is applied at most once - a duplicate or a decision for an event that is no longer pending is refused by Unity. Pass instanceId to target a specific occurrence when the same event id is pending more than once.")]
     public static async Task<string> ExecuteDecision(
         IDistributedPublisher<string, ExecuteDecisionMessage> publisher,
         [Description("Event id from await_next_world_event")] string eventId,
-        [Description("Chosen option id")] string choiceId)
+        [Description("Chosen option id")] string choiceId,
+        // P13A — optional so the existing two-argument call keeps working unchanged. Unity
+        // refuses an omitted id when the event id alone is ambiguous (more than one pending
+        // occurrence), so it can never silently decide the wrong one; the id to pass back is
+        // returned by await_next_world_event as "InstanceId".
+        [Description("Instance id from await_next_world_event (recommended; omit only when a single occurrence of eventId is pending)")] string instanceId = null)
     {
         await publisher.PublishAsync(
             InterprocessTopics.ExecuteDecision,
-            new ExecuteDecisionMessage { EventId = eventId, ChoiceId = choiceId });
+            new ExecuteDecisionMessage { EventId = eventId, ChoiceId = choiceId, InstanceId = instanceId });
 
-        return $"Decision sent to Unity: event={eventId} choice={choiceId}";
+        return $"Decision sent to Unity: event={eventId} choice={choiceId}" +
+               (string.IsNullOrEmpty(instanceId) ? string.Empty : $" instance={instanceId}");
     }
 
     [McpServerTool, Description("Have a disciple buy an item from the sect stockpile using their contribution.")]

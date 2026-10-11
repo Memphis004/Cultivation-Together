@@ -139,6 +139,11 @@ namespace Xianxia.Sect
             var previous = _phase;
             _transitioning = true;
             _lastError = string.Empty;
+            // P13A — hold the session-transition pause as its OWN reason for exactly as long
+            // as the transition is in flight. It is separate from the clock's "no active
+            // session" fact: releasing an event pause (or the session boundary clearing the
+            // reasons it owns) must never be able to resume a transition mid-flight.
+            _timeSystem?.Pause(TimePauseReason.SessionTransition);
             SetPhase(GameSessionPhase.StartingNewGame);
 
             try
@@ -176,6 +181,9 @@ namespace Xianxia.Sect
             }
             finally
             {
+                // P13A — the transition is over (success, refusal or failure), so the
+                // transition pause goes with it; every other pause reason is untouched.
+                _timeSystem?.Resume(TimePauseReason.SessionTransition);
                 _transitioning = false;
             }
         }
@@ -191,6 +199,7 @@ namespace Xianxia.Sect
             var previous = _phase;
             _transitioning = true;
             _lastError = string.Empty;
+            _timeSystem?.Pause(TimePauseReason.SessionTransition); // P13A — see StartNewGameAsync
             SetPhase(GameSessionPhase.LoadingGame);
 
             try
@@ -241,6 +250,7 @@ namespace Xianxia.Sect
             }
             finally
             {
+                _timeSystem?.Resume(TimePauseReason.SessionTransition); // P13A — see StartNewGameAsync
                 _transitioning = false;
             }
         }
@@ -259,6 +269,7 @@ namespace Xianxia.Sect
             var previous = _phase;
             _transitioning = true;
             _lastError = string.Empty;
+            _timeSystem?.Pause(TimePauseReason.SessionTransition); // P13A — see StartNewGameAsync
             SetPhase(GameSessionPhase.ReturningToTitle);
 
             try
@@ -283,6 +294,7 @@ namespace Xianxia.Sect
             }
             finally
             {
+                _timeSystem?.Resume(TimePauseReason.SessionTransition); // P13A — see StartNewGameAsync
                 _transitioning = false;
             }
         }

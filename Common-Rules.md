@@ -62,3 +62,10 @@ Common rules for P10 onward:
 
 15. Do not edit Shared/ unless the phase explicitly lists it. Do not
     commit McpBridge/bin or obj.
+    
+16. Any change to DI registrations, or to constructors of registered
+    types, must be verified by building the real container: an EditMode
+    test that builds the LifetimeScope registrations, or a Play Mode boot
+    smoke test. Do not leave a second public constructor on a registered
+    type (VContainer picks the one with the most parameters); pin the
+    intended constructor through a factory at the composition root.    

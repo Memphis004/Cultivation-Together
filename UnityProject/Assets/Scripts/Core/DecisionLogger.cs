@@ -93,7 +93,7 @@ namespace Xianxia.Sect
         {
             Debug.Log(
                 $"[DecisionLogger] Received decision from bridge - " +
-                $"eventId={message.EventId} choiceId={message.ChoiceId}");
+                $"instanceId={message.InstanceId} eventId={message.EventId} choiceId={message.ChoiceId}");
 
             lock (_gate)
             {
@@ -132,14 +132,19 @@ namespace Xianxia.Sect
 
                 try
                 {
-                    _decisionExecutor.Execute(message.EventId, message.ChoiceId);
+                    // P13A — the instance id is forwarded when the sender supplied one, so the
+                    // decision can only land on the occurrence it was made for. A sender that
+                    // only knows the event id is still accepted (see DecisionExecutor's
+                    // compatibility rule); an empty InstanceId is simply "not specified".
+                    _decisionExecutor.Execute(message.InstanceId, message.EventId, message.ChoiceId);
                 }
                 catch (Exception ex)
                 {
                     // Never swallow silently - include which decision failed.
                     Debug.LogError(
                         $"[DecisionLogger] Decision execution failed on main thread - " +
-                        $"eventId={message.EventId} choiceId={message.ChoiceId}: {ex}");
+                        $"instanceId={message.InstanceId} eventId={message.EventId} " +
+                        $"choiceId={message.ChoiceId}: {ex}");
                 }
             }
         }

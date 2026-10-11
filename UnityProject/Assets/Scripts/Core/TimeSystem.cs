@@ -21,7 +21,11 @@ namespace Xianxia.Sect
     /// <summary>
     /// E1 — explicit pause owners. A flags set, not one boolean: a decision pause
     /// can never be mistaken for a player pause, and clearing one never clears the
-    /// other. SessionTransition is intentionally NOT defined yet (reserved for P12).
+    /// other.
+    ///
+    /// P13A defines <see cref="SessionTransition"/> (held by
+    /// <see cref="GameSessionCoordinator"/> for the duration of a transition), so the
+    /// event pause releasing can never resume a transition that is still in flight.
     /// </summary>
     [System.Flags]
     public enum TimePauseReason
@@ -31,6 +35,58 @@ namespace Xianxia.Sect
         User = 1,
         /// <summary>A decision-requiring world event is outstanding.</summary>
         PendingDecision = 2,
+        /// <summary>P13A — a session transition is in flight (GameSessionCoordinator owns this one).</summary>
+        SessionTransition = 4,
+    }
+
+    /// <summary>
+    /// P13A — ONE outstanding, undecided world event.
+    ///
+    /// <see cref="InstanceId"/> identifies this OCCURRENCE; <see cref="EventId"/> is the
+    /// authored definition it was raised from, and many instances can share one definition.
+    /// A decision is addressed to an instance, never to a definition, so a replayed, stale
+    /// or duplicate decision can never resolve a different occurrence of the same event.
+    /// Instances are only ever created by <see cref="TimeSystem.RaiseWorldEvent"/> (or by a
+    /// restore, which re-mints one) and are removed only by resolving or clearing them.
+    /// </summary>
+    public sealed class PendingWorldEvent
+    {
+        public PendingWorldEvent(string instanceId, string eventId, string description, List<EventChoiceInfo> choices)
+        {
+            InstanceId = instanceId;
+            EventId = eventId;
+            Description = description;
+            Choices = choices ?? new List<EventChoiceInfo>();
+        }
+
+        /// <summary>Unique per raised occurrence (never reused), e.g. <c>evt_000001</c>.</summary>
+        public string InstanceId { get; }
+
+        /// <summary>The authored event definition id (<c>cfg.game.EventDef.Id</c>).</summary>
+        public string EventId { get; }
+
+        /// <summary>Authoring text shown to the player / the AI GM.</summary>
+        public string Description { get; }
+
+        /// <summary>The choices this occurrence offers (never null).</summary>
+        public IReadOnlyList<EventChoiceInfo> Choices { get; }
+
+        /// <summary>
+        /// Exact choice-id match against THIS occurrence's choices — never a substring or
+        /// prefix test, and never a lookup into the definition's authored rows, so a choice
+        /// that was not offered here can never be accepted.
+        /// </summary>
+        public bool HasChoice(string choiceId)
+        {
+            for (int i = 0; i < Choices.Count; i++)
+            {
+                var choice = Choices[i];
+                if (choice != null && choice.ChoiceId == choiceId) return true;
+            }
+            return false;
+        }
+
+        public override string ToString() => $"{InstanceId}({EventId})";
     }
 
     public class TimeSystem : IStartable
@@ -70,15 +126,31 @@ namespace Xianxia.Sect
         // NOTE (E2-lite): this cache is the BRIDGE's handoff and its semantics are
         // deliberately unchanged (cleared on read). The authoritative pending
         // decision below is a SEPARATE concern and is never cleared by a read.
+        //
+        // P13A: this stays a single slot ON PURPOSE. It is "the newest event to hand a
+        // late awaiter", not pending-state storage — that is _pendingDecisions below,
+        // which is bounded and whose entries are never overwritten.
         private AwaitWorldEventResponse _cachedPendingEvent;
 
-        // E2-lite — authoritative pending decision state (at most ONE at a time).
-        // Set when a decision-requiring event is raised, cleared when a valid
-        // decision is applied. The UI and the decision validator read THIS, so it
-        // does not depend on anyone having consumed the bridge cache.
-        private string _pendingEventId;
-        private string _pendingDescription;
-        private List<EventChoiceInfo> _pendingChoices = new List<EventChoiceInfo>();
+        /// <summary>
+        /// P13A — how many undecided events may be outstanding at once. The bound is
+        /// deliberate: the pending state is authoritative and must not grow without limit.
+        /// At the cap a further decision event is REFUSED, loudly (see
+        /// <see cref="RaiseWorldEvent"/>); an already-pending decision is never evicted,
+        /// replaced or overwritten to make room for a newer one.
+        /// </summary>
+        public const int MaxPendingDecisions = 8;
+
+        // P13A — authoritative pending decisions in ARRIVAL ORDER (oldest first). The head
+        // (index 0) is the CURRENT event: it is what the UI opens, what the bridge handoff
+        // cache carries, and what a snapshot captures. Any pending instance may be resolved
+        // by its own instance id, which removes exactly that one.
+        //
+        // This replaces E2-lite's single-slot fields, which silently overwrote an
+        // outstanding decision as soon as a second one was raised.
+        private readonly List<PendingWorldEvent> _pendingDecisions = new List<PendingWorldEvent>();
+        private int _nextEventInstanceNumber = 1;
+        private static readonly List<EventChoiceInfo> NoChoices = new List<EventChoiceInfo>();
 
         public TimeSystem(
             IPublisher<TimeSpeedChangedMessage> speedPublisher,
@@ -140,8 +212,14 @@ namespace Xianxia.Sect
         public void EndSession(string reason)
         {
             SetSessionActive(false);
-            ClearPendingDecision();
-            SetReasons(TimePauseReason.None);
+            ClearPendingDecisions();
+
+            // P13A — clear exactly the reasons a session boundary OWNS: the player pause
+            // (a fresh session starts unpaused) and the decision pause (its events are
+            // gone). A SessionTransition pause is PRESERVED: the transition that holds it
+            // is the very caller of this method and is still in flight, so ending the
+            // session must not resume a transition that has not finished.
+            SetReasons(_reasons & TimePauseReason.SessionTransition);
             CancelPendingWorldEventWait(reason);
         }
 
@@ -167,55 +245,135 @@ namespace Xianxia.Sect
         }
 
         /// <summary>
-        /// E2-lite — the SINGLE decision-validation path, reused by the in-game UI
-        /// click (EventPopupPresenter) and by the bridge decision (DecisionLogger ->
-        /// DecisionExecutor). The decision is valid only when a decision is pending,
-        /// <paramref name="eventId"/> equals the pending event id, and
-        /// <paramref name="choiceId"/> is one of the pending choices. On success the
-        /// pending state is cleared, so a duplicate/stale/unknown decision can never
-        /// be applied twice. On any failure nothing changes, false is returned, and
+        /// P13A — the SINGLE decision-validation path, reused by the in-game UI click
+        /// (EventPopupPresenter) and by the bridge decision (DecisionLogger ->
+        /// DecisionExecutor). A decision is valid only when a decision is pending, it names
+        /// that pending INSTANCE, <paramref name="eventId"/> agrees with the instance's
+        /// definition, and <paramref name="choiceId"/> is one of the choices THAT INSTANCE
+        /// offered (exact id match). On success exactly that instance is removed, so a
+        /// duplicate / replayed / stale / unknown decision can never be applied twice. On any
+        /// failure nothing changes (not even the current event), false is returned, and
         /// <paramref name="reason"/> says why.
         /// </summary>
-        public bool TryResolvePendingDecision(string eventId, string choiceId, out string reason)
+        /// <param name="instanceId">
+        /// The target occurrence. Null/empty is accepted for a legacy caller that only knows
+        /// the definition id: the decision then applies only when EXACTLY ONE pending instance
+        /// has that definition id. An ambiguous match is refused rather than guessed at, so a
+        /// bare event id can never resolve the wrong occurrence of a repeated event.
+        /// </param>
+        public bool TryResolvePendingDecision(string instanceId, string eventId, string choiceId, out string reason)
         {
             if (!HasPendingDecision)
             {
-                reason = "no decision event is pending";
-                return false;
-            }
-            if (eventId != _pendingEventId)
-            {
-                reason = $"eventId '{eventId}' is not the pending event ('{_pendingEventId}')";
+                // P13A — a duplicate/replayed decision lands here once its occurrence is gone, so
+                // the rejection still names what was asked for instead of a bare "nothing pending".
+                reason = string.IsNullOrEmpty(instanceId)
+                    ? "no decision event is pending"
+                    : $"instanceId '{instanceId}' is not a pending decision (none is pending)";
                 return false;
             }
 
-            bool knownChoice = false;
-            for (int i = 0; i < _pendingChoices.Count; i++)
+            PendingWorldEvent target;
+            if (!string.IsNullOrEmpty(instanceId))
             {
-                var choice = _pendingChoices[i];
-                if (choice != null && choice.ChoiceId == choiceId)
+                if (!TryGetPendingDecision(instanceId, out target))
                 {
-                    knownChoice = true;
-                    break;
+                    reason = $"instanceId '{instanceId}' is not a pending decision";
+                    return false;
+                }
+                if (eventId != target.EventId)
+                {
+                    reason = $"instanceId '{instanceId}' is event '{target.EventId}', not '{eventId}'";
+                    return false;
                 }
             }
-            if (!knownChoice)
+            else
             {
-                reason = $"choiceId '{choiceId}' is not one of the pending choices";
+                target = null;
+                int matches = 0;
+                for (int i = 0; i < _pendingDecisions.Count; i++)
+                {
+                    if (_pendingDecisions[i].EventId != eventId) continue;
+                    target = _pendingDecisions[i];
+                    matches++;
+                }
+                if (matches == 0)
+                {
+                    reason = $"eventId '{eventId}' is not a pending event";
+                    return false;
+                }
+                if (matches > 1)
+                {
+                    reason = $"eventId '{eventId}' matches {matches} pending instances - " +
+                             "a decision must name the instance id";
+                    return false;
+                }
+            }
+
+            if (!target.HasChoice(choiceId))
+            {
+                reason = $"choiceId '{choiceId}' is not one of the choices of {target}";
                 return false;
             }
 
-            ClearPendingDecision();
+            _pendingDecisions.Remove(target);
             reason = null;
             return true;
         }
 
-        /// <summary>Clears the authoritative pending decision state (E2-lite).</summary>
-        public void ClearPendingDecision()
+        /// <summary>
+        /// Legacy two-argument form (definition id only) — see the four-argument overload for
+        /// the compatibility rule it follows.
+        /// </summary>
+        public bool TryResolvePendingDecision(string eventId, string choiceId, out string reason)
+            => TryResolvePendingDecision(null, eventId, choiceId, out reason);
+
+        /// <summary>
+        /// P13A — drop every outstanding pending decision. Used at a session boundary and by a
+        /// restore (which replaces the pending state outright); never by a decision.
+        /// </summary>
+        public void ClearPendingDecisions() => _pendingDecisions.Clear();
+
+        /// <summary>
+        /// P13A — look up one outstanding pending decision by its instance id. Read-only; a
+        /// null/empty id never matches (instance ids are never empty).
+        /// </summary>
+        public bool TryGetPendingDecision(string instanceId, out PendingWorldEvent pending)
         {
-            _pendingEventId = null;
-            _pendingDescription = null;
-            _pendingChoices = new List<EventChoiceInfo>();
+            if (!string.IsNullOrEmpty(instanceId))
+            {
+                for (int i = 0; i < _pendingDecisions.Count; i++)
+                {
+                    if (_pendingDecisions[i].InstanceId != instanceId) continue;
+                    pending = _pendingDecisions[i];
+                    return true;
+                }
+            }
+
+            pending = null;
+            return false;
+        }
+
+        /// <summary>
+        /// P13A — store one newly raised pending decision and mint its instance id. Returns
+        /// null when <see cref="MaxPendingDecisions"/> is already reached: the raise is then
+        /// refused (logged here) and NOTHING was stored — no pending decision is ever replaced
+        /// or evicted, and the caller must not report the event as pending.
+        /// </summary>
+        private PendingWorldEvent EnqueuePendingDecision(string eventId, string description, List<EventChoiceInfo> choices)
+        {
+            if (_pendingDecisions.Count >= MaxPendingDecisions)
+            {
+                Debug.LogWarning(
+                    $"[TimeSystem] Refused to queue world event '{eventId}': {_pendingDecisions.Count} decisions are " +
+                    $"already outstanding (cap {MaxPendingDecisions}). The oldest pending decision " +
+                    $"('{PendingInstanceId}') is kept - an outstanding decision is never overwritten to make room.");
+                return null;
+            }
+
+            var pending = new PendingWorldEvent($"evt_{_nextEventInstanceNumber++:000000}", eventId, description, choices);
+            _pendingDecisions.Add(pending);
+            return pending;
         }
 
         /// <summary>
@@ -232,27 +390,37 @@ namespace Xianxia.Sect
         {
             SetSpeed(speed);
 
+            // P13A — a restore replaces the pending state outright (it describes the
+            // session being loaded), so whatever the session being left had queued goes first.
+            ClearPendingDecisions();
+
             if (string.IsNullOrEmpty(pendingEventId))
             {
-                ClearPendingDecision();
                 Resume(TimePauseReason.PendingDecision); // a fresh session is not decision-paused
                 return;
             }
 
-            _pendingEventId = pendingEventId;
-            _pendingDescription = pendingDescription;
-            _pendingChoices = pendingChoices != null
-                ? new List<EventChoiceInfo>(pendingChoices)
-                : new List<EventChoiceInfo>();
+            // P13A — the restored decision is stored under a FRESH instance id. Instance ids
+            // identify a LIVE occurrence and are deliberately not persisted (see the reset
+            // list in SectSessionSnapshot.cs): a decision addressed to a pre-save instance is
+            // stale after a load and is refused, while the restored event itself stays fully
+            // answerable under its new id.
+            var restored = EnqueuePendingDecision(pendingEventId, pendingDescription,
+                                                  pendingChoices != null ? new List<EventChoiceInfo>(pendingChoices) : null);
+            if (restored == null) return; // capped state cannot occur from a validated snapshot
 
+            // The snapshot's pause flag is authoritative: a restore that says "not paused"
+            // must not leave the clock frozen on a pause whose event no longer exists.
             if (pendingDecisionPaused) Pause(TimePauseReason.PendingDecision);
+            else Resume(TimePauseReason.PendingDecision);
 
             _worldEventPublisher.Publish(new WorldEventTriggeredMessage
             {
-                EventId = _pendingEventId,
+                EventId = restored.EventId,
+                InstanceId = restored.InstanceId,
                 RequiresDecision = true,
-                Description = _pendingDescription,
-                Choices = _pendingChoices,
+                Description = restored.Description,
+                Choices = new List<EventChoiceInfo>(restored.Choices),
             });
         }
 
@@ -282,21 +450,36 @@ namespace Xianxia.Sect
         /// <summary>True when a decision-requiring event is outstanding (the pause reason).</summary>
         public bool IsPendingDecisionPaused => HasReason(TimePauseReason.PendingDecision);
 
-        // ---------- E2-lite: authoritative pending-decision state ----------
+        // ---------- P13A: authoritative pending-decision state ----------
         // Separate from IsPendingDecisionPaused: the player can clear the pause
         // (ResumeByPlayer) while the event is still pending and undecided.
 
-        /// <summary>True while a decision-requiring event is outstanding and undecided.</summary>
-        public bool HasPendingDecision => _pendingEventId != null;
+        /// <summary>True while at least one decision-requiring event is outstanding and undecided.</summary>
+        public bool HasPendingDecision => _pendingDecisions.Count > 0;
 
-        /// <summary>Authoritative id of the pending decision event, or null when none.</summary>
-        public string PendingEventId => _pendingEventId;
+        /// <summary>How many decisions are outstanding right now (0..<see cref="MaxPendingDecisions"/>).</summary>
+        public int PendingDecisionCount => _pendingDecisions.Count;
 
-        /// <summary>Authoritative description of the pending decision event, or null.</summary>
-        public string PendingDescription => _pendingDescription;
+        /// <summary>
+        /// The CURRENT pending decision — the OLDEST undecided one — or null when none. This is
+        /// the single ordering every consumer reads (UI, bridge handoff, snapshot), so "which
+        /// event am I looking at" can never differ between them.
+        /// </summary>
+        public PendingWorldEvent PendingDecision =>
+            _pendingDecisions.Count > 0 ? _pendingDecisions[0] : null;
 
-        /// <summary>Authoritative choices of the pending decision event (never null).</summary>
-        public IReadOnlyList<EventChoiceInfo> PendingChoices => _pendingChoices;
+        /// <summary>Instance id of the current pending decision, or null when none.</summary>
+        public string PendingInstanceId => PendingDecision?.InstanceId;
+
+        /// <summary>Authored definition id of the current pending decision, or null when none.</summary>
+        public string PendingEventId => PendingDecision?.EventId;
+
+        /// <summary>Description of the current pending decision, or null when none.</summary>
+        public string PendingDescription => PendingDecision?.Description;
+
+        /// <summary>Choices of the current pending decision (never null; empty when none).</summary>
+        public IReadOnlyList<EventChoiceInfo> PendingChoices =>
+            PendingDecision?.Choices ?? (IReadOnlyList<EventChoiceInfo>)NoChoices;
 
         /// <summary>Current (validated) simulation speed.</summary>
         public int Speed => _speed;
@@ -405,39 +588,57 @@ namespace Xianxia.Sect
         // _pendingEventSource is what actually delivers this to the bridge,
         // via the request-response AwaitWorldEventHandler below. The
         // in-memory Publish() call is just for any other in-Unity listener.
-        public void RaiseWorldEvent(string eventId, string description, bool requiresDecision, List<EventChoiceInfo> choices)
+        //
+        // P13A: a decision-requiring event is stored as its OWN pending instance,
+        // queued behind anything already outstanding and identified by a unique id.
+        /// <returns>
+        /// False only when a decision-requiring event could not be stored because
+        /// <see cref="MaxPendingDecisions"/> is reached: nothing is pending for it then, no
+        /// message is published, no awaiter is completed, and no outstanding decision was
+        /// touched. Always true for a non-decision event.
+        /// </returns>
+        public bool RaiseWorldEvent(string eventId, string description, bool requiresDecision, List<EventChoiceInfo> choices)
         {
             Debug.Log($"[TimeSystem] World event raised: {eventId} (requiresDecision={requiresDecision})");
 
+            var effectiveChoices = choices ?? new List<EventChoiceInfo>();
+            string instanceId = null;
+
             if (requiresDecision)
             {
-                // E2-lite: store the authoritative pending state (a single slot).
-                // The pause reason is added only for a NEWLY pending event - if one
-                // is already pending (e.g. the player pressed Play but has not decided
-                // yet), raising further events must NOT re-add the pause.
                 bool alreadyPending = HasPendingDecision;
-                _pendingEventId = eventId;
-                _pendingDescription = description;
-                _pendingChoices = choices ?? new List<EventChoiceInfo>();
 
+                var pending = EnqueuePendingDecision(eventId, description, effectiveChoices);
+                if (pending == null) return false; // cap reached - nothing was stored, nothing changed
+
+                instanceId = pending.InstanceId;
+                effectiveChoices = new List<EventChoiceInfo>(pending.Choices);
+
+                // E2-lite/P13A: the pause reason is added only for the event that turns an
+                // EMPTY pending state into a non-empty one - if any decision is still
+                // outstanding (e.g. the player pressed Play but has not decided yet),
+                // raising further events must NOT re-add the pause...
                 if (!alreadyPending && _config.AutoPauseOnDecisionEvent)
                     Pause(TimePauseReason.PendingDecision);
+                // ...and must never clear it either: another instance is still undecided.
             }
 
             _worldEventPublisher.Publish(new WorldEventTriggeredMessage
             {
                 EventId = eventId,
+                InstanceId = instanceId,
                 RequiresDecision = requiresDecision,
                 Description = description,
-                Choices = choices ?? new List<EventChoiceInfo>(),
+                Choices = effectiveChoices,
             });
 
             var response = new AwaitWorldEventResponse
             {
                 EventId = eventId,
+                InstanceId = instanceId,
                 RequiresDecision = requiresDecision,
                 Description = description,
-                Choices = choices ?? new List<EventChoiceInfo>(),
+                Choices = effectiveChoices,
             };
 
             if (requiresDecision)
@@ -448,6 +649,7 @@ namespace Xianxia.Sect
             var previous = _pendingEventSource;
             _pendingEventSource = new UniTaskCompletionSource<AwaitWorldEventResponse>();
             previous.TrySetResult(response);
+            return true;
         }
     }
 
