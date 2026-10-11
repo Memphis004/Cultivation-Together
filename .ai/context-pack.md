@@ -1,11 +1,11 @@
 # Cultivation-Together Context Pack
 
 - Repository: Memphis004/Cultivation-Together
-- Commit: 1e0a9e1
+- Commit: d8417d7
 - Branch: main
 - Generated: 2026-10-11
-- Uncommitted changes in working tree: 49 file(s) (ไฟล์ที่แนบมาอ่านจาก working tree ไม่ใช่จาก commit — ถ้า > 0 อาจต่างจาก commit)
-- Files after .aiignore filter: 2079
+- Uncommitted changes in working tree: 6 file(s) (ไฟล์ที่แนบมาอ่านจาก working tree ไม่ใช่จาก commit — ถ้า > 0 อาจต่างจาก commit)
+- Files after .aiignore filter: 2091
 
 ## Ground Rules (สำคัญมาก — บังคับ AI)
 
@@ -94,6 +94,7 @@
 - `UnityProject/Assets/Scripts/Core/Session/IGameSessionCoordinator.cs`: interface ISessionGate, static class SessionGate, interface IGameSessionCoordinator, interface IStarterStateFactory, interface ISessionUiCloser, interface IGameplaySceneLoader
 - `UnityProject/Assets/Scripts/Core/Session/PrototypeStarterStateFactory.cs`: sealed class PrototypeStarterStateFactory
 - `UnityProject/Assets/Scripts/Core/Session/SessionMessages.cs`: class SessionPhaseChangedMessage
+- `UnityProject/Assets/Scripts/Core/Session/SessionRuntimeConfig.cs`: sealed class SessionRuntimeConfig
 - `UnityProject/Assets/Scripts/Core/Session/SessionUiCloser.cs`: sealed class SessionUiCloser
 - `UnityProject/Assets/Scripts/Core/SessionSnapshotService.cs`: interface ISessionRestoreAuthority, class SessionSnapshotService
 - `UnityProject/Assets/Scripts/Core/TaskObservability.cs`: class TaskChangeObservabilityBuffer, class TaskChangeObservabilityHandler, class TaskProtectionHandler
@@ -133,10 +134,12 @@
 - `UnityProject/Assets/Scripts/UI/Presenters/DiscipleDetailTabPresenters.cs`: interface IDiscipleTabPresenter, class InfoTabPresenter, class StatusTabPresenter, class PlaceholderTabPresenter
 - `UnityProject/Assets/Scripts/UI/Presenters/DiscipleListPresenter.cs`: sealed class DiscipleListArgs, class DiscipleListPresenter
 - `UnityProject/Assets/Scripts/UI/Presenters/EventPopupPresenter.cs`: class EventPopupOpenArgs, class EventPopupPresenter
+- `UnityProject/Assets/Scripts/UI/Presenters/IngameMenuPresenter.cs`: sealed class IngameMenuArgs, class IngameMenuPresenter
 - `UnityProject/Assets/Scripts/UI/Presenters/LogWindowPresenter.cs`: class LogWindowPresenter
 - `UnityProject/Assets/Scripts/UI/Presenters/ResourcePopupPresenter.cs`: sealed class ResourcePopupArgs, class ResourcePopupPresenter
 - `UnityProject/Assets/Scripts/UI/Presenters/TaskAssignmentPresenter.cs`: class TaskAssignmentPresenter
 - `UnityProject/Assets/Scripts/UI/Presenters/TimeControlPresenter.cs`: class TimeControlPresenter
+- `UnityProject/Assets/Scripts/UI/Presenters/TitleMenuPresenter.cs`: class TitleMenuPresenter
 - `UnityProject/Assets/Scripts/UI/Presenters/WalletHudPresenter.cs`: class WalletHudPresenter
 - `UnityProject/Assets/Scripts/UI/Presenters/WorldEventChipPresenter.cs`: sealed class WorldEventChipArgs, class WorldEventChipPresenter
 - `UnityProject/Assets/Scripts/UI/Systems/BuildingPlacementUISystem.cs`: class BuildingPlacementUISystem
@@ -154,11 +157,13 @@
 - `UnityProject/Assets/Scripts/UI/Views/DiscipleListView.cs`: sealed class DiscipleListCard, class DiscipleListView
 - `UnityProject/Assets/Scripts/UI/Views/EventPopupView.cs`: class EventChoiceViewData, class EventPopupView
 - `UnityProject/Assets/Scripts/UI/Views/FitWidthGridLayoutGroup.cs`: sealed class FitWidthGridLayoutGroup
+- `UnityProject/Assets/Scripts/UI/Views/IngameMenuView.cs`: class IngameMenuView
 - `UnityProject/Assets/Scripts/UI/Views/LogWindowView.cs`: class LogWindowView
 - `UnityProject/Assets/Scripts/UI/Views/PortraitOverrideBinding.cs`: sealed class PortraitOverrideBinding
 - `UnityProject/Assets/Scripts/UI/Views/ResourcePopupView.cs`: sealed class ResourcePopupRow, class ResourcePopupView
 - `UnityProject/Assets/Scripts/UI/Views/TaskAssignmentView.cs`: sealed class TaskAssignmentArgs, sealed class TaskAssignmentRowCell, class TaskAssignmentView
 - `UnityProject/Assets/Scripts/UI/Views/TimeControlView.cs`: enum TimeControlActiveButton, class TimeControlView
+- `UnityProject/Assets/Scripts/UI/Views/TitleMenuView.cs`: class TitleMenuView
 - `UnityProject/Assets/Scripts/UI/Views/UIViewBase.cs`: abstract class UIViewBase
 - `UnityProject/Assets/Scripts/UI/Views/WalletHudView.cs`: class ResourceSlotBinding, class WalletHudView
 - `UnityProject/Assets/Scripts/UI/Views/WorldEventChipView.cs`: class WorldEventChipView
@@ -4343,7 +4348,7 @@
     1  UnityProject/.zcode
     3  UnityProject/AgentScripts
     5  UnityProject/Assets
-   16  UnityProject/Assets/Editor
+   18  UnityProject/Assets/Editor
     2  UnityProject/Assets/Packages/MessagePack.3.1.8
     1  UnityProject/Assets/Packages/MessagePack.3.1.8/lib
     2  UnityProject/Assets/Packages/MessagePack.Annotations.3.1.8
@@ -4361,7 +4366,7 @@
     1  UnityProject/Assets/Plugins/NuGet
    10  UnityProject/Assets/Prefabs
     5  UnityProject/Assets/Prefabs/Avatar
-    7  UnityProject/Assets/Prefabs/UI
+    9  UnityProject/Assets/Prefabs/UI
    36  UnityProject/Assets/Resources/Avatar
     4  UnityProject/Assets/Resources/Avatar/Icons
     3  UnityProject/Assets/Resources/Avatar/Portraits
@@ -4384,7 +4389,7 @@
    17  UnityProject/Assets/Scripts/Core
     5  UnityProject/Assets/Scripts/Core/Installers
     7  UnityProject/Assets/Scripts/Core/Persistence
-    6  UnityProject/Assets/Scripts/Core/Session
+    7  UnityProject/Assets/Scripts/Core/Session
     2  UnityProject/Assets/Scripts/Data
     9  UnityProject/Assets/Scripts/Data/Gen
     1  UnityProject/Assets/Scripts/Scenes/SectScene
@@ -4392,9 +4397,9 @@
     7  UnityProject/Assets/Scripts/Systems
     1  UnityProject/Assets/Scripts/Tests
     9  UnityProject/Assets/Scripts/UI/Core
-   13  UnityProject/Assets/Scripts/UI/Presenters
+   15  UnityProject/Assets/Scripts/UI/Presenters
     4  UnityProject/Assets/Scripts/UI/Systems
-   19  UnityProject/Assets/Scripts/UI/Views
+   21  UnityProject/Assets/Scripts/UI/Views
     5  UnityProject/Assets/Scripts/UI/Widgets
    12  UnityProject/Assets/Scripts/Visual/Core
    11  UnityProject/Assets/Scripts/Visual/Scene
@@ -4440,7 +4445,7 @@
     1  UnityProject/Assets/Spine/Runtime
    42  UnityProject/Assets/Spine/Runtime/spine-csharp
   116  UnityProject/Assets/Spine/Runtime/spine-unity
-   45  UnityProject/Assets/Tests/EditMode
+   48  UnityProject/Assets/Tests/EditMode
     2  UnityProject/Assets/TextMesh Pro/Fonts
     3  UnityProject/Assets/TextMesh Pro/Resources
     4  UnityProject/Assets/TextMesh Pro/Resources/Fonts & Materials
@@ -4899,6 +4904,7 @@
   UnityProject/Assets/Editor/DiscipleListPanelGenerator.cs
   UnityProject/Assets/Editor/EventPopupPanelGenerator.cs
   UnityProject/Assets/Editor/GeneratorRemoteControl.cs
+  UnityProject/Assets/Editor/IngameMenuPanelGenerator.cs
   UnityProject/Assets/Editor/LandMaskBuilder.cs
   UnityProject/Assets/Editor/LandMaskPainterWindow.cs
   UnityProject/Assets/Editor/LocalOwnershipHarness.cs
@@ -4906,6 +4912,7 @@
   UnityProject/Assets/Editor/TaskAssignmentPanelGenerator.cs
   UnityProject/Assets/Editor/ThaiFontAtlasBaker.cs
   UnityProject/Assets/Editor/TimeControlPanelGenerator.cs
+  UnityProject/Assets/Editor/TitleMenuPanelGenerator.cs
   UnityProject/Assets/Editor/UiSpriteImporter.cs
   UnityProject/Assets/Packages/MessagePack.3.1.8/lib/netstandard2.1/MessagePack.xml
   UnityProject/Assets/Packages/MessagePack.Annotations.3.1.8/lib/netstandard2.0/MessagePack.Annotations.xml
@@ -4980,6 +4987,7 @@
   UnityProject/Assets/Scripts/Core/Session/IGameSessionCoordinator.cs
   UnityProject/Assets/Scripts/Core/Session/PrototypeStarterStateFactory.cs
   UnityProject/Assets/Scripts/Core/Session/SessionMessages.cs
+  UnityProject/Assets/Scripts/Core/Session/SessionRuntimeConfig.cs
   UnityProject/Assets/Scripts/Core/Session/SessionUiCloser.cs
   UnityProject/Assets/Scripts/Core/SessionSnapshotService.cs
   UnityProject/Assets/Scripts/Core/TaskObservability.cs
@@ -5021,10 +5029,12 @@
   UnityProject/Assets/Scripts/UI/Presenters/DiscipleDetailTabPresenters.cs
   UnityProject/Assets/Scripts/UI/Presenters/DiscipleListPresenter.cs
   UnityProject/Assets/Scripts/UI/Presenters/EventPopupPresenter.cs
+  UnityProject/Assets/Scripts/UI/Presenters/IngameMenuPresenter.cs
   UnityProject/Assets/Scripts/UI/Presenters/LogWindowPresenter.cs
   UnityProject/Assets/Scripts/UI/Presenters/ResourcePopupPresenter.cs
   UnityProject/Assets/Scripts/UI/Presenters/TaskAssignmentPresenter.cs
   UnityProject/Assets/Scripts/UI/Presenters/TimeControlPresenter.cs
+  UnityProject/Assets/Scripts/UI/Presenters/TitleMenuPresenter.cs
   UnityProject/Assets/Scripts/UI/Presenters/WalletHudPresenter.cs
   UnityProject/Assets/Scripts/UI/Presenters/WorldEventChipPresenter.cs
   UnityProject/Assets/Scripts/UI/Systems/BuildingPlacementUISystem.cs
@@ -5042,11 +5052,13 @@
   UnityProject/Assets/Scripts/UI/Views/DiscipleListView.cs
   UnityProject/Assets/Scripts/UI/Views/EventPopupView.cs
   UnityProject/Assets/Scripts/UI/Views/FitWidthGridLayoutGroup.cs
+  UnityProject/Assets/Scripts/UI/Views/IngameMenuView.cs
   UnityProject/Assets/Scripts/UI/Views/LogWindowView.cs
   UnityProject/Assets/Scripts/UI/Views/PortraitOverrideBinding.cs
   UnityProject/Assets/Scripts/UI/Views/ResourcePopupView.cs
   UnityProject/Assets/Scripts/UI/Views/TaskAssignmentView.cs
   UnityProject/Assets/Scripts/UI/Views/TimeControlView.cs
+  UnityProject/Assets/Scripts/UI/Views/TitleMenuView.cs
   UnityProject/Assets/Scripts/UI/Views/UIViewBase.cs
   UnityProject/Assets/Scripts/UI/Views/WalletHudView.cs
   UnityProject/Assets/Scripts/UI/Views/WorldEventChipView.cs
@@ -5338,14 +5350,7 @@
   UnityProject/Assets/Spine/Runtime/spine-unity/Modules/TK2D/SpriteCollectionAttachmentLoader.cs
   UnityProject/Assets/Spine/Runtime/spine-unity/Shaders/Sprite/README.md
   UnityProject/Assets/Spine/Runtime/spine-unity/SkeletonDataModifierAssets/BlendModeMaterials/BlendModeMaterialsAsset.cs
-  UnityProject/Assets/Spine/Runtime/spine-unity/SpineAttributes.cs
-  UnityProject/Assets/Spine/Runtime/spine-unity/Utility/AtlasUtilities.cs
-  UnityProject/Assets/Spine/Runtime/spine-unity/Utility/AttachmentCloneExtensions.cs
-  UnityProject/Assets/Spine/Runtime/spine-unity/Utility/AttachmentRegionExtensions.cs
-  UnityProject/Assets/Spine/Runtime/spine-unity/Utility/MaterialChecks.cs
-  UnityProject/Assets/Spine/Runtime/spine-unity/Utility/SkeletonExtensions.cs
-  UnityProject/Assets/Spine/Runtime/spine-unity/Utility/SkinUtilities.cs
-  ... [187 more files truncated — ปรับ TREE_MAX_LINES หรือ .aiignore]
+  ... [197 more files truncated — ปรับ TREE_MAX_LINES หรือ .aiignore]
 ```
 
 ## Recent Wiki Log (last 15 entries, each cut to 400 chars)
