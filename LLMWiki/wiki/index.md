@@ -96,7 +96,7 @@ Catalogs of game entities:
 
 ## Maintenance
 
-- Last index update: 2026-09-25
+- Last index update: 2026-10-11
 - Total source pages: 11 (+ 9 code snippets)
 - Total concept pages: 14
 - Total entity pages: 7
