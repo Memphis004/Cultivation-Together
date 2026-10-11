@@ -395,6 +395,27 @@ namespace Xianxia.Sect.Tests
         }
 
         [Test]
+        public void AttemptBreakthroughHandler_OutsidePlaying_ReturnsNoActiveSessionResult()
+        {
+            // The bridge's second write tool is gated by the same session fact as assign_task.
+            WithImmediateMainThread(() =>
+            {
+                var handler = new AttemptBreakthroughHandler(_provider, new FakeSessionGate { IsPlaying = false });
+                var response = handler.InvokeAsync(new AttemptBreakthroughRequest
+                {
+                    RequesterId = SectStateProvider.SectMasterRequesterId,
+                    DiscipleId = "d000",
+                }).GetAwaiter().GetResult();
+
+                Assert.IsFalse(response.Success);
+                StringAssert.Contains("no active session", response.FailReason);
+                Assert.AreEqual(CultivationConfig.StageQiCondensation,
+                                Find(_provider, "d000").Attributes.CultivationStageId,
+                                "no mutation happened");
+            });
+        }
+
+        [Test]
         public void MutationGate_IsPlaying_MatchesTheLiveSessionPhase()
         {
             // The coordinator IS the gate the handlers inject.

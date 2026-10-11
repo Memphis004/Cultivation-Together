@@ -20,16 +20,18 @@ namespace Xianxia.Sect.UI
     /// <summary>
     /// Tab ข้อมูล: bind ชื่อ/rank/task/wallet จริง (ย้ายมาจาก view เดิม)
     /// + P10C — stamina (bar + เลข) และ level ของสามหมวดทักษะ ("Lv n · XP x")
-    /// + placeholder note "ระบบสายบำเพ็ญ — ยังไม่มีข้อมูล"
-    /// (คู่แทร็กบำเพ็ญ / CultivationTrack ไม่มีใน state — backlog แยกงาน)
+    /// + P14B — สายบำเพ็ญ: ชื่อขั้น + progress bar ("progress / requirement")
+    ///   และปุ่ม "ทะลวงขั้น" ที่สถานะ/ข้อความมาจาก ISectStateProvider.CanBreakthrough
     /// </summary>
     public class InfoTabPresenter : IDiscipleTabPresenter
     {
         private readonly DiscipleDetailView _view;
+        private readonly ISectStateProvider _stateProvider;
 
-        public InfoTabPresenter(DiscipleDetailView view)
+        public InfoTabPresenter(DiscipleDetailView view, ISectStateProvider stateProvider)
         {
             _view = view;
+            _stateProvider = stateProvider;
         }
 
         public void Show(DiscipleState d)
@@ -42,7 +44,61 @@ namespace Xianxia.Sect.UI
                 "หินวิญญาณ " + (d.Wallet?.SpiritStones ?? 0) +
                 " · อุทิศ " + (d.Wallet?.Contribution ?? 0));
             ShowAttributes(d);
-            // TODO(backlog): คู่แทร็กบำเพ็ญ (CultivationTrack) เมื่อมี data model จริง
+            ShowCultivation(d);
+        }
+
+        /// <summary>
+        /// P14B — the cultivation row: stage display name, the progress bar with
+        /// "progress / requirement", and the breakthrough button's state + inline reason.
+        /// Both come from ISectStateProvider.CanBreakthrough — the SAME validation
+        /// TryBreakthrough revalidates — so the panel can never disagree with a commit and
+        /// never keeps a second copy of the rule. Called on open/switch and on the panel's
+        /// ≤4/s tick, so live meditation progress is visible without any per-tick message.
+        /// </summary>
+        public void ShowCultivation(DiscipleState d)
+        {
+            if (d == null) return;
+            var attributes = d.Attributes;
+            var stageId = attributes != null ? attributes.CultivationStageId : null;
+            float progress = attributes != null ? attributes.CultivationProgress : 0f;
+
+            bool known = CultivationConfig.IsKnownStage(stageId);
+            bool isFinal = known && CultivationConfig.IsFinal(stageId);
+
+            string reason = string.Empty;
+            bool ready = _stateProvider != null &&
+                         _stateProvider.CanBreakthrough(SectStateProvider.SectMasterRequesterId,
+                                                        d.DiscipleId, out reason);
+
+            _view.SetCultivation(
+                CultivationConfig.DisplayName(stageId),
+                progress,
+                CultivationConfig.Requirement(stageId),
+                isFinal,
+                ready);
+            _view.SetBreakthroughState(ready, reason); // reason is empty when ready
+        }
+
+        /// <summary>
+        /// P14B — the ปุ่มทะลวงขั้น action: REVALIDATE and commit through the authoritative
+        /// provider as the sect master (SECT_MASTER — no viewer bypass, no AI-GM path).
+        /// A rejection changes nothing and shows its failReason inline; the button itself is
+        /// already disabled whenever CanBreakthrough says no. On success the row is re-derived
+        /// from the new authoritative state (next stage, progress 0).
+        /// </summary>
+        public void TryBreakthrough(DiscipleState d)
+        {
+            if (d == null || _stateProvider == null) return;
+
+            string failReason;
+            if (!_stateProvider.TryBreakthrough(SectStateProvider.SectMasterRequesterId,
+                                                d.DiscipleId, out failReason))
+            {
+                _view.SetBreakthroughState(false, failReason);
+                return;
+            }
+
+            Show(d);
         }
 
         /// <summary>

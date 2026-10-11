@@ -207,6 +207,17 @@ namespace Xianxia.Sect.Tests
             public TaskPermissionResult CheckTaskPermission(string requesterId, string discipleId, string taskId)
                 => TaskPermissionResult.Allow();
 
+            // P14B (breakthrough) — not exercised here; stubbed for the interface.
+            public bool CanBreakthrough(string requesterId, string discipleId, out string reason)
+            {
+                reason = null; return false;
+            }
+
+            public bool TryBreakthrough(string requesterId, string discipleId, out string failReason)
+            {
+                failReason = null; return false;
+            }
+
             // P5B persistence — not exercised here; stubbed for the interface.
             public SectViewerMembershipSave ExportViewerMembership() => new SectViewerMembershipSave();
             public bool TryImportViewerMembership(SectViewerMembershipSave save, out string failReason)

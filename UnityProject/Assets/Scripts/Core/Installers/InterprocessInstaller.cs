@@ -82,6 +82,15 @@ namespace Xianxia.Sect.Installers
             messagePipeBuilder.RegisterTcpRemoteRequestHandler<AssignTaskRequest, AssignTaskResponse>(interprocess);
             builder.RegisterAsyncRequestHandler<AssignTaskRequest, AssignTaskResponse, AssignTaskHandler>(options);
 
+            // Request/response: attempting a cultivation breakthrough for a disciple.
+            // Write pair, second of its kind after AssignTask — and deliberately the SAME
+            // permission policy (SectStateProvider.TryBreakthrough reuses
+            // EvaluateTaskPermission, Hybrid 10-minute viewer protection included), so the
+            // bridge gains no power a human sect master does not have. No read pair is
+            // added: get_sect_state already carries stage + progress.
+            messagePipeBuilder.RegisterTcpRemoteRequestHandler<AttemptBreakthroughRequest, AttemptBreakthroughResponse>(interprocess);
+            builder.RegisterAsyncRequestHandler<AttemptBreakthroughRequest, AttemptBreakthroughResponse, AttemptBreakthroughHandler>(options);
+
             // Request/response: the bridge reads the ownership-change log
             // (P4 observability, READ-ONLY — deliberately no ownership-assignment
             // pair or tool exists; the only writers stay the dev harness/fixtures).

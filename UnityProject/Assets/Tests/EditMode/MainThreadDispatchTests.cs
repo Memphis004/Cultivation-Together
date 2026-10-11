@@ -316,6 +316,52 @@ namespace Xianxia.Sect.Tests
             StringAssert.Contains("shutting down", response.Message);
         }
 
+        [Test]
+        public void AttemptBreakthroughHandler_MutatesNothing_UntilTheHopIsPumped()
+        {
+            // The bridge's newest write path: it mutates live cultivation state, so it owes
+            // the same hop contract as assign_task — and it is the same shared operation, so
+            // the refusals below come from SectStateProvider, not from this handler.
+            var provider = BuildProvider();
+            ReadyUp(provider, "d001");
+            var handler = new AttemptBreakthroughHandler(provider);
+
+            var pending = handler.InvokeAsync(new AttemptBreakthroughRequest
+            {
+                RequesterId = SectStateProvider.SectMasterRequesterId,
+                DiscipleId = "d001",
+            });
+
+            Assert.IsFalse(pending.Status.IsCompleted(), "the handler must wait for the hop first");
+            Assert.AreEqual(CultivationConfig.StageQiCondensation, FindStage(provider, "d001"),
+                            "state must be untouched while the hop is queued");
+
+            Pump();
+            var response = pending.GetAwaiter().GetResult();
+
+            Assert.IsTrue(response.Success, response.FailReason);
+            Assert.AreEqual(CultivationConfig.StageFoundationEstablishment, FindStage(provider, "d001"));
+        }
+
+        [Test]
+        public void AttemptBreakthroughHandler_WhileShuttingDown_FailsClosed_AndStateIsUntouched()
+        {
+            var provider = BuildProvider();
+            ReadyUp(provider, "d001");
+            var handler = new AttemptBreakthroughHandler(provider);
+
+            MainThreadDispatch.MarkShuttingDown();
+            var response = handler.InvokeAsync(new AttemptBreakthroughRequest
+            {
+                RequesterId = SectStateProvider.SectMasterRequesterId,
+                DiscipleId = "d001",
+            }).GetAwaiter().GetResult();
+
+            Assert.IsFalse(response.Success);
+            StringAssert.Contains("shutting down", response.FailReason);
+            Assert.AreEqual(CultivationConfig.StageQiCondensation, FindStage(provider, "d001"));
+        }
+
         // ---- fixtures (same wiring the provider tests use) ----
 
         private static SectStateProvider BuildProvider()
@@ -340,6 +386,30 @@ namespace Xianxia.Sect.Tests
                 if (d.DiscipleId == discipleId) return d.CurrentTask ?? string.Empty;
             }
             return null;
+        }
+
+        private static string FindStage(SectStateProvider provider, string discipleId)
+        {
+            foreach (var d in provider.BuildSectEconomyState().Disciples)
+            {
+                if (d.DiscipleId == discipleId) return d.Attributes.CultivationStageId;
+            }
+            return null;
+        }
+
+        /// <summary>Put the disciple exactly at the first stage's requirement (the normal ready state).</summary>
+        private static void ReadyUp(SectStateProvider provider, string discipleId)
+        {
+            foreach (var d in provider.BuildSectEconomyState().Disciples)
+            {
+                if (d.DiscipleId != discipleId) continue;
+                d.Attributes.CultivationStageId = CultivationConfig.StageQiCondensation;
+                d.Attributes.CultivationProgress =
+                    CultivationConfig.Requirement(CultivationConfig.StageQiCondensation);
+                return;
+            }
+
+            Assert.Fail("no disciple with id: " + discipleId);
         }
 
         private static string FindPart(SectStateProvider provider, string discipleId, string slot)

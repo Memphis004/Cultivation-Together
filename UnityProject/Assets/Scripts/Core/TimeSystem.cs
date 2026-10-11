@@ -1003,6 +1003,35 @@ namespace Xianxia.Sect
         TaskPermissionResult CheckTaskPermission(string requesterId, string discipleId, string taskId);
 
         /// <summary>
+        /// P14B — read-only cultivation query for the UI (button state + inline reason).
+        /// Evaluates the SAME validation <see cref="TryBreakthrough"/> revalidates on
+        /// mutation, so display and commit can never disagree: non-empty requester and
+        /// disciple ids; the disciple exists; its cultivation stage id is in the stage
+        /// table; PERMISSION follows the identical P5B evaluation task assignment uses
+        /// ("SECT_MASTER" may override a Viewer-owned disciple only after strictly more
+        /// than 10 real-time minutes of owner inactivity; any other requester only its own
+        /// valid active membership — no second policy, no AI-GM bypass); the stage is not
+        /// the final one; and progress has reached the stage requirement. Never mutates
+        /// state and never refreshes viewer activity. False with a reason otherwise.
+        /// </summary>
+        bool CanBreakthrough(string requesterId, string discipleId, out string reason);
+
+        /// <summary>
+        /// P14B — explicit, fully validated breakthrough. Validation happens BEFORE any
+        /// mutation and fails closed (nothing changes and nothing is published on a
+        /// rejection): ids non-empty → disciple exists → known stage id → the P5B
+        /// permission evaluation shared with task assignment (Hybrid 10-minute viewer
+        /// protection included) → stage not final → progress &gt;= requirement (tiny
+        /// epsilon). On success exactly one atomic mutation: stage = next stage,
+        /// progress = 0. A valid owner command refreshes that viewer's activity exactly
+        /// like a task change does; a SectMaster command does not. No RNG, no cost, no
+        /// cooldown, no failure chance, and DiscipleRank never changes. Publishes
+        /// DiscipleCultivationChangedMessage (in-memory only, never on the interprocess
+        /// broker) on success only.
+        /// </summary>
+        bool TryBreakthrough(string requesterId, string discipleId, out string failReason);
+
+        /// <summary>
         /// P5B persistence — the membership slice worth surviving a session: the
         /// viewer registry (status / binding / LastActiveAtUtc) TOGETHER with each
         /// disciple's ownership, so the registry ⇄ ownership invariants hold after a

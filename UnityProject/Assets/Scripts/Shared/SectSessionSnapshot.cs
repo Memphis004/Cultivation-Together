@@ -13,6 +13,8 @@
 //     SectEconomyState.Disciples           roster: id/name/rank/sex/wallet/
 //                                          inventory/task/avatar/backend/
 //                                          ownership/Manual-Auto/attributes
+//                                          (stamina, skill XP, and P14A cultivation
+//                                          progress + stage id)
 //     SectEconomyState.Stockpile           raw resources + crafted goods
 //     SectEconomyState.PlacedBuildings     building placement
 //     SectEconomyState.ViewerRegistry      membership records + pending apps

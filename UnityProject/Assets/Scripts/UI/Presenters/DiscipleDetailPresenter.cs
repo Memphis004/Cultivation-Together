@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using MessagePipe;
 using TMPro;
 using Xianxia.Sect;
+using Xianxia.Sect.Messages;
 
 namespace Xianxia.Sect.UI
 {
@@ -21,6 +22,12 @@ namespace Xianxia.Sect.UI
         private readonly ISectStateProvider _stateProvider;
         private readonly AvatarPartPool _partPool;
 
+        // P14B — in-memory notification that a breakthrough was committed. Optional (null)
+        // exactly like TaskAssignmentPresenter's subscriber, so existing construction sites
+        // stay valid; production resolves it from MessagePipe via VContainer.
+        private readonly ISubscriber<DiscipleCultivationChangedMessage> _cultivationSubscriber;
+        private IDisposable _cultivationSubscription;
+
         private readonly Dictionary<DiscipleTab, IDiscipleTabPresenter> _tabs =
             new Dictionary<DiscipleTab, IDiscipleTabPresenter>();
 
@@ -28,10 +35,12 @@ namespace Xianxia.Sect.UI
         private string _currentDiscipleId;
         private bool _tabsBuilt;
 
-        public DiscipleDetailPresenter(ISectStateProvider stateProvider, AvatarPartPool partPool)
+        public DiscipleDetailPresenter(ISectStateProvider stateProvider, AvatarPartPool partPool,
+            ISubscriber<DiscipleCultivationChangedMessage> cultivationSubscriber = null)
         {
             _stateProvider = stateProvider;
             _partPool = partPool;
+            _cultivationSubscriber = cultivationSubscriber;
         }
 
         protected override void OnViewBound()
@@ -41,6 +50,12 @@ namespace Xianxia.Sect.UI
             View.TabClicked += SwitchTab;
             // P10C — the view ticks at most ~4×/s on unscaled time, only while visible.
             View.RefreshTick += OnAttributeRefresh;
+            // P14B — a breakthrough (this panel's button or any other committer) refreshes
+            // through the same bind path. The panel ALSO re-derives from authoritative state
+            // on every attribute tick, so a missed/unordered message cannot lose it (rule 13).
+            View.BreakthroughClicked += OnBreakthroughClicked;
+            if (_cultivationSubscriber != null)
+                _cultivationSubscription = _cultivationSubscriber.Subscribe(OnCultivationChanged);
         }
 
         public override void OnOpen(object args)
@@ -80,7 +95,7 @@ namespace Xianxia.Sect.UI
 
             var statusContent = View.GetTabContent(DiscipleTab.Status);
 
-            _tabs[DiscipleTab.Info] = new InfoTabPresenter(View);
+            _tabs[DiscipleTab.Info] = new InfoTabPresenter(View, _stateProvider);
             _tabs[DiscipleTab.Status] = new StatusTabPresenter(
                 statusContent != null
                     ? statusContent.GetComponentInChildren<RadarChartGraphic>(true)
@@ -184,6 +199,37 @@ namespace Xianxia.Sect.UI
             presenter.Show(d);
         }
 
+        /// <summary>
+        /// P14B — the ทะลวงขั้น button: revalidate + commit through the authoritative
+        /// provider (the tab presenter owns the rule; this only routes to the open disciple)
+        /// and render the result — a rejection shows its failReason inline, a success shows
+        /// the next stage with progress 0.
+        /// </summary>
+        private void OnBreakthroughClicked()
+        {
+            var d = FindCurrentDisciple();
+            if (d == null) return;
+
+            IDiscipleTabPresenter presenter;
+            if (!_tabs.TryGetValue(DiscipleTab.Info, out presenter)) return;
+
+            var info = presenter as InfoTabPresenter;
+            if (info != null) info.TryBreakthrough(d);
+        }
+
+        /// <summary>
+        /// P14B — DiscipleCultivationChangedMessage (in-memory only): refresh the ข้อมูล tab
+        /// when the change belongs to the disciple currently shown. Ignored for every other
+        /// disciple, so opening a panel never triggers unrelated work.
+        /// </summary>
+        private void OnCultivationChanged(DiscipleCultivationChangedMessage message)
+        {
+            if (message == null || message.DiscipleId != _currentDiscipleId) return;
+            if (_currentTab != DiscipleTab.Info) return;
+
+            RefreshCurrentTab();
+        }
+
         private DiscipleState FindCurrentDisciple()
         {
             if (string.IsNullOrEmpty(_currentDiscipleId)) return null;
@@ -202,6 +248,9 @@ namespace Xianxia.Sect.UI
             View.RailItemClicked -= SwitchDisciple;
             View.TabClicked -= SwitchTab;
             View.RefreshTick -= OnAttributeRefresh; // P10C — no refresh after the panel is gone
+            View.BreakthroughClicked -= OnBreakthroughClicked; // P14B — no commit after the panel is gone
+            _cultivationSubscription?.Dispose();
+            _cultivationSubscription = null;
         }
     }
 }

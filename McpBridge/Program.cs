@@ -182,4 +182,24 @@ public static class SectActionTools
             ? $"Task '{taskId}' assigned to {discipleId}."
             : response.FailReason;
     }
+
+    // The second write tool after assign_task - and deliberately the SAME policy: the
+    // request always carries SECT_MASTER, and Unity refuses it while a Hybrid viewer-owned
+    // disciple's owner has been active within the last 10 real-time minutes. The refusal
+    // reason is returned verbatim so the GM can explain it instead of retrying.
+    [McpServerTool, Description("Have a disciple break through to the next cultivation stage. Always sent as SECT_MASTER (the AI GM acts as the sect master), so a viewer-owned disciple stays protected for the same 10 real-time minutes of owner inactivity that blocks assign_task; the reply is the authority's refusal reason when it fails. Requires the disciple to have reached its current stage's progress requirement - see the stage/progress fields for each disciple in get_sect_state, and re-read it afterwards for the new stage.")]
+    public static async Task<string> AttemptBreakthrough(
+        IRemoteRequestHandler<AttemptBreakthroughRequest, AttemptBreakthroughResponse> requestHandler,
+        [Description("Disciple id, e.g. from get_sect_state")] string discipleId)
+    {
+        var response = await requestHandler.InvokeAsync(new AttemptBreakthroughRequest
+        {
+            RequesterId = "SECT_MASTER",
+            DiscipleId = discipleId,
+        });
+
+        return response.Success
+            ? $"Breakthrough succeeded for {discipleId}; read its new stage from get_sect_state."
+            : response.FailReason;
+    }
 }

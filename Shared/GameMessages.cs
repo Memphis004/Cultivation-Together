@@ -527,6 +527,37 @@ namespace Xianxia.Sect.Messages
         [Key(3)] public int BuildingCount { get; set; }
     }
 
+    // ---------- P14B follow-up: explicit breakthrough (§3 §4 of the cultivation notes) ----------
+    // Request/response pair: the MCP bridge (or AI GM) asks Unity to advance a
+    // disciple exactly one cultivation stage. Request-response because the caller
+    // needs the verdict immediately — same reasoning as AssignTaskRequest — and
+    // because the operation IS SectStateProvider.TryBreakthrough, the very call the
+    // ข้อมูล tab's ทะลวงขั้น button goes through.
+    //
+    // PERMISSION: no policy of its own and no AI-GM bypass. The bridge always sends
+    // RequesterId = "SECT_MASTER", so the Hybrid viewer rule applies in full — a
+    // viewer-owned disciple is protected for the same 10 real-time minutes of owner
+    // inactivity that blocks assign_task. Authenticating the caller more strongly is
+    // the same open item as it is for the other write tools.
+    //
+    // READ-BACK: deliberately no breakthrough query pair — get_sect_state already
+    // carries every disciple's cultivation stage id + progress, so a second read path
+    // could only drift from it. DiscipleCultivationChangedMessage stays in-memory-only
+    // and is deliberately NOT added to InterprocessTopics (see CultivationMessages.cs).
+    [MessagePackObject]
+    public class AttemptBreakthroughRequest
+    {
+        [Key(0)] public string RequesterId { get; set; } = string.Empty;
+        [Key(1)] public string DiscipleId { get; set; } = string.Empty;
+    }
+
+    [MessagePackObject]
+    public class AttemptBreakthroughResponse
+    {
+        [Key(0)] public bool Success { get; set; }
+        [Key(1)] public string FailReason { get; set; } = string.Empty;
+    }
+
     // Topic keys for the keyed (IDistributedPublisher<TKey,TMessage>) channels.
     public static class InterprocessTopics
     {

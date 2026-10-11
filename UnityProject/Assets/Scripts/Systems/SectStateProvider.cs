@@ -165,6 +165,9 @@ namespace Xianxia.Sect
         // P9A — in-memory only, same rule as the ownership publisher (autonomy is a
         // local player/UI concern; it never crosses the TCP wire).
         private readonly IPublisher<DiscipleControlModeChangedMessage> _controlModeChangedPublisher;
+        // P14B — in-memory only, same rule: a breakthrough is a local gameplay/UI concern,
+        // so it is never registered on the interprocess broker (no RPC, no MCP tool).
+        private readonly IPublisher<DiscipleCultivationChangedMessage> _cultivationChangedPublisher;
         private readonly BuildingDefPool _buildingDefPool;
         private readonly AvatarPartPool _avatarPartPool;
         private readonly VisualRuntimeConfig _visualConfig;
@@ -220,7 +223,8 @@ namespace Xianxia.Sect
             IPublisher<DiscipleTaskChangedMessage> discipleTaskChangedPublisher,
             IPublisher<DiscipleOwnerChangedMessage> ownershipChangedPublisher = null,
             IClock clock = null,
-            IPublisher<DiscipleControlModeChangedMessage> controlModeChangedPublisher = null)
+            IPublisher<DiscipleControlModeChangedMessage> controlModeChangedPublisher = null,
+            IPublisher<DiscipleCultivationChangedMessage> cultivationChangedPublisher = null)
         {
             _discipleRecruitedPublisher = discipleRecruitedPublisher;
             _resourceChangedPublisher = resourceChangedPublisher;
@@ -232,9 +236,12 @@ namespace Xianxia.Sect
             // P4: optional (default null) so every existing test construction site
             // stays valid; production wires it via VContainer in UIInstaller/GameLifetimeScope.
             _ownershipChangedPublisher = ownershipChangedPublisher;
-            // P9A: optional (default null) for the same reason — appended LAST so the
-            // positional test construction sites (ownerChanged, clock) are unchanged.
+            // P9A: optional (default null) for the same reason — appended after the
+            // positional test construction sites (ownerChanged, clock) so they stay valid.
             _controlModeChangedPublisher = controlModeChangedPublisher;
+            // P14B: optional (default null) for the same reason — appended LAST. Production
+            // resolves it from MessagePipe's publisher registration via VContainer.
+            _cultivationChangedPublisher = cultivationChangedPublisher;
             _avatarPartPool = avatarPartPool;
             _visualConfig = visualConfig;
             _entitlementProvider = entitlementProvider;
@@ -524,6 +531,15 @@ namespace Xianxia.Sect
                     attributes.Stamina = ClampStamina(attributes.Stamina + staminaPerSecond * deltaTimeSeconds);
                     if (xpCategory != null)
                         AddSkillXp(attributes, xpCategory, xpPerSecond * deltaTimeSeconds);
+
+                    // P14A — meditation ALSO accumulates cultivation progress. Resting ONLY,
+                    // in this same single apply step and against the same delta as the P10B
+                    // rates above (so pause is a zero delta and game speed is never applied
+                    // twice). Clamped AT the current stage's requirement with no carry-over;
+                    // the final stage accrues nothing. Stamina is untouched by this line, and
+                    // nothing is published per tick.
+                    if (record.Outcome == DiscipleWorkOutcome.Resting)
+                        AddCultivationProgress(attributes, CultivationConfig.ProgressPerSecondResting * deltaTimeSeconds);
                 }
 
                 // Craft completion XP: awarded where the item was actually produced. A
@@ -561,6 +577,31 @@ namespace Xianxia.Sect
             if (value < DiscipleAttributesConfig.SkillXpMin) return DiscipleAttributesConfig.SkillXpMin;
             if (value > DiscipleAttributesConfig.SkillXpMax) return DiscipleAttributesConfig.SkillXpMax;
             return value;
+        }
+
+        /// <summary>
+        /// P14A — adds cultivation progress toward the current stage's requirement.
+        /// Resting-only accrual: an unknown stage id (corruption — rejected by restore
+        /// validation) and the FINAL stage accrue nothing, and the result is clamped AT the
+        /// requirement so progress can never overflow or carry over into the next stage.
+        /// Never publishes and never touches stamina/XP.
+        /// </summary>
+        private static void AddCultivationProgress(DiscipleAttributes attributes, float amount)
+        {
+            if (attributes == null || amount <= 0f) return;
+            if (float.IsNaN(amount) || float.IsInfinity(amount)) return;
+
+            string stageId = attributes.CultivationStageId;
+            if (!CultivationConfig.IsKnownStage(stageId)) return; // unknown id: leave it for validation to reject
+            if (CultivationConfig.IsFinal(stageId)) return;       // nothing beyond the last stage
+
+            float requirement = CultivationConfig.Requirement(stageId);
+            float current = attributes.CultivationProgress;
+            if (float.IsNaN(current) || float.IsInfinity(current) || current < 0f) current = 0f;
+
+            float next = current + amount;
+            if (next > requirement) next = requirement; // clamp — no carry-over past the stage
+            attributes.CultivationProgress = next;
         }
 
         /// <summary>P10B — the resting task id (same literal KnownTasks is built with).</summary>
@@ -1309,6 +1350,161 @@ namespace Xianxia.Sect
             record.LastActiveAtUtc = _clock.UtcNow;
         }
 
+        // ---------- P14B — explicit breakthrough (validated; ONE atomic mutation) ----------
+
+        /// <summary>
+        /// P14B — tolerance on the readiness comparison. Progress accrues in float steps
+        /// against the tick delta and is clamped AT the requirement, so an exact match is
+        /// the normal case; the epsilon only absorbs accumulated float error. It is
+        /// deliberately tiny (a fraction of a millisecond of meditation at the prototype
+        /// rate) so it can never let a disciple through meaningfully early.
+        /// </summary>
+        private const float CultivationReadyEpsilon = 1e-4f;
+
+        /// <summary>
+        /// P14B — read-only half of the breakthrough pair: the SAME validation the mutation
+        /// revalidates, so the UI's button state and reason text can never disagree with a
+        /// commit. Never mutates state and never refreshes viewer activity.
+        /// </summary>
+        public bool CanBreakthrough(string requesterId, string discipleId, out string reason)
+        {
+            DiscipleState disciple;
+            return EvaluateBreakthrough(requesterId, discipleId, out disciple, out reason);
+        }
+
+        /// <summary>
+        /// P14B — explicit breakthrough: validate fully (fail closed, nothing mutated and
+        /// nothing published on a rejection), then advance exactly one stage in a single
+        /// atomic mutation (stage = next, progress = 0). Permission reuses the P5B
+        /// evaluation task assignment uses — including the Hybrid viewers' 10-minute
+        /// protection window — so there is no second policy and no AI-GM bypass. A valid
+        /// owner command refreshes the requester's own activity exactly like a task change;
+        /// a SectMaster command does not. No RNG, no cost, no cooldown, no failure chance,
+        /// and DiscipleRank is never touched. Publishes DiscipleCultivationChangedMessage
+        /// (in-memory only) on success only.
+        /// </summary>
+        public bool TryBreakthrough(string requesterId, string discipleId, out string failReason)
+        {
+            DiscipleState disciple;
+            if (!EvaluateBreakthrough(requesterId, discipleId, out disciple, out failReason))
+                return false;
+
+            var attributes = disciple.Attributes;
+            var oldStageId = attributes.CultivationStageId;
+            // EvaluateBreakthrough proved the stage is known and not final, so the next id
+            // is non-empty (and always different from the current one).
+            var newStageId = CultivationConfig.NextStageId(oldStageId);
+
+            // --- validation complete: ONE mutation block, no partial write ---
+            attributes.CultivationStageId = newStageId;
+            attributes.CultivationProgress = 0f;
+
+            var trimmedRequester = (requesterId ?? string.Empty).Trim();
+            RefreshRequesterActivity(trimmedRequester); // owner command only; SectMaster is a no-op
+
+            _cultivationChangedPublisher?.Publish(new DiscipleCultivationChangedMessage
+            {
+                DiscipleId = disciple.DiscipleId,
+                OldStageId = oldStageId,
+                NewStageId = newStageId,
+            });
+
+            Debug.Log($"[SectStateProvider] {trimmedRequester} advanced {disciple.DiscipleId} " +
+                      $"to cultivation stage '{newStageId}'.");
+            return true;
+        }
+
+        /// <summary>
+        /// P14B — shared validation for <see cref="CanBreakthrough"/> / <see cref="TryBreakthrough"/>:
+        /// ONE implementation, so the query and the commit cannot drift. Order, each step
+        /// failing closed with a reason:
+        ///   1. requester id non-empty;
+        ///   2. disciple id non-empty and the disciple exists;
+        ///   3. the attribute block exists and its cultivation stage id is IN the stage table
+        ///      (a non-empty unknown id is corruption, rejected by restore validation too);
+        ///   4. PERMISSION — the identical P5B evaluation TryAssignTask uses, including the
+        ///      Hybrid viewer protection window; never a second policy, never an AI-GM bypass;
+        ///   5. the stage is not the final one;
+        ///   6. progress has reached the stage requirement (tiny epsilon).
+        /// On success <paramref name="disciple"/> is the row to mutate and reason is empty.
+        /// Never mutates state and never refreshes viewer activity.
+        /// </summary>
+        private bool EvaluateBreakthrough(string requesterId, string discipleId,
+            out DiscipleState disciple, out string reason)
+        {
+            reason = string.Empty;
+            disciple = null;
+
+            var trimmedRequester = (requesterId ?? string.Empty).Trim();
+            if (trimmedRequester.Length == 0)
+            {
+                reason = "Requester id is empty.";
+                return false;
+            }
+
+            if (string.IsNullOrEmpty(discipleId))
+            {
+                reason = "Disciple id is empty.";
+                return false;
+            }
+
+            var candidate = FindDisciple(discipleId);
+            if (candidate == null)
+            {
+                reason = $"No disciple with id: {discipleId}";
+                return false;
+            }
+
+            var attributes = candidate.Attributes;
+            if (attributes == null)
+            {
+                reason = $"Disciple '{candidate.DiscipleId}' has no attribute block.";
+                return false;
+            }
+
+            var stageId = attributes.CultivationStageId;
+            if (!CultivationConfig.IsKnownStage(stageId))
+            {
+                reason = $"Disciple '{candidate.DiscipleId}' has an unknown cultivation stage id '{stageId}'.";
+                return false;
+            }
+
+            // Same authority as task assignment (EvaluateTaskPermission): empty/invalid
+            // requesters and inconsistent membership data fail closed, and the SectMaster
+            // override against a Viewer-owned disciple needs strictly more than the
+            // 10-minute inactivity window on the injected real-time clock.
+            var permission = EvaluateTaskPermission(trimmedRequester, candidate);
+            if (!permission.Allowed)
+            {
+                reason = permission.Reason;
+                return false;
+            }
+
+            if (CultivationConfig.IsFinal(stageId))
+            {
+                reason = $"'{candidate.DiscipleId}' is already at the final cultivation stage ('{stageId}').";
+                return false;
+            }
+
+            var requirement = CultivationConfig.Requirement(stageId);
+            var progress = attributes.CultivationProgress;
+            if (float.IsNaN(progress) || float.IsInfinity(progress))
+            {
+                reason = $"Disciple '{candidate.DiscipleId}' has a non-finite cultivation progress value.";
+                return false;
+            }
+
+            if (progress < requirement - CultivationReadyEpsilon)
+            {
+                reason = $"'{candidate.DiscipleId}' has not finished stage '{stageId}' yet " +
+                         $"({progress:0} of {requirement:0}).";
+                return false;
+            }
+
+            disciple = candidate;
+            return true;
+        }
+
         // ---------- P5B — viewer membership persistence (slice export/import) ----------
         // The registry and the disciples' ownership are exported/imported TOGETHER:
         // restoring only one half would break invariants #1/#2/#3 (active record ⇔
@@ -1697,6 +1893,23 @@ namespace Xianxia.Sect
                     { failReason = $"Disciple '{disciple.DiscipleId}' has a non-finite skill XP value for '{pair.Key}'."; return false; }
                 }
             }
+
+            // P14A — cultivation. An EMPTY stage id is a legacy save (Normalize promotes it
+            // to the first stage), but a NON-EMPTY id that is not in the stage table is
+            // corruption: reject it with an explicit reason instead of silently downgrading
+            // (a downgrade would destroy progression). Progress must be finite.
+            if (!string.IsNullOrEmpty(attributes.CultivationStageId)
+                && !CultivationConfig.IsKnownStage(attributes.CultivationStageId))
+            {
+                failReason = $"Disciple '{disciple.DiscipleId}' has an unknown cultivation stage id '{attributes.CultivationStageId}'.";
+                return false;
+            }
+            if (!IsFinite(attributes.CultivationProgress))
+            {
+                failReason = $"Disciple '{disciple.DiscipleId}' has a non-finite cultivation progress value.";
+                return false;
+            }
+
             return true;
         }
 

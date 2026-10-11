@@ -16,9 +16,18 @@ namespace Xianxia.Sect.UI
         // P10C — attributes shown on the ข้อมูล tab (stamina bar + number, three skill values).
         [SerializeField] private Image staminaBarFill;
         [SerializeField] private TMP_Text staminaText, skillGatheringText, skillAlchemyText, skillForgingText;
+        // P14B — cultivation row (stage name + progress bar) and the breakthrough button.
+        // The view never derives the rule: readiness and the reason text are passed in from
+        // ISectStateProvider.CanBreakthrough (the SAME validation a commit revalidates).
+        [SerializeField] private TMP_Text cultivationStageText, cultivationProgressText, breakthroughReasonText;
+        [SerializeField] private Image cultivationBarFill;
+        [SerializeField] private Button breakthroughButton;
         public event Action CloseClicked;
         public event Action<string> RailItemClicked;
         public event Action<DiscipleTab> TabClicked;
+
+        /// <summary>P14B — raised by the ทะลวงขั้น button; the presenter revalidates and commits.</summary>
+        public event Action BreakthroughClicked;
 
         /// <summary>
         /// P10C — raised at most ~4×/s on UNSCALED time, and only while the panel is
@@ -32,13 +41,32 @@ namespace Xianxia.Sect.UI
 
         private float _nextAttributeRefreshAt;
         private bool _visible;
+        private bool breakthroughWired;
         public AvatarRenderer PortraitRenderer => portraitRenderer;
         public RectTransform ContentHost => contentHost;
         private readonly Stack<RailItem> pool = new Stack<RailItem>();
         private readonly List<RailItem> active = new List<RailItem>();
         private bool wired;
         private void Awake() { if (closeButton != null) closeButton.onClick.AddListener(OnClose); }
-        public override void Show() { Wire(); _visible = true; _nextAttributeRefreshAt = 0f; base.Show(); }
+        public override void Show()
+        {
+            Wire();
+            WireBreakthroughButton();
+            _visible = true; _nextAttributeRefreshAt = 0f; base.Show();
+        }
+
+        /// <summary>
+        /// P14B — the ทะลวงขั้น listener is attached on Show() (the path UIService.Open always
+        /// takes) rather than in Awake(), the same rule DiscipleListView's close button follows:
+        /// an opened panel is always wired, a second Show() is a no-op, and the real button is
+        /// drivable from an EditMode test.
+        /// </summary>
+        private void WireBreakthroughButton()
+        {
+            if (breakthroughWired || breakthroughButton == null) return;
+            breakthroughWired = true;
+            breakthroughButton.onClick.AddListener(OnBreakthroughClicked);
+        }
         public override void Hide() { _visible = false; base.Hide(); }
         private void Update()
         {
@@ -88,6 +116,66 @@ namespace Xianxia.Sect.UI
                                  : UiPalette.Jade;
         }
 
+        /// <summary>
+        /// P14B — cultivation row: the stage display name, the progress bar with
+        /// "progress / requirement", and the two VISUAL states the caller derived from the
+        /// authoritative query (ready → highlighted; the final stage → "ขั้นสุดท้าย"). The
+        /// view only draws what it is told — it never recomputes readiness.
+        /// </summary>
+        public void SetCultivation(string stageLabel, float progress, float requirement, bool isFinalStage, bool ready)
+        {
+            if (cultivationStageText != null)
+                cultivationStageText.text = string.IsNullOrEmpty(stageLabel) ? "ขั้น · —" : "ขั้น · " + stageLabel;
+
+            if (cultivationProgressText != null)
+            {
+                if (isFinalStage)
+                    cultivationProgressText.text = "ขั้นสุดท้าย";
+                else if (ready)
+                    cultivationProgressText.text = "พร้อมทะลวงขั้น · " +
+                        Mathf.RoundToInt(progress) + " / " + Mathf.RoundToInt(requirement);
+                else
+                    cultivationProgressText.text =
+                        Mathf.RoundToInt(progress) + " / " + Mathf.RoundToInt(requirement);
+
+                cultivationProgressText.color = isFinalStage ? UiPalette.Secondary
+                                             : ready ? UiPalette.Vermilion
+                                             : UiPalette.Text;
+            }
+
+            if (cultivationBarFill == null) return;
+            var fill = cultivationBarFill.rectTransform;
+            var track = fill.parent as RectTransform;
+            float fullWidth = track != null ? track.rect.width : 0f;
+            if (fullWidth <= 0f) fullWidth = fill.sizeDelta.x;
+            float ratio = isFinalStage ? 1f
+                        : requirement > 0f ? Mathf.Clamp01(progress / requirement)
+                        : 0f;
+            fill.sizeDelta = new Vector2(fullWidth * ratio, fill.sizeDelta.y);
+
+            cultivationBarFill.color = isFinalStage ? UiPalette.Disabled
+                                     : ready ? UiPalette.Vermilion
+                                     : UiPalette.Jade;
+        }
+
+        /// <summary>
+        /// P14B — the breakthrough button's interactable state + inline reason, straight
+        /// from the authoritative CanBreakthrough / TryBreakthrough result (the panel never
+        /// duplicates the rule). Ready also highlights the button via the shared Ink select
+        /// style; the reason is shown inline instead of as a modal.
+        /// </summary>
+        public void SetBreakthroughState(bool ready, string reason)
+        {
+            if (breakthroughButton != null)
+            {
+                breakthroughButton.interactable = ready;
+                InkWidgets.Select(breakthroughButton, ready);
+            }
+
+            if (breakthroughReasonText != null)
+                breakthroughReasonText.text = ready ? string.Empty : (reason ?? string.Empty);
+        }
+
         /// <summary>P10C — one text per skill category (e.g. "Lv 3 · XP 340"); the presenter
         /// formats them from the shared attribute helpers, this only displays.</summary>
         public void SetSkills(string gathering, string alchemy, string forging)
@@ -97,6 +185,7 @@ namespace Xianxia.Sect.UI
             if (skillForgingText != null) skillForgingText.text = forging ?? string.Empty;
         }
         private void OnClose() => CloseClicked?.Invoke();
+        private void OnBreakthroughClicked() => BreakthroughClicked?.Invoke();
         private void Wire()
         {
             if (wired || tabRail == null) return; wired = true;
@@ -171,6 +260,12 @@ namespace Xianxia.Sect.UI
             private void Click()=>click?.Invoke(id);
             private void OnDestroy() { if(button!=null)button.onClick.RemoveListener(Click);click=null; }
         }
-        private void OnDestroy() { if(closeButton!=null)closeButton.onClick.RemoveListener(OnClose);CloseClicked=null;RailItemClicked=null;TabClicked=null; }
+
+        private void OnDestroy()
+        {
+            if (closeButton != null) closeButton.onClick.RemoveListener(OnClose);
+            if (breakthroughButton != null) breakthroughButton.onClick.RemoveListener(OnBreakthroughClicked);
+            CloseClicked = null; RailItemClicked = null; TabClicked = null; BreakthroughClicked = null;
+        }
     }
 }

@@ -34,23 +34,44 @@ namespace Xianxia.Sect.EditorTools
             var rank=InkWidgets.Text(header,"HeaderRankText","",font,28,570,0,338,62,UiPalette.LightText,TextAlignmentOptions.MidlineRight);
             var host=InkWidgets.Rect(window,"ContentHost",452,170,924,522);
             var info=InkWidgets.Rect(host,"InfoContent",0,0,924,522);InkWidgets.Stretch(info);
+            // P14B — 10 stacked bands in 522 px (48 px rows, gaps tightened from 14 px to 3 px)
+            // so the cultivation row and the ทะลวงขั้น button fit without scrolling.
             var nameValue=InkWidgets.StatRow(info,"NameRow","ชื่อ","",font,0,0,924,UiPalette.Jade);
-            var rankValue=InkWidgets.StatRow(info,"RankRow","ตำแหน่ง","",font,0,62,924,UiPalette.Blue);
-            var taskValue=InkWidgets.StatRow(info,"TaskRow","งานปัจจุบัน","",font,0,124,924,UiPalette.Vermilion);
-            var walletValue=InkWidgets.StatRow(info,"WalletRow","ทรัพยากร","",font,0,186,924,UiPalette.Jade);
-            // Wallet is also repeated in the bottom bar; allow its longer two-part value room.
-            walletValue.rectTransform.anchoredPosition=new Vector2(260,-0);walletValue.rectTransform.sizeDelta=new Vector2(654,48);
+            var rankValue=InkWidgets.StatRow(info,"RankRow","ตำแหน่ง","",font,0,51,924,UiPalette.Blue);
+            var taskValue=InkWidgets.StatRow(info,"TaskRow","งานปัจจุบัน","",font,0,102,924,UiPalette.Vermilion);
+            var walletValue=InkWidgets.StatRow(info,"WalletRow","ทรัพยากร","",font,0,153,924,UiPalette.Jade);
+            // Wallet is also repeated in the bottom bar; allow its longer two-part value room
+            // (StatRow returns the row's Value CHILD, so this offsets inside the row: x left,
+            // y stays 0 = the row's top).
+            walletValue.rectTransform.anchoredPosition=new Vector2(260,0);walletValue.rectTransform.sizeDelta=new Vector2(654,48);
             // P10C — attributes on the ข้อมูล tab: a stamina BAR + number, and the three skill levels.
             // Fixed width/h cells; SetStamina only rewrites the fill width and colour (no layout pass).
-            var staminaRow=InkWidgets.Rect(info,"StaminaRow",0,248,924,48);InkWidgets.Fill(staminaRow,UiPalette.PaperDark);
+            var staminaRow=InkWidgets.Rect(info,"StaminaRow",0,204,924,48);InkWidgets.Fill(staminaRow,UiPalette.PaperDark);
             InkWidgets.Fill(InkWidgets.Rect(staminaRow,"Dot",10,19,10,10),UiPalette.Jade);
             InkWidgets.Text(staminaRow,"Label","stamina",font,26,28,0,300,26,UiPalette.Text);
             var staminaBar=InkWidgets.Rect(staminaRow,"StaminaBar",28,33,300,9);InkWidgets.Fill(staminaBar,UiPalette.Disabled);
             var staminaFill=InkWidgets.Rect(staminaBar,"Fill",0,0,300,9);InkWidgets.Fill(staminaFill,UiPalette.Jade);
             var staminaValue=InkWidgets.Text(staminaRow,"Value","",font,26,536,0,378,48,UiPalette.Text,TextAlignmentOptions.MidlineRight);
-            var skillGathering=InkWidgets.StatRow(info,"SkillRowGathering","ฝีมือ · เก็บทรัพยากร","",font,0,310,924,UiPalette.Jade);
-            var skillAlchemy=InkWidgets.StatRow(info,"SkillRowAlchemy","ฝีมือ · ปรุงยา","",font,0,372,924,UiPalette.Blue);
-            var skillForging=InkWidgets.StatRow(info,"SkillRowForging","ฝีมือ · หลอมหล่อ","",font,0,434,924,UiPalette.Vermilion);
+            // P14B — cultivation: stage name + progress bar ("progress / requirement") on its own
+            // row, then the breakthrough button with its inline reason. SetCultivation only
+            // rewrites text/fill width/colour; the ready state and the reason come from
+            // ISectStateProvider.CanBreakthrough — never recomputed in the prefab.
+            var cultivationRow=InkWidgets.Rect(info,"CultivationRow",0,255,924,48);InkWidgets.Fill(cultivationRow,UiPalette.PaperDark);
+            InkWidgets.Fill(InkWidgets.Rect(cultivationRow,"Dot",10,19,10,10),UiPalette.Blue);
+            var cultivationStage=InkWidgets.Text(cultivationRow,"Label","ขั้น · ",font,26,28,0,300,26,UiPalette.Text);
+            var cultivationBar=InkWidgets.Rect(cultivationRow,"CultivationBar",28,33,300,9);InkWidgets.Fill(cultivationBar,UiPalette.Disabled);
+            var cultivationFill=InkWidgets.Rect(cultivationBar,"Fill",0,0,300,9);InkWidgets.Fill(cultivationFill,UiPalette.Jade);
+            var cultivationProgress=InkWidgets.Text(cultivationRow,"Value","",font,26,536,0,378,48,UiPalette.Text,TextAlignmentOptions.MidlineRight);
+            var skillGathering=InkWidgets.StatRow(info,"SkillRowGathering","ฝีมือ · เก็บทรัพยากร","",font,0,306,924,UiPalette.Jade);
+            var skillAlchemy=InkWidgets.StatRow(info,"SkillRowAlchemy","ฝีมือ · ปรุงยา","",font,0,357,924,UiPalette.Blue);
+            var skillForging=InkWidgets.StatRow(info,"SkillRowForging","ฝีมือ · หลอมหล่อ","",font,0,408,924,UiPalette.Vermilion);
+            // The authority's reasons are full sentences (Thai or English, e.g. "'d001' has not
+            // finished stage 'qi_condensation' yet (150 of 300)."), so this one WRAPS onto a
+            // second line inside its own 54 px band instead of being truncated by the widget's
+            // default ellipsis — a hidden reason would defeat the point of showing it inline.
+            var breakthroughReason=InkWidgets.Text(info,"BreakthroughReasonText","",font,20,0,456,612,54,UiPalette.Secondary,TextAlignmentOptions.MidlineLeft);
+            breakthroughReason.textWrappingMode=TextWrappingModes.Normal;
+            var breakthroughButton=InkWidgets.OutlineButton(info,"BreakthroughButton","ทะลวงขั้น",font,624,462,300,48);
             var status=InkWidgets.Rect(host,"StatusContent",0,0,924,522);InkWidgets.Stretch(status);
             string[] axes={"รากฐาน","รากกระดูก","ปัญญา","ศักยภาพ","เสน่ห์","วาสนา"};
             for(int c=0;c<3;c++)
@@ -76,6 +97,11 @@ namespace Xianxia.Sect.EditorTools
             Set(so,"closeButton",close);Set(so,"portraitRenderer",renderer);Set(so,"railContent",content);Set(so,"tabRail",tabs);Set(so,"contentHost",host);            Set(so,"headerNameText",name);Set(so,"headerRankText",rank);so.ApplyModifiedPropertiesWithoutUndo();
             Set(so,"staminaBarFill",staminaFill.GetComponent<Image>());Set(so,"staminaText",staminaValue);
             Set(so,"skillGatheringText",skillGathering);Set(so,"skillAlchemyText",skillAlchemy);Set(so,"skillForgingText",skillForging);so.ApplyModifiedPropertiesWithoutUndo();
+            // P14B — cultivation row + breakthrough button on the ข้อมูล tab.
+            Set(so,"cultivationStageText",cultivationStage);Set(so,"cultivationProgressText",cultivationProgress);
+            Set(so,"cultivationBarFill",cultivationFill.GetComponent<Image>());
+            Set(so,"breakthroughButton",breakthroughButton);Set(so,"breakthroughReasonText",breakthroughReason);
+            so.ApplyModifiedPropertiesWithoutUndo();
             var prefab=PrefabUtility.SaveAsPrefabAsset(root.gameObject,"Assets/Prefabs/UI/DiscipleDetailPanel.prefab");Object.DestroyImmediate(root.gameObject);
             var catalog=AssetDatabase.LoadAssetAtPath<UIPanelCatalog>("Assets/Panel Catalog/MainPanelCatalog.asset");var cs=new SerializedObject(catalog);var panels=cs.FindProperty("panels");
             bool found=false;for(int i=0;i<panels.arraySize;i++){var el=panels.GetArrayElementAtIndex(i);if(el.FindPropertyRelative("PanelId").stringValue!="DiscipleDetail")continue;el.FindPropertyRelative("Prefab").objectReferenceValue=prefab;found=true;}
