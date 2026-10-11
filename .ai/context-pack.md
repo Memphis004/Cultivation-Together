@@ -1,11 +1,11 @@
 # Cultivation-Together Context Pack
 
 - Repository: Memphis004/Cultivation-Together
-- Commit: 94732ee
+- Commit: d60a551
 - Branch: main
 - Generated: 2026-10-11
-- Uncommitted changes in working tree: 0 file(s) (ไฟล์ที่แนบมาอ่านจาก working tree ไม่ใช่จาก commit — ถ้า > 0 อาจต่างจาก commit)
-- Files after .aiignore filter: 2089
+- Uncommitted changes in working tree: 2 file(s) (ไฟล์ที่แนบมาอ่านจาก working tree ไม่ใช่จาก commit — ถ้า > 0 อาจต่างจาก commit)
+- Files after .aiignore filter: 2096
 
 ## Ground Rules (สำคัญมาก — บังคับ AI)
 
@@ -49,14 +49,14 @@
 (ตัด `Gen/`, `Tests/`, `Editor/`, `Spikes/` ออก — ถ้าต้องการให้ขอผ่าน need_files)
 
 - `McpBridge/Program.cs`: static class SectQueryTools, static class SectActionTools
-- `McpBridge/Shared/DiscipleAttributes.cs`: static class DiscipleAttributesConfig, class DiscipleAttributes
-- `McpBridge/Shared/GameMessages.cs`: class DiscipleRecruitedMessage, class DiscipleRankChangedMessage, class SectResourceChangedMessage, class ContributionEarnedMessage, class SceneLoadedMessage, class WorldEventTriggeredMessage, class TimeSpeedChangedMessage, class SectStateQuery, class SectStateSnapshot, class AwaitWorldEventRequest, class AwaitWorldEventResponse, class EventChoiceInfo, class ExecuteDecisionMessage, class DecisionExecutedMessage, class BuildModeStartedMessage, class BuildModeEndedMessage, class PurchaseItemRequest, class PurchaseItemResponse, class BuildingPlacedMessage, class DiscipleChibiBackendChangedMessage, class DiscipleSelectedMessage, class AvatarEquipmentChangedMessage, class ChangeAvatarPartRequest, class ChangeAvatarPartResponse, class AssignTaskRequest, class AssignTaskResponse, class DiscipleTaskChangedMessage, class DiscipleOwnerChangedMessage, class DiscipleControlModeChangedMessage, class OwnershipObservabilityQuery, class OwnershipObservabilitySnapshot, class TaskChangeObservabilityQuery, class TaskChangeObservabilitySnapshot, class TaskProtectionQuery, class TaskProtectionEntry, class TaskProtectionSnapshot, class SectViewerMembershipSave, class SectSavedOwnership, class SessionRestoredMessage, static class InterprocessTopics
+- `McpBridge/Shared/DiscipleAttributes.cs`: static class DiscipleAttributesConfig, sealed class CultivationStageDef, static class CultivationConfig, class DiscipleAttributes
+- `McpBridge/Shared/GameMessages.cs`: class DiscipleRecruitedMessage, class DiscipleRankChangedMessage, class SectResourceChangedMessage, class ContributionEarnedMessage, class SceneLoadedMessage, class WorldEventTriggeredMessage, class TimeSpeedChangedMessage, class SectStateQuery, class SectStateSnapshot, class AwaitWorldEventRequest, class AwaitWorldEventResponse, class EventChoiceInfo, class ExecuteDecisionMessage, class DecisionExecutedMessage, class BuildModeStartedMessage, class BuildModeEndedMessage, class PurchaseItemRequest, class PurchaseItemResponse, class BuildingPlacedMessage, class DiscipleChibiBackendChangedMessage, class DiscipleSelectedMessage, class AvatarEquipmentChangedMessage, class ChangeAvatarPartRequest, class ChangeAvatarPartResponse, class AssignTaskRequest, class AssignTaskResponse, class DiscipleTaskChangedMessage, class DiscipleOwnerChangedMessage, class DiscipleControlModeChangedMessage, class OwnershipObservabilityQuery, class OwnershipObservabilitySnapshot, class TaskChangeObservabilityQuery, class TaskChangeObservabilitySnapshot, class TaskProtectionQuery, class TaskProtectionEntry, class TaskProtectionSnapshot, class SectViewerMembershipSave, class SectSavedOwnership, class SessionRestoredMessage, class AttemptBreakthroughRequest, class AttemptBreakthroughResponse, static class InterprocessTopics
 - `McpBridge/Shared/MockSectData.cs`: static class MockSectData
 - `McpBridge/Shared/SectEconomyState.cs`: enum OwnerScope, enum DiscipleRank, enum DiscipleSex, enum DiscipleOwnerType, enum DiscipleControlMode, enum ChibiBackend, class CurrencyWallet, class InventoryItem, class DiscipleState, class SectStockpile, class PlacedBuildingState, class SectEconomyState, struct SlotPart, sealed class AvatarAppearance, static class AvatarSlots
 - `McpBridge/Shared/SectSessionSnapshot.cs`: class SectSessionSnapshotEnvelope, class SectSessionSnapshot, class PendingEventSnapshot
 - `McpBridge/Shared/ViewerMembership.cs`: enum ViewerMembershipStatus, class ViewerRecord, class PendingViewerApplication, interface IClock, sealed class UtcClock, class SectViewerRegistry
-- `Shared/DiscipleAttributes.cs`: static class DiscipleAttributesConfig, class DiscipleAttributes
-- `Shared/GameMessages.cs`: class DiscipleRecruitedMessage, class DiscipleRankChangedMessage, class SectResourceChangedMessage, class ContributionEarnedMessage, class SceneLoadedMessage, class WorldEventTriggeredMessage, class TimeSpeedChangedMessage, class SectStateQuery, class SectStateSnapshot, class AwaitWorldEventRequest, class AwaitWorldEventResponse, class EventChoiceInfo, class ExecuteDecisionMessage, class DecisionExecutedMessage, class BuildModeStartedMessage, class BuildModeEndedMessage, class PurchaseItemRequest, class PurchaseItemResponse, class BuildingPlacedMessage, class DiscipleChibiBackendChangedMessage, class DiscipleSelectedMessage, class AvatarEquipmentChangedMessage, class ChangeAvatarPartRequest, class ChangeAvatarPartResponse, class AssignTaskRequest, class AssignTaskResponse, class DiscipleTaskChangedMessage, class DiscipleOwnerChangedMessage, class DiscipleControlModeChangedMessage, class OwnershipObservabilityQuery, class OwnershipObservabilitySnapshot, class TaskChangeObservabilityQuery, class TaskChangeObservabilitySnapshot, class TaskProtectionQuery, class TaskProtectionEntry, class TaskProtectionSnapshot, class SectViewerMembershipSave, class SectSavedOwnership, class SessionRestoredMessage, static class InterprocessTopics
+- `Shared/DiscipleAttributes.cs`: static class DiscipleAttributesConfig, sealed class CultivationStageDef, static class CultivationConfig, class DiscipleAttributes
+- `Shared/GameMessages.cs`: class DiscipleRecruitedMessage, class DiscipleRankChangedMessage, class SectResourceChangedMessage, class ContributionEarnedMessage, class SceneLoadedMessage, class WorldEventTriggeredMessage, class TimeSpeedChangedMessage, class SectStateQuery, class SectStateSnapshot, class AwaitWorldEventRequest, class AwaitWorldEventResponse, class EventChoiceInfo, class ExecuteDecisionMessage, class DecisionExecutedMessage, class BuildModeStartedMessage, class BuildModeEndedMessage, class PurchaseItemRequest, class PurchaseItemResponse, class BuildingPlacedMessage, class DiscipleChibiBackendChangedMessage, class DiscipleSelectedMessage, class AvatarEquipmentChangedMessage, class ChangeAvatarPartRequest, class ChangeAvatarPartResponse, class AssignTaskRequest, class AssignTaskResponse, class DiscipleTaskChangedMessage, class DiscipleOwnerChangedMessage, class DiscipleControlModeChangedMessage, class OwnershipObservabilityQuery, class OwnershipObservabilitySnapshot, class TaskChangeObservabilityQuery, class TaskChangeObservabilitySnapshot, class TaskProtectionQuery, class TaskProtectionEntry, class TaskProtectionSnapshot, class SectViewerMembershipSave, class SectSavedOwnership, class SessionRestoredMessage, class AttemptBreakthroughRequest, class AttemptBreakthroughResponse, static class InterprocessTopics
 - `Shared/MockSectData.cs`: static class MockSectData
 - `Shared/SectEconomyState.cs`: enum OwnerScope, enum DiscipleRank, enum DiscipleSex, enum DiscipleOwnerType, enum DiscipleControlMode, enum ChibiBackend, class CurrencyWallet, class InventoryItem, class DiscipleState, class SectStockpile, class PlacedBuildingState, class SectEconomyState, struct SlotPart, sealed class AvatarAppearance, static class AvatarSlots
 - `Shared/SectSessionSnapshot.cs`: class SectSessionSnapshotEnvelope, class SectSessionSnapshot, class PendingEventSnapshot
@@ -67,7 +67,9 @@
 - `UnityProject/Assets/Scripts/Building/PlaceableLandMask.cs`: static class PlaceableLandMask
 - `UnityProject/Assets/Scripts/Building/PlacementController.cs`: class PlacementController
 - `UnityProject/Assets/Scripts/Core/AssignTaskHandler.cs`: class AssignTaskHandler
+- `UnityProject/Assets/Scripts/Core/AttemptBreakthroughHandler.cs`: class AttemptBreakthroughHandler
 - `UnityProject/Assets/Scripts/Core/ChangeAvatarPartHandler.cs`: class ChangeAvatarPartHandler
+- `UnityProject/Assets/Scripts/Core/CultivationMessages.cs`: class DiscipleCultivationChangedMessage
 - `UnityProject/Assets/Scripts/Core/DecisionExecutor.cs`: class DecisionExecutor
 - `UnityProject/Assets/Scripts/Core/DecisionLogger.cs`: class DecisionLogger
 - `UnityProject/Assets/Scripts/Core/GameLifetimeScope.cs`: class GameLifetimeScope
@@ -105,8 +107,8 @@
 - `UnityProject/Assets/Scripts/Data/AvatarPartPool.cs`: class AvatarPartDef, class AvatarPartTable, class AvatarPartPool
 - `UnityProject/Assets/Scripts/Data/LubanEventPool.cs`: class LubanEventPool
 - `UnityProject/Assets/Scripts/Scenes/SectScene/SectSceneLifetimeScope.cs`: sealed class SectSceneLifetimeScope
-- `UnityProject/Assets/Scripts/Shared/DiscipleAttributes.cs`: static class DiscipleAttributesConfig, class DiscipleAttributes
-- `UnityProject/Assets/Scripts/Shared/GameMessages.cs`: class DiscipleRecruitedMessage, class DiscipleRankChangedMessage, class SectResourceChangedMessage, class ContributionEarnedMessage, class SceneLoadedMessage, class WorldEventTriggeredMessage, class TimeSpeedChangedMessage, class SectStateQuery, class SectStateSnapshot, class AwaitWorldEventRequest, class AwaitWorldEventResponse, class EventChoiceInfo, class ExecuteDecisionMessage, class DecisionExecutedMessage, class BuildModeStartedMessage, class BuildModeEndedMessage, class PurchaseItemRequest, class PurchaseItemResponse, class BuildingPlacedMessage, class DiscipleChibiBackendChangedMessage, class DiscipleSelectedMessage, class AvatarEquipmentChangedMessage, class ChangeAvatarPartRequest, class ChangeAvatarPartResponse, class AssignTaskRequest, class AssignTaskResponse, class DiscipleTaskChangedMessage, class DiscipleOwnerChangedMessage, class DiscipleControlModeChangedMessage, class OwnershipObservabilityQuery, class OwnershipObservabilitySnapshot, class TaskChangeObservabilityQuery, class TaskChangeObservabilitySnapshot, class TaskProtectionQuery, class TaskProtectionEntry, class TaskProtectionSnapshot, class SectViewerMembershipSave, class SectSavedOwnership, class SessionRestoredMessage, static class InterprocessTopics
+- `UnityProject/Assets/Scripts/Shared/DiscipleAttributes.cs`: static class DiscipleAttributesConfig, sealed class CultivationStageDef, static class CultivationConfig, class DiscipleAttributes
+- `UnityProject/Assets/Scripts/Shared/GameMessages.cs`: class DiscipleRecruitedMessage, class DiscipleRankChangedMessage, class SectResourceChangedMessage, class ContributionEarnedMessage, class SceneLoadedMessage, class WorldEventTriggeredMessage, class TimeSpeedChangedMessage, class SectStateQuery, class SectStateSnapshot, class AwaitWorldEventRequest, class AwaitWorldEventResponse, class EventChoiceInfo, class ExecuteDecisionMessage, class DecisionExecutedMessage, class BuildModeStartedMessage, class BuildModeEndedMessage, class PurchaseItemRequest, class PurchaseItemResponse, class BuildingPlacedMessage, class DiscipleChibiBackendChangedMessage, class DiscipleSelectedMessage, class AvatarEquipmentChangedMessage, class ChangeAvatarPartRequest, class ChangeAvatarPartResponse, class AssignTaskRequest, class AssignTaskResponse, class DiscipleTaskChangedMessage, class DiscipleOwnerChangedMessage, class DiscipleControlModeChangedMessage, class OwnershipObservabilityQuery, class OwnershipObservabilitySnapshot, class TaskChangeObservabilityQuery, class TaskChangeObservabilitySnapshot, class TaskProtectionQuery, class TaskProtectionEntry, class TaskProtectionSnapshot, class SectViewerMembershipSave, class SectSavedOwnership, class SessionRestoredMessage, class AttemptBreakthroughRequest, class AttemptBreakthroughResponse, static class InterprocessTopics
 - `UnityProject/Assets/Scripts/Shared/MockSectData.cs`: static class MockSectData
 - `UnityProject/Assets/Scripts/Shared/SectEconomyState.cs`: enum OwnerScope, enum DiscipleRank, enum DiscipleSex, enum DiscipleOwnerType, enum DiscipleControlMode, enum ChibiBackend, class CurrencyWallet, class InventoryItem, class DiscipleState, class SectStockpile, class PlacedBuildingState, class SectEconomyState, struct SlotPart, sealed class AvatarAppearance, static class AvatarSlots
 - `UnityProject/Assets/Scripts/Shared/SectSessionSnapshot.cs`: class SectSessionSnapshotEnvelope, class SectSessionSnapshot, class PendingEventSnapshot
@@ -208,7 +210,7 @@
 
 (แต่ละไฟล์จำกัด 40000 bytes; เลขนำหน้าคือเลขบรรทัดจริงของไฟล์)
 
-### project_summary.md (19184 bytes)
+### project_summary.md (22499 bytes)
 ````
      1	# Cultivation Together — Project Summary / Design Log
      2	
@@ -350,130 +352,152 @@
    138	| Building system (grid, placement, ghost, camera rig) | ✅ ใช้จริง |
    139	| Hybrid permissions (P5B) — `CheckTaskPermission`, cooldown 12s, owner protection 600s | ✅ ใช้จริง |
    140	| Viewer membership (P5A/P5B) — `ViewerRecord`, registry, invariants | ✅ ใช้จริง |
-   141	| Save / Load (P11) — slot, backup, versioned envelope, atomic write | ✅ ใช้จริง |
-   142	| Session lifecycle — Title ↔ Playing, scene load, stale-completion invalidation | ✅ ใช้จริง |
-   143	| Combat / stat / technique system | ❌ ยังไม่ตัดสิน (open questions #2–#4) |
-   144	
-   145	### 5.2 UI (Xianxia.UI.MVP Lite)
-   146	
-   147	`UIService` + `UIPanelCatalog` (ScriptableObject) + `UIRoot`; presenter resolve ผ่าน
-   148	enum→Type mapping (**ไม่มี reflection**) — panel ที่ลงทะเบียน: `EventPopup`, `ResourceHud`,
-   149	`LogWindow`, `AvatarCustomization`, `DiscipleDetail`, `BottomMenu`, `ResourcePopup`,
-   150	`BuildingMenu`, `TaskAssignment`, `DiscipleList`, `TimeControl`, `EventChip`, `TitleMenu`,
-   151	`IngameMenu`
-   152	
-   153	**Panel ใหม่ต้องเดินตาม generator pattern:** Editor generator → regenerate prefab →
-   154	`UIPresenterKind` **ต่อท้ายเท่านั้น** → catalog entry → ฟอนต์ไทย TMP + palette กลาง —
-   155	**ห้าม hand-edit prefab YAML**
-   156	
-   157	**WorldEvent UI:** popup ดึงข้อมูลจาก authoritative state (ไม่พึ่ง message อย่างเดียว)
-   158	จึงไม่พังเวลา start/subscribe สลับลำดับ; มี "chip" ลอยเมื่อ popup ถูกซ่อนแต่ยัง pending;
-   159	`Hide`/Escape ซ่อนโดย**ไม่**ล้าง pending และ**ไม่** resume เวลา
-   160	
-   161	### 5.3 Data pipeline (Luban)
-   162	
-   163	```
-   164	DataTables/Data/EventDef.csv ─────┐
-   165	DataTables/Data/EventChoiceDef.csv ┤  DataTables/gen.sh | gen.bat
-   166	DataTables/Defines/schema.xml ────┤  (luban.conf: topModule "cfg", target "client")
-   167	                                  ↓
-   168	        UnityProject/Assets/Scripts/Data/Gen/  (namespace cfg.game; Tables.cs)
-   169	                                  ↓
-   170	        UnityProject/Assets/Resources/DataTables/*.json  (runtime load)
-   171	```
-   172	
-   173	**ห้ามแก้ไฟล์ใน `Data/Gen/`** — regenerate จาก CSV แทน
-   174	ตารางปัจจุบัน: `TbEventDef` (id, description, requiresDecision, weight) และ
-   175	`TbEventChoiceDef` (eventId, choiceId, label) — สอง flat table join ด้วย `eventId`
+   141	| Cultivation (P14A/B) — ตาราง stage append-only, สะสมตอนนั่งสมาธิ, **ทะลวงขั้น** + MCP tool `attempt_breakthrough` | ✅ ใช้จริง + tested |
+   142	| Save / Load (P11) — slot, backup, versioned envelope, atomic write | ✅ ใช้จริง |
+   143	| Session lifecycle — Title ↔ Playing, scene load, stale-completion invalidation | ✅ ใช้จริง |
+   144	| Combat / stat / technique system | ❌ ยังไม่ตัดสิน (open questions #2–#4) |
+   145	
+   146	### 5.2 UI (Xianxia.UI.MVP Lite)
+   147	
+   148	`UIService` + `UIPanelCatalog` (ScriptableObject) + `UIRoot`; presenter resolve ผ่าน
+   149	enum→Type mapping (**ไม่มี reflection**) — panel ที่ลงทะเบียน: `EventPopup`, `ResourceHud`,
+   150	`LogWindow`, `AvatarCustomization`, `DiscipleDetail`, `BottomMenu`, `ResourcePopup`,
+   151	`BuildingMenu`, `TaskAssignment`, `DiscipleList`, `TimeControl`, `EventChip`, `TitleMenu`,
+   152	`IngameMenu`
+   153	
+   154	**Panel ใหม่ต้องเดินตาม generator pattern:** Editor generator → regenerate prefab →
+   155	`UIPresenterKind` **ต่อท้ายเท่านั้น** → catalog entry → ฟอนต์ไทย TMP + palette กลาง —
+   156	**ห้าม hand-edit prefab YAML**
+   157	
+   158	**WorldEvent UI:** popup ดึงข้อมูลจาก authoritative state (ไม่พึ่ง message อย่างเดียว)
+   159	จึงไม่พังเวลา start/subscribe สลับลำดับ; มี "chip" ลอยเมื่อ popup ถูกซ่อนแต่ยัง pending;
+   160	`Hide`/Escape ซ่อนโดย**ไม่**ล้าง pending และ**ไม่** resume เวลา
+   161	
+   162	### 5.4 Vertical slice (P15) — ทั้งเกมเป็นเส้นทางเดียว
+   163	
+   164	`Tests/EditMode/VerticalSliceIntegrationTests.cs` (12 tests) ขับ service จริงทั้งเส้น:
+   165	Title → New Game → assign ด้วยมือ → Auto → work/recovery → event decision → Save →
+   166	Return to Title → Continue แล้ว state ตรงเป๊ะ + 1×/2×/3× equivalence, pause correctness,
+   167	Hybrid protection ผ่าน local fixture, ไม่มี notification/reward ซ้ำ, fractional progress
+   168	ข้าม save, building occupancy หลัง load, callback ของ session เก่าถูกปฏิเสธ,
+   169	วน Title/NewGame/Load ไม่ leak listener, cold restart / corrupt save / failed write
+   170	
+   171	**คนยังต้องรัน playbook บนหน้าจอเอง** (ยัง NOT VERIFIED) และ **autosave ยังไม่มี** —
+   172	coverage เต็ม, ตัวเลข metrics ที่วัดได้, ข้อเสนอ tuning และ feasibility ของ autosave อยู่ที่
+   173	`LLMWiki/wiki/sources/vertical-slice-playbook.md`
+   174	
+   175	### 5.3 Data pipeline (Luban)
    176	
-   177	---
-   178	
-   179	## 6. Phase history (จาก `LLMWiki/wiki/log.md`)
-   180	
-   181	| Phase | สาระ |
-   182	|---|---|
-   183	| lab 1–13 (21–30 Aug 2026) | ตั้ง DI graph, MessagePipe bus + TCP, subsystems, UI MVP-Lite; **lab 7** ยกเลิก protobuf → MessagePack; **lab 13** เจอ bug in-process pub/sub ไม่ถึง interprocess → ดึง `DecisionExecutor` |
-   184	| E1-pre | main-thread hop สำหรับ handler ที่มาจาก TCP (`MainThreadDispatch`) — handler ต้อง `await UniTask.SwitchToMainThread()` ก่อนแตะ Unity API |
-   185	| E2-lite | world-event spawner + `WorldEventRuntimeConfig.StartGraceSeconds` (ไม่ยิงจาก constructor อีก เพราะ Start order ไม่การันตี) |
-   186	| P3 | Task assignment UI (row dropdown, draft, conflict detection) |
-   187	| P4 | Ownership: `DiscipleOwnerType/OwnerId`, `TrySetDiscipleOwner` + identity convention, `DiscipleOwnerChangedMessage`, local dev harness + `get_ownership_log` (read-only) |
-   188	| P5A | Viewer membership data + invariants + injectable `IClock` (UTC เท่านั้น) |
-   189	| P5B | Hybrid permissions (`CheckTaskPermission`, 600s protection, 12s cooldown), bridge read-only queries (`get_task_change_log`, `get_task_protection`), membership persistence (local file) |
-   190	| P10/P11 | Save/load: slot + backup + versioned envelope, autosave, `TitleMenu`/`IngameMenu`, session coordinator |
-   191	| P12A/B | `CloseAllExcept` / `TrySetVisible` — session-end panel cleanup vs persistent HUD |
-   192	| P13A | Pending-decision **instances**: id เดียวกันซ้อนได้, `InstanceId` ใน decision, save/restore ทุก occurrence, popup re-target |
-   193	| P13B (2026-10-11) | แก้ crash ตอน restore: presenter อ่าน member ของ view ที่ถูก destroy แล้ว (`MissingReferenceException`) — panel handle ตรวจ Unity lifetime แทน |
+   177	```
+   178	DataTables/Data/EventDef.csv ─────┐
+   179	DataTables/Data/EventChoiceDef.csv ┤  DataTables/gen.sh | gen.bat
+   180	DataTables/Defines/schema.xml ────┤  (luban.conf: topModule "cfg", target "client")
+   181	                                  ↓
+   182	        UnityProject/Assets/Scripts/Data/Gen/  (namespace cfg.game; Tables.cs)
+   183	                                  ↓
+   184	        UnityProject/Assets/Resources/DataTables/*.json  (runtime load)
+   185	```
+   186	
+   187	**ห้ามแก้ไฟล์ใน `Data/Gen/`** — regenerate จาก CSV แทน
+   188	ตารางปัจจุบัน: `TbEventDef` (id, description, requiresDecision, weight) และ
+   189	`TbEventChoiceDef` (eventId, choiceId, label) — สอง flat table join ด้วย `eventId`
+   190	
+   191	---
+   192	
+   193	## 6. Phase history (จาก `LLMWiki/wiki/log.md`)
    194	
-   195	### Fix ล่าสุด (2026-10-11)
-   196	
-   197	`WorldEventUISystem` / `UIService` อ่าน `handle.View.GameObject` เพื่อเช็คว่า panel ยังอยู่
-   198	แต่ property นั้นเป็น member บน MonoBehaviour ที่ถูก `Destroy` ไปแล้ว → `MissingReferenceException`
-   199	ตอน session boundary (destroy chip → restore pending event → ต้องเปิด popup กลับ)
-   200	แก้โดยเช็ค Unity lifetime ที่ panel handle (view เป็น null / destroyed → ถือว่าไม่มี panel)
-   201	แล้วเปิดใหม่ — regression test: `EventPopupLiteTests.SessionBoundary_DestroyingTheChip_StillGivesAPendingEventItsPopupBack`
-   202	
-   203	**EditMode suite: 618/618 ผ่าน** (2026-10-11)
-   204	
-   205	---
-   206	
-   207	## 7. กฎที่ต้องยึด (สรุปจาก `Common-Rules.md` + `conventions.md`)
-   208	
-   209	1. **C# 8 เท่านั้น** — ห้าม `record`, `init`, `global using`, target-typed `new`
-   210	2. **MessagePack `[Key(N)]` append-only** — ห้ามแก้เลขเดิม; enum value ใหม่ต่อท้ายเสมอ
-   211	3. **Resource mutation ต้องผ่าน `AdjustAndNotify()`** ใน `SectStateProvider` เท่านั้น (ไม่งั้น HUD ไม่อัปเดต)
-   212	4. **เวลา:** gameplay progression ใช้ `TimeSystem.SimulationDelta` เท่านั้น — ห้ามอ่าน
-   213	   `Time.deltaTime` ใน gameplay code, ห้าม set `Time.timeScale`
-   214	   pause ใช้ `Pause/Resume(reason)` + `ResumeByPlayer` (ห้าม `SetPaused` ในโค้ดใหม่)
-   215	   real-time clock (UTC cooldown, viewer inactivity) แยกจาก sim time — **ห้ามคูณ speed ซ้ำ**
-   216	5. **Threading:** callback จาก TCP/MessagePipe.Interprocess มาบน background thread —
-   217	   ต้อง `await UniTask.SwitchToMainThread()` ก่อน mutate state / publish / แตะ UI
-   218	6. **request-response ต้อง register ทั้งคู่:** `RegisterTcpRemoteRequestHandler` + `RegisterAsyncRequestHandler`
-   219	7. **ห้ามใช้ `FindObjectOfType`/reflection หา service** — ใช้ DI constructor injection
-   220	8. **ห้ามฟื้น outfit / `TryApplyOutfit`** (decision ใน `wiki/sources/avatar-appearance.md` §1)
-   221	9. **ห้ามแก้ `Shared/`** นอกจากงานที่ระบุชัด แล้วรัน `./sync-shared.sh`
-   222	10. **ห้าม commit `McpBridge/bin` หรือ `obj`** (และ `UnityProject/{Logs,Temp,obj,UserSettings}` + generated `.csproj`)
-   223	11. **เปลี่ยน DI registration หรือ constructor ของ registered type** ต้องพิสูจน์ด้วยการ build
-   224	    container จริง (EditMode test หรือ Play Mode boot smoke test) — ห้ามมี public constructor
-   225	    ซ้อนบน registered type (VContainer เลือกตัวที่ param เยอะสุด) ให้ pin ผ่าน factory ที่ composition root
-   226	12. **UI ที่พึ่ง game state** ต้อง derive จาก authoritative state (`TimeSystem`, `SectStateProvider`)
-   227	    ไม่ใช่จาก message อย่างเดียว เพื่อให้ subscription/start order หาข้อมูลไม่เจอไม่ได้
-   228	
-   229	---
-   230	
-   231	## 8. Known issues / open items
-   232	
-   233	- **Core loop, combat (ACS-style vs Rimworld-style), stat system, technique/manual, item detail
-   234	  ยังไม่ตัดสิน** → `LLMWiki/wiki/sources/open-questions.md`
-   235	- **Portrait/art pipeline** ยังต้อง generate ผ่าน ComfyUI + chroma-key แล้ว bake (ดู skills
-   236	  `chroma-key-portrait-pipeline`, `portrait-edit-prompt`)
-   237	- `Visual.Spikes/Editor/Phase4VerifyRunner.cs` มี assertion ที่ stale กับ start state ปัจจุบัน
-   238	  (d001 = `meditation` ไม่ใช่ `gathering_herb`) — ไม่ได้อยู่ใน EditMode suite
-   239	- Bridge tool `change_avatar_part` ยังไม่ผูกครบฝั่ง bridge (Unity-side request handler มีแล้ว)
-   240	- Wiki บางหน้าเขียน scene pattern เป็น "CoreScene + GameplayScene" — **ของจริงใน build
-   241	  settings ตอนนี้คือ `SectScene`** (ดู `SceneNamesTests`); ให้ code ชนะ
-   242	
-   243	---
-   244	
-   245	## 9. วิธีรัน / verify
-   246	
-   247	```bash
-   248	# sync shared contracts (ทำทุกครั้งที่แก้ Shared/)
-   249	./sync-shared.sh
-   250	
-   251	# data pipeline (แก้ CSV แล้ว regenerate)
-   252	cd DataTables && ./gen.sh        # หรือ gen.bat บน Windows
-   253	
-   254	# MCP bridge
-   255	cd McpBridge && dotnet build && dotnet run     # Unity ต้องรันก่อน (host TCP 3215)
-   256	
-   257	# Unity: เปิด UnityProject/ ใน Unity Hub → resolve packages → Play
-   258	# EditMode tests: รันผ่าน Test Runner หรือ Unity MCP tool `run_tests`
-   259	
-   260	# context pack สำหรับ AI
-   261	./build-context.sh               # → .ai/context-pack.md
-   262	```
-   263	
-   264	ลำดับ boot: **Unity ก่อน** (เป็น TCP server) แล้วค่อยรัน bridge (client)
+   195	| Phase | สาระ |
+   196	|---|---|
+   197	| lab 1–13 (21–30 Aug 2026) | ตั้ง DI graph, MessagePipe bus + TCP, subsystems, UI MVP-Lite; **lab 7** ยกเลิก protobuf → MessagePack; **lab 13** เจอ bug in-process pub/sub ไม่ถึง interprocess → ดึง `DecisionExecutor` |
+   198	| E1-pre | main-thread hop สำหรับ handler ที่มาจาก TCP (`MainThreadDispatch`) — handler ต้อง `await UniTask.SwitchToMainThread()` ก่อนแตะ Unity API |
+   199	| E2-lite | world-event spawner + `WorldEventRuntimeConfig.StartGraceSeconds` (ไม่ยิงจาก constructor อีก เพราะ Start order ไม่การันตี) |
+   200	| P3 | Task assignment UI (row dropdown, draft, conflict detection) |
+   201	| P4 | Ownership: `DiscipleOwnerType/OwnerId`, `TrySetDiscipleOwner` + identity convention, `DiscipleOwnerChangedMessage`, local dev harness + `get_ownership_log` (read-only) |
+   202	| P5A | Viewer membership data + invariants + injectable `IClock` (UTC เท่านั้น) |
+   203	| P5B | Hybrid permissions (`CheckTaskPermission`, 600s protection, 12s cooldown), bridge read-only queries (`get_task_change_log`, `get_task_protection`), membership persistence (local file) |
+   204	| P10/P11 | Save/load: slot + backup + versioned envelope, autosave, `TitleMenu`/`IngameMenu`, session coordinator |
+   205	| P12A/B | `CloseAllExcept` / `TrySetVisible` — session-end panel cleanup vs persistent HUD |
+   206	| P13A | Pending-decision **instances**: id เดียวกันซ้อนได้, `InstanceId` ใน decision, save/restore ทุก occurrence, popup re-target |
+   207	| P13B (2026-10-11) | แก้ crash ตอน restore: presenter อ่าน member ของ view ที่ถูก destroy แล้ว (`MissingReferenceException`) — panel handle ตรวจ Unity lifetime แทน |
+   208	| P14A/B (2026-10-11) | สายบำเพ็ญ: `CultivationStageDef`/`CultivationConfig` (ตาราง stage append-only ใน `Shared/DiscipleAttributes.cs`), progress สะสมตอนนั่งสมาธิ (`TimeSystem.SimulationDelta` เท่านั้น), **ทะลวงขั้น** validated + atomic โดยใช้ authority ชุดเดียวกับ task assignment, `DiscipleCultivationChangedMessage` (Unity-only) + แถว/ปุ่มบนแท็บ Info — ดู `wiki/sources/cultivation-system.md` |
+   209	| P14B follow-up (2026-10-11) | MCP write tool ตัวที่สอง `attempt_breakthrough`: RPC pair เดียวกับ `assign_task` (`RegisterTcpRemoteRequestHandler` + `RegisterAsyncRequestHandler`), handler hop main thread, ส่ง `SECT_MASTER` hard-coded (ไม่มี AI-GM bypass; Hybrid 10 นาทีใช้เต็ม) |
+   210	| P15 (2026-10-11) | Vertical slice: integration suite 12 tests (ทั้งเกมเป็นเส้นทางเดียว) + debug metrics + playbook/feasibility ของ autosave — ดู `wiki/sources/vertical-slice-playbook.md` |
+   211	
+   212	### Fix ล่าสุด (2026-10-11)
+   213	
+   214	`WorldEventUISystem` / `UIService` อ่าน `handle.View.GameObject` เพื่อเช็คว่า panel ยังอยู่
+   215	แต่ property นั้นเป็น member บน MonoBehaviour ที่ถูก `Destroy` ไปแล้ว → `MissingReferenceException`
+   216	ตอน session boundary (destroy chip → restore pending event → ต้องเปิด popup กลับ)
+   217	แก้โดยเช็ค Unity lifetime ที่ panel handle (view เป็น null / destroyed → ถือว่าไม่มี panel)
+   218	แล้วเปิดใหม่ — regression test: `EventPopupLiteTests.SessionBoundary_DestroyingTheChip_StillGivesAPendingEventItsPopupBack`
+   219	
+   220	**EditMode suite: 697/697 ผ่าน** (2026-10-11) — 618 (ก่อน P14) + 62 (P14A/B) + 5 (P14B follow-up) + 12 (P15)
+   221	
+   222	---
+   223	
+   224	## 7. กฎที่ต้องยึด (สรุปจาก `Common-Rules.md` + `conventions.md`)
+   225	
+   226	1. **C# 8 เท่านั้น** — ห้าม `record`, `init`, `global using`, target-typed `new`
+   227	2. **MessagePack `[Key(N)]` append-only** — ห้ามแก้เลขเดิม; enum value ใหม่ต่อท้ายเสมอ
+   228	3. **Resource mutation ต้องผ่าน `AdjustAndNotify()`** ใน `SectStateProvider` เท่านั้น (ไม่งั้น HUD ไม่อัปเดต)
+   229	4. **เวลา:** gameplay progression ใช้ `TimeSystem.SimulationDelta` เท่านั้น — ห้ามอ่าน
+   230	   `Time.deltaTime` ใน gameplay code, ห้าม set `Time.timeScale`
+   231	   pause ใช้ `Pause/Resume(reason)` + `ResumeByPlayer` (ห้าม `SetPaused` ในโค้ดใหม่)
+   232	   real-time clock (UTC cooldown, viewer inactivity) แยกจาก sim time — **ห้ามคูณ speed ซ้ำ**
+   233	5. **Threading:** callback จาก TCP/MessagePipe.Interprocess มาบน background thread —
+   234	   ต้อง `await UniTask.SwitchToMainThread()` ก่อน mutate state / publish / แตะ UI
+   235	6. **request-response ต้อง register ทั้งคู่:** `RegisterTcpRemoteRequestHandler` + `RegisterAsyncRequestHandler`
+   236	7. **ห้ามใช้ `FindObjectOfType`/reflection หา service** — ใช้ DI constructor injection
+   237	8. **ห้ามฟื้น outfit / `TryApplyOutfit`** (decision ใน `wiki/sources/avatar-appearance.md` §1)
+   238	9. **ห้ามแก้ `Shared/`** นอกจากงานที่ระบุชัด แล้วรัน `./sync-shared.sh`
+   239	10. **ห้าม commit `McpBridge/bin` หรือ `obj`** (และ `UnityProject/{Logs,Temp,obj,UserSettings}` + generated `.csproj`)
+   240	11. **เปลี่ยน DI registration หรือ constructor ของ registered type** ต้องพิสูจน์ด้วยการ build
+   241	    container จริง (EditMode test หรือ Play Mode boot smoke test) — ห้ามมี public constructor
+   242	    ซ้อนบน registered type (VContainer เลือกตัวที่ param เยอะสุด) ให้ pin ผ่าน factory ที่ composition root
+   243	12. **UI ที่พึ่ง game state** ต้อง derive จาก authoritative state (`TimeSystem`, `SectStateProvider`)
+   244	    ไม่ใช่จาก message อย่างเดียว เพื่อให้ subscription/start order หาข้อมูลไม่เจอไม่ได้
+   245	
+   246	---
+   247	
+   248	## 8. Known issues / open items
+   249	
+   250	- **Core loop, combat (ACS-style vs Rimworld-style), stat system, technique/manual, item detail
+   251	  ยังไม่ตัดสิน** → `LLMWiki/wiki/sources/open-questions.md`
+   252	- **Autosave ของ session ยังไม่มี** (ตรวจใน P15): มีแต่ autosave ของ viewer membership
+   253	  (10 วิ real-time, คนละไฟล์) — เส้นทาง save มี official ทางเดียวคือผู้เล่นกด Save
+   254	  รายละเอียด + ข้อกำหนดถ้าจะทำอยู่ใน `wiki/sources/vertical-slice-playbook.md` §5
+   255	- **P15 playbook บนหน้าจอยังไม่มีใครรัน** — integration suite พิสูจน์ logic/state
+   256	  แต่ไม่พิสูจน์การ render/คลิกจริง (§2 ของ playbook)
+   257	- **Portrait/art pipeline** ยังต้อง generate ผ่าน ComfyUI + chroma-key แล้ว bake (ดู skills
+   258	  `chroma-key-portrait-pipeline`, `portrait-edit-prompt`)
+   259	- `Visual.Spikes/Editor/Phase4VerifyRunner.cs` มี assertion ที่ stale กับ start state ปัจจุบัน
+   260	  (d001 = `meditation` ไม่ใช่ `gathering_herb`) — ไม่ได้อยู่ใน EditMode suite
+   261	- Bridge tool `change_avatar_part` ยังไม่ผูกครบฝั่ง bridge (Unity-side request handler มีแล้ว)
+   262	- Wiki บางหน้าเขียน scene pattern เป็น "CoreScene + GameplayScene" — **ของจริงใน build
+   263	  settings ตอนนี้คือ `SectScene`** (ดู `SceneNamesTests`); ให้ code ชนะ
+   264	
+   265	---
+   266	
+   267	## 9. วิธีรัน / verify
+   268	
+   269	```bash
+   270	# sync shared contracts (ทำทุกครั้งที่แก้ Shared/)
+   271	./sync-shared.sh
+   272	
+   273	# data pipeline (แก้ CSV แล้ว regenerate)
+   274	cd DataTables && ./gen.sh        # หรือ gen.bat บน Windows
+   275	
+   276	# MCP bridge
+   277	cd McpBridge && dotnet build && dotnet run     # Unity ต้องรันก่อน (host TCP 3215)
+   278	
+   279	# Unity: เปิด UnityProject/ ใน Unity Hub → resolve packages → Play
+   280	# EditMode tests: รันผ่าน Test Runner หรือ Unity MCP tool `run_tests`
+   281	
+   282	# context pack สำหรับ AI
+   283	./build-context.sh               # → .ai/context-pack.md
+   284	```
+   285	
+   286	ลำดับ boot: **Unity ก่อน** (เป็น TCP server) แล้วค่อยรัน bridge (client)
 ````
 
 ### AGENTS.md (12207 bytes)
@@ -515,7 +539,7 @@
     35	| Serialization | MessagePack (`[Key(N)]`) |
     36	| Data | Luban (`DataTables/`) → `Assets/Scripts/Data/Gen/` → `Resources/DataTables/*.json` |
     37	| Scenes | `Assets/Scenes/SectScene.unity` คือ gameplay scene ที่อยู่ใน build settings |
-    38	| จำนวน test ปัจจุบัน | EditMode 618 tests (2026-10-11) |
+    38	| จำนวน test ปัจจุบัน | EditMode 697 tests (2026-10-11) |
     39	
     40	**Boot order:** Unity ก่อน แล้วค่อยรัน bridge
     41	
@@ -708,7 +732,7 @@
     22	echo "  $BRIDGE_DEST"
 ````
 
-### Shared/GameMessages.cs (25586 bytes)
+### Shared/GameMessages.cs (27298 bytes)
 ````
      1	using System;
      2	using System.Collections.Generic;
@@ -1239,18 +1263,49 @@
    527	        [Key(3)] public int BuildingCount { get; set; }
    528	    }
    529	
-   530	    // Topic keys for the keyed (IDistributedPublisher<TKey,TMessage>) channels.
-   531	    public static class InterprocessTopics
-   532	    {
-   533	        public const string DiscipleRecruited = "sect.disciple_recruited";
-   534	        public const string DiscipleRankChanged = "sect.disciple_rank_changed";
-   535	        public const string ResourceChanged = "sect.resource_changed";
-   536	        public const string ContributionEarned = "sect.contribution_earned";
-   537	        public const string WorldEvent = "sect.world_event";
-   538	        public const string ExecuteDecision = "sect.execute_decision";
-   539	        public const string AvatarEquipmentChanged = "sect.avatar_equipment_changed";
-   540	    }
-   541	}
+   530	    // ---------- P14B follow-up: explicit breakthrough (§3 §4 of the cultivation notes) ----------
+   531	    // Request/response pair: the MCP bridge (or AI GM) asks Unity to advance a
+   532	    // disciple exactly one cultivation stage. Request-response because the caller
+   533	    // needs the verdict immediately — same reasoning as AssignTaskRequest — and
+   534	    // because the operation IS SectStateProvider.TryBreakthrough, the very call the
+   535	    // ข้อมูล tab's ทะลวงขั้น button goes through.
+   536	    //
+   537	    // PERMISSION: no policy of its own and no AI-GM bypass. The bridge always sends
+   538	    // RequesterId = "SECT_MASTER", so the Hybrid viewer rule applies in full — a
+   539	    // viewer-owned disciple is protected for the same 10 real-time minutes of owner
+   540	    // inactivity that blocks assign_task. Authenticating the caller more strongly is
+   541	    // the same open item as it is for the other write tools.
+   542	    //
+   543	    // READ-BACK: deliberately no breakthrough query pair — get_sect_state already
+   544	    // carries every disciple's cultivation stage id + progress, so a second read path
+   545	    // could only drift from it. DiscipleCultivationChangedMessage stays in-memory-only
+   546	    // and is deliberately NOT added to InterprocessTopics (see CultivationMessages.cs).
+   547	    [MessagePackObject]
+   548	    public class AttemptBreakthroughRequest
+   549	    {
+   550	        [Key(0)] public string RequesterId { get; set; } = string.Empty;
+   551	        [Key(1)] public string DiscipleId { get; set; } = string.Empty;
+   552	    }
+   553	
+   554	    [MessagePackObject]
+   555	    public class AttemptBreakthroughResponse
+   556	    {
+   557	        [Key(0)] public bool Success { get; set; }
+   558	        [Key(1)] public string FailReason { get; set; } = string.Empty;
+   559	    }
+   560	
+   561	    // Topic keys for the keyed (IDistributedPublisher<TKey,TMessage>) channels.
+   562	    public static class InterprocessTopics
+   563	    {
+   564	        public const string DiscipleRecruited = "sect.disciple_recruited";
+   565	        public const string DiscipleRankChanged = "sect.disciple_rank_changed";
+   566	        public const string ResourceChanged = "sect.resource_changed";
+   567	        public const string ContributionEarned = "sect.contribution_earned";
+   568	        public const string WorldEvent = "sect.world_event";
+   569	        public const string ExecuteDecision = "sect.execute_decision";
+   570	        public const string AvatarEquipmentChanged = "sect.avatar_equipment_changed";
+   571	    }
+   572	}
 ````
 
 ### Shared/SectEconomyState.cs (12696 bytes)
@@ -1687,7 +1742,7 @@
    144	    }
    145	}````
 
-### McpBridge/Program.cs (9561 bytes)
+### McpBridge/Program.cs (11055 bytes)
 ````
      1	// MCP bridge process (external, matches the "MCP bridge process" box in the
      2	// architecture diagram). Runs as its own .NET console app, separate from
@@ -1873,7 +1928,27 @@
    182	            ? $"Task '{taskId}' assigned to {discipleId}."
    183	            : response.FailReason;
    184	    }
-   185	}
+   185	
+   186	    // The second write tool after assign_task - and deliberately the SAME policy: the
+   187	    // request always carries SECT_MASTER, and Unity refuses it while a Hybrid viewer-owned
+   188	    // disciple's owner has been active within the last 10 real-time minutes. The refusal
+   189	    // reason is returned verbatim so the GM can explain it instead of retrying.
+   190	    [McpServerTool, Description("Have a disciple break through to the next cultivation stage. Always sent as SECT_MASTER (the AI GM acts as the sect master), so a viewer-owned disciple stays protected for the same 10 real-time minutes of owner inactivity that blocks assign_task; the reply is the authority's refusal reason when it fails. Requires the disciple to have reached its current stage's progress requirement - see the stage/progress fields for each disciple in get_sect_state, and re-read it afterwards for the new stage.")]
+   191	    public static async Task<string> AttemptBreakthrough(
+   192	        IRemoteRequestHandler<AttemptBreakthroughRequest, AttemptBreakthroughResponse> requestHandler,
+   193	        [Description("Disciple id, e.g. from get_sect_state")] string discipleId)
+   194	    {
+   195	        var response = await requestHandler.InvokeAsync(new AttemptBreakthroughRequest
+   196	        {
+   197	            RequesterId = "SECT_MASTER",
+   198	            DiscipleId = discipleId,
+   199	        });
+   200	
+   201	        return response.Success
+   202	            ? $"Breakthrough succeeded for {discipleId}; read its new stage from get_sect_state."
+   203	            : response.FailReason;
+   204	    }
+   205	}
 ````
 
 ### UnityProject/Assets/Scripts/Core/GameLifetimeScope.cs (4173 bytes)
@@ -1960,7 +2035,7 @@
     80	}
 ````
 
-### UnityProject/Assets/Scripts/Core/Installers/InterprocessInstaller.cs (7356 bytes)
+### UnityProject/Assets/Scripts/Core/Installers/InterprocessInstaller.cs (8141 bytes)
 ````
      1	using MessagePipe;
      2	using VContainer;
@@ -2046,31 +2121,40 @@
     82	            messagePipeBuilder.RegisterTcpRemoteRequestHandler<AssignTaskRequest, AssignTaskResponse>(interprocess);
     83	            builder.RegisterAsyncRequestHandler<AssignTaskRequest, AssignTaskResponse, AssignTaskHandler>(options);
     84	
-    85	            // Request/response: the bridge reads the ownership-change log
-    86	            // (P4 observability, READ-ONLY — deliberately no ownership-assignment
-    87	            // pair or tool exists; the only writers stay the dev harness/fixtures).
-    88	            messagePipeBuilder.RegisterTcpRemoteRequestHandler<OwnershipObservabilityQuery, OwnershipObservabilitySnapshot>(interprocess);
-    89	            builder.RegisterAsyncRequestHandler<OwnershipObservabilityQuery, OwnershipObservabilitySnapshot, OwnershipObservabilityHandler>(options);
-    90	
-    91	            // Request/response: the bridge reads the task-change log (P5B
-    92	            // observability, READ-ONLY). Task assignment keeps its own AssignTask
-    93	            // pair; this pair only observes.
-    94	            messagePipeBuilder.RegisterTcpRemoteRequestHandler<TaskChangeObservabilityQuery, TaskChangeObservabilitySnapshot>(interprocess);
-    95	            builder.RegisterAsyncRequestHandler<TaskChangeObservabilityQuery, TaskChangeObservabilitySnapshot, TaskChangeObservabilityHandler>(options);
-    96	
-    97	            // Request/response: the bridge reads the current viewer-protection
-    98	            // state (P5B, READ-ONLY) — protection, remaining time, membership
-    99	            // consistency and who may change each Viewer-owned disciple's task.
-   100	            messagePipeBuilder.RegisterTcpRemoteRequestHandler<TaskProtectionQuery, TaskProtectionSnapshot>(interprocess);
-   101	            builder.RegisterAsyncRequestHandler<TaskProtectionQuery, TaskProtectionSnapshot, TaskProtectionHandler>(options);
-   102	
-   103	            // Interprocess pub/sub: broadcast avatar equipment changes to UI + MCP client
-   104	            messagePipeBuilder.RegisterTcpInterprocessMessageBroker<string, AvatarEquipmentChangedMessage>(interprocess);
+    85	            // Request/response: attempting a cultivation breakthrough for a disciple.
+    86	            // Write pair, second of its kind after AssignTask — and deliberately the SAME
+    87	            // permission policy (SectStateProvider.TryBreakthrough reuses
+    88	            // EvaluateTaskPermission, Hybrid 10-minute viewer protection included), so the
+    89	            // bridge gains no power a human sect master does not have. No read pair is
+    90	            // added: get_sect_state already carries stage + progress.
+    91	            messagePipeBuilder.RegisterTcpRemoteRequestHandler<AttemptBreakthroughRequest, AttemptBreakthroughResponse>(interprocess);
+    92	            builder.RegisterAsyncRequestHandler<AttemptBreakthroughRequest, AttemptBreakthroughResponse, AttemptBreakthroughHandler>(options);
+    93	
+    94	            // Request/response: the bridge reads the ownership-change log
+    95	            // (P4 observability, READ-ONLY — deliberately no ownership-assignment
+    96	            // pair or tool exists; the only writers stay the dev harness/fixtures).
+    97	            messagePipeBuilder.RegisterTcpRemoteRequestHandler<OwnershipObservabilityQuery, OwnershipObservabilitySnapshot>(interprocess);
+    98	            builder.RegisterAsyncRequestHandler<OwnershipObservabilityQuery, OwnershipObservabilitySnapshot, OwnershipObservabilityHandler>(options);
+    99	
+   100	            // Request/response: the bridge reads the task-change log (P5B
+   101	            // observability, READ-ONLY). Task assignment keeps its own AssignTask
+   102	            // pair; this pair only observes.
+   103	            messagePipeBuilder.RegisterTcpRemoteRequestHandler<TaskChangeObservabilityQuery, TaskChangeObservabilitySnapshot>(interprocess);
+   104	            builder.RegisterAsyncRequestHandler<TaskChangeObservabilityQuery, TaskChangeObservabilitySnapshot, TaskChangeObservabilityHandler>(options);
    105	
-   106	            return options;
-   107	        }
-   108	    }
-   109	}
+   106	            // Request/response: the bridge reads the current viewer-protection
+   107	            // state (P5B, READ-ONLY) — protection, remaining time, membership
+   108	            // consistency and who may change each Viewer-owned disciple's task.
+   109	            messagePipeBuilder.RegisterTcpRemoteRequestHandler<TaskProtectionQuery, TaskProtectionSnapshot>(interprocess);
+   110	            builder.RegisterAsyncRequestHandler<TaskProtectionQuery, TaskProtectionSnapshot, TaskProtectionHandler>(options);
+   111	
+   112	            // Interprocess pub/sub: broadcast avatar equipment changes to UI + MCP client
+   113	            messagePipeBuilder.RegisterTcpInterprocessMessageBroker<string, AvatarEquipmentChangedMessage>(interprocess);
+   114	
+   115	            return options;
+   116	        }
+   117	    }
+   118	}
 ````
 
 ### UnityProject/Assets/Scripts/Scenes/SectScene/SectSceneLifetimeScope.cs (4188 bytes)
@@ -2136,7 +2220,7 @@
     59	}
 ````
 
-### UnityProject/Assets/Scripts/Core/TimeSystem.cs (57202 bytes)
+### UnityProject/Assets/Scripts/Core/TimeSystem.cs (59276 bytes)
 ````
      1	using System.Collections.Generic;
      2	using System.Threading;
@@ -2938,10 +3022,10 @@
    798	    // Answers AwaitWorldEventRequest coming in over the interprocess bus.
    799	    // Request-response, not pub/sub - see the comment on AwaitWorldEventRequest
    800	    // in GameMessages.cs for wh
-... [TRUNCATED: แสดง 40000 จาก 57202 bytes — ขอส่วนที่เหลือผ่าน need_files]
+... [TRUNCATED: แสดง 40000 จาก 59276 bytes — ขอส่วนที่เหลือผ่าน need_files]
 ````
 
-### UnityProject/Assets/Scripts/Systems/SectStateProvider.cs (113534 bytes)
+### UnityProject/Assets/Scripts/Systems/SectStateProvider.cs (124557 bytes)
 ````
      1	using System;
      2	using System.Collections.Generic;
@@ -3110,624 +3194,601 @@
    165	        // P9A — in-memory only, same rule as the ownership publisher (autonomy is a
    166	        // local player/UI concern; it never crosses the TCP wire).
    167	        private readonly IPublisher<DiscipleControlModeChangedMessage> _controlModeChangedPublisher;
-   168	        private readonly BuildingDefPool _buildingDefPool;
-   169	        private readonly AvatarPartPool _avatarPartPool;
-   170	        private readonly VisualRuntimeConfig _visualConfig;
-   171	        private readonly IVisualEntitlementProvider _entitlementProvider;
-   172	        /// <summary>Concrete ref to the injected provider (null when a test/substitute implements the interface directly) — used only for bind-late wiring, not for resolution.</summary>
-   173	        private readonly DefaultEntitlementProvider _defaultEntitlementProvider;
-   174	
-   175	        // P5B — real-time clock for the viewer inactivity/activity rule. Injected so
-   176	        // tests can drive it deterministically; NEVER scaled game time (game time can
-   177	        // be paused/speed-changed, which would silently extend or shrink protection).
-   178	        private readonly IClock _clock;
-   179	
-   180	        // P5B — real-time cooldown on ACTUAL task changes, keyed per disciple.
-   181	        // Prototype balance value (see DefaultTaskChangeCooldownSeconds). A no-op
-   182	        // request never consumes or checks it.
-   183	        private readonly Dictionary<string, DateTime> _taskChangeLastAtUtc = new();
-   184	
-   185	        // Fractional resource accumulated per task since the last whole
-   186	        // unit was added to the stockpile - avoids losing sub-1 production
-   187	        // between ticks.
-   188	        private readonly Dictionary<string, float> _gatherAccumulators = new();
-   189	
-   190	        // Seconds accumulated toward the current craft, keyed per disciple
-   191	        // (not per task like gathering) - crafting has a resource cost, so
-   192	        // two disciples on the same task must progress independently, not
-   193	        // share one pooled timer.
-   194	        private readonly Dictionary<string, float> _craftProgress = new();
-   195	
-   196	        // P10B — per-tick scratch: disciple id -> that tick's single work record.
-   197	        // Cleared at the start of a tick and consumed by ApplyWorkAttributes, so an
-   198	        // outcome can never be written twice or applied twice. One small map, one
-   199	        // applier — no second clock, no fixed-step loop, no per-frame allocation.
-   200	        private struct WorkTickRecord
-   201	        {
-   202	            public DiscipleWorkOutcome Outcome;
-   203	            /// <summary>Non-null only on a craft-completion tick (P10B §4).</summary>
-   204	            public string CompletedCraftCategory;
-   205	        }
-   206	
-   207	        private readonly Dictionary<string, WorkTickRecord> _workTick = new();
-   208	        private int _workTickRecordCount;
+   168	        // P14B — in-memory only, same rule: a breakthrough is a local gameplay/UI concern,
+   169	        // so it is never registered on the interprocess broker (no RPC, no MCP tool).
+   170	        private readonly IPublisher<DiscipleCultivationChangedMessage> _cultivationChangedPublisher;
+   171	        private readonly BuildingDefPool _buildingDefPool;
+   172	        private readonly AvatarPartPool _avatarPartPool;
+   173	        private readonly VisualRuntimeConfig _visualConfig;
+   174	        private readonly IVisualEntitlementProvider _entitlementProvider;
+   175	        /// <summary>Concrete ref to the injected provider (null when a test/substitute implements the interface directly) — used only for bind-late wiring, not for resolution.</summary>
+   176	        private readonly DefaultEntitlementProvider _defaultEntitlementProvider;
+   177	
+   178	        // P5B — real-time clock for the viewer inactivity/activity rule. Injected so
+   179	        // tests can drive it deterministically; NEVER scaled game time (game time can
+   180	        // be paused/speed-changed, which would silently extend or shrink protection).
+   181	        private readonly IClock _clock;
+   182	
+   183	        // P5B — real-time cooldown on ACTUAL task changes, keyed per disciple.
+   184	        // Prototype balance value (see DefaultTaskChangeCooldownSeconds). A no-op
+   185	        // request never consumes or checks it.
+   186	        private readonly Dictionary<string, DateTime> _taskChangeLastAtUtc = new();
+   187	
+   188	        // Fractional resource accumulated per task since the last whole
+   189	        // unit was added to the stockpile - avoids losing sub-1 production
+   190	        // between ticks.
+   191	        private readonly Dictionary<string, float> _gatherAccumulators = new();
+   192	
+   193	        // Seconds accumulated toward the current craft, keyed per disciple
+   194	        // (not per task like gathering) - crafting has a resource cost, so
+   195	        // two disciples on the same task must progress independently, not
+   196	        // share one pooled timer.
+   197	        private readonly Dictionary<string, float> _craftProgress = new();
+   198	
+   199	        // P10B — per-tick scratch: disciple id -> that tick's single work record.
+   200	        // Cleared at the start of a tick and consumed by ApplyWorkAttributes, so an
+   201	        // outcome can never be written twice or applied twice. One small map, one
+   202	        // applier — no second clock, no fixed-step loop, no per-frame allocation.
+   203	        private struct WorkTickRecord
+   204	        {
+   205	            public DiscipleWorkOutcome Outcome;
+   206	            /// <summary>Non-null only on a craft-completion tick (P10B §4).</summary>
+   207	            public string CompletedCraftCategory;
+   208	        }
    209	
-   210	        public SectStateProvider(
-   211	            IPublisher<DiscipleRecruitedMessage> discipleRecruitedPublisher,
-   212	            IPublisher<SectResourceChangedMessage> resourceChangedPublisher,
-   213	            IPublisher<AvatarEquipmentChangedMessage> avatarChangedPublisher,
-   214	            IPublisher<DiscipleChibiBackendChangedMessage> chibiBackendPublisher,
-   215	            AvatarPartPool avatarPartPool,
-   216	            VisualRuntimeConfig visualConfig,
-   217	            IVisualEntitlementProvider entitlementProvider,
-   218	            BuildingDefPool buildingDefPool,
-   219	            IPublisher<BuildingPlacedMessage> buildingPlacedPublisher,
-   220	            IPublisher<DiscipleTaskChangedMessage> discipleTaskChangedPublisher,
-   221	            IPublisher<DiscipleOwnerChangedMessage> ownershipChangedPublisher = null,
-   222	            IClock clock = null,
-   223	            IPublisher<DiscipleControlModeChangedMessage> controlModeChangedPublisher = null)
-   224	        {
-   225	            _discipleRecruitedPublisher = discipleRecruitedPublisher;
-   226	            _resourceChangedPublisher = resourceChangedPublisher;
-   227	            _avatarChangedPublisher = avatarChangedPublisher;
-   228	            _chibiBackendPublisher = chibiBackendPublisher;
-   229	            _buildingDefPool = buildingDefPool;
-   230	            _buildingPlacedPublisher = buildingPlacedPublisher;
-   231	            _discipleTaskChangedPublisher = discipleTaskChangedPublisher;
-   232	            // P4: optional (default null) so every existing test construction site
-   233	            // stays valid; production wires it via VContainer in UIInstaller/GameLifetimeScope.
-   234	            _ownershipChangedPublisher = ownershipChangedPublisher;
-   235	            // P9A: optional (default null) for the same reason — appended LAST so the
-   236	            // positional test construction sites (ownerChanged, clock) are unchanged.
-   237	            _controlModeChangedPublisher = controlModeChangedPublisher;
-   238	            _avatarPartPool = avatarPartPool;
-   239	            _visualConfig = visualConfig;
-   240	            _entitlementProvider = entitlementProvider;
-   241	            _defaultEntitlementProvider = entitlementProvider as DefaultEntitlementProvider;
-   242	            // P5B: production registers UtcClock via DI; every existing test construction
-   243	            // site omits it and keeps working (real UTC clock, which those tests never
-   244	            // depend on because they never cross the 10-minute protection window).
-   245	            _clock = clock ?? new UtcClock();
-   246	
-   247	            // Phase 5 — bind the provider's rank source HERE instead of injecting
-   248	            // ISectStateProvider into the provider itself: that direction would be a
-   249	            // DI cycle (SectStateProvider → provider → SectStateProvider). Bind-late
-   250	            // keeps the provider ignorant of the state module; before this line runs,
-   251	            // CanUse(discipleId, "owner") fails closed (Unspecified = deny).
-   252	            //
-   253	            // Note: inject the INTERFACE, not the concrete type. In this VContainer
-   254	            // version Register<I, Impl> registers only the interface (concrete Resolve
-   255	            // is not available), so consumers must resolve IVisualEntitlementProvider
-   256	            // and reach the concrete for bind-late via a type test.
-   257	            _defaultEntitlementProvider?.BindRankLookup(id =>
-   258	            {
-   259	                var d = FindDisciple(id);
-   260	                return d != null ? d.Rank : DiscipleRank.Unspecified;
-   261	            });
-   262	        }
-   263	
-   264	        /// <summary>Single lookup helper — also used by the entitlement rank binding.</summary>
-   265	        private DiscipleState FindDisciple(string discipleId)
-   266	        {
-   267	            if (string.IsNullOrEmpty(discipleId)) return null;
-   268	            for (int i = 0; i < _state.Disciples.Count; i++)
-   269	            {
-   270	                var d = _state.Disciples[i];
-   271	                if (d != null && d.DiscipleId == discipleId) return d;
-   272	            }
-   273	            return null;
-   274	        }
-   275	
-   276	        public SectEconomyState BuildSectEconomyState()
-   277	        {
-   278	            return _state;
-   279	        }
-   280	
-   281	        // Passive resource gathering - every disciple whose CurrentTask is
-   282	        // a known gathering task contributes toward that resource. Called
-   283	        // from DiscipleSystem.Tick(). Disciples whose task fails the building
-   284	        // requirement are SKIPPED (CurrentTask is never rewritten here — the
-   285	        // assignment gate is the only place that validates on assignment).
-   286	        //
-   287	        // P10B: production is unchanged; this tick additionally records ONE work
-   288	        // outcome per disciple and then applies the attribute change once.
-   289	        public void TickGathering(float deltaTimeSeconds)
-   290	        {
-   291	            var placedDefIds = CollectPlacedDefIds(); // once per tick, not per disciple
-   292	            BeginWorkTick(); // P10B
-   293	            foreach (var disciple in _state.Disciples)
-   294	            {
-   295	                // P10B — EVERY disciple gets exactly one outcome in this tick. Meditation
-   296	                // rests; anything that is not a gathering task (including a crafting task,
-   297	                // whose tick owns its change) is None = no attribute change here, so the
-   298	                // outcome cannot be applied twice across the two ticks of a frame. The
-   299	                // empty-task guard must come first so no dictionary is probed with a null key.
-   300	                if (string.IsNullOrEmpty(disciple.CurrentTask))
-   301	                {
-   302	                    RecordWorkOutcome(disciple, DiscipleWorkOutcome.None);
-   303	                    continue;
-   304	                }
-   305	
-   306	                if (!GatheringRates.TryGetValue(disciple.CurrentTask, out var rate))
-   307	                {
-   308	                    RecordWorkOutcome(disciple, IsMeditationTask(disciple.CurrentTask)
-   309	                        ? DiscipleWorkOutcome.Resting
-   310	                        : DiscipleWorkOutcome.None);
-   311	                    continue;
-   312	                }
-   313	
-   314	                if (!IsTaskAvailableWithBuildings(disciple.CurrentTask, placedDefIds, out _))
-   315	                {
-   316	                    // P10B: the gate failed (building missing) → Blocked (small regen).
-   317	                    RecordWorkOutcome(disciple, DiscipleWorkOutcome.Blocked);
+   210	        private readonly Dictionary<string, WorkTickRecord> _workTick = new();
+   211	        private int _workTickRecordCount;
+   212	
+   213	        public SectStateProvider(
+   214	            IPublisher<DiscipleRecruitedMessage> discipleRecruitedPublisher,
+   215	            IPublisher<SectResourceChangedMessage> resourceChangedPublisher,
+   216	            IPublisher<AvatarEquipmentChangedMessage> avatarChangedPublisher,
+   217	            IPublisher<DiscipleChibiBackendChangedMessage> chibiBackendPublisher,
+   218	            AvatarPartPool avatarPartPool,
+   219	            VisualRuntimeConfig visualConfig,
+   220	            IVisualEntitlementProvider entitlementProvider,
+   221	            BuildingDefPool buildingDefPool,
+   222	            IPublisher<BuildingPlacedMessage> buildingPlacedPublisher,
+   223	            IPublisher<DiscipleTaskChangedMessage> discipleTaskChangedPublisher,
+   224	            IPublisher<DiscipleOwnerChangedMessage> ownershipChangedPublisher = null,
+   225	            IClock clock = null,
+   226	            IPublisher<DiscipleControlModeChangedMessage> controlModeChangedPublisher = null,
+   227	            IPublisher<DiscipleCultivationChangedMessage> cultivationChangedPublisher = null)
+   228	        {
+   229	            _discipleRecruitedPublisher = discipleRecruitedPublisher;
+   230	            _resourceChangedPublisher = resourceChangedPublisher;
+   231	            _avatarChangedPublisher = avatarChangedPublisher;
+   232	            _chibiBackendPublisher = chibiBackendPublisher;
+   233	            _buildingDefPool = buildingDefPool;
+   234	            _buildingPlacedPublisher = buildingPlacedPublisher;
+   235	            _discipleTaskChangedPublisher = discipleTaskChangedPublisher;
+   236	            // P4: optional (default null) so every existing test construction site
+   237	            // stays valid; production wires it via VContainer in UIInstaller/GameLifetimeScope.
+   238	            _ownershipChangedPublisher = ownershipChangedPublisher;
+   239	            // P9A: optional (default null) for the same reason — appended after the
+   240	            // positional test construction sites (ownerChanged, clock) so they stay valid.
+   241	            _controlModeChangedPublisher = controlModeChangedPublisher;
+   242	            // P14B: optional (default null) for the same reason — appended LAST. Production
+   243	            // resolves it from MessagePipe's publisher registration via VContainer.
+   244	            _cultivationChangedPublisher = cultivationChangedPublisher;
+   245	            _avatarPartPool = avatarPartPool;
+   246	            _visualConfig = visualConfig;
+   247	            _entitlementProvider = entitlementProvider;
+   248	            _defaultEntitlementProvider = entitlementProvider as DefaultEntitlementProvider;
+   249	            // P5B: production registers UtcClock via DI; every existing test construction
+   250	            // site omits it and keeps working (real UTC clock, which those tests never
+   251	            // depend on because they never cross the 10-minute protection window).
+   252	            _clock = clock ?? new UtcClock();
+   253	
+   254	            // Phase 5 — bind the provider's rank source HERE instead of injecting
+   255	            // ISectStateProvider into the provider itself: that direction would be a
+   256	            // DI cycle (SectStateProvider → provider → SectStateProvider). Bind-late
+   257	            // keeps the provider ignorant of the state module; before this line runs,
+   258	            // CanUse(discipleId, "owner") fails closed (Unspecified = deny).
+   259	            //
+   260	            // Note: inject the INTERFACE, not the concrete type. In this VContainer
+   261	            // version Register<I, Impl> registers only the interface (concrete Resolve
+   262	            // is not available), so consumers must resolve IVisualEntitlementProvider
+   263	            // and reach the concrete for bind-late via a type test.
+   264	            _defaultEntitlementProvider?.BindRankLookup(id =>
+   265	            {
+   266	                var d = FindDisciple(id);
+   267	                return d != null ? d.Rank : DiscipleRank.Unspecified;
+   268	            });
+   269	        }
+   270	
+   271	        /// <summary>Single lookup helper — also used by the entitlement rank binding.</summary>
+   272	        private DiscipleState FindDisciple(string discipleId)
+   273	        {
+   274	            if (string.IsNullOrEmpty(discipleId)) return null;
+   275	            for (int i = 0; i < _state.Disciples.Count; i++)
+   276	            {
+   277	                var d = _state.Disciples[i];
+   278	                if (d != null && d.DiscipleId == discipleId) return d;
+   279	            }
+   280	            return null;
+   281	        }
+   282	
+   283	        public SectEconomyState BuildSectEconomyState()
+   284	        {
+   285	            return _state;
+   286	        }
+   287	
+   288	        // Passive resource gathering - every disciple whose CurrentTask is
+   289	        // a known gathering task contributes toward that resource. Called
+   290	        // from DiscipleSystem.Tick(). Disciples whose task fails the building
+   291	        // requirement are SKIPPED (CurrentTask is never rewritten here — the
+   292	        // assignment gate is the only place that validates on assignment).
+   293	        //
+   294	        // P10B: production is unchanged; this tick additionally records ONE work
+   295	        // outcome per disciple and then applies the attribute change once.
+   296	        public void TickGathering(float deltaTimeSeconds)
+   297	        {
+   298	            var placedDefIds = CollectPlacedDefIds(); // once per tick, not per disciple
+   299	            BeginWorkTick(); // P10B
+   300	            foreach (var disciple in _state.Disciples)
+   301	            {
+   302	                // P10B — EVERY disciple gets exactly one outcome in this tick. Meditation
+   303	                // rests; anything that is not a gathering task (including a crafting task,
+   304	                // whose tick owns its change) is None = no attribute change here, so the
+   305	                // outcome cannot be applied twice across the two ticks of a frame. The
+   306	                // empty-task guard must come first so no dictionary is probed with a null key.
+   307	                if (string.IsNullOrEmpty(disciple.CurrentTask))
+   308	                {
+   309	                    RecordWorkOutcome(disciple, DiscipleWorkOutcome.None);
+   310	                    continue;
+   311	                }
+   312	
+   313	                if (!GatheringRates.TryGetValue(disciple.CurrentTask, out var rate))
+   314	                {
+   315	                    RecordWorkOutcome(disciple, IsMeditationTask(disciple.CurrentTask)
+   316	                        ? DiscipleWorkOutcome.Resting
+   317	                        : DiscipleWorkOutcome.None);
    318	                    continue;
    319	                }
    320	
-   321	                var accKey = disciple.CurrentTask;
-   322	                var acc = _gatherAccumulators.TryGetValue(accKey, out var existing) ? existing : 0f;
-   323	                acc += rate.PerSecond * deltaTimeSeconds;
-   324	
-   325	                var wholeUnits = Mathf.FloorToInt(acc);
-   326	                if (wholeUnits > 0)
-   327	                {
-   328	                    AdjustAndNotify(_state.Stockpile.RawResources, rate.Resource, wholeUnits);
-   329	                    acc -= wholeUnits;
-   330	                    Debug.Log($"[SectStateProvider] Gathered +{wholeUnits} {rate.Resource} (task={accKey})");
-   331	                }
-   332	
-   333	                _gatherAccumulators[accKey] = acc;
-   334	
-   335	                // P10B: reaching here means the gate passed → Productive.
-   336	                RecordWorkOutcome(disciple, DiscipleWorkOutcome.ProductiveGathering);
-   337	            }
-   338	
-   339	            ApplyWorkAttributes(deltaTimeSeconds); // P10B — the single apply step
-   340	        }
+   321	                if (!IsTaskAvailableWithBuildings(disciple.CurrentTask, placedDefIds, out _))
+   322	                {
+   323	                    // P10B: the gate failed (building missing) → Blocked (small regen).
+   324	                    RecordWorkOutcome(disciple, DiscipleWorkOutcome.Blocked);
+   325	                    continue;
+   326	                }
+   327	
+   328	                var accKey = disciple.CurrentTask;
+   329	                var acc = _gatherAccumulators.TryGetValue(accKey, out var existing) ? existing : 0f;
+   330	                acc += rate.PerSecond * deltaTimeSeconds;
+   331	
+   332	                var wholeUnits = Mathf.FloorToInt(acc);
+   333	                if (wholeUnits > 0)
+   334	                {
+   335	                    AdjustAndNotify(_state.Stockpile.RawResources, rate.Resource, wholeUnits);
+   336	                    acc -= wholeUnits;
+   337	                    Debug.Log($"[SectStateProvider] Gathered +{wholeUnits} {rate.Resource} (task={accKey})");
+   338	                }
+   339	
+   340	                _gatherAccumulators[accKey] = acc;
    341	
-   342	        // Disciple crafting: whoever's CurrentTask matches a known recipe
-   343	        // accumulates progress; once a craft completes, consumes the raw
-   344	        // resource cost and produces the item - into the sect stockpile for
-   345	        // ordinary disciples, or straight into personal inventory for
-   346	        // Elder+ (matches the ownership rule from the economy design:
-   347	        // outer/inner disciples craft for the sect, elders keep their own).
-   348	        // Called from ResourceCraftingSystem.Tick(). Disciples whose task
-   349	        // fails the building requirement are SKIPPED — progress is HELD at
-   350	        // its current value exactly like the out-of-materials path (never
-   351	        // reset), and CurrentTask is never rewritten here.
-   352	        public void TickCrafting(float deltaTimeSeconds)
-   353	        {
-   354	            var placedDefIds = CollectPlacedDefIds(); // once per tick, not per disciple
-   355	            BeginWorkTick(); // P10B
-   356	            foreach (var disciple in _state.Disciples)
-   357	            {
-   358	                // P10B — EVERY disciple gets exactly one outcome in this tick too. Only a
-   359	                // crafting task changes an attribute here; everything else (gathering task,
-   360	                // meditation, unknown/empty) is None = handled by TickGathering, so no
-   361	                // stamina change is applied twice across the two ticks of a frame.
-   362	                if (string.IsNullOrEmpty(disciple.CurrentTask))
-   363	                {
-   364	                    RecordWorkOutcome(disciple, DiscipleWorkOutcome.None);
-   365	                    continue;
-   366	                }
-   367	
-   368	                if (!CraftingRecipes.TryGetValue(disciple.CurrentTask, out var recipe))
-   369	                {
-   370	                    RecordWorkOutcome(disciple, DiscipleWorkOutcome.None);
-   371	                    continue;
-   372	                }
-   373	
-   374	                if (!IsTaskAvailableWithBuildings(disciple.CurrentTask, placedDefIds, out _))
-   375	                {
-   376	                    // P10B: the gate failed (building missing) → Blocked (small regen).
-   377	                    RecordWorkOutcome(disciple, DiscipleWorkOutcome.Blocked);
+   342	                // P10B: reaching here means the gate passed → Productive.
+   343	                RecordWorkOutcome(disciple, DiscipleWorkOutcome.ProductiveGathering);
+   344	            }
+   345	
+   346	            ApplyWorkAttributes(deltaTimeSeconds); // P10B — the single apply step
+   347	        }
+   348	
+   349	        // Disciple crafting: whoever's CurrentTask matches a known recipe
+   350	        // accumulates progress; once a craft completes, consumes the raw
+   351	        // resource cost and produces the item - into the sect stockpile for
+   352	        // ordinary disciples, or straight into personal inventory for
+   353	        // Elder+ (matches the ownership rule from the economy design:
+   354	        // outer/inner disciples craft for the sect, elders keep their own).
+   355	        // Called from ResourceCraftingSystem.Tick(). Disciples whose task
+   356	        // fails the building requirement are SKIPPED — progress is HELD at
+   357	        // its current value exactly like the out-of-materials path (never
+   358	        // reset), and CurrentTask is never rewritten here.
+   359	        public void TickCrafting(float deltaTimeSeconds)
+   360	        {
+   361	            var placedDefIds = CollectPlacedDefIds(); // once per tick, not per disciple
+   362	            BeginWorkTick(); // P10B
+   363	            foreach (var disciple in _state.Disciples)
+   364	            {
+   365	                // P10B — EVERY disciple gets exactly one outcome in this tick too. Only a
+   366	                // crafting task changes an attribute here; everything else (gathering task,
+   367	                // meditation, unknown/empty) is None = handled by TickGathering, so no
+   368	                // stamina change is applied twice across the two ticks of a frame.
+   369	                if (string.IsNullOrEmpty(disciple.CurrentTask))
+   370	                {
+   371	                    RecordWorkOutcome(disciple, DiscipleWorkOutcome.None);
+   372	                    continue;
+   373	                }
+   374	
+   375	                if (!CraftingRecipes.TryGetValue(disciple.CurrentTask, out var recipe))
+   376	                {
+   377	                    RecordWorkOutcome(disciple, DiscipleWorkOutcome.None);
    378	                    continue;
    379	                }
    380	
-   381	                var progress = _craftProgress.TryGetValue(disciple.DiscipleId, out var existing) ? existing : 0f;
-   382	                progress += deltaTimeSeconds;
-   383	
-   384	                if (progress < recipe.CraftSeconds) 
-   385	                {
-   386	                    _craftProgress[disciple.DiscipleId] = progress;
-   387	                    // P10B: progress advanced → Productive (no completion yet).
-   388	                    RecordWorkOutcome(disciple, DiscipleWorkOutcome.ProductiveCrafting);
-   389	                    continue;
-   390	                }
-   391	
-   392	                if (!TryConsume(_state.Stockpile.RawResources, recipe.Costs))
-   393	                {
-   394	                    // Ready to complete but not enough raw resources - hold
-   395	                    // at the completion threshold and wait rather than
-   396	                    // losing the accumulated progress or overshooting.
-   397	                    _craftProgress[disciple.DiscipleId] = recipe.CraftSeconds;
-   398	                    // P10B: held waiting for materials → Blocked; no XP is awarded.
-   399	                    RecordWorkOutcome(disciple, DiscipleWorkOutcome.Blocked);
-   400	                    continue;
-   401	                }
-   402	
-   403	                foreach (var (resource, amount) in recipe.Costs)
-   404	                {
-   405	                    var newTotal = _state.Stockpile.RawResources.TryGetValue(resource, out var v) ? v : 0;
-   406	                    _resourceChangedPublisher.Publish(new SectResourceChangedMessage
-   407	                    {
-   408	                        ResourceId = resource,
-   409	                        Delta = -amount,
-   410	                        NewTotal = newTotal,
-   411	                    });
-   412	                }
-   413	
-   414	                var item = new InventoryItem
-   415	                {
-   416	                    ItemDefId = recipe.ItemDefId,
-   417	                    Quantity = 1,
-   418	                    Grade = recipe.Grade,
-   419	                    OwnerScope = disciple.Rank >= DiscipleRank.Elder ? OwnerScope.Personal : OwnerScope.SectStockpile,
-   420	                };
-   421	
-   422	                if (item.OwnerScope == OwnerScope.Personal)
-   423	                {
-   424	                    disciple.PersonalInventory.Add(item);
-   425	                }
-   426	                else
-   427	                {
-   428	                    AddToStockpileGoods(item);
-   429	                }
-   430	
-   431	                Debug.Log($"[SectStateProvider] {disciple.DisplayName} crafted {item.ItemDefId} " +
-   432	                          $"(grade {item.Grade}, {item.OwnerScope})");
-   433	
-   434	                // Carry over any overshoot instead of resetting to exactly 0.
-   435	                _craftProgress[disciple.DiscipleId] = progress - recipe.CraftSeconds;
-   436	
-   437	                // P10B: this is the authoritative completion point. The completion tick
-   438	                // counts as Productive (§4 simplification) and carries the recipe's
-   439	                // skill category so the XP is awarded ONCE, in ApplyWorkAttributes.
-   440	                RecordWorkOutcome(disciple, DiscipleWorkOutcome.ProductiveCrafting, recipe.SkillCategory);
-   441	            }
-   442	
-   443	            ApplyWorkAttributes(deltaTimeSeconds); // P10B — the single apply step
-   444	        }
-   445	
-   446	        // ---------- P10B: work outcome → attribute change ----------
-   447	
-   448	        /// <summary>Starts one tick's outcome scratch (P10B).</summary>
-   449	        private void BeginWorkTick()
-   450	        {
-   451	            _workTick.Clear();
-   452	            _workTickRecordCount = 0;
-   453	        }
+   381	                if (!IsTaskAvailableWithBuildings(disciple.CurrentTask, placedDefIds, out _))
+   382	                {
+   383	                    // P10B: the gate failed (building missing) → Blocked (small regen).
+   384	                    RecordWorkOutcome(disciple, DiscipleWorkOutcome.Blocked);
+   385	                    continue;
+   386	                }
+   387	
+   388	                var progress = _craftProgress.TryGetValue(disciple.DiscipleId, out var existing) ? existing : 0f;
+   389	                progress += deltaTimeSeconds;
+   390	
+   391	                if (progress < recipe.CraftSeconds) 
+   392	                {
+   393	                    _craftProgress[disciple.DiscipleId] = progress;
+   394	                    // P10B: progress advanced → Productive (no completion yet).
+   395	                    RecordWorkOutcome(disciple, DiscipleWorkOutcome.ProductiveCrafting);
+   396	                    continue;
+   397	                }
+   398	
+   399	                if (!TryConsume(_state.Stockpile.RawResources, recipe.Costs))
+   400	                {
+   401	                    // Ready to complete but not enough raw resources - hold
+   402	                    // at the completion threshold and wait rather than
+   403	                    // losing the accumulated progress or overshooting.
+   404	                    _craftProgress[disciple.DiscipleId] = recipe.CraftSeconds;
+   405	                    // P10B: held waiting for materials → Blocked; no XP is awarded.
+   406	                    RecordWorkOutcome(disciple, DiscipleWorkOutcome.Blocked);
+   407	                    continue;
+   408	                }
+   409	
+   410	                foreach (var (resource, amount) in recipe.Costs)
+   411	                {
+   412	                    var newTotal = _state.Stockpile.RawResources.TryGetValue(resource, out var v) ? v : 0;
+   413	                    _resourceChangedPublisher.Publish(new SectResourceChangedMessage
+   414	                    {
+   415	                        ResourceId = resource,
+   416	                        Delta = -amount,
+   417	                        NewTotal = newTotal,
+   418	                    });
+   419	                }
+   420	
+   421	                var item = new InventoryItem
+   422	                {
+   423	                    ItemDefId = recipe.ItemDefId,
+   424	                    Quantity = 1,
+   425	                    Grade = recipe.Grade,
+   426	                    OwnerScope = disciple.Rank >= DiscipleRank.Elder ? OwnerScope.Personal : OwnerScope.SectStockpile,
+   427	                };
+   428	
+   429	                if (item.OwnerScope == OwnerScope.Personal)
+   430	                {
+   431	                    disciple.PersonalInventory.Add(item);
+   432	                }
+   433	                else
+   434	                {
+   435	                    AddToStockpileGoods(item);
+   436	                }
+   437	
+   438	                Debug.Log($"[SectStateProvider] {disciple.DisplayName} crafted {item.ItemDefId} " +
+   439	                          $"(grade {item.Grade}, {item.OwnerScope})");
+   440	
+   441	                // Carry over any overshoot instead of resetting to exactly 0.
+   442	                _craftProgress[disciple.DiscipleId] = progress - recipe.CraftSeconds;
+   443	
+   444	                // P10B: this is the authoritative completion point. The completion tick
+   445	                // counts as Productive (§4 simplification) and carries the recipe's
+   446	                // skill category so the XP is awarded ONCE, in ApplyWorkAttributes.
+   447	                RecordWorkOutcome(disciple, DiscipleWorkOutcome.ProductiveCrafting, recipe.SkillCategory);
+   448	            }
+   449	
+   450	            ApplyWorkAttributes(deltaTimeSeconds); // P10B — the single apply step
+   451	        }
+   452	
+   453	        // ---------- P10B: work outcome → attribute change ----------
    454	
-   455	        /// <summary>
-   456	        /// Records this tick's outcome for one disciple. Each tick writes exactly ONE
-   457	        /// record per disciple (the two ticks of a frame cover different task domains and
-   458	        /// the other side records None), which is what keeps the apply step from
-   459	        /// double-counting a change.
-   460	        /// </summary>
-   461	        private void RecordWorkOutcome(DiscipleState disciple, DiscipleWorkOutcome outcome,
-   462	                                       string completedCraftCategory = null)
-   463	        {
-   464	            if (disciple == null || string.IsNullOrEmpty(disciple.DiscipleId)) return;
-   465	
-   466	            _workTick[disciple.DiscipleId] = new WorkTickRecord
-   467	            {
-   468	                Outcome = outcome,
-   469	                CompletedCraftCategory = completedCraftCategory,
-   470	            };
-   471	            _workTickRecordCount++;
-   472	        }
-   473	
-   474	        /// <summary>
-   475	        /// The ONLY place P10B mutates attributes (one function, called once per tick,
-   476	        /// after that tick's outcomes are recorded — so nothing can be applied twice).
-   477	        /// Rates are linear in the tick's simulation delta (rate * delta, then clamped);
-   478	        /// a zero or non-finite delta (pause) changes no rate-driven value. A completed
-   479	        /// craft is an event, not a rate, so its XP is not scaled by the delta.
-   480	        /// </summary>
-   481	        private void ApplyWorkAttributes(float deltaTimeSeconds)
-   482	        {
-   483	            if (_workTick.Count == 0) return;
-   484	
-   485	            bool ratesApply = deltaTimeSeconds > 0f; // false for 0 (paused) and for NaN
-   486	
-   487	            foreach (var disciple in _state.Disciples)
-   488	            {
-   489	                if (disciple == null || string.IsNullOrEmpty(disciple.DiscipleId)) continue;
-   490	
-   491	                WorkTickRecord record;
-   492	                if (!_workTick.TryGetValue(disciple.DiscipleId, out record)) continue;
+   455	        /// <summary>Starts one tick's outcome scratch (P10B).</summary>
+   456	        private void BeginWorkTick()
+   457	        {
+   458	            _workTick.Clear();
+   459	            _workTickRecordCount = 0;
+   460	        }
+   461	
+   462	        /// <summary>
+   463	        /// Records this tick's outcome for one disciple. Each tick writes exactly ONE
+   464	        /// record per disciple (the two ticks of a frame cover different task domains and
+   465	        /// the other side records None), which is what keeps the apply step from
+   466	        /// double-counting a change.
+   467	        /// </summary>
+   468	        private void RecordWorkOutcome(DiscipleState disciple, DiscipleWorkOutcome outcome,
+   469	                                       string completedCraftCategory = null)
+   470	        {
+   471	            if (disciple == null || string.IsNullOrEmpty(disciple.DiscipleId)) return;
+   472	
+   473	            _workTick[disciple.DiscipleId] = new WorkTickRecord
+   474	            {
+   475	                Outcome = outcome,
+   476	                CompletedCraftCategory = completedCraftCategory,
+   477	            };
+   478	            _workTickRecordCount++;
+   479	        }
+   480	
+   481	        /// <summary>
+   482	        /// The ONLY place P10B mutates attributes (one function, called once per tick,
+   483	        /// after that tick's outcomes are recorded — so nothing can be applied twice).
+   484	        /// Rates are linear in the tick's simulation delta (rate * delta, then clamped);
+   485	        /// a zero or non-finite delta (pause) changes no rate-driven value. A completed
+   486	        /// craft is an event, not a rate, so its XP is not scaled by the delta.
+   487	        /// </summary>
+   488	        private void ApplyWorkAttributes(float deltaTimeSeconds)
+   489	        {
+   490	            if (_workTick.Count == 0) return;
+   491	
+   492	            bool ratesApply = deltaTimeSeconds > 0f; // false for 0 (paused) and for NaN
    493	
-   494	                // Attributes are created + normalized by P10A; never invented or repaired here.
-   495	                var attributes = disciple.Attributes;
-   496	                if (attributes == null) continue;
+   494	            foreach (var disciple in _state.Disciples)
+   495	            {
+   496	                if (disciple == null || string.IsNullOrEmpty(disciple.DiscipleId)) continue;
    497	
-   498	                float staminaPerSecond;
-   499	                string xpCategory = null;
-   500	                float xpPerSecond = 0f;
-   501	
-   502	                switch (record.Outcome)
-   503	                {
-   504	                    case DiscipleWorkOutcome.ProductiveGathering:
-   505	                        staminaPerSecond = -DiscipleAttributesConfig.WorkStaminaDrainPerSecondGathering;
-   506	                        xpCategory = DiscipleAttributesConfig.CategoryGathering;
-   507	                        xpPerSecond = DiscipleAttributesConfig.WorkGatheringXpPerSecond;
-   508	                        break;
-   509	                    case DiscipleWorkOutcome.ProductiveCrafting:
-   510	                        staminaPerSecond = -DiscipleAttributesConfig.WorkStaminaDrainPerSecondCrafting;
-   511	                        break;
-   512	                    case DiscipleWorkOutcome.Resting:
-   513	                        staminaPerSecond = DiscipleAttributesConfig.WorkStaminaRegenPerSecondResting;
-   514	                        break;
-   515	                    case DiscipleWorkOutcome.Blocked:
-   516	                        staminaPerSecond = DiscipleAttributesConfig.WorkStaminaRegenPerSecondBlocked;
-   517	                        break;
-   518	                    default:
-   519	                        continue; // None — no attribute change at all
-   520	                }
-   521	
-   522	                if (ratesApply)
-   523	                {
-   524	                    attributes.Stamina = ClampStamina(attributes.Stamina + staminaPerSecond * deltaTimeSeconds);
-   525	                    if (xpCategory != null)
-   526	                        AddSkillXp(attributes, xpCategory, xpPerSecond * deltaTimeSeconds);
+   498	                WorkTickRecord record;
+   499	                if (!_workTick.TryGetValue(disciple.DiscipleId, out record)) continue;
+   500	
+   501	                // Attributes are created + normalized by P10A; never invented or repaired here.
+   502	                var attributes = disciple.Attributes;
+   503	                if (attributes == null) continue;
+   504	
+   505	                float staminaPerSecond;
+   506	                string xpCategory = null;
+   507	                float xpPerSecond = 0f;
+   508	
+   509	                switch (record.Outcome)
+   510	                {
+   511	                    case DiscipleWorkOutcome.ProductiveGathering:
+   512	                        staminaPerSecond = -DiscipleAttributesConfig.WorkStaminaDrainPerSecondGathering;
+   513	                        xpCategory = DiscipleAttributesConfig.CategoryGathering;
+   514	                        xpPerSecond = DiscipleAttributesConfig.WorkGatheringXpPerSecond;
+   515	                        break;
+   516	                    case DiscipleWorkOutcome.ProductiveCrafting:
+   517	                        staminaPerSecond = -DiscipleAttributesConfig.WorkStaminaDrainPerSecondCrafting;
+   518	                        break;
+   519	                    case DiscipleWorkOutcome.Resting:
+   520	                        staminaPerSecond = DiscipleAttributesConfig.WorkStaminaRegenPerSecondResting;
+   521	                        break;
+   522	                    case DiscipleWorkOutcome.Blocked:
+   523	                        staminaPerSecond = DiscipleAttributesConfig.WorkStaminaRegenPerSecondBlocked;
+   524	                        break;
+   525	                    default:
+   526	                        continue; // None — no attribute change at all
    527	                }
    528	
-   529	                // Craft completion XP: awarded where the item was actually produced. A
-   530	                // craft already held at CraftSeconds can complete on a zero-delta frame
-   531	                // (the item is still made), so the award follows the completion, not the delta.
-   532	                if (!string.IsNullOrEmpty(record.CompletedCraftCategory))
-   533	                    AddSkillXp(attributes, record.CompletedCraftCategory,
-   534	                               DiscipleAttributesConfig.WorkCraftXpPerCompletion);
-   535	            }
-   536	        }
-   537	
-   538	        /// <summary>Adds XP to one category, reading through the shared safe accessor and clamping to the cap.</summary>
-   539	        private static void AddSkillXp(DiscipleAttributes attributes, string category, float amount)
-   540	        {
-   541	            if (string.IsNullOrEmpty(category) || amount == 0f) return;
-   542	            if (attributes.SkillXp == null) attributes.SkillXp = new Dictionary<string, float>();
-   543	
-   544	            float current = DiscipleAttributes.GetSkillXp(attributes, category);
-   545	            attributes.SkillXp[category] = ClampSkillXp(current + amount);
-   546	        }
-   547	
-   548	        /// <summary>Clamps to the configured stamina bounds (a non-finite value is left for Normalize to repair).</summary>
-   549	        private static float ClampStamina(float value)
-   550	        {
-   551	            if (float.IsNaN(value) || float.IsInfinity(value)) return value;
-   552	            if (value < DiscipleAttributesConfig.StaminaMin) return DiscipleAttributesConfig.StaminaMin;
-   553	            if (value > DiscipleAttributesConfig.StaminaMax) return DiscipleAttributesConfig.StaminaMax;
-   554	            return value;
-   555	        }
-   556	
-   557	        /// <summary>Clamps to the configured XP bounds (0..cap).</summary>
-   558	        private static float ClampSkillXp(float value)
-   559	        {
-   560	            if (float.IsNaN(value) || float.IsInfinity(value)) return DiscipleAttributesConfig.SkillXpDefault;
-   561	            if (value < DiscipleAttributesConfig.SkillXpMin) return DiscipleAttributesConfig.SkillXpMin;
-   562	            if (value > DiscipleAttributesConfig.SkillXpMax) return DiscipleAttributesConfig.SkillXpMax;
-   563	            return value;
-   564	        }
-   565	
-   566	        /// <summary>P10B — the resting task id (same literal KnownTasks is built with).</summary>
-   567	        private static bool IsMeditationTask(string taskId)
-   568	        {
-   569	            return taskId == "meditation";
-   570	        }
-   571	
-   572	        // ---- P10B test seams (EditMode tests, no reflection) ----
-   573	
-   574	        /// <summary>The outcome recorded for one disciple in the tick that just ran.</summary>
-   575	        public bool TryGetLastWorkOutcome(string discipleId, out DiscipleWorkOutcome outcome)
-   576	        {
-   577	            WorkTickRecord record;
-   578	            if (!string.IsNullOrEmpty(discipleId) && _workTick.TryGetValue(discipleId, out record))
-   579	            {
-   580	                outcome = record.Outcome;
-   581	                return true;
-   582	            }
-   583	
-   584	            outcome = DiscipleWorkOutcome.None;
-   585	            return false;
-   586	        }
-   587	
-   588	        /// <summary>
-   589	        /// How many outcome records the last tick wrote. Equal to the number of
-   590	        /// disciples means exactly one record each — a second record for the same
-   591	        /// disciple would be one more than the roster size.
-   592	        /// </summary>
-   593	        public int LastTickOutcomeRecordCountForTest => _workTickRecordCount;
-   594	
-   595	        // Adds a new Outer Disciple assigned to a gathering task, round-robin
-   596	        // across GatheringTasks so recruits don't all pile onto one resource.
-   597	        public void RecruitOuterDisciple(DiscipleSex sex = DiscipleSex.Unspecified)
-   598	        {
-   599	            var index = _state.Disciples.Count;
-   600	            var task = GatheringTasks[index % GatheringTasks.Length];
-   601	            var name = RecruitNamePool[index % RecruitNamePool.Length];
-   602	
-   603	            // Default parity: even index → Male, odd → Female (preserves existing mixed-roster look)
-   604	            var resolvedSex = (sex != DiscipleSex.Unspecified) ? sex
-   605	                : (index % 2 == 0) ? DiscipleSex.Male : DiscipleSex.Female;
+   529	                if (ratesApply)
+   530	                {
+   531	                    attributes.Stamina = ClampStamina(attributes.Stamina + staminaPerSecond * deltaTimeSeconds);
+   532	                    if (xpCategory != null)
+   533	                        AddSkillXp(attributes, xpCategory, xpPerSecond * deltaTimeSeconds);
+   534	
+   535	                    // P14A — meditation ALSO accumulates cultivation progress. Resting ONLY,
+   536	                    // in this same single apply step and against the same delta as the P10B
+   537	                    // rates above (so pause is a zero delta and game speed is never applied
+   538	                    // twice). Clamped AT the current stage's requirement with no carry-over;
+   539	                    // the final stage accrues nothing. Stamina is untouched by this line, and
+   540	                    // nothing is published per tick.
+   541	                    if (record.Outcome == DiscipleWorkOutcome.Resting)
+   542	                        AddCultivationProgress(attributes, CultivationConfig.ProgressPerSecondResting * deltaTimeSeconds);
+   543	                }
+   544	
+   545	                // Craft completion XP: awarded where the item was actually produced. A
+   546	                // craft already held at CraftSeconds can complete on a zero-delta frame
+   547	                // (the item is still made), so the award follows the completion, not the delta.
+   548	                if (!string.IsNullOrEmpty(record.CompletedCraftCategory))
+   549	                    AddSkillXp(attributes, record.CompletedCraftCategory,
+   550	                               DiscipleAttributesConfig.WorkCraftXpPerCompletion);
+   551	            }
+   552	        }
+   553	
+   554	        /// <summary>Adds XP to one category, reading through the shared safe accessor and clamping to the cap.</summary>
+   555	        private static void AddSkillXp(DiscipleAttributes attributes, string category, float amount)
+   556	        {
+   557	            if (string.IsNullOrEmpty(category) || amount == 0f) return;
+   558	            if (attributes.SkillXp == null) attributes.SkillXp = new Dictionary<string, float>();
+   559	
+   560	            float current = DiscipleAttributes.GetSkillXp(attributes, category);
+   561	            attributes.SkillXp[category] = ClampSkillXp(current + amount);
+   562	        }
+   563	
+   564	        /// <summary>Clamps to the configured stamina bounds (a non-finite value is left for Normalize to repair).</summary>
+   565	        private static float ClampStamina(float value)
+   566	        {
+   567	            if (float.IsNaN(value) || float.IsInfinity(value)) return value;
+   568	            if (value < DiscipleAttributesConfig.StaminaMin) return DiscipleAttributesConfig.StaminaMin;
+   569	            if (value > DiscipleAttributesConfig.StaminaMax) return DiscipleAttributesConfig.StaminaMax;
+   570	            return value;
+   571	        }
+   572	
+   573	        /// <summary>Clamps to the configured XP bounds (0..cap).</summary>
+   574	        private static float ClampSkillXp(float value)
+   575	        {
+   576	            if (float.IsNaN(value) || float.IsInfinity(value)) return DiscipleAttributesConfig.SkillXpDefault;
+   577	            if (value < DiscipleAttributesConfig.SkillXpMin) return DiscipleAttributesConfig.SkillXpMin;
+   578	            if (value > DiscipleAttributesConfig.SkillXpMax) return DiscipleAttributesConfig.SkillXpMax;
+   579	            return value;
+   580	        }
+   581	
+   582	        /// <summary>
+   583	        /// P14A — adds cultivation progress toward the current stage's requirement.
+   584	        /// Resting-only accrual: an unknown stage id (corruption — rejected by restore
+   585	        /// validation) and the FINAL stage accrue nothing, and the result is clamped AT the
+   586	        /// requirement so progress can never overflow or carry over into the next stage.
+   587	        /// Never publishes and never touches stamina/XP.
+   588	        /// </summary>
+   589	        private static void AddCultivationProgress(DiscipleAttributes attributes, float amount)
+   590	        {
+   591	            if (attributes == null || amount <= 0f) return;
+   592	            if (float.IsNaN(amount) || float.IsInfinity(amount)) return;
+   593	
+   594	            string stageId = attributes.CultivationStageId;
+   595	            if (!CultivationConfig.IsKnownStage(stageId)) return; // unknown id: leave it for validation to reject
+   596	            if (CultivationConfig.IsFinal(stageId)) return;       // nothing beyond the last stage
+   597	
+   598	            float requirement = CultivationConfig.Requirement(stageId);
+   599	            float current = attributes.CultivationProgress;
+   600	            if (float.IsNaN(current) || float.IsInfinity(current) || current < 0f) current = 0f;
+   601	
+   602	            float next = current + amount;
+   603	            if (next > requirement) next = requirement; // clamp — no carry-over past the stage
+   604	            attributes.CultivationProgress = next;
+   605	        }
    606	
-   607	            var disciple = new DiscipleState
-   608	            {
-   609	                DiscipleId = $"d{index + 1:000}",
-   610	                DisplayName = name,
-   611	                Rank = DiscipleRank.OuterDisciple,
-   612	                Wallet = new CurrencyWallet(),
-   613	                PersonalInventory = new List<InventoryItem>(),
-   614	                CurrentTask = task,
-   615	                Sex = resolvedSex,
-   616	                Avatar = CreateStarterAvatar(index, resolvedSex),
-   617	                // P9A — new disciples start Manual (explicit, matching the field default).
-   618	                ControlMode = DiscipleControlMode.Manual,
-   619	                // P10A — fresh, normalized attribute block (stamina 100, all 3 skill
-   620	                // categories present at 0 XP). Data only; nothing consumes it yet.
-   621	                Attributes = DiscipleAttributes.Normalize(new DiscipleAttributes()),
-   622	            };
-   623	
-   624	            _state.Disciples.Add(disciple);
-   625	            _discipleRecruitedPublisher.Publish(new DiscipleRecruitedMessage
-   626	            {
-   627	                DiscipleId = disciple.DiscipleId,
-   628	                DisplayName = disciple.DisplayName,
-   629	            });
-   630	
-   631	            Debug.Log($"[SectStateProvider] Recruited outer disciple: {disciple.DisplayName} ({disciple.DiscipleId}), sex={resolvedSex}, assigned to {task}");
-   632	        }
-   633	
-   634	        private AvatarAppearance CreateStarterAvatar(int rosterIndex, DiscipleSex sex)
-   635	        {
-   636	            var a = new AvatarAppearance();
-   637	            a.SetSlot(AvatarSlots.Body, "body_robe_grey");
-   638	            a.SetSlot(AvatarSlots.Head, (sex == DiscipleSex.Female) ? "head_female_01" : "head_male_01");
-   639	            a.SetSlot(AvatarSlots.Hair, StarterHair[rosterIndex % StarterHair.Length]);
-   640	            return a;
-   641	        }
-   642	
-   643	        public bool TryChangeAvatarPart(string discipleId, string slot, string partId,
-   644	                                        out string failReason, out AvatarAppearance result)
-   645	        {
-   646	            failReason = string.Empty;
-   647	            result = null;
-   648	
-   649	            var disciple = _state.Disciples.FirstOrDefault(d => d.DiscipleId == discipleId);
-   650	            if (disciple == null) { failReason = $"No disciple with id: {discipleId}"; return false; }
-   651	
-   652	            if (System.Array.IndexOf(AvatarSlots.Equippable, slot) < 0)
-   653	            { failReason = $"Invalid slot: {slot}"; return false; }
-   654	
-   655	            if (!_avatarPartPool.IsValidForSlot(slot, partId))
-   656	            { failReason = $"PartId '{partId}' is not valid for slot '{slot}'"; return false; }
-   657	
-   658	            // Pose validation: reject a part whose poseId is non-empty and
-   659	            // differs from the disciple's effective pose.
-   660	            if (!string.IsNullOrEmpty(partId))
-   661	            {
-   662	                var partDef = _avatarPartPool.GetById(partId);
-   663	                if (partDef != null && !string.IsNullOrEmpty(partDef.poseId))
-   664	                {
-   665	                    string effectivePose = (disciple.Avatar != null && !string.IsNullOrEmpty(disciple.Avatar.PoseId))
-   666	                        ? disciple.Avatar.PoseId
-   667	                        : "pose_idle_01";
-   668	                    if (partDef.poseId != effectivePose)
-   669	                    {
-   670	                        failReason = $"Part '{partId}' requires pose '{partDef.poseId}' but disciple is in pose '{effectivePose}'.";
-   671	                        return false;
-   672	                    }
-   673	                }
-   674	            }
-   675	
-   676	            // Validation ชั้น 5 — coverage: part ต้องมี art อย่างน้อย 1 backend ที่เปิดใช้
-   677	            // (empty layer = เจตนา "ถอดออก" ผ่านเสมอ — *_none defaults)
-   678	            // Face split (Roadmap #1): face sub-layers เป็น portrait-only ตามดีไซน์ (R4 —
-   679	            // chibi เก็บ feature baked-in) จึงผ่านด้วย Portrait เดี่ยว โดยไม่ต้องมี chibi/spine art
-   680	            // (แก้ latent bug: acc_none — ชิ้น "ถอดเครื่องประดับ" ที่มีแต่ chibi art — เคยโดน reject)
-   681	            if (!string.IsNullOrEmpty(partId))
-   682	            {
-   683	                var partDef = _avatarPartPool.GetById(partId);
-   684	                if (partDef != null && !partDef.IsEmptyLayer)
-   685	                {
-   686	                    bool anyCovered =
-   687	                        partDef.Supports(VisualBackend.Portrait) ||
-   688	                        (_visualConfig != null && _visualConfig.SpriteSheetEnabled &&
-   689	                         partDef.Supports(VisualBackend.SpriteSheet)) ||
-   690	                        (_visualConfig != null && _visualConfig.SpineEnabled &&
-   691	                         partDef.Supports(VisualBackend.Spine));
-   692	                    if (!anyCovered)
-   693	                    {
-   694	                        failReason = $"Part '{partId}' has no art on any enabled backend (coverage check).";
-   695	                        return false;
-   696	                    }
-   697	                }
-   698	            }
-   699	
-   700	            // Validation ชั้น 6 — entitlement (Phase 5, §8): part ที่ติด entitlement
-   701	            // ต้องผ่าน IVisualEntitlementProvider เท่านั้น — ต่างจากชั้น 5 ที่ป้องกัน
-   702	            // "render ไม่ได้" ชั้นนี้ป้องกัน "ไม่มีสิทธิ์ใช้" — failReason เขียนให้
-   703	            // AI/UI อ่านแล้วเข้าใจเหตุผล (ตามสเปก Phase 5)
-   704	            if (!string.IsNullOrEmpty(partId) && _entitlementProvider != null)
-   705	            {
-   706	                var entitlementDef = _avatarPartPool.GetById(partId);
-   707	                if (entitlementDef != null && !string.IsNullOrEmpty(entitlementDef.entitlement) &&
-   708	                    !_entitlementProvider.CanUse(discipleId, entitlementDef.entitlement))
-   709	                {
-   710	                    failReason = $"Part '{partId}' requires entitlement '{entitlementDef.entitlement}'.";
-   711	                    return false;
-   712	                }
-   713	            }
-   714	
-   715	            if (disciple.Avatar == null) disciple.Avatar = new AvatarAppearance();
+   607	        /// <summary>P10B — the resting task id (same literal KnownTasks is built with).</summary>
+   608	        private static bool IsMeditationTask(string taskId)
+   609	        {
+   610	            return taskId == "meditation";
+   611	        }
+   612	
+   613	        // ---- P10B test seams (EditMode tests, no reflection) ----
+   614	
+   615	        /// <summary>The outcome recorded for one disciple in the tick that just ran.</summary>
+   616	        public bool TryGetLastWorkOutcome(string discipleId, out DiscipleWorkOutcome outcome)
+   617	        {
+   618	            WorkTickRecord record;
+   619	            if (!string.IsNullOrEmpty(discipleId) && _workTick.TryGetValue(discipleId, out record))
+   620	            {
+   621	                outcome = record.Outcome;
+   622	                return true;
+   623	            }
+   624	
+   625	            outcome = DiscipleWorkOutcome.None;
+   626	            return false;
+   627	        }
+   628	
+   629	        /// <summary>
+   630	        /// How many outcome records the last tick wrote. Equal to the number of
+   631	        /// disciples means exactly one record each — a second record for the same
+   632	        /// disciple would be one more than the roster size.
+   633	        /// </summary>
+   634	        public int LastTickOutcomeRecordCountForTest => _workTickRecordCount;
+   635	
+   636	        // Adds a new Outer Disciple assigned to a gathering task, round-robin
+   637	        // across GatheringTasks so recruits don't all pile onto one resource.
+   638	        public void RecruitOuterDisciple(DiscipleSex sex = DiscipleSex.Unspecified)
+   639	        {
+   640	            var index = _state.Disciples.Count;
+   641	            var task = GatheringTasks[index % GatheringTasks.Length];
+   642	            var name = RecruitNamePool[index % RecruitNamePool.Length];
+   643	
+   644	            // Default parity: even index → Male, odd → Female (preserves existing mixed-roster look)
+   645	            var resolvedSex = (sex != DiscipleSex.Unspecified) ? sex
+   646	                : (index % 2 == 0) ? DiscipleSex.Male : DiscipleSex.Female;
+   647	
+   648	            var disciple = new DiscipleState
+   649	            {
+   650	                DiscipleId = $"d{index + 1:000}",
+   651	                DisplayName = name,
+   652	                Rank = DiscipleRank.OuterDisciple,
+   653	                Wallet = new CurrencyWallet(),
+   654	                PersonalInventory = new List<InventoryItem>(),
+   655	                CurrentTask = task,
+   656	                Sex = resolvedSex,
+   657	                Avatar = CreateStarterAvatar(index, resolvedSex),
+   658	                // P9A — new disciples start Manual (explicit, matching the field default).
+   659	                ControlMode = DiscipleControlMode.Manual,
+   660	                // P10A — fresh, normalized attribute block (stamina 100, all 3 skill
+   661	                // categories present at 0 XP). Data only; nothing consumes it yet.
+   662	                Attributes = DiscipleAttributes.Normalize(new DiscipleAttributes()),
+   663	            };
+   664	
+   665	            _state.Disciples.Add(disciple);
+   666	            _discipleRecruitedPublisher.Publish(new DiscipleRecruitedMessage
+   667	            {
+   668	                DiscipleId = disciple.DiscipleId,
+   669	                DisplayName = disciple.DisplayName,
+   670	            });
+   671	
+   672	            Debug.Log($"[SectStateProvider] Recruited outer disciple: {disciple.DisplayName} ({disciple.DiscipleId}), sex={resolvedSex}, assigned to {task}");
+   673	        }
+   674	
+   675	        private AvatarAppearance CreateStarterAvatar(int rosterIndex, DiscipleSex sex)
+   676	        {
+   677	            var a = new AvatarAppearance();
+   678	            a.SetSlot(AvatarSlots.Body, "body_robe_grey");
+   679	            a.SetSlot(AvatarSlots.Head, (sex == DiscipleSex.Female) ? "head_female_01" : "head_male_01");
+   680	            a.SetSlot(AvatarSlots.Hair, StarterHair[rosterIndex % StarterHair.Length]);
+   681	            return a;
+   682	        }
+   683	
+   684	        public bool TryChangeAvatarPart(string discipleId, string slot, string partId,
+   685	                                        out string failReason, out AvatarAppearance result)
+   686	        {
+   687	            failReason = string.Empty;
+   688	            result = null;
+   689	
+   690	            var disciple = _state.Disciples.FirstOrDefault(d => d.DiscipleId == discipleId);
+   691	            if (disciple == null) { failReason = $"No disciple with id: {discipleId}"; return false; }
+   692	
+   693	            if (System.Array.IndexOf(AvatarSlots.Equippable, slot) < 0)
+   694	            { failReason = $"Invalid slot: {slot}"; return false; }
+   695	
+   696	            if (!_avatarPartPool.IsValidForSlot(slot, partId))
+   697	            { failReason = $"PartId '{partId}' is not valid for slot '{slot}'"; return false; }
+   698	
+   699	            // Pose validation: reject a part whose poseId is non-empty and
+   700	            // differs from the disciple's effective pose.
+   701	            if (!string.IsNullOrEmpty(partId))
+   702	            {
+   703	                var partDef = _avatarPartPool.GetById(partId);
+   704	                if (partDef != null && !string.IsNullOrEmpty(partDef.poseId))
+   705	                {
+   706	                    string effectivePose = (disciple.Avatar != null && !string.IsNullOrEmpty(disciple.Avatar.PoseId))
+   707	                        ? disciple.Avatar.PoseId
+   708	                        : "pose_idle_01";
+   709	                    if (partDef.poseId != effectivePose)
+   710	                    {
+   711	                        failReason = $"Part '{partId}' requires pose '{partDef.poseId}' but disciple is in pose '{effectivePose}'.";
+   712	                        return false;
+   713	                    }
+   714	                }
+   715	            }
    716	
-   717	            var oldPart = disciple.Avatar.GetSlot(slot);
-   718	            disciple.Avatar.SetSlot(slot, partId);
-   719	
-   720	            _avatarChangedPublisher.Publish(new AvatarEquipmentChangedMessage
-   721	            {
-   722	                DiscipleId = discipleId,
-   723	                Slot       = slot,
-   724	                OldPartId  = oldPart,
-   725	                NewPartId  = partId
-   726	            });
-   727	
-   728	            result = disciple.Avatar.Clone();   // return copy, not reference to live state
-   729	            return true;
-   730	        }
-   731	
-   732	        // ---------- P4 (local ownership test harness) — validated ownership assignment ----------
-   733	        // Non-Npc OwnerId convention: a real Twitch user id is numeric, so the
-   734	        // synthetic local-identity convention is "viewer_*" / "player_*" (alpha
-   735	        // prefix + underscore, no whitespace) — clearly fake, never shaped like a
-   736	        // real Twitch id. Real authentication (P5B+) replaces this entirely.
-   737	        private const string OwnerIdPattern = "^[A-Za-z][A-Za-z0-9]*(_[A-Za-z0-9]+)*$";
-   738	
-   739	        public bool TrySetDiscipleOwner(string discipleId, DiscipleOwnerType ownerType,
-   740	                                        string ownerId, out string failReason)
-   741	        {
-   742	            failReason = string.Empty;
-   743	
-   744	            // 1. disciple must exist
-   745	            var disciple = FindDisciple(discipleId);
-   746	            if (disciple == null)
-   747	            {
-   748	                failReason = $"No disciple with id: {discipleId}";
-   749	                return false;
-   750	            }
-   751	
-   752	            // 2. enum value must be defined (fail-closed on out-of-range casts)
-   753	            if (!Enum.IsDefined(typeof(DiscipleOwnerType), ownerType))
-   754	            {
-   755	                failReason = $"Undefined DiscipleOwnerType value: {ownerType}";
-   756	                return false;
-   757	            }
-   758	
-   759	            var trimmedOwnerId = (ownerId ?? string.Empty).Trim();
+   717	            // Validation ชั้น 5 — coverage: part ต้องมี art อย่างน้อย 1 backend ที่เปิดใช้
+   718	            // (empty layer = เจตนา "ถอดออก" ผ่านเสมอ — *_none defaults)
+   719	            // Face split (Roadmap #1): face sub-layers เป็น portrait-only ตามดีไซน์ (R4 —
+   720	            // chibi เก็บ feature baked-in) จึงผ่านด้วย Portrait เดี่ยว โดยไม่ต้องมี chibi/spine art
+   721	            // (แก้ latent bug: acc_none — ชิ้น "ถอดเครื่องประดับ" ที่มีแต่ chibi art — เคยโดน reject)
+   722	            if (!string.IsNullOrEmpty(partId))
+   723	            {
+   724	                var partDef = _avatarPartPool.GetById(partId);
+   725	                if (partDef != null && !partDef.IsEmptyLayer)
+   726	                {
+   727	                    bool anyCovered =
+   728	                        partDef.Supports(VisualBackend.Portrait) ||
+   729	                        (_visualConfig != null && _visualConfig.SpriteSheetEnabled &&
+   730	                         partDef.Supports(VisualBackend.SpriteSheet)) ||
+   731	                        (_visualConfig != null && _visualConfig.SpineEnabled &&
+   732	                         partDef.Supports(VisualBackend.Spine));
+   733	                    if (!anyCovered)
+   734	                    {
+   735	                        failReason = $"Part '{partId}' has no art on any enabled backend (coverage check).";
+   736	                        return false;
+   737	                    }
+   738	                }
+   739	            }
+   740	
+   741	            // Validation ชั้น 6 — entitlement (Phase 5, §8): part ที่ติด entitlement
+   742	            // ต้องผ่าน IVisualEntitlementProvider เท่านั้น — ต่างจากชั้น 5 ที่ป้องกัน
+   743	            // "render ไม่ได้" ชั้นนี้ป้องกัน "ไม่มีสิทธิ์ใช้" — failReason เขียนให้
+   744	            // AI/UI อ่านแล้วเข้าใจเหตุผล (ตามสเปก Phase 5)
+   745	            if (!string.IsNullOrEmpty(partId) && _entitlementProvider != null)
+   746	            {
+   747	                var entitlementDef = _avatarPartPool.GetById(partId);
+   748	                if (entitlementDef != null && !string.IsNullOrEmpty(entitlementDef.entitlement) &&
+   749	                    !_entitlementProvider.CanUse(discipleId, entitlementDef.entitlement))
+   750	                {
+   751	                    failReason = $"Part '{partId}' requires entitlement '{entitlementDef.entitlement}'.";
+   752	                    return false;
+   753	                }
+   754	            }
+   755	
+   756	            if (disciple.Avatar == null) disciple.Avatar = new AvatarAppearance();
+   757	
+   758	            var oldPart = disciple.Avatar.GetSlot(slot);
+   759	            disciple.Avatar.SetSlot(slot, partId);
    760	
-   761	            // 3. Npc normalizes OwnerId to empty (no orphaned ids on Npc rows)
-   762	            if (ownerType == DiscipleOwnerType.Npc)
-   763	            {
-   764	                if (!string.IsNullOrEmpty(trimmedOwnerId))
-   765	                {
-   766	                    failReason = "Npc ownership must carry an empty OwnerId.";
-   767	                    return false;
-   768	                }
-   769	                trimmedOwnerId = string.Empty;
-   770	            }
-   771	            else
-   772	            {
-   773	                // 4. non-Npc identities satisfy the identity convention
-   774	                if (string.IsNullOrEmpty(trimmedOwnerId) ||
-   775	                    !System.Text.RegularExpressions.Regex.IsMatch(trimmedOwnerId, OwnerIdPattern))
-   776	                {
-   777	                    failReason = $"OwnerId '{trimmedOwnerId}' does not satisfy the identity convention " +
-   778	                                 "(alpha prefix, [A-Za-z0-9_], no whitespace).";
-   779	                    return false;
-   780	                }
-   781	            }
-   782	
-   783	            // 5. a Viewer identity must not control a different active disciple
-   784	            if (ownerType == DiscipleOwnerType.Viewer && !string.IsNullOrE
-... [TRUNCATED: แสดง 40000 จาก 113534 bytes — ขอส่วนที่เหลือผ่าน need_files]
+   761	            _avatarChangedPublisher.Publish(new AvatarEquipmentChangedMes
+... [TRUNCATED: แสดง 40000 จาก 124557 bytes — ขอส่วนที่เหลือผ่าน need_files]
 ````
 
 ### DataTables/luban.conf (287 bytes)
@@ -3888,7 +3949,7 @@
     24	}
 ````
 
-### LLMWiki/wiki/index.md (4943 bytes)
+### LLMWiki/wiki/index.md (6344 bytes)
 ````
      1	---
      2	title: Wiki Index
@@ -3927,72 +3988,76 @@
     35	- [[sources/open-questions|Open Questions]] — what's deliberately not decided
     36	- [[sources/visual-demo-scene|Visual Demo Scene (DEV-ONLY)]] — DiscipleVisualSystem Phase 3 demo บน Spine example rig + DevSpineOverride seam + guards
     37	- [[decisions/visual-overrides-straight-alpha|Visual Overrides — Straight-Alpha Conversion]] — ADR: atlas ของ rig เฉพาะตัวละคร (Q5) เป็น straight alpha บน Linear color space + วิธี re-export จาก Spine IDE + การเปิด Spine ถาวร (S4 activation — license ยืนยัน 2026-09-25, gate ตั้งที่ composition root)
-    38	
-    39	## Code Snippets (Important Scripts)
+    38	- [[sources/cultivation-system|Cultivation System (P14) — Revised Design]] — สายบำเพ็ญ: ตาราง stage append-only, progress สะสมตอนนั่งสมาธิ, **ทะลวงขั้น** (validated + atomic, permission ชุดเดียวกับ task assignment), Unity-only message, แถว+ปุ่มบนแท็บ Info + revision log (ตามดีไซน์ vs ที่สร้างจริง) และ backlog (chat command / balance) — ต่อด้วย **P14B follow-up**: write tool `attempt_breakthrough` ทาง RPC pair เดียวกับ `assign_task` (ส่ง `SECT_MASTER`, Hybrid 10 นาทีใช้เต็ม, ไม่มี AI-GM bypass)
+    39	- [[sources/vertical-slice-playbook|Vertical Slice Playbook (P15)]] — ทดสอบทั้งเกมเป็นหนึ่งเส้นทาง (ไม่ต้องมี Twitch): 12 integration tests, playbook ที่คนต้องรันเอง, debug metrics ที่วัดได้จริง, ข้อเสนอ tuning (ยังไม่แก้ค่า), และสถานะ autosave (ยังไม่มี — ตรวจแล้ว)
     40	
-    41	- [[sources/code-snippets/GameLifetimeScope.cs.md|GameLifetimeScope.cs]] — composition root
-    42	- [[sources/code-snippets/SectStateProvider.cs.md|SectStateProvider.cs]] — state aggregator
-    43	- [[sources/code-snippets/WorldEventSystem.cs.md|WorldEventSystem.cs]] — event trigger
-    44	- [[sources/code-snippets/TimeSystem.cs.md|TimeSystem.cs]] — game clock + await
-    45	- [[sources/code-snippets/GameMessages.cs.md|GameMessages.cs]] — all message DTOs
-    46	- [[sources/code-snippets/UIPresenter-and-UIViewBase.cs.md|UIPresenter + UIViewBase]] — MVP base
-    47	- [[sources/code-snippets/EventPopupPresenter.cs.md|EventPopupPresenter.cs]] — choice click handler
-    48	- [[sources/code-snippets/LogWindowPresenter.cs.md|LogWindowPresenter.cs]] — event log presenter
-    49	- [[sources/code-snippets/LogWindowView.cs.md|LogWindowView.cs]] — scrolling TMP log view
-    50	
-    51	## Concepts (AI-maintained)
+    41	## Code Snippets (Important Scripts)
+    42	
+    43	- [[sources/code-snippets/GameLifetimeScope.cs.md|GameLifetimeScope.cs]] — composition root
+    44	- [[sources/code-snippets/SectStateProvider.cs.md|SectStateProvider.cs]] — state aggregator
+    45	- [[sources/code-snippets/WorldEventSystem.cs.md|WorldEventSystem.cs]] — event trigger
+    46	- [[sources/code-snippets/TimeSystem.cs.md|TimeSystem.cs]] — game clock + await
+    47	- [[sources/code-snippets/GameMessages.cs.md|GameMessages.cs]] — all message DTOs
+    48	- [[sources/code-snippets/UIPresenter-and-UIViewBase.cs.md|UIPresenter + UIViewBase]] — MVP base
+    49	- [[sources/code-snippets/EventPopupPresenter.cs.md|EventPopupPresenter.cs]] — choice click handler
+    50	- [[sources/code-snippets/LogWindowPresenter.cs.md|LogWindowPresenter.cs]] — event log presenter
+    51	- [[sources/code-snippets/LogWindowView.cs.md|LogWindowView.cs]] — scrolling TMP log view
     52	
-    53	System-level concepts:
+    53	## Concepts (AI-maintained)
     54	
-    55	- [[concepts/vcontainer-composition|VContainer Composition Root]]
-    56	- [[concepts/message-pipe-bus|MessagePipe Bus]]
-    57	- [[concepts/mcp-bridge|MCP Bridge]]
-    58	- [[concepts/decision-pipeline|Decision Pipeline]]
-    59	- [[concepts/state-management|State Management]]
-    60	- [[concepts/time-system|Time System]]
-    61	- [[concepts/world-events|World Events]]
-    62	- [[concepts/gathering-system|Gathering System]]
-    63	- [[concepts/crafting-system|Crafting System]]
-    64	- [[concepts/purchase-store|Purchase Store]]
-    65	- [[concepts/mvp-ui|MVP UI Pattern]]
-    66	- [[concepts/log-window|Log Window]]
-    67	- [[concepts/data-pipeline|Data Pipeline (Luban)]]
-    68	
-    69	## Entities (AI-maintained)
+    55	System-level concepts:
+    56	
+    57	- [[concepts/vcontainer-composition|VContainer Composition Root]]
+    58	- [[concepts/message-pipe-bus|MessagePipe Bus]]
+    59	- [[concepts/mcp-bridge|MCP Bridge]]
+    60	- [[concepts/decision-pipeline|Decision Pipeline]]
+    61	- [[concepts/state-management|State Management]]
+    62	- [[concepts/time-system|Time System]]
+    63	- [[concepts/world-events|World Events]]
+    64	- [[concepts/gathering-system|Gathering System]]
+    65	- [[concepts/crafting-system|Crafting System]]
+    66	- [[concepts/purchase-store|Purchase Store]]
+    67	- [[concepts/mvp-ui|MVP UI Pattern]]
+    68	- [[concepts/log-window|Log Window]]
+    69	- [[concepts/data-pipeline|Data Pipeline (Luban)]]
     70	
-    71	Catalogs of game entities:
+    71	## Entities (AI-maintained)
     72	
-    73	- [[entities/disciples|Disciples]] — characters
-    74	- [[entities/world-events|World Events]] — current event catalog
-    75	- [[entities/events|Events]] — event timeline + flow
-    76	- [[entities/resources|Resources]] — raw materials
-    77	- [[entities/items|Items]] — crafted goods
-    78	- [[entities/sects|Sects]] — faction concept (player + others)
-    79	- [[entities/avatar-appearance|Avatar Appearance]] — dictionary Parts/Colors schema, layered rendering, customization UI (implemented)
-    80	
-    81	## Quick Reference — Common Questions
+    73	Catalogs of game entities:
+    74	
+    75	- [[entities/disciples|Disciples]] — characters
+    76	- [[entities/world-events|World Events]] — current event catalog
+    77	- [[entities/events|Events]] — event timeline + flow
+    78	- [[entities/resources|Resources]] — raw materials
+    79	- [[entities/items|Items]] — crafted goods
+    80	- [[entities/sects|Sects]] — faction concept (player + others)
+    81	- [[entities/avatar-appearance|Avatar Appearance]] — dictionary Parts/Colors schema, layered rendering, customization UI (implemented)
     82	
-    83	| Question | Start here |
-    84	|---|---|
-    85	| How does the AI play the game? | [[concepts/mcp-bridge]] |
-    86	| How do world events work? | [[concepts/world-events]] → [[entities/world-events]] |
-    87	| How is state stored? | [[concepts/state-management]] |
-    88	| How do decisions apply? | [[concepts/decision-pipeline]] |
-    89	| How do I add a new event? | [[concepts/data-pipeline]] → [[entities/world-events]] |
-    90	| How do I add a new UI panel? | [[concepts/mvp-ui]] |
-    91	| How does the event log work? | [[concepts/log-window]] |
-    92	| How do I add a new resource? | [[entities/resources]] |
-    93	| What bugs were hit during build? | [[sources/bug-log]] |
-    94	| What's not decided yet? | [[sources/open-questions]] |
-    95	| What was built in each lab? | [[sources/devlog-history]] |
-    96	
-    97	## Maintenance
-    98	
-    99	- Last index update: 2026-10-11
-   100	- Total source pages: 11 (+ 9 code snippets)
-   101	- Total concept pages: 14
-   102	- Total entity pages: 7
-   103	- Total bug log entries: 11 (across 13 labs)
+    83	## Quick Reference — Common Questions
+    84	
+    85	| Question | Start here |
+    86	|---|---|
+    87	| How does the AI play the game? | [[concepts/mcp-bridge]] |
+    88	| How do world events work? | [[concepts/world-events]] → [[entities/world-events]] |
+    89	| How is state stored? | [[concepts/state-management]] |
+    90	| How do decisions apply? | [[concepts/decision-pipeline]] |
+    91	| How do I add a new event? | [[concepts/data-pipeline]] → [[entities/world-events]] |
+    92	| How do I add a new UI panel? | [[concepts/mvp-ui]] |
+    93	| How does the event log work? | [[concepts/log-window]] |
+    94	| How does cultivation / breakthrough work? | [[sources/cultivation-system]] |
+    95	| How do I verify the whole loop by hand? | [[sources/vertical-slice-playbook]] |
+    96	| How do I add a new resource? | [[entities/resources]] |
+    97	| What bugs were hit during build? | [[sources/bug-log]] |
+    98	| What's not decided yet? | [[sources/open-questions]] |
+    99	| What was built in each lab? | [[sources/devlog-history]] |
+   100	
+   101	## Maintenance
+   102	
+   103	- Last index update: 2026-10-11
+   104	- Total source pages: 13 (+ 9 code snippets)
+   105	- Total concept pages: 14
+   106	- Total entity pages: 7
+   107	- Total bug log entries: 11 (across 13 labs)
 ````
 
 ### LLMWiki/wiki/conventions.md (3924 bytes)
@@ -4784,7 +4849,7 @@
     1  LLMWiki/wiki/decisions
     7  LLMWiki/wiki/entities
     1  LLMWiki/wiki/schema
-   17  LLMWiki/wiki/sources
+   19  LLMWiki/wiki/sources
     9  LLMWiki/wiki/sources/code-snippets
     1  LLMWiki/wiki/sources/references
     2  McpBridge
@@ -4953,7 +5018,7 @@
     1  UnityProject/Assets/Scenes/VisualDemo
     2  UnityProject/Assets/Scripts
     5  UnityProject/Assets/Scripts/Building
-   17  UnityProject/Assets/Scripts/Core
+   19  UnityProject/Assets/Scripts/Core
     5  UnityProject/Assets/Scripts/Core/Installers
     7  UnityProject/Assets/Scripts/Core/Persistence
     7  UnityProject/Assets/Scripts/Core/Session
@@ -5012,7 +5077,7 @@
     1  UnityProject/Assets/Spine/Runtime
    42  UnityProject/Assets/Spine/Runtime/spine-csharp
   116  UnityProject/Assets/Spine/Runtime/spine-unity
-   50  UnityProject/Assets/Tests/EditMode
+   53  UnityProject/Assets/Tests/EditMode
     2  UnityProject/Assets/TextMesh Pro/Fonts
     3  UnityProject/Assets/TextMesh Pro/Resources
     4  UnityProject/Assets/TextMesh Pro/Resources/Fonts & Materials
@@ -5321,6 +5386,7 @@
   LLMWiki/wiki/sources/code-snippets/TimeSystem.cs.md
   LLMWiki/wiki/sources/code-snippets/UIPresenter-and-UIViewBase.cs.md
   LLMWiki/wiki/sources/code-snippets/WorldEventSystem.cs.md
+  LLMWiki/wiki/sources/cultivation-system.md
   LLMWiki/wiki/sources/devlog-history.md
   LLMWiki/wiki/sources/disciple-visual-system-phase0-results.md
   LLMWiki/wiki/sources/disciple-visual-system.md
@@ -5332,6 +5398,7 @@
   LLMWiki/wiki/sources/sex-gender-system.md
   LLMWiki/wiki/sources/task-system-v2.md
   LLMWiki/wiki/sources/task-system.md
+  LLMWiki/wiki/sources/vertical-slice-playbook.md
   LLMWiki/wiki/sources/visual-demo-scene.md
   McpBridge/Program.cs
   McpBridge/Shared/DiscipleAttributes.cs
@@ -5526,7 +5593,9 @@
   UnityProject/Assets/Scripts/Building/PlaceableLandMask.cs
   UnityProject/Assets/Scripts/Building/PlacementController.cs
   UnityProject/Assets/Scripts/Core/AssignTaskHandler.cs
+  UnityProject/Assets/Scripts/Core/AttemptBreakthroughHandler.cs
   UnityProject/Assets/Scripts/Core/ChangeAvatarPartHandler.cs
+  UnityProject/Assets/Scripts/Core/CultivationMessages.cs
   UnityProject/Assets/Scripts/Core/DecisionExecutor.cs
   UnityProject/Assets/Scripts/Core/DecisionLogger.cs
   UnityProject/Assets/Scripts/Core/GameLifetimeScope.cs
@@ -5911,22 +5980,12 @@
   UnityProject/Assets/Spine/Runtime/spine-unity/Mesh Generation/DoubleBuffered.cs
   UnityProject/Assets/Spine/Runtime/spine-unity/Mesh Generation/MeshGenerator.cs
   UnityProject/Assets/Spine/Runtime/spine-unity/Mesh Generation/MeshRendererBuffers.cs
-  UnityProject/Assets/Spine/Runtime/spine-unity/Mesh Generation/SkeletonRendererInstruction.cs
-  UnityProject/Assets/Spine/Runtime/spine-unity/Mesh Generation/SpineMesh.cs
-  UnityProject/Assets/Spine/Runtime/spine-unity/Modules/TK2D/SpriteCollectionAttachmentLoader.cs
-  UnityProject/Assets/Spine/Runtime/spine-unity/Shaders/Sprite/README.md
-  ... [201 more files truncated — ปรับ TREE_MAX_LINES หรือ .aiignore]
+  ... [208 more files truncated — ปรับ TREE_MAX_LINES หรือ .aiignore]
 ```
 
 ## Recent Wiki Log (last 15 entries, each cut to 400 chars)
 
 ```
-## [2026-10-02] update | Scripts/UI/Views/BottomMenuView.cs + Prefabs/UI/BottomMenuPrefab.prefab | ขยับแถบเมนูล่าง (ปุ่ม สร้าง/ศิษย์/คลัง) ออกจากขอบจอตามฟีดแบ็ก: เดิม bar วางที่ y=0 แล้วปุ่ม 96x95 ลอยอยู่สูงจากขอบล่า�
-## [2026-10-02] new-tool | Assets/Editor/LandMaskPainterWindow.cs + Assets/Editor/LandMaskBuilder.cs | เครื่องมือ Unity Editor สำหรับ mask พื้นที่วางได้ (Xianxia > Land Mask Painter) ไว้ใช้ตอนเปลี่ยนภาพภูเขา/เกาะลอยฟ้าใหม่: หน้าต่างวาดภาพ
-## [2026-10-04] new-feature | Shared/GameMessages.cs (+2 mirrors) + Scripts/Systems/SectStateProvider.cs + Core/TimeSystem.cs + Core/AssignTaskHandler.cs + Core/Installers/InterprocessInstaller.cs + McpBridge/Program.cs | Task System v2 Phase A–C: [Key(9)] OwnerType/[Key(10)] OwnerId + AssignTaskRequest/Response/DiscipleTaskChangedMessage; ISectStateProvider.TryAssignTask (disciple→permission:
-## [2026-10-08] new-feature | Scripts/Shared/MockSectData.cs + Scripts/Systems/SectStateProvider.cs + Tests/EditMode/{TaskRequirementTests,MockStartStateTests,BuildingPlacementTests,BuildingMenuPresenterTests}.cs + LLMWiki/wiki/sources/open-questions.md | Task building-requirements + start-state fix: TaskRequiredBuilding static dict (gathering_herb→herb_plot, refining_elixir→pill_hall, forging
-## [2026-10-08] verify | UnityProject/Assets/Tests/EditMode/MockStartStateTests.cs | P1 (task availability) gap-fill: ยืนยันว่า requirement ทั้งหมด implement อยู่แล้วจาก entry ก่อนหน้า (TaskRequiredBuilding + IsTaskAvailable side-effect-free + TryAssignTask gate + TickGathering/TickCrafting per-tick DefId set; forge ใน build
-## [2026-10-08] verify | UnityProject/Assets/Tests/EditMode/MockStartStateTests.cs | P2 (fresh mock state consistency) gap-fill: ยืนยัน state เริ่มต้นถูกต้องอยู่แล้ว (b001 herb_plot เดียวที่ (-11,-8) rot 0 บน grid 50x50 origin -25,-25 — test วัดผ่าน mask จริง ไม่ใช่คำเคลม�
 ## [2026-10-08] new-feature | Scripts/UI/Views/TaskAssignmentView.cs + Scripts/UI/Presenters/TaskAssignmentPresenter.cs + Scripts/UI/Core/UIPresenterKind.cs + Scripts/UI/Core/UIService.cs + Scripts/Core/Installers/UIInstaller.cs + Scripts/Core/TimeSystem.cs + Scripts/Systems/SectStateProvider.cs + Editor/TaskAssignmentPanelGenerator.cs + Scripts/UI/Presenters/BottomMenuPresenter.cs + Scripts/UI/Sy
 ## [2026-10-08] new-feature | Shared/GameMessages.cs (+2 mirrors) + Scripts/Core/TimeSystem.cs + Scripts/Systems/SectStateProvider.cs + Editor/LocalOwnershipHarness.cs + Tests/EditMode/OwnershipHarnessTests.cs + Tests/EditMode/DiscipleListPresenterTests.cs | P4 local ownership test harness: ใช้ DiscipleOwnerType/OwnerId เดิม (ไม่เพิ่ม ControllerViewerId หรือ e
 ## [2026-10-08] new-feature | Shared/GameMessages.cs (+2 mirrors) + Scripts/Core/OwnershipObservability.cs + Scripts/Core/Installers/{GameplayInstaller,InterprocessInstaller}.cs + Editor/LocalOwnershipHarness.cs (resolve fix) + McpBridge/Program.cs + Tests/EditMode/OwnershipHarnessTests.cs | P4 observability: bridge อ่าน log การเปลี่ยนเจ้าของได้ โ�
@@ -5936,5 +5995,11 @@
 ## [2026-10-09] update | Shared/MockSectData.cs (+2 mirrors) + Tests/EditMode/{MockStartStateTests,BuildingPlacementTests,BuildingMenuPresenterTests,AssignTaskTests,TaskRequirementTests,HybridPermissionTests,TaskObservabilityTests,OwnershipHarnessTests,TaskAssignmentPresenterTests}.cs + LLMWiki/wiki/log.md | Start state = no buildings at all: ลบ herb_plot b001 ที่ (-11,-8) ออกจ�
 ## [2026-10-11] bugfix | Scripts/UI/Core/UIPanelHandle.cs + Scripts/UI/Core/UIService.cs + Scripts/UI/Systems/WorldEventUISystem.cs + Tests/EditMode/EventPopupLiteTests.cs | P13B popup-restore crash: session boundary destroy session UI โดยไม่ผ่าน UIService.Close → cached UIPanelHandle ยังชี้ไปที่ instance ที่ตายแล้ว; View ถูก ty
 ## [2026-10-11] update | .gitignore + project_summary.md (new) + AGENTS.md (new) + .ai/context-pack.md | housekeeping: (1) untrack generated output — git rm --cached UnityProject/{Logs,UserSettings,Temp} + McpBridge/{bin,obj} + UnityProject/{MessagePipe.Interprocess,Xianxia.Sect.Runtime}.csproj (97 ไฟล์; ไฟล์ยังอยู่บน disk) เพราะถูก commit คร
+## [2026-10-11] new-page | wiki/sources/cultivation-system.md | P14 (สายบำเพ็ญ) design ฉบับปรับปรุง — เขียนหลัง ship (P14A model+accrual, P14B breakthrough+UI) จึงไม่มี "แผนก่อนลงมือ" บนดิสก์เลย: เอกสารรวม stage table append-only 4 ขั้น (qi_condensatio
+## [2026-10-11] wire | wiki/index.md | เพิ่ม [[sources/cultivation-system]] เข้า Sources (11→12 หน้า + อัปเดต Maintenance counter) และเพิ่มแถว Quick Reference "How does cultivation / breakthrough work?"
+## [2026-10-11] regenerate | .ai/context-pack.md | รัน ./build-context.sh หลังเพิ่มหน้า P14 (exit 0, 5,919 บรรทัด / 360,524 bytes ≈ 120k tokens, ไม่มี Missing section) — pack ดึง index.md ที่ wiring แล้ว + log 2 entry ใหม่ครบ; หมายเหตุ: หน้านี้ยังไม่อยู่ใ�
+## [2026-10-11] new-tool | Shared/GameMessages.cs (+2 mirrors) + Core/AttemptBreakthroughHandler.cs + Core/Installers/InterprocessInstaller.cs + McpBridge/Program.cs + Tests/EditMode/{CultivationBreakthroughTests,MainThreadDispatchTests,GameSessionCoordinatorTests}.cs | P14B follow-up — MCP write tool ตัวที่สอง `attempt_breakthrough`: เพิ่ม `AttemptBreakthroughRequest
+## [2026-10-11] new-page | wiki/sources/vertical-slice-playbook.md | P15 — ทดสอบทั้งเกมเป็นหนึ่งเส้นทางโดยไม่ต้องมี Twitch: (1) coverage 12 integration tests ใน `Tests/EditMode/VerticalSliceIntegrationTests.cs` ขับ service จริง (full path Title→NewGame→assign→Auto→decision→Save→Continue,
+## [2026-10-11] wire | wiki/index.md | เพิ่ม [[sources/vertical-slice-playbook]] เข้า Sources (12→13 หน้า) + Quick Reference "How do I verify the whole loop by hand?" + Maintenance counter
 ```
 
