@@ -143,7 +143,7 @@ namespace Xianxia.Sect.UI
 
         /// <summary>True only while the chip's instance is still alive (a session end destroys it).</summary>
         private bool ChipAlive =>
-            _chip != null && _chip.View != null && _chip.View.GameObject != null;
+            _chip != null && _chip.IsAlive;
 
         /// <summary>
         /// Re-open the chip after a session boundary destroyed it. A panel missing from the
@@ -187,7 +187,7 @@ namespace Xianxia.Sect.UI
             if (!shouldRaise || _chipRaised) return;
 
             _chipRaised = true;
-            if (_chip.View.GameObject != null) _chip.View.GameObject.transform.SetAsLastSibling();
+            _chip.View.GameObject.transform.SetAsLastSibling();   // ChipAlive was checked by the caller
         }
 
         private void OpenPopup()

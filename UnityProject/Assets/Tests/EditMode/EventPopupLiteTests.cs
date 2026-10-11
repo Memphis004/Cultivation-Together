@@ -529,6 +529,157 @@ namespace Xianxia.Sect.Tests
             Assert.IsTrue(chip.isActiveAndEnabled, "and it reports the pending event it found in authoritative state");
         }
 
+        // ------------------------------------------------- 7. session boundary (P13C fix)
+
+        /// <summary>
+        /// A probe view whose GameObject read throws once it is "gone" — the Play-mode behaviour of
+        /// a destroyed MonoBehaviour (a real play test produced exactly this MissingReferenceException
+        /// out of the world-event refresh). EditMode's DestroyImmediate returns null from that read
+        /// instead, so the destroyed-instance test below cannot distinguish the two implementations:
+        /// this fake can.
+        /// </summary>
+        private sealed class ViewThatThrowsOnceGone : MonoBehaviour, IUIView
+        {
+            public bool Gone;
+            public GameObject GameObject =>
+                Gone ? throw new MissingReferenceException("probe: the view instance is gone") : gameObject;
+            public void Show() { }
+            public void Hide() { }
+        }
+
+        [Test]
+        public void PanelHandle_IsAlive_ChecksUnityLifetime_WithoutReadingAMemberOfTheView()
+        {
+            var go = new GameObject("EventPopupTest_ProbeView", typeof(RectTransform));
+            _tempRoots.Add(go);
+            var view = go.AddComponent<ViewThatThrowsOnceGone>();
+            var handle = new UIPanelHandle("Probe", view, null);
+
+            Assert.IsTrue(handle.IsAlive, "a live view is alive");
+
+            // The Unity object itself is still alive, but ANY member read on it blows up. IsAlive
+            // must decide from the object's Unity lifetime alone (`view is UnityEngine.Object o &&
+            // o != null`), never from `View != null` + `View.GameObject` — the interface-typed
+            // reference compares non-null for a destroyed view, so that pair reads a dead member.
+            view.Gone = true;
+            Assert.DoesNotThrow(() => Assert.IsTrue(handle.IsAlive),
+                                "IsAlive must not read a member of the view");
+        }
+
+        /// <summary>
+        /// A panel handle outlives its instance whenever something destroys the instance without
+        /// going through UIService.Close — every session boundary does exactly that to the session
+        /// UI. The handle's View is typed as the INTERFACE IUIView, so `View != null` is a plain
+        /// reference test that a destroyed view PASSES; the next Unity member read then throws
+        /// MissingReferenceException (UIViewBase.GameObject => gameObject).
+        ///
+        /// Behaviour guard for the damage that caused (a real play test): the throw came out of the
+        /// world-event per-frame refresh every frame after a session boundary, which aborted the
+        /// refresh BEFORE the pending-event branch — a restored pending event kept its state but
+        /// never got a popup to answer it in. See
+        /// PanelHandle_IsAlive_ChecksUnityLifetime_WithoutReadingAMemberOfTheView for the mechanism.
+        /// </summary>
+        [Test]
+        public void PanelHandle_IsAlive_SeesDestroyedViewAsDead_InsteadOfThrowing()
+        {
+            var uiRootGo = new GameObject("EventPopupTest_UIRoot4", typeof(RectTransform));
+            _tempRoots.Add(uiRootGo);
+            var uiRoot = uiRootGo.AddComponent<UIRoot>();
+            var catalog = AssetDatabase.LoadAssetAtPath<UIPanelCatalog>(CatalogPath);
+            Assert.IsNotNull(catalog, "the generated MainPanelCatalog must exist");
+
+            var builder = new ContainerBuilder();
+            builder.RegisterMessagePipe();
+            builder.RegisterInstance(_time);
+            builder.RegisterInstance<ISectStateProvider>(_provider);
+            builder.Register<DecisionExecutor>(Lifetime.Singleton);
+            builder.Register<EventPopupPresenter>(Lifetime.Transient);
+            builder.Register<WorldEventChipPresenter>(Lifetime.Transient);
+            builder.RegisterInstance(uiRoot);
+            builder.RegisterInstance(catalog);
+            builder.Register<UIService>(Lifetime.Singleton);
+            var container = builder.Build();
+            _tempCleanup.Add(container.Dispose);
+
+            var handle = container.Resolve<UIService>().Open("EventChip", new WorldEventChipArgs());
+            Assert.IsTrue(handle.IsAlive, "a freshly opened panel is alive");
+
+            UnityEngine.Object.DestroyImmediate(handle.View.GameObject);
+
+            Assert.IsNotNull(handle.View, "the interface-typed reference still compares non-null - which is why IsAlive exists");
+            Assert.IsFalse(handle.IsAlive, "a destroyed view must read as DEAD, not throw");
+        }
+
+        /// <summary>
+        /// The live reproduction (found by a play test): decide/raise an event, let the chip exist,
+        /// then destroy the chip instance the way the session closer does. The next refresh must
+        /// survive it AND a pending event — here one WITH a speaker — must still get its popup,
+        /// with the speaker area rendered from the authoritative state.
+        /// </summary>
+        [Test]
+        public void SessionBoundary_DestroyingTheChip_StillGivesAPendingEventItsPopupBack()
+        {
+            var uiRootGo = new GameObject("EventPopupTest_UIRoot5", typeof(RectTransform));
+            _tempRoots.Add(uiRootGo);
+            var uiRoot = uiRootGo.AddComponent<UIRoot>();
+            var catalog = AssetDatabase.LoadAssetAtPath<UIPanelCatalog>(CatalogPath);
+            Assert.IsNotNull(catalog, "the generated MainPanelCatalog must exist");
+
+            var builder = new ContainerBuilder();
+            builder.RegisterMessagePipe();
+            builder.RegisterInstance(_time);
+            builder.RegisterInstance<ISectStateProvider>(_provider);
+            builder.Register<DecisionExecutor>(Lifetime.Singleton);
+            builder.Register<EventPopupPresenter>(Lifetime.Transient);
+            builder.Register<WorldEventChipPresenter>(Lifetime.Transient);
+            builder.RegisterInstance(uiRoot);
+            builder.RegisterInstance(catalog);
+            builder.Register<UIService>(Lifetime.Singleton);
+            var container = builder.Build();
+            _tempCleanup.Add(container.Dispose);
+
+            var uiSystem = new WorldEventUISystem(
+                container.Resolve<ISubscriber<WorldEventTriggeredMessage>>(),
+                container.Resolve<UIService>(),
+                _time);
+            _tempCleanup.Add(uiSystem.Dispose);
+            var triggerPublisher = container.Resolve<IPublisher<WorldEventTriggeredMessage>>();
+
+            // A decision event WITH a speaker (d001 is in MockSectData's roster, so the presenter
+            // can re-derive the portrait — the portrait itself is never carried).
+            _time.RaiseWorldEvent(EventId, "Raiders at the gate.", true, ChoiceInfos(ChoiceIds), "d001", "Lin Feng");
+            uiSystem.Start();
+
+            var popup = FindChild<EventPopupView>(uiRoot.transform);
+            Assert.IsNotNull(popup, "the popup opens for the pending event");
+            Assert.IsTrue(popup.SpeakerVisibleForTest, "the popup renders the speaker area");
+            Assert.AreEqual("Lin Feng", popup.SpeakerNameForTest);
+
+            var chip = FindChild<WorldEventChipView>(uiRoot.transform);
+            Assert.IsNotNull(chip, "the chip exists while the popup is the signal");
+
+            // The session boundary destroys the chip instance out from under the handle.
+            UnityEngine.Object.DestroyImmediate(chip.gameObject);
+
+            // Production: the per-frame canvas hook re-derives everything from this state.
+            triggerPublisher.Publish(new WorldEventTriggeredMessage
+            {
+                EventId = EventId,
+                RequiresDecision = true,
+                Description = "Raiders at the gate.",
+            });
+
+            Assert.IsNotNull(FindChild<WorldEventChipView>(uiRoot.transform),
+                             "the dead chip handle is replaced instead of used");
+            var popupAfter = FindChild<EventPopupView>(uiRoot.transform);
+            Assert.IsNotNull(popupAfter, "a pending event still gets its popup after a session boundary");
+            Assert.AreEqual(EventId, popupAfter.TitleForTest);
+            Assert.IsTrue(popupAfter.SpeakerVisibleForTest, "and it still renders the speaker");
+            Assert.AreEqual("Lin Feng", popupAfter.SpeakerNameForTest);
+            Assert.IsTrue(popupAfter.IsChoiceInteractableForTest("pay_tribute"),
+                          "the restored event is still answerable");
+        }
+
         private static T FindChild<T>(Transform parent) where T : Component
         {
             for (int i = 0; i < parent.childCount; i++)

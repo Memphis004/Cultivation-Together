@@ -23,15 +23,25 @@ namespace Xianxia.Sect.UI
         {
             if (_openPanels.TryGetValue(panelId, out var existing))
             {
-                existing.View.Show();
-                // Z-order fix (§6.1): Show() only flips activeSelf — without this a
-                // panel re-opened after panels created LATER sits underneath them
-                // (DiscipleDetail opened via DiscipleList hides behind the list).
-                // Hide()/Show() panels (DiscipleDetail) never re-parent, so this one
-                // line is the whole fix — no other presenter touched.
-                existing.View.GameObject.transform.SetAsLastSibling();
-                existing.Presenter.OnOpen(args);
-                return existing;
+                // The cached instance may have been destroyed without going through
+                // Close() (a session boundary destroying the session UI, a scene unload).
+                // Using it through the interface-typed handle would throw
+                // MissingReferenceException on the first Unity member read, so a dead
+                // handle is dropped and the panel is rebuilt below instead.
+                if (existing.IsAlive)
+                {
+                    existing.View.Show();
+                    // Z-order fix (§6.1): Show() only flips activeSelf — without this a
+                    // panel re-opened after panels created LATER sits underneath them
+                    // (DiscipleDetail opened via DiscipleList hides behind the list).
+                    // Hide()/Show() panels (DiscipleDetail) never re-parent, so this one
+                    // line is the whole fix — no other presenter touched.
+                    existing.View.GameObject.transform.SetAsLastSibling();
+                    existing.Presenter.OnOpen(args);
+                    return existing;
+                }
+
+                _openPanels.Remove(panelId);
             }
 
             var definition = _catalog.Get(panelId);
@@ -73,7 +83,9 @@ namespace Xianxia.Sect.UI
         public bool TrySetVisible(string panelId, bool visible)
         {
             if (!_openPanels.TryGetValue(panelId, out var handle)) return false;
-            if (handle.View == null || handle.View.GameObject == null) return false;
+            // IsAlive, not "View == null": the interface-typed reference never reads as null
+            // for a destroyed instance, and the GameObject read below would throw.
+            if (!handle.IsAlive) return false;
 
             if (handle.View.GameObject.activeSelf == visible) return false;
 
@@ -109,10 +121,18 @@ namespace Xianxia.Sect.UI
             if (!_openPanels.TryGetValue(panelId, out var handle)) return;
 
             handle.Presenter.OnClose();
-            handle.View.Hide();
+
+            // The instance can already be gone (see IsAlive): Hide()/GameObject would throw and
+            // leave the presenter undisposed, so the Unity half is guarded and the presenter is
+            // released either way.
+            if (handle.IsAlive)
+            {
+                handle.View.Hide();
+            }
+
             handle.Presenter.Dispose();
 
-            if (handle.View.GameObject != null)
+            if (handle.IsAlive)
             {
                 // Destroy() is a no-op-with-an-error outside Play Mode ("Destroy may not be
                 // called from edit mode") — EditMode tests and editor tooling close panels too,
