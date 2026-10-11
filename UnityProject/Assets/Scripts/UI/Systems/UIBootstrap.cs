@@ -47,12 +47,14 @@ namespace Xianxia.Sect.UI
             _uiService.Open("LogWindow");
             _uiService.Open("BottomMenu");
             OpenTimeControl();
+            OpenTitleMenu();
             // _uiService.Open("AvatarCustomization", new AvatarCustomizationPayload("d001"));
 
             WireResourcePopup();
             WireDiscipleList();
             WireBuildModeToggle();
             WireTaskAssignment();
+            WireIngameMenu();
 
             // Subscribe to scene loads for scene-specific UI setup if needed.
             // Currently scene-specific UI (EventPopup) is handled by
@@ -279,6 +281,86 @@ namespace Xianxia.Sect.UI
                                  "(" + ex.Message + ")");
             }
         }
+
+        /// <summary>
+        /// P12B — the Title screen. Opened once, here, like the other always-on panels: it is
+        /// persistent infrastructure ("TitleMenu" is in SessionUiCloser's keep-list), and its own
+        /// presenter shows/hides it from the authoritative session phase. A project that has not
+        /// run the generator yet gets the same clear instruction instead of a crash — and the game
+        /// still boots, it just has no Title UI (which is exactly the pre-P12B behaviour).
+        /// </summary>
+        private void OpenTitleMenu()
+        {
+            try
+            {
+                _uiService.Open("TitleMenu");
+            }
+            catch (System.Exception ex)
+            {
+                Debug.LogWarning("[UIBootstrap] TitleMenu panel is not in the catalog yet - " +
+                                 "run menu: Xianxia → Generate TitleMenu Panel (once, in edit mode). " +
+                                 "(" + ex.Message + ")");
+            }
+        }
+
+        /// <summary>
+        /// P12B — the menu button on the time-control bar opens the in-game menu (Save / Return to
+        /// Title). Wired like the bottom-menu buttons (WarehouseButton / TaskAssignmentButton):
+        /// UIBootstrap owns the open/close of the panel, the time-control presenter knows nothing
+        /// about it. The button is only reachable while a session is Playing, because the whole
+        /// bar is session UI.
+        /// </summary>
+        private void WireIngameMenu()
+        {
+            UIPanelHandle timeControl;
+            try
+            {
+                timeControl = _uiService.Open("TimeControl"); // deduped: returns the open handle
+            }
+            catch (System.Exception)
+            {
+                return; // OpenTimeControl already logged the fix instruction
+            }
+
+            var view = timeControl.View as TimeControlView;
+            if (view != null && view.MenuButton != null)
+            {
+                view.MenuButton.onClick.AddListener(ToggleIngameMenu);
+            }
+        }
+
+        private void ToggleIngameMenu()
+        {
+            if (_ingameMenuOpen)
+            {
+                _uiService.Close("IngameMenu");
+                _ingameMenuOpen = false;
+                return;
+            }
+
+            try
+            {
+                _uiService.Open("IngameMenu", new IngameMenuArgs
+                {
+                    CloseCallback = OnIngameMenuCloseRequested,
+                });
+                _ingameMenuOpen = true;
+            }
+            catch (System.Exception ex)
+            {
+                Debug.LogWarning("[UIBootstrap] IngameMenu panel is not in the catalog yet - " +
+                                 "run menu: Xianxia → Generate IngameMenu Panel (once, in edit mode). " +
+                                 "(" + ex.Message + ")");
+            }
+        }
+
+        private void OnIngameMenuCloseRequested()
+        {
+            _uiService.Close("IngameMenu");
+            _ingameMenuOpen = false;
+        }
+
+        private bool _ingameMenuOpen;
 
         private void OnSceneLoaded(SceneLoadedMessage msg)
         {

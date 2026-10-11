@@ -22,6 +22,11 @@ namespace Xianxia.Sect.EditorTools
     /// left into the freed 76px, keeping the SAME gaps (6 / 4 / 4 / 8) and the same
     /// 8px margins, so the row rhythm is unchanged; the status label takes the freed
     /// width (226 → 302) and stays on the same baseline.
+    ///
+    /// P12B added the in-game menu button at the END of the bar, and widened the bar
+    /// 560 → 640 rather than moving anything: pause/1x/2x/3x keep their exact
+    /// positions, the status baseline is unchanged, and the new 80px button takes
+    /// 552..632 with an 8px right margin (status 250..544).
     /// Re-running REPLACES the existing prefab asset — the menu asks first, the
     /// remote-control path (GenerateNonInteractive) does not.
     /// </summary>
@@ -66,7 +71,7 @@ namespace Xianxia.Sect.EditorTools
             rootRt.anchorMin = new Vector2(0f, 1f);
             rootRt.anchorMax = new Vector2(0f, 1f);
             rootRt.pivot = new Vector2(0f, 1f);
-            rootRt.sizeDelta = new Vector2(560f, 56f);
+            rootRt.sizeDelta = new Vector2(640f, 56f);
             rootRt.anchoredPosition = new Vector2(12f, -110f);
             root.GetComponent<Image>().color = new Color(0f, 0f, 0f, 0.55f);
 
@@ -76,18 +81,19 @@ namespace Xianxia.Sect.EditorTools
                                  " — labels would fall back to the default font (no Thai glyphs)");
 
             // E1.1 layout: pause 8..78, 6 gap, 1x 84..134, 4 gap, 2x 138..188,
-            // 4 gap, 3x 192..242, 8 gap, status 250..552 (8px right margin).
+            // 4 gap, 3x 192..242, 8 gap, status 250..544, 8 gap, menu 552..632.
             var pauseButton = CreateButton(root.transform, "PauseButton", "หยุด", thaiFont, 8f, 70f);
             var speed1 = CreateButton(root.transform, "Speed1Button", "1x", thaiFont, 84f, 50f);
             var speed2 = CreateButton(root.transform, "Speed2Button", "2x", thaiFont, 138f, 50f);
             var speed3 = CreateButton(root.transform, "Speed3Button", "3x", thaiFont, 192f, 50f);
+            var menuButton = CreateButton(root.transform, "MenuButton", "เมนู", thaiFont, 552f, 80f);
 
             var status = CreateText(root.transform, "StatusText", "กำลังเดิน 1x", thaiFont);
             var statusRt = status.rectTransform;
             statusRt.anchorMin = new Vector2(0f, 0.5f);
             statusRt.anchorMax = new Vector2(0f, 0.5f);
             statusRt.pivot = new Vector2(0f, 0.5f);
-            statusRt.sizeDelta = new Vector2(302f, 40f);
+            statusRt.sizeDelta = new Vector2(294f, 40f);
             statusRt.anchoredPosition = new Vector2(250f, 0f);
             status.alignment = TextAlignmentOptions.MidlineLeft;
             status.fontSize = 24;
@@ -98,6 +104,7 @@ namespace Xianxia.Sect.EditorTools
             so.FindProperty("speed1Button").objectReferenceValue = speed1;
             so.FindProperty("speed2Button").objectReferenceValue = speed2;
             so.FindProperty("speed3Button").objectReferenceValue = speed3;
+            so.FindProperty("menuButton").objectReferenceValue = menuButton;
             so.FindProperty("statusText").objectReferenceValue = status;
             so.ApplyModifiedPropertiesWithoutUndo();
 

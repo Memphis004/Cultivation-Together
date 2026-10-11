@@ -50,6 +50,7 @@ namespace Xianxia.Sect
         private readonly TaskChangeObservabilityBuffer _taskChange;
         private readonly ISessionUiCloser _uiCloser;
         private readonly IPublisher<SessionPhaseChangedMessage> _phasePublisher;
+        private readonly SessionRuntimeConfig _runtimeConfig;
 
         private GameSessionPhase _phase = GameSessionPhase.Title;
         private bool _transitioning;
@@ -68,7 +69,8 @@ namespace Xianxia.Sect
             OwnershipObservabilityBuffer ownership = null,
             TaskChangeObservabilityBuffer taskChange = null,
             ISessionUiCloser uiCloser = null,
-            IPublisher<SessionPhaseChangedMessage> phasePublisher = null)
+            IPublisher<SessionPhaseChangedMessage> phasePublisher = null,
+            SessionRuntimeConfig runtimeConfig = null)
         {
             _sceneLoader = sceneLoader;
             _snapshots = snapshots;
@@ -81,6 +83,7 @@ namespace Xianxia.Sect
             _taskChange = taskChange;
             _uiCloser = uiCloser;
             _phasePublisher = phasePublisher;
+            _runtimeConfig = runtimeConfig;
 
             // P12A — the coordinator starts in Title, so the simulation clock is inactive
             // from construction rather than from the first transition: nothing may tick —
@@ -96,14 +99,32 @@ namespace Xianxia.Sect
         public int CompletedTransitions => _completedTransitions;
 
         /// <summary>
-        /// Entry point — boot default. There is no Title prefab yet, so the boot behaviour
-        /// (gameplay auto-loads) is preserved by immediately requesting a New Game. When
-        /// the Title UI lands this becomes a user-driven call and nothing else changes.
+        /// Entry point — boot default.
+        ///
+        /// P12B §6: <see cref="SessionRuntimeConfig.StartAtTitle"/> (default true) decides what
+        /// boot means. True → stay in <see cref="GameSessionPhase.Title"/> and let the Title panel
+        /// drive New Game / Continue: no session exists, so the simulation clock stays inactive
+        /// (set in the constructor) and the session HUD is hidden here, not by the UI, so the
+        /// authoritative state and the screen can never disagree. False → the pre-P12B
+        /// quick-start behaviour (immediately request a New Game), which is what dev/verify
+        /// Play-mode runs want.
         /// </summary>
         public void Start()
         {
             if (_disposed) return;
-            Debug.Log("[GameSessionCoordinator] boot: no Title UI yet — starting a new game session");
+
+            if (_runtimeConfig != null && _runtimeConfig.StartAtTitle)
+            {
+                // UIBootstrap opens the persistent HUD panels around this call (entry-point
+                // order is registration order), so hiding them here is what keeps the Title
+                // screen from showing gameplay UI. SetPhase cannot do it for us: the phase is
+                // already Title and never changed.
+                _uiCloser?.SetSessionUiVisible(false);
+                Debug.Log("[GameSessionCoordinator] boot: StartAtTitle=true — waiting at the Title screen");
+                return;
+            }
+
+            Debug.Log("[GameSessionCoordinator] boot: StartAtTitle=false — starting a new game session");
             StartNewGameAsync().Forget();
         }
 
@@ -356,6 +377,14 @@ namespace Xianxia.Sect
             if (_phase == next) return;
             var previous = _phase;
             _phase = next;
+
+            // P12B §4 — the session HUD belongs to a live session only. Hiding/showing it HERE
+            // means every path (New Game, Load, Return to Title, a failed transition) is covered
+            // by one line, and it happens before the message so subscribers observe the phase
+            // they are being told about. It never closes anything: the persistent panels keep
+            // their instances and wiring (that is what SessionUiCloser's keep-list is for).
+            _uiCloser?.SetSessionUiVisible(next == GameSessionPhase.Playing);
+
             _phasePublisher?.Publish(new SessionPhaseChangedMessage { Previous = previous, Current = next });
         }
 

@@ -566,6 +566,12 @@ namespace Xianxia.Sect.Tests
         {
             public int CloseCount;
             public int CloseSessionUi() { CloseCount++; return 1; }
+
+            // P12B — the coordinator also drives HUD visibility from SetPhase; counted here so a
+            // test can tell the two apart.
+            public int VisibleCount;
+            public bool? LastVisible;
+            public int SetSessionUiVisible(bool visible) { VisibleCount++; LastVisible = visible; return 0; }
         }
 
         private sealed class FakeSessionGate : ISessionGate

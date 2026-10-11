@@ -44,6 +44,7 @@ namespace Xianxia.Sect
         private readonly ISubscriber<BuildModeStartedMessage> _buildStartedSubscriber;
         private readonly ISubscriber<BuildModeEndedMessage> _buildEndedSubscriber;
         private readonly ISubscriber<SessionRestoredMessage> _sessionRestoredSubscriber;
+        private readonly ISubscriber<SessionPhaseChangedMessage> _sessionPhaseSubscriber; // P12B
         private readonly CameraFramingConfig _framing;
 
         private Transform _ghostRoot;
@@ -65,7 +66,8 @@ namespace Xianxia.Sect
             ISubscriber<BuildModeStartedMessage> buildStartedSubscriber,
             ISubscriber<BuildModeEndedMessage> buildEndedSubscriber,
             ISubscriber<SessionRestoredMessage> sessionRestoredSubscriber,
-            CameraFramingConfig framing)
+            CameraFramingConfig framing,
+            ISubscriber<SessionPhaseChangedMessage> sessionPhaseSubscriber = null)
         {
             // fallback (grid ไม่ถูก inject — ทดสอบ/edge case): ขนาด+origin ตรง overlay
             _grid = grid ?? new BuildingGrid(
@@ -78,6 +80,7 @@ namespace Xianxia.Sect
             _buildStartedSubscriber = buildStartedSubscriber;
             _buildEndedSubscriber = buildEndedSubscriber;
             _sessionRestoredSubscriber = sessionRestoredSubscriber;
+            _sessionPhaseSubscriber = sessionPhaseSubscriber;
             _framing = framing;
         }
 
@@ -92,6 +95,38 @@ namespace Xianxia.Sect
             _buildStartedSubscriber.Subscribe(OnBuildModeStarted);
             _buildEndedSubscriber.Subscribe(OnBuildModeEnded);
             _sessionRestoredSubscriber.Subscribe(OnSessionRestored); // P11A
+            // P12B §5 — clear the derived scene visuals at the session boundary.
+            _sessionPhaseSubscriber?.Subscribe(OnSessionPhaseChanged);
+        }
+
+        /// <summary>
+        /// P12B §5 — the marker/ghost GameObjects this system creates are NOT parented into the
+        /// gameplay scene (nothing calls <c>SceneManager.SetActiveScene</c>, so <c>new GameObject</c>
+        /// lands in the persistent core scene). Unloading the gameplay scene therefore does NOT
+        /// destroy them: without this they would survive Return to Title as leftover visuals, and
+        /// they rebuild from the restored state on the next New Game / Load anyway
+        /// (<see cref="OnSessionRestored"/>).
+        ///
+        /// Only <see cref="GameSessionPhase.Title"/> clears them: a Playing phase arrives AFTER the
+        /// restore that rebuilt them, so reacting to "not Playing" would erase the fresh session's
+        /// markers.
+        /// </summary>
+        private void OnSessionPhaseChanged(SessionPhaseChangedMessage message)
+        {
+            if (message.Current != GameSessionPhase.Title) return;
+
+            HideGhostVisuals();
+            ClearPlacedMarkers();
+        }
+
+        /// <summary>Destroy every placed marker (the transform root itself is kept and reused).</summary>
+        private void ClearPlacedMarkers()
+        {
+            foreach (var pair in _placedMarkers)
+            {
+                if (pair.Value != null) Object.Destroy(pair.Value.gameObject);
+            }
+            _placedMarkers.Clear();
         }
 
         /// <summary>

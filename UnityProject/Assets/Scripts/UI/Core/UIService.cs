@@ -61,6 +61,30 @@ namespace Xianxia.Sect.UI
         }
 
         /// <summary>
+        /// P12B — show or hide an ALREADY-OPEN panel without closing it. Closing runs
+        /// presenter OnClose/Dispose and destroys the instance (which would detach the
+        /// persistent HUD's button wiring); this only flips the view's active state, so the
+        /// instance, its subscriptions and its wiring survive a Title detour.
+        ///
+        /// Returns true only when the panel was open and its visibility really changed — a view
+        /// that refuses to show (e.g. the time-control bar while no session is Playing) reports
+        /// false rather than pretending it is visible.
+        /// </summary>
+        public bool TrySetVisible(string panelId, bool visible)
+        {
+            if (!_openPanels.TryGetValue(panelId, out var handle)) return false;
+            if (handle.View == null || handle.View.GameObject == null) return false;
+
+            if (handle.View.GameObject.activeSelf == visible) return false;
+
+            if (visible) handle.View.Show();
+            else handle.View.Hide();
+
+            var go = handle.View.GameObject;
+            return go != null && go.activeSelf == visible;
+        }
+
+        /// <summary>
         /// P12A — close every open panel except the supplied persistent ids (null/empty
         /// closes them all). Each close runs the presenter's OnClose/Dispose and destroys
         /// the panel instance, exactly like <see cref="Close"/>. Returns how many panels
@@ -90,7 +114,11 @@ namespace Xianxia.Sect.UI
 
             if (handle.View.GameObject != null)
             {
-                UnityEngine.Object.Destroy(handle.View.GameObject);
+                // Destroy() is a no-op-with-an-error outside Play Mode ("Destroy may not be
+                // called from edit mode") — EditMode tests and editor tooling close panels too,
+                // so the mode picks the call instead of leaving the instance behind.
+                if (Application.isPlaying) UnityEngine.Object.Destroy(handle.View.GameObject);
+                else UnityEngine.Object.DestroyImmediate(handle.View.GameObject);
             }
 
             _openPanels.Remove(panelId);
@@ -112,6 +140,8 @@ namespace Xianxia.Sect.UI
                 case UIPresenterKind.DiscipleList: return typeof(DiscipleListPresenter);
                 case UIPresenterKind.TimeControl: return typeof(TimeControlPresenter);
                 case UIPresenterKind.EventChip: return typeof(WorldEventChipPresenter);
+                case UIPresenterKind.TitleMenu: return typeof(TitleMenuPresenter);
+                case UIPresenterKind.IngameMenu: return typeof(IngameMenuPresenter);
                 default:
                     throw new ArgumentOutOfRangeException(nameof(kind), kind, null);
             }

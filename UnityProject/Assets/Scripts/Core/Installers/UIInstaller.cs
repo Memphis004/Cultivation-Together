@@ -37,6 +37,8 @@ namespace Xianxia.Sect.Installers
             builder.Register<TaskAssignmentPresenter>(Lifetime.Transient); // P3: มอบหมายงาน (draft/confirm)
             builder.Register<TimeControlPresenter>(Lifetime.Transient); // E1: แถบควบคุมเวลา (pause/1x/2x/3x — E1.1 ตัดปุ่ม Play ออก)
             builder.Register<WorldEventChipPresenter>(Lifetime.Transient); // E3: ชิป "มีเหตุการณ์รอตัดสินใจ"
+            builder.Register<TitleMenuPresenter>(Lifetime.Transient); // P12B: หน้าจอชื่อเกม (เล่นใหม่ / เล่นต่อ / ออก)
+            builder.Register<IngameMenuPresenter>(Lifetime.Transient); // P12B: เมนูระหว่างเล่น (บันทึก / กลับหน้าจอชื่อเกม)
             builder.RegisterEntryPoint<DiscipleDetailUISystem>(Lifetime.Singleton); // Phase 4: message → panel
             builder.RegisterEntryPoint<WorldEventUISystem>(Lifetime.Singleton);
             builder.RegisterEntryPoint<UIBootstrap>(Lifetime.Singleton);

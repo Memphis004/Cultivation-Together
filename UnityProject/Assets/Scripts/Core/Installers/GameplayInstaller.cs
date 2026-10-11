@@ -122,6 +122,10 @@ namespace Xianxia.Sect.Installers
             // buffer it clears is already constructed + subscribed before its own Start()
             // drives the boot session. Exposed as ISessionGate so the MCP mutation handlers
             // (registered above) can refuse calls outside Playing.
+            // P12B — boot behaviour (StartAtTitle, default true) as a real config, not a
+            // hard-coded branch: same plain-C# singleton convention as TimeRuntimeConfig /
+            // WorldEventRuntimeConfig. Set XIANXIA_START_AT_TITLE=0 to keep the old quick start.
+            builder.RegisterInstance(SessionRuntimeConfig.Instance);
             builder.Register<IStarterStateFactory, PrototypeStarterStateFactory>(Lifetime.Singleton);
             builder.Register<ISessionUiCloser, SessionUiCloser>(Lifetime.Singleton);
             builder.RegisterEntryPoint<GameSessionCoordinator>(Lifetime.Singleton)

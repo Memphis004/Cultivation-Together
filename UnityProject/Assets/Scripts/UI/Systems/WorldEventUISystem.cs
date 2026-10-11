@@ -29,26 +29,38 @@ namespace Xianxia.Sect.UI
         private readonly ISubscriber<WorldEventTriggeredMessage> _subscriber;
         private readonly UIService _uiService;
         private readonly TimeSystem _timeSystem;
+        private readonly IGameSessionCoordinator _coordinator;
+        private readonly ISubscriber<SessionPhaseChangedMessage> _phaseSubscriber;
         private IDisposable _subscription;
+        private IDisposable _phaseSubscription;
 
         private UIPanelHandle _popup;
         private UIPanelHandle _chip;
         private string _hiddenEventId;   // the player hid the popup for THIS event
         private bool _chipRaised;
+        private bool _chipHidden;
+        private bool _chipOpenAttempted;
 
         public WorldEventUISystem(
             ISubscriber<WorldEventTriggeredMessage> subscriber,
             UIService uiService,
-            TimeSystem timeSystem)
+            TimeSystem timeSystem,
+            IGameSessionCoordinator coordinator = null,
+            ISubscriber<SessionPhaseChangedMessage> phaseSubscriber = null)
         {
             _subscriber = subscriber;
             _uiService = uiService;
             _timeSystem = timeSystem;
+            _coordinator = coordinator;
+            _phaseSubscriber = phaseSubscriber;
         }
 
         public void Start()
         {
             _subscription = _subscriber.Subscribe(_ => Refresh());
+            // P12B §4 — the phase decides whether any of this UI may be on screen, and the
+            // message is only the cue to re-derive that from the coordinator.
+            _phaseSubscription = _phaseSubscriber?.Subscribe(_ => Refresh());
 
             OpenChip();   // the chip outlives individual events; Start() order cannot matter
 
@@ -64,6 +76,24 @@ namespace Xianxia.Sect.UI
 
         private void Refresh()
         {
+            // P12B §4 — outside Playing there is no session event UI at all. The popup is CLOSED
+            // (not merely left on screen) and the chip is hidden, because a pending decision
+            // cannot exist without a live session: the pending state is cleared at the session
+            // boundary, so nothing here can lose a real event.
+            if (!SessionPlaying)
+            {
+                if (_popup != null) ClosePopup();
+                _hiddenEventId = null;
+                _chipRaised = false;
+                SetChipHidden(true);
+                return;
+            }
+
+            // The chip is session UI: CloseSessionUi destroys it when a session ends, so the
+            // handle must be re-opened rather than used through a destroyed instance.
+            EnsureChipOpen();
+            SetChipHidden(false);
+
             bool pending = _timeSystem.HasPendingDecision;
 
             if (!pending)
@@ -81,9 +111,48 @@ namespace Xianxia.Sect.UI
             RefreshChip(pending);
         }
 
+        /// <summary>
+        /// P12B — is a live session Playing? Read from the authoritative coordinator (never from
+        /// the message payload). No coordinator means "no session gate wired" (existing
+        /// construction sites / tests), which behaves exactly as before.
+        /// </summary>
+        private bool SessionPlaying =>
+            _coordinator == null || _coordinator.Phase == GameSessionPhase.Playing;
+
+        /// <summary>True only while the chip's instance is still alive (a session end destroys it).</summary>
+        private bool ChipAlive =>
+            _chip != null && _chip.View != null && _chip.View.GameObject != null;
+
+        /// <summary>
+        /// Re-open the chip after a session boundary destroyed it. A panel missing from the
+        /// catalog (generator not run) is attempted ONCE — this runs per frame, and repeating a
+        /// failing Open would flood the console.
+        /// </summary>
+        private void EnsureChipOpen()
+        {
+            if (ChipAlive) return;
+            if (_chipOpenAttempted && _chip == null) return;
+
+            _chipOpenAttempted = true;
+            _chip = null;
+            _chipHidden = false;
+            OpenChip();
+        }
+
+        /// <summary>Hide/show the whole chip without touching its own pending/visible logic.</summary>
+        private void SetChipHidden(bool hidden)
+        {
+            if (hidden == _chipHidden) return;
+            _chipHidden = hidden;
+            if (!ChipAlive) return;
+
+            if (hidden) _chip.View.Hide();
+            else _chip.View.Show();
+        }
+
         private void RefreshChip(bool pending)
         {
-            if (_chip == null) return;
+            if (!ChipAlive) return;
 
             bool modalOpen = DiscipleModalScope.IsOpen;
 
@@ -178,6 +247,8 @@ namespace Xianxia.Sect.UI
         {
             _subscription?.Dispose();
             _subscription = null;
+            _phaseSubscription?.Dispose();
+            _phaseSubscription = null;
             Canvas.willRenderCanvases -= Refresh;
         }
     }

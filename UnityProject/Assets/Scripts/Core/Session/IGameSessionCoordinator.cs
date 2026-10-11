@@ -91,6 +91,16 @@ namespace Xianxia.Sect
     {
         /// <summary>Close session-scoped UI. Returns how many panels were actually closed.</summary>
         int CloseSessionUi();
+
+        /// <summary>
+        /// P12B — show or hide the always-on session UI (the HUD panels this closer treats as
+        /// persistent infrastructure) as the session phase changes. Hiding is deliberately NOT
+        /// closing: the instances — and therefore the button wiring their presenters hold — stay
+        /// alive across a Title detour, and nothing has to be re-opened.
+        ///
+        /// Returns how many panels actually changed state.
+        /// </summary>
+        int SetSessionUiVisible(bool visible);
     }
 
     /// <summary>

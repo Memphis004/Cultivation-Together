@@ -86,15 +86,17 @@
     <Compile Include="Assets\Scripts\Visual\Core\TaskActivityMapper.cs" />
     <Compile Include="Assets\Scripts\UI\Views\AvatarRenderer.cs" />
     <Compile Include="Assets\Scripts\Visual\Scene\TerrainBackdropRenderer.cs" />
-    <Compile Include="Assets\Scripts\Data\Gen\worldevent\TbEvent.cs" />
     <Compile Include="Assets\Scripts\Core\Persistence\SaveSessionService.cs" />
+    <Compile Include="Assets\Scripts\Data\Gen\worldevent\TbEvent.cs" />
     <Compile Include="Assets\Scripts\Core\WorldEventRuntimeConfig.cs" />
     <Compile Include="Assets\Scripts\Visual\Core\IChibiVisual.cs" />
+    <Compile Include="Assets\Scripts\UI\Views\IngameMenuView.cs" />
     <Compile Include="Assets\Scripts\Visual\Scene\IsometricCellMath.cs" />
     <Compile Include="Assets\Scripts\Core\Session\GameSessionCoordinator.cs" />
     <Compile Include="Assets\Scripts\Visual\Scene\GridOverlayRenderer.cs" />
     <Compile Include="Assets\Scripts\Core\SceneNames.cs" />
     <Compile Include="Assets\Scripts\Core\Persistence\SaveSlotPersistence.cs" />
+    <Compile Include="Assets\Scripts\UI\Presenters\IngameMenuPresenter.cs" />
     <Compile Include="Assets\Scripts\UI\Widgets\InkWidgets.cs" />
     <Compile Include="Assets\Scripts\AssemblyInfo.cs" />
     <Compile Include="Assets\Scripts\Visual\Scene\CameraRigPorts.cs" />
@@ -106,6 +108,7 @@
     <Compile Include="Assets\Scripts\Core\Session\IGameSessionCoordinator.cs" />
     <Compile Include="Assets\Scripts\UI\Presenters\DiscipleListPresenter.cs" />
     <Compile Include="Assets\Scripts\Visual\Sprite\ChibiFrameClock.cs" />
+    <Compile Include="Assets\Scripts\Core\Session\SessionRuntimeConfig.cs" />
     <Compile Include="Assets\Scripts\Shared\SectSessionSnapshot.cs" />
     <Compile Include="Assets\Scripts\UI\Views\UIViewBase.cs" />
     <Compile Include="Assets\Scripts\Core\OwnershipObservability.cs" />
@@ -128,6 +131,7 @@
     <Compile Include="Assets\Scripts\Core\DecisionExecutor.cs" />
     <Compile Include="Assets\Scripts\Core\Session\GameSessionPhase.cs" />
     <Compile Include="Assets\Scripts\UI\Presenters\DiscipleDetailTabPresenters.cs" />
+    <Compile Include="Assets\Scripts\UI\Views\TitleMenuView.cs" />
     <Compile Include="Assets\Scripts\UI\Views\AvatarCustomizationViewData.cs" />
     <Compile Include="Assets\Scripts\Scenes\SectScene\SectSceneLifetimeScope.cs" />
     <Compile Include="Assets\Scripts\UI\Views\EventPopupView.cs" />
@@ -149,6 +153,7 @@
     <Compile Include="Assets\Scripts\Visual\Scene\RigZoomInput.cs" />
     <Compile Include="Assets\Scripts\Core\Persistence\SaveFileSystem.cs" />
     <Compile Include="Assets\Scripts\UI\Views\BuildingMenuView.cs" />
+    <Compile Include="Assets\Scripts\UI\Presenters\TitleMenuPresenter.cs" />
     <Compile Include="Assets\Scripts\Core\MainThreadDispatch.cs" />
     <Compile Include="Assets\Scripts\UI\Presenters\TaskAssignmentPresenter.cs" />
     <Compile Include="Assets\Scripts\UI\Systems\WorldEventUISystem.cs" />

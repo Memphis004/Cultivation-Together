@@ -98,6 +98,30 @@ namespace Xianxia.EditorTools
                         WriteResult("error:" + ex.Message);
                     }
                     break;
+                case "gen_title_menu":
+                    try
+                    {
+                        // P12B — non-interactive entry (a marker-file run cannot answer a dialog).
+                        Xianxia.Sect.EditorTools.TitleMenuPanelGenerator.GenerateNonInteractive();
+                        WriteResult("generated_title_menu");
+                    }
+                    catch (System.Exception ex)
+                    {
+                        WriteResult("error:" + ex.Message);
+                    }
+                    break;
+                case "gen_ingame_menu":
+                    try
+                    {
+                        // P12B — non-interactive entry (a marker-file run cannot answer a dialog).
+                        Xianxia.Sect.EditorTools.IngameMenuPanelGenerator.GenerateNonInteractive();
+                        WriteResult("generated_ingame_menu");
+                    }
+                    catch (System.Exception ex)
+                    {
+                        WriteResult("error:" + ex.Message);
+                    }
+                    break;
                 case "import_disciple_list_art":
                     try
                     {

@@ -22,12 +22,21 @@ namespace Xianxia.Sect.UI
 
         private readonly TimeSystem _timeSystem;
         private readonly ISubscriber<TimeSpeedChangedMessage> _speedSubscriber;
+        private readonly IGameSessionCoordinator _coordinator;
+        private readonly ISubscriber<SessionPhaseChangedMessage> _phaseSubscriber;
         private IDisposable _subscription;
+        private IDisposable _phaseSubscription;
 
-        public TimeControlPresenter(TimeSystem timeSystem, ISubscriber<TimeSpeedChangedMessage> speedSubscriber)
+        public TimeControlPresenter(
+            TimeSystem timeSystem,
+            ISubscriber<TimeSpeedChangedMessage> speedSubscriber,
+            IGameSessionCoordinator coordinator = null,
+            ISubscriber<SessionPhaseChangedMessage> phaseSubscriber = null)
         {
             _timeSystem = timeSystem;
             _speedSubscriber = speedSubscriber;
+            _coordinator = coordinator;
+            _phaseSubscriber = phaseSubscriber;
         }
 
         protected override void OnViewBound()
@@ -39,9 +48,27 @@ namespace Xianxia.Sect.UI
 
             _subscription = _speedSubscriber.Subscribe(_ => RefreshView());
 
+            // P12B §4 — session UI: visible (and its hotkeys live) only while a session is
+            // Playing. The message is a trigger only; the phase is always re-read from the
+            // authoritative coordinator, so bind/start order cannot lose it (Common-Rules 13).
+            _phaseSubscription = _phaseSubscriber?.Subscribe(_ => ApplySessionState());
+
             // Read current state once on bind; afterwards the trigger message is
             // the only refresh cue (no per-frame polling).
+            ApplySessionState();
             RefreshView();
+        }
+
+        /// <summary>
+        /// P12B — hides the whole bar (and therefore silences Space / 1 / 2 / 3, because an
+        /// inactive GameObject gets no Update) whenever the phase is not Playing. No coordinator
+        /// means "no session gate wired" (existing construction sites / tests), which stays
+        /// visible exactly as before.
+        /// </summary>
+        private void ApplySessionState()
+        {
+            bool playing = _coordinator == null || _coordinator.Phase == GameSessionPhase.Playing;
+            View.SetSessionActive(playing);
         }
 
         // Handlers only MUTATE. The refresh cue is exclusively the
@@ -96,6 +123,8 @@ namespace Xianxia.Sect.UI
         {
             _subscription?.Dispose();
             _subscription = null;
+            _phaseSubscription?.Dispose();
+            _phaseSubscription = null;
 
             View.PauseClicked -= OnPauseClicked;
             View.ToggleClicked -= OnToggleClicked;

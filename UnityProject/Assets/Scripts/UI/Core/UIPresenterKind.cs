@@ -14,5 +14,7 @@ namespace Xianxia.Sect.UI
         TaskAssignment, // P3: มอบหมายงานศิษย์ (draft/confirm) — appended last to keep existing int values stable
         TimeControl, // E1: แถบควบคุมเวลา (pause/1x/2x/3x — E1.1 ตัดปุ่ม Play ออก) — appended last to keep existing int values stable
         EventChip, // E3: ชิป "มีเหตุการณ์รอตัดสินใจ" ใต้แถบเวลา — appended last to keep existing int values stable
+        TitleMenu, // P12B: หน้าจอชื่อเกม (เล่นใหม่ / เล่นต่อ / ออก) — appended last to keep existing int values stable
+        IngameMenu, // P12B: เมนูระหว่างเล่น (บันทึก / กลับหน้าจอชื่อเกม) — appended last to keep existing int values stable
     }
 }

@@ -30,11 +30,27 @@ namespace Xianxia.Sect.UI
         [SerializeField] private Button speed1Button;
         [SerializeField] private Button speed2Button;
         [SerializeField] private Button speed3Button;
+        [SerializeField] private Button menuButton;
         [SerializeField] private TMP_Text statusText;
 
         public event Action PauseClicked;
         public event Action ToggleClicked;   // Space hotkey — same rule as Pause
         public event Action<int> SpeedClicked;
+
+        /// <summary>
+        /// P12B — the in-game menu button that sits at the end of this bar. Exposed as the raw
+        /// Button so <c>UIBootstrap</c> wires it to the IngameMenu panel exactly like the
+        /// bottom-menu buttons (WarehouseButton / TaskAssignmentButton) — the time-control
+        /// presenter deliberately knows nothing about that panel.
+        /// </summary>
+        public Button MenuButton => menuButton;
+
+        /// <summary>
+        /// P12B — false while the session phase is not Playing. Hiding the GameObject is what
+        /// silences the Space / 1 / 2 / 3 hotkeys (an inactive MonoBehaviour gets no Update), so
+        /// the hotkey rule needs no second check inside <see cref="Update"/>.
+        /// </summary>
+        private bool _sessionActive = true;
 
         private bool _wired;
 
@@ -116,12 +132,48 @@ namespace Xianxia.Sect.UI
         }
 
         /// <summary>
+        /// P12B §4 — session UI: the bar (and its hotkeys) belong to a live session. While the
+        /// phase is not Playing the whole GameObject is inactive, which is also why
+        /// <see cref="Show"/> refuses to bring it back.
+        /// </summary>
+        public void SetSessionActive(bool active)
+        {
+            if (_sessionActive == active) return;
+            _sessionActive = active;
+
+            if (active) gameObject.SetActive(true);
+            else gameObject.SetActive(false);
+        }
+
+        /// <summary>True while the bar is allowed on screen (diagnostics/tests).</summary>
+        public bool SessionActive => _sessionActive;
+
+        /// <summary>
+        /// P12B §4 — THE hotkey rule, in one place: Space / 1 / 2 / 3 fire only for a live session,
+        /// on an enabled object. <see cref="Update"/> consults this exact property, so an EditMode
+        /// test can assert the rule without simulating keyboard input.
+        /// </summary>
+        public bool HotkeysAllowed => _sessionActive && isActiveAndEnabled;
+
+        /// <summary>
+        /// P12B — a panel showing itself must not defeat the session rule: while no session is
+        /// Playing the bar stays hidden even if something re-Opens the panel (UIService.Open
+        /// re-Shows an existing instance).
+        /// </summary>
+        public override void Show()
+        {
+            if (!_sessionActive) return;
+            base.Show();
+        }
+
+        /// <summary>
         /// E1 hotkeys — legacy Input Manager (already used across this project:
         /// DiscipleListView/DiscipleDetailView Escape, Input.GetKeyDown). No new
         /// package. Guarded so keystrokes never fire while a text input has focus.
         /// </summary>
         private void Update()
         {
+            if (!HotkeysAllowed) return;
             if (IsTextInputFocused()) return;
 
             if (Input.GetKeyDown(KeyCode.Space)) ToggleClicked?.Invoke();
@@ -142,7 +194,12 @@ namespace Xianxia.Sect.UI
         /// <summary>
         /// E0 free region: top-left, just BELOW the 100px WalletHud bar (top strip).
         /// Clear of WalletHud (top-right cluster), LogWindow (bottom-left 400x300)
-        /// and BottomMenu (bottom bar). 560x56 at anchored (12, -110).
+        /// and BottomMenu (bottom bar).
+        ///
+        /// P12B widened it 560 → 640 so the in-game menu button fits at the end of the bar
+        /// WITHOUT moving the pause/speed buttons or the status baseline (the same "slot into the
+        /// freed space" edit E1.1 used when the Play button was removed): status keeps its x and
+        /// gives up 8px of width, the menu button takes the last 80px with an 8px right margin.
         /// </summary>
         public override void ApplyDefaultLayout()
         {
@@ -151,7 +208,7 @@ namespace Xianxia.Sect.UI
             rt.anchorMin = new Vector2(0f, 1f);
             rt.anchorMax = new Vector2(0f, 1f);
             rt.pivot = new Vector2(0f, 1f);
-            rt.sizeDelta = new Vector2(560f, 56f);
+            rt.sizeDelta = new Vector2(640f, 56f);
             rt.anchoredPosition = new Vector2(12f, -110f);
         }
 
