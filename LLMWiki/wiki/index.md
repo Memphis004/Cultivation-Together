@@ -35,6 +35,8 @@ Design documents and historical record:
 - [[sources/open-questions|Open Questions]] — what's deliberately not decided
 - [[sources/visual-demo-scene|Visual Demo Scene (DEV-ONLY)]] — DiscipleVisualSystem Phase 3 demo บน Spine example rig + DevSpineOverride seam + guards
 - [[decisions/visual-overrides-straight-alpha|Visual Overrides — Straight-Alpha Conversion]] — ADR: atlas ของ rig เฉพาะตัวละคร (Q5) เป็น straight alpha บน Linear color space + วิธี re-export จาก Spine IDE + การเปิด Spine ถาวร (S4 activation — license ยืนยัน 2026-09-25, gate ตั้งที่ composition root)
+- [[sources/cultivation-system|Cultivation System (P14) — Revised Design]] — สายบำเพ็ญ: ตาราง stage append-only, progress สะสมตอนนั่งสมาธิ, **ทะลวงขั้น** (validated + atomic, permission ชุดเดียวกับ task assignment), Unity-only message, แถว+ปุ่มบนแท็บ Info + revision log (ตามดีไซน์ vs ที่สร้างจริง) และ backlog (chat command / balance) — ต่อด้วย **P14B follow-up**: write tool `attempt_breakthrough` ทาง RPC pair เดียวกับ `assign_task` (ส่ง `SECT_MASTER`, Hybrid 10 นาทีใช้เต็ม, ไม่มี AI-GM bypass)
+- [[sources/vertical-slice-playbook|Vertical Slice Playbook (P15)]] — ทดสอบทั้งเกมเป็นหนึ่งเส้นทาง (ไม่ต้องมี Twitch): 12 integration tests, playbook ที่คนต้องรันเอง, debug metrics ที่วัดได้จริง, ข้อเสนอ tuning (ยังไม่แก้ค่า), และสถานะ autosave (ยังไม่มี — ตรวจแล้ว)
 
 ## Code Snippets (Important Scripts)
 
@@ -89,6 +91,8 @@ Catalogs of game entities:
 | How do I add a new event? | [[concepts/data-pipeline]] → [[entities/world-events]] |
 | How do I add a new UI panel? | [[concepts/mvp-ui]] |
 | How does the event log work? | [[concepts/log-window]] |
+| How does cultivation / breakthrough work? | [[sources/cultivation-system]] |
+| How do I verify the whole loop by hand? | [[sources/vertical-slice-playbook]] |
 | How do I add a new resource? | [[entities/resources]] |
 | What bugs were hit during build? | [[sources/bug-log]] |
 | What's not decided yet? | [[sources/open-questions]] |
@@ -97,7 +101,7 @@ Catalogs of game entities:
 ## Maintenance
 
 - Last index update: 2026-10-11
-- Total source pages: 11 (+ 9 code snippets)
+- Total source pages: 13 (+ 9 code snippets)
 - Total concept pages: 14
 - Total entity pages: 7
 - Total bug log entries: 11 (across 13 labs)

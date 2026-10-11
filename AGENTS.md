@@ -35,7 +35,7 @@
 | Serialization | MessagePack (`[Key(N)]`) |
 | Data | Luban (`DataTables/`) → `Assets/Scripts/Data/Gen/` → `Resources/DataTables/*.json` |
 | Scenes | `Assets/Scenes/SectScene.unity` คือ gameplay scene ที่อยู่ใน build settings |
-| จำนวน test ปัจจุบัน | EditMode 618 tests (2026-10-11) |
+| จำนวน test ปัจจุบัน | EditMode 697 tests (2026-10-11) |
 
 **Boot order:** Unity ก่อน แล้วค่อยรัน bridge
 

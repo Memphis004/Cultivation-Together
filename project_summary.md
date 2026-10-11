@@ -138,6 +138,7 @@ Cultivation Together/                ← repo root
 | Building system (grid, placement, ghost, camera rig) | ✅ ใช้จริง |
 | Hybrid permissions (P5B) — `CheckTaskPermission`, cooldown 12s, owner protection 600s | ✅ ใช้จริง |
 | Viewer membership (P5A/P5B) — `ViewerRecord`, registry, invariants | ✅ ใช้จริง |
+| Cultivation (P14A/B) — ตาราง stage append-only, สะสมตอนนั่งสมาธิ, **ทะลวงขั้น** + MCP tool `attempt_breakthrough` | ✅ ใช้จริง + tested |
 | Save / Load (P11) — slot, backup, versioned envelope, atomic write | ✅ ใช้จริง |
 | Session lifecycle — Title ↔ Playing, scene load, stale-completion invalidation | ✅ ใช้จริง |
 | Combat / stat / technique system | ❌ ยังไม่ตัดสิน (open questions #2–#4) |
@@ -157,6 +158,19 @@ enum→Type mapping (**ไม่มี reflection**) — panel ที่ลง�
 **WorldEvent UI:** popup ดึงข้อมูลจาก authoritative state (ไม่พึ่ง message อย่างเดียว)
 จึงไม่พังเวลา start/subscribe สลับลำดับ; มี "chip" ลอยเมื่อ popup ถูกซ่อนแต่ยัง pending;
 `Hide`/Escape ซ่อนโดย**ไม่**ล้าง pending และ**ไม่** resume เวลา
+
+### 5.4 Vertical slice (P15) — ทั้งเกมเป็นเส้นทางเดียว
+
+`Tests/EditMode/VerticalSliceIntegrationTests.cs` (12 tests) ขับ service จริงทั้งเส้น:
+Title → New Game → assign ด้วยมือ → Auto → work/recovery → event decision → Save →
+Return to Title → Continue แล้ว state ตรงเป๊ะ + 1×/2×/3× equivalence, pause correctness,
+Hybrid protection ผ่าน local fixture, ไม่มี notification/reward ซ้ำ, fractional progress
+ข้าม save, building occupancy หลัง load, callback ของ session เก่าถูกปฏิเสธ,
+วน Title/NewGame/Load ไม่ leak listener, cold restart / corrupt save / failed write
+
+**คนยังต้องรัน playbook บนหน้าจอเอง** (ยัง NOT VERIFIED) และ **autosave ยังไม่มี** —
+coverage เต็ม, ตัวเลข metrics ที่วัดได้, ข้อเสนอ tuning และ feasibility ของ autosave อยู่ที่
+`LLMWiki/wiki/sources/vertical-slice-playbook.md`
 
 ### 5.3 Data pipeline (Luban)
 
@@ -191,6 +205,9 @@ DataTables/Defines/schema.xml ────┤  (luban.conf: topModule "cfg", tar
 | P12A/B | `CloseAllExcept` / `TrySetVisible` — session-end panel cleanup vs persistent HUD |
 | P13A | Pending-decision **instances**: id เดียวกันซ้อนได้, `InstanceId` ใน decision, save/restore ทุก occurrence, popup re-target |
 | P13B (2026-10-11) | แก้ crash ตอน restore: presenter อ่าน member ของ view ที่ถูก destroy แล้ว (`MissingReferenceException`) — panel handle ตรวจ Unity lifetime แทน |
+| P14A/B (2026-10-11) | สายบำเพ็ญ: `CultivationStageDef`/`CultivationConfig` (ตาราง stage append-only ใน `Shared/DiscipleAttributes.cs`), progress สะสมตอนนั่งสมาธิ (`TimeSystem.SimulationDelta` เท่านั้น), **ทะลวงขั้น** validated + atomic โดยใช้ authority ชุดเดียวกับ task assignment, `DiscipleCultivationChangedMessage` (Unity-only) + แถว/ปุ่มบนแท็บ Info — ดู `wiki/sources/cultivation-system.md` |
+| P14B follow-up (2026-10-11) | MCP write tool ตัวที่สอง `attempt_breakthrough`: RPC pair เดียวกับ `assign_task` (`RegisterTcpRemoteRequestHandler` + `RegisterAsyncRequestHandler`), handler hop main thread, ส่ง `SECT_MASTER` hard-coded (ไม่มี AI-GM bypass; Hybrid 10 นาทีใช้เต็ม) |
+| P15 (2026-10-11) | Vertical slice: integration suite 12 tests (ทั้งเกมเป็นเส้นทางเดียว) + debug metrics + playbook/feasibility ของ autosave — ดู `wiki/sources/vertical-slice-playbook.md` |
 
 ### Fix ล่าสุด (2026-10-11)
 
@@ -200,7 +217,7 @@ DataTables/Defines/schema.xml ────┤  (luban.conf: topModule "cfg", tar
 แก้โดยเช็ค Unity lifetime ที่ panel handle (view เป็น null / destroyed → ถือว่าไม่มี panel)
 แล้วเปิดใหม่ — regression test: `EventPopupLiteTests.SessionBoundary_DestroyingTheChip_StillGivesAPendingEventItsPopupBack`
 
-**EditMode suite: 618/618 ผ่าน** (2026-10-11)
+**EditMode suite: 697/697 ผ่าน** (2026-10-11) — 618 (ก่อน P14) + 62 (P14A/B) + 5 (P14B follow-up) + 12 (P15)
 
 ---
 
@@ -232,6 +249,11 @@ DataTables/Defines/schema.xml ────┤  (luban.conf: topModule "cfg", tar
 
 - **Core loop, combat (ACS-style vs Rimworld-style), stat system, technique/manual, item detail
   ยังไม่ตัดสิน** → `LLMWiki/wiki/sources/open-questions.md`
+- **Autosave ของ session ยังไม่มี** (ตรวจใน P15): มีแต่ autosave ของ viewer membership
+  (10 วิ real-time, คนละไฟล์) — เส้นทาง save มี official ทางเดียวคือผู้เล่นกด Save
+  รายละเอียด + ข้อกำหนดถ้าจะทำอยู่ใน `wiki/sources/vertical-slice-playbook.md` §5
+- **P15 playbook บนหน้าจอยังไม่มีใครรัน** — integration suite พิสูจน์ logic/state
+  แต่ไม่พิสูจน์การ render/คลิกจริง (§2 ของ playbook)
 - **Portrait/art pipeline** ยังต้อง generate ผ่าน ComfyUI + chroma-key แล้ว bake (ดู skills
   `chroma-key-portrait-pipeline`, `portrait-edit-prompt`)
 - `Visual.Spikes/Editor/Phase4VerifyRunner.cs` มี assertion ที่ stale กับ start state ปัจจุบัน
