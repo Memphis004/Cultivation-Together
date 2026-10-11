@@ -1,11 +1,11 @@
 # Cultivation-Together Context Pack
 
 - Repository: Memphis004/Cultivation-Together
-- Commit: 2a30d99
+- Commit: 30af296
 - Branch: main
 - Generated: 2026-10-11
-- Uncommitted changes in working tree: 31 file(s) (ไฟล์ที่แนบมาอ่านจาก working tree ไม่ใช่จาก commit — ถ้า > 0 อาจต่างจาก commit)
-- Files after .aiignore filter: 2092
+- Uncommitted changes in working tree: 1 file(s) (ไฟล์ที่แนบมาอ่านจาก working tree ไม่ใช่จาก commit — ถ้า > 0 อาจต่างจาก commit)
+- Files after .aiignore filter: 2089
 
 ## Ground Rules (สำคัญมาก — บังคับ AI)
 
@@ -207,6 +207,480 @@
 ## Selected Source Files
 
 (แต่ละไฟล์จำกัด 40000 bytes; เลขนำหน้าคือเลขบรรทัดจริงของไฟล์)
+
+### project_summary.md (19184 bytes)
+````
+     1	# Cultivation Together — Project Summary / Design Log
+     2	
+     3	> ไฟล์นี้เป็น design log ระดับโปรเจกต์ ที่ `build-context.sh` บังคับแนบเข้า context pack
+     4	> และ `LLMWiki/wiki/sources/*.md` อ้างเป็น source
+     5	>
+     6	> **สถานะ:** reconstruct 2026-10-11 จาก (ก) อ่าน code จริงใน repo และ (ข) ประวัติใน
+     7	> `LLMWiki/wiki/log.md` — ทุกข้อที่เขียนว่า "ยืนยันจาก code" ตรวจจากไฟล์จริงแล้ว
+     8	> ส่วน phase history ยกมาจาก wiki log ตามที่บันทึกไว้ ถ้าขัดกับ code ให้ **code ชนะ**
+     9	> แล้วแก้ไฟล์นี้
+    10	
+    11	---
+    12	
+    13	## 1. ภาพรวม (What this is)
+    14	
+    15	เกม **修仙 / จัดการสำนัก** (xianxia sect management) ที่ **AI GM เล่นแทน/เล่นร่วมกับผู้เล่น**
+    16	ผ่าน MCP — Unity เป็นเจ้าของ gameplay state ทั้งหมด และมี process ภายนอก (`McpBridge`)
+    17	ต่อเข้ามาอ่าน state / สั่ง decision ผ่าน TCP
+    18	
+    19	วงจรหลักระดับ MVP:
+    20	
+    21	```
+    22	[Sect State] → [World Event Trigger] → [Choices] → [Decision] →
+    23	[Consequences] → [loop]
+    24	```
+    25	
+    26	- World event ยิงเป็นคาบ (weighted-random จาก Luban table, ยังไม่มี state-based condition)
+    27	- decision event จะ auto-pause เกม (`PauseReason.PendingDecision`) จนกว่าจะตัดสิน
+    28	- 1 decision = 1 occurrence (P13A) — event id เดียวกัน pending ซ้อนกันได้ ต้องอ้าง `InstanceId`
+    29	- **AI GM ไม่มี bypass:** สวมบท `SECT_MASTER` และติด rule Hybrid protection เดียวกับคนเล่น
+    30	
+    31	Core loop สุดท้ายยัง **จงใจไม่ฟิก** (ดู `LLMWiki/wiki/sources/open-questions.md`)
+    32	
+    33	---
+    34	
+    35	## 2. Tech stack (ยืนยันจาก code)
+    36	
+    37	| ส่วน | เทคโนโลยี | หลักฐาน |
+    38	|---|---|---|
+    39	| Engine | Unity 6 (URP 17.3.0, 2D) | `UnityProject/Packages/manifest.json`, `UserSettings/Layouts/default-6000.dwlt` |
+    40	| ภาษา | **C# 8 เท่านั้น** — ห้าม `record` / `init` / `global using` / target-typed `new` | `Common-Rules.md` §3, wiki `conventions.md` |
+    41	| DI | VContainer `jp.hadashikick.vcontainer` 1.19.0 (pin git URL) | `manifest.json` |
+    42	| Messaging | MessagePipe + MessagePipe.VContainer + MessagePipe.Interprocess (git) | `manifest.json`, `Assets/Plugins/MessagePipe.Interprocess/` |
+    43	| Async | UniTask | `manifest.json` |
+    44	| Serialization | **MessagePack** (protobuf ถูกยกเลิกใน lab 7) | `Assets/Scripts/Shared/*.cs` `[Key(N)]` |
+    45	| UI | UGUI + TextMeshPro (ไม่ใช้ UI Toolkit) | `Assets/Scripts/UI/`, `Assets/Resources/Fonts/THSarabunPSK SDF.asset` |
+    46	| Data pipeline | **Luban** (`com.code-philosophy.luban`) | `DataTables/`, `luban.conf` |
+    47	| NuGet ใน Unity | NuGetForUnity (`com.github-glitchenzo.nugetforunity`) | `manifest.json` |
+    48	| Bridge | .NET 8 console app + `ModelContextProtocol` 2.2.0 | `McpBridge/McpBridge.csproj` |
+    49	| Tests | Unity Test Framework 1.6.0 (EditMode) | `Assets/Tests/EditMode/*.asmdef` |
+    50	| Visual (Tier-2) | Spine-Unity runtime (OSS exception, license ยืนยัน 2026-09-25) | `Assets/Spine/`, wiki `conventions.md` |
+    51	| Visual (Tier-1) | Sprite-sheet / layered sprite | `Assets/Scripts/Visual/` |
+    52	
+    53	---
+    54	
+    55	## 3. Workspace layout (monorepo)
+    56	
+    57	```
+    58	Cultivation Together/                ← repo root
+    59	├── Shared/                          ← ★ canonical source ของ DTO/state — แก้ที่นี่เท่านั้น
+    60	│   ├── GameMessages.cs              ←   sync ไป 2 consumer
+    61	│   ├── SectEconomyState.cs
+    62	│   ├── SectSessionSnapshot.cs
+    63	│   ├── ViewerMembership.cs
+    64	│   ├── DiscipleAttributes.cs
+    65	│   ├── MessageTypes.cs
+    66	│   └── MockSectData.cs
+    67	├── UnityProject/                    ← เปิด folder นี้ใน Unity Hub
+    68	│   └── Assets/Scripts/              ← logic ทั้งหมด (asmdef: Xianxia.Sect.Runtime)
+    69	├── McpBridge/                       ← .NET 8 console app (MCP server, stdio)
+    70	├── DataTables/                      ← Luban: Data/*.csv + Defines/schema.xml + luban.conf
+    71	├── Tools/Luban/                     ← Luban binary (vendored — อย่าลบ)
+    72	├── LLMWiki/                         ← wiki (อ่าน wiki/index.md ก่อน)
+    73	├── scripts/                         ← dev helper scripts (python)
+    74	├── sync-shared.sh                   ← คัดลอก Shared/*.cs เข้า 2 consumer
+    75	└── build-context.sh                 ← สร้าง .ai/context-pack.md
+    76	```
+    77	
+    78	**Shared มี 3 สำเนา:** `Shared/` (canonical) → `UnityProject/Assets/Scripts/Shared/` และ
+    79	`McpBridge/Shared/` ผ่าน `./sync-shared.sh` — **ห้ามแก้สำเนาตรง ๆ** ถ้าไม่ sync จะ drift
+    80	
+    81	---
+    82	
+    83	## 4. Architecture
+    84	
+    85	```
+    86	┌─ Unity (Host) ────────────────────────────────────────────────┐
+    87	│  GameLifetimeScope (VContainer root)                           │
+    88	│    └─ Installers: Gameplay / UI / Building / Visual / Interprocess
+    89	│  MessagePipe bus  ── in-memory pub/sub                        │
+    90	│                   └─ TCP interprocess  127.0.0.1:3215         │
+    91	│  Subsystems: TimeSystem, DiscipleSystem, ResourceCraftingSystem,
+    92	│              WorldEventSystem, DecisionLogger, WorldEventUISystem,
+    93	│              ViewerMembershipPersistenceSystem, UIBootstrap …  │
+    94	│  ISectStateProvider (single live state) = SectStateProvider    │
+    95	│  Data: LubanEventPool, AvatarPartPool, BuildingDefs            │
+    96	│  UI: UIRoot + UIPanelCatalog + UIService (MVP-Lite)            │
+    97	└───────────────────────────┬───────────────────────────────────┘
+    98	                            │ TCP
+    99	┌─ McpBridge (.NET 8, client) ──────────────────────────────────┐
+   100	│  SectQueryTools  (read):  get_sect_state, await_next_world_event,
+   101	│                           get_ownership_log, get_task_change_log,
+   102	│                           get_task_protection
+   103	│  SectActionTools (write): execute_decision, purchase_item, assign_task
+   104	│  stdio → ModelContextProtocol SDK
+   105	└───────────────────────────┬───────────────────────────────────┘
+   106	                            │ stdio
+   107	                    AI GM client
+   108	```
+   109	
+   110	**Transport rule (สำคัญ):** `IDistributedSubscriber` บน TCP transport นี้เรียก
+   111	`worker.StartReceiver()` (bind listen socket เอง) **ไม่สนใจ `HostAsServer`** → process
+   112	ที่ไม่ใช่ hub (bridge) ใช้ subscriber ไม่ได้เพราะ port ชนกัน
+   113	สิ่งที่ bridge ต้องการ *คำตอบ* ให้ใช้ **request-response** (`IRemoteRequestHandler`)
+   114	สิ่งที่เป็นการแจ้งเตือน UI ให้ใช้ **pub/sub**
+   115	
+   116	**In-process pub/sub ห้ามใช้แทนการเรียกข้าม process:** `EventPopupPresenter` เคย publish
+   117	`ExecuteDecisionMessage` in-memory แต่ `DecisionLogger` listen อยู่บน interprocess channel
+   118	→ คลิกแล้วเงียบ แก้โดยดึง `DecisionExecutor` ออกมาให้ทั้งสองทางเรียกตัวเดียวกัน
+   119	
+   120	**Installer layering:** registration ใหม่ต้องอยู่ installer ที่ถูกชั้น (`Core/Installers/*`)
+   121	หรือ `SectSceneLifetimeScope` ถ้าผูกฉาก — **ห้ามยัดกลับ `GameLifetimeScope.Configure()`**
+   122	
+   123	---
+   124	
+   125	## 5. สถานะ implementation (ณ 2026-10-11)
+   126	
+   127	### 5.1 แกน gameplay
+   128	
+   129	| ระบบ | สถานะ |
+   130	|---|---|
+   131	| `TimeSystem` — simulation clock, `SimulationDelta`, `Pause/Resume(reason)`, `PendingDecision` | ✅ ใช้จริง + tested |
+   132	| `SectStateProvider` — state aggregator, `AdjustAndNotify()` สำหรับ resource | ✅ ใช้จริง |
+   133	| `DiscipleSystem` — roster, attribute (stamina / skill xp), auto-scheduler | ✅ ใช้จริง |
+   134	| `ResourceCraftingSystem` — gathering / crafting tick (speed-aware, เก็บเศษ) | ✅ ใช้จริง |
+   135	| `WorldEventSystem` + `LubanEventPool` — weighted-random spawner, start grace 10s sim-time | ✅ ใช้จริง |
+   136	| `DecisionExecutor` / `DecisionLogger` | ✅ ใช้จริง |
+   137	| Pending-decision **instances** (P13A) — ซ้อนได้, `InstanceId`, bounded queue | ✅ ใช้จริง |
+   138	| Building system (grid, placement, ghost, camera rig) | ✅ ใช้จริง |
+   139	| Hybrid permissions (P5B) — `CheckTaskPermission`, cooldown 12s, owner protection 600s | ✅ ใช้จริง |
+   140	| Viewer membership (P5A/P5B) — `ViewerRecord`, registry, invariants | ✅ ใช้จริง |
+   141	| Save / Load (P11) — slot, backup, versioned envelope, atomic write | ✅ ใช้จริง |
+   142	| Session lifecycle — Title ↔ Playing, scene load, stale-completion invalidation | ✅ ใช้จริง |
+   143	| Combat / stat / technique system | ❌ ยังไม่ตัดสิน (open questions #2–#4) |
+   144	
+   145	### 5.2 UI (Xianxia.UI.MVP Lite)
+   146	
+   147	`UIService` + `UIPanelCatalog` (ScriptableObject) + `UIRoot`; presenter resolve ผ่าน
+   148	enum→Type mapping (**ไม่มี reflection**) — panel ที่ลงทะเบียน: `EventPopup`, `ResourceHud`,
+   149	`LogWindow`, `AvatarCustomization`, `DiscipleDetail`, `BottomMenu`, `ResourcePopup`,
+   150	`BuildingMenu`, `TaskAssignment`, `DiscipleList`, `TimeControl`, `EventChip`, `TitleMenu`,
+   151	`IngameMenu`
+   152	
+   153	**Panel ใหม่ต้องเดินตาม generator pattern:** Editor generator → regenerate prefab →
+   154	`UIPresenterKind` **ต่อท้ายเท่านั้น** → catalog entry → ฟอนต์ไทย TMP + palette กลาง —
+   155	**ห้าม hand-edit prefab YAML**
+   156	
+   157	**WorldEvent UI:** popup ดึงข้อมูลจาก authoritative state (ไม่พึ่ง message อย่างเดียว)
+   158	จึงไม่พังเวลา start/subscribe สลับลำดับ; มี "chip" ลอยเมื่อ popup ถูกซ่อนแต่ยัง pending;
+   159	`Hide`/Escape ซ่อนโดย**ไม่**ล้าง pending และ**ไม่** resume เวลา
+   160	
+   161	### 5.3 Data pipeline (Luban)
+   162	
+   163	```
+   164	DataTables/Data/EventDef.csv ─────┐
+   165	DataTables/Data/EventChoiceDef.csv ┤  DataTables/gen.sh | gen.bat
+   166	DataTables/Defines/schema.xml ────┤  (luban.conf: topModule "cfg", target "client")
+   167	                                  ↓
+   168	        UnityProject/Assets/Scripts/Data/Gen/  (namespace cfg.game; Tables.cs)
+   169	                                  ↓
+   170	        UnityProject/Assets/Resources/DataTables/*.json  (runtime load)
+   171	```
+   172	
+   173	**ห้ามแก้ไฟล์ใน `Data/Gen/`** — regenerate จาก CSV แทน
+   174	ตารางปัจจุบัน: `TbEventDef` (id, description, requiresDecision, weight) และ
+   175	`TbEventChoiceDef` (eventId, choiceId, label) — สอง flat table join ด้วย `eventId`
+   176	
+   177	---
+   178	
+   179	## 6. Phase history (จาก `LLMWiki/wiki/log.md`)
+   180	
+   181	| Phase | สาระ |
+   182	|---|---|
+   183	| lab 1–13 (21–30 Aug 2026) | ตั้ง DI graph, MessagePipe bus + TCP, subsystems, UI MVP-Lite; **lab 7** ยกเลิก protobuf → MessagePack; **lab 13** เจอ bug in-process pub/sub ไม่ถึง interprocess → ดึง `DecisionExecutor` |
+   184	| E1-pre | main-thread hop สำหรับ handler ที่มาจาก TCP (`MainThreadDispatch`) — handler ต้อง `await UniTask.SwitchToMainThread()` ก่อนแตะ Unity API |
+   185	| E2-lite | world-event spawner + `WorldEventRuntimeConfig.StartGraceSeconds` (ไม่ยิงจาก constructor อีก เพราะ Start order ไม่การันตี) |
+   186	| P3 | Task assignment UI (row dropdown, draft, conflict detection) |
+   187	| P4 | Ownership: `DiscipleOwnerType/OwnerId`, `TrySetDiscipleOwner` + identity convention, `DiscipleOwnerChangedMessage`, local dev harness + `get_ownership_log` (read-only) |
+   188	| P5A | Viewer membership data + invariants + injectable `IClock` (UTC เท่านั้น) |
+   189	| P5B | Hybrid permissions (`CheckTaskPermission`, 600s protection, 12s cooldown), bridge read-only queries (`get_task_change_log`, `get_task_protection`), membership persistence (local file) |
+   190	| P10/P11 | Save/load: slot + backup + versioned envelope, autosave, `TitleMenu`/`IngameMenu`, session coordinator |
+   191	| P12A/B | `CloseAllExcept` / `TrySetVisible` — session-end panel cleanup vs persistent HUD |
+   192	| P13A | Pending-decision **instances**: id เดียวกันซ้อนได้, `InstanceId` ใน decision, save/restore ทุก occurrence, popup re-target |
+   193	| P13B (2026-10-11) | แก้ crash ตอน restore: presenter อ่าน member ของ view ที่ถูก destroy แล้ว (`MissingReferenceException`) — panel handle ตรวจ Unity lifetime แทน |
+   194	
+   195	### Fix ล่าสุด (2026-10-11)
+   196	
+   197	`WorldEventUISystem` / `UIService` อ่าน `handle.View.GameObject` เพื่อเช็คว่า panel ยังอยู่
+   198	แต่ property นั้นเป็น member บน MonoBehaviour ที่ถูก `Destroy` ไปแล้ว → `MissingReferenceException`
+   199	ตอน session boundary (destroy chip → restore pending event → ต้องเปิด popup กลับ)
+   200	แก้โดยเช็ค Unity lifetime ที่ panel handle (view เป็น null / destroyed → ถือว่าไม่มี panel)
+   201	แล้วเปิดใหม่ — regression test: `EventPopupLiteTests.SessionBoundary_DestroyingTheChip_StillGivesAPendingEventItsPopupBack`
+   202	
+   203	**EditMode suite: 618/618 ผ่าน** (2026-10-11)
+   204	
+   205	---
+   206	
+   207	## 7. กฎที่ต้องยึด (สรุปจาก `Common-Rules.md` + `conventions.md`)
+   208	
+   209	1. **C# 8 เท่านั้น** — ห้าม `record`, `init`, `global using`, target-typed `new`
+   210	2. **MessagePack `[Key(N)]` append-only** — ห้ามแก้เลขเดิม; enum value ใหม่ต่อท้ายเสมอ
+   211	3. **Resource mutation ต้องผ่าน `AdjustAndNotify()`** ใน `SectStateProvider` เท่านั้น (ไม่งั้น HUD ไม่อัปเดต)
+   212	4. **เวลา:** gameplay progression ใช้ `TimeSystem.SimulationDelta` เท่านั้น — ห้ามอ่าน
+   213	   `Time.deltaTime` ใน gameplay code, ห้าม set `Time.timeScale`
+   214	   pause ใช้ `Pause/Resume(reason)` + `ResumeByPlayer` (ห้าม `SetPaused` ในโค้ดใหม่)
+   215	   real-time clock (UTC cooldown, viewer inactivity) แยกจาก sim time — **ห้ามคูณ speed ซ้ำ**
+   216	5. **Threading:** callback จาก TCP/MessagePipe.Interprocess มาบน background thread —
+   217	   ต้อง `await UniTask.SwitchToMainThread()` ก่อน mutate state / publish / แตะ UI
+   218	6. **request-response ต้อง register ทั้งคู่:** `RegisterTcpRemoteRequestHandler` + `RegisterAsyncRequestHandler`
+   219	7. **ห้ามใช้ `FindObjectOfType`/reflection หา service** — ใช้ DI constructor injection
+   220	8. **ห้ามฟื้น outfit / `TryApplyOutfit`** (decision ใน `wiki/sources/avatar-appearance.md` §1)
+   221	9. **ห้ามแก้ `Shared/`** นอกจากงานที่ระบุชัด แล้วรัน `./sync-shared.sh`
+   222	10. **ห้าม commit `McpBridge/bin` หรือ `obj`** (และ `UnityProject/{Logs,Temp,obj,UserSettings}` + generated `.csproj`)
+   223	11. **เปลี่ยน DI registration หรือ constructor ของ registered type** ต้องพิสูจน์ด้วยการ build
+   224	    container จริง (EditMode test หรือ Play Mode boot smoke test) — ห้ามมี public constructor
+   225	    ซ้อนบน registered type (VContainer เลือกตัวที่ param เยอะสุด) ให้ pin ผ่าน factory ที่ composition root
+   226	12. **UI ที่พึ่ง game state** ต้อง derive จาก authoritative state (`TimeSystem`, `SectStateProvider`)
+   227	    ไม่ใช่จาก message อย่างเดียว เพื่อให้ subscription/start order หาข้อมูลไม่เจอไม่ได้
+   228	
+   229	---
+   230	
+   231	## 8. Known issues / open items
+   232	
+   233	- **Core loop, combat (ACS-style vs Rimworld-style), stat system, technique/manual, item detail
+   234	  ยังไม่ตัดสิน** → `LLMWiki/wiki/sources/open-questions.md`
+   235	- **Portrait/art pipeline** ยังต้อง generate ผ่าน ComfyUI + chroma-key แล้ว bake (ดู skills
+   236	  `chroma-key-portrait-pipeline`, `portrait-edit-prompt`)
+   237	- `Visual.Spikes/Editor/Phase4VerifyRunner.cs` มี assertion ที่ stale กับ start state ปัจจุบัน
+   238	  (d001 = `meditation` ไม่ใช่ `gathering_herb`) — ไม่ได้อยู่ใน EditMode suite
+   239	- Bridge tool `change_avatar_part` ยังไม่ผูกครบฝั่ง bridge (Unity-side request handler มีแล้ว)
+   240	- Wiki บางหน้าเขียน scene pattern เป็น "CoreScene + GameplayScene" — **ของจริงใน build
+   241	  settings ตอนนี้คือ `SectScene`** (ดู `SceneNamesTests`); ให้ code ชนะ
+   242	
+   243	---
+   244	
+   245	## 9. วิธีรัน / verify
+   246	
+   247	```bash
+   248	# sync shared contracts (ทำทุกครั้งที่แก้ Shared/)
+   249	./sync-shared.sh
+   250	
+   251	# data pipeline (แก้ CSV แล้ว regenerate)
+   252	cd DataTables && ./gen.sh        # หรือ gen.bat บน Windows
+   253	
+   254	# MCP bridge
+   255	cd McpBridge && dotnet build && dotnet run     # Unity ต้องรันก่อน (host TCP 3215)
+   256	
+   257	# Unity: เปิด UnityProject/ ใน Unity Hub → resolve packages → Play
+   258	# EditMode tests: รันผ่าน Test Runner หรือ Unity MCP tool `run_tests`
+   259	
+   260	# context pack สำหรับ AI
+   261	./build-context.sh               # → .ai/context-pack.md
+   262	```
+   263	
+   264	ลำดับ boot: **Unity ก่อน** (เป็น TCP server) แล้วค่อยรัน bridge (client)
+````
+
+### AGENTS.md (12207 bytes)
+````
+     1	# AGENTS.md — instructions for AI coding agents
+     2	
+     3	> Entry point สำหรับ AI agent ทุกตัวที่ทำงานใน repo นี้
+     4	> `build-context.sh` แนบไฟล์นี้เข้า context pack เสมอ — ถ้าเพิ่มกฎใหม่ ให้เพิ่มที่นี่
+     5	>
+     6	> เอกสารประกอบ: `project_summary.md` (design log), `Common-Rules.md` (กฎ phase),
+     7	> `LLMWiki/wiki/conventions.md` (workflow), `LLMWiki/wiki/index.md` (สารบัญ wiki)
+     8	
+     9	---
+    10	
+    11	## 0. ก่อนเริ่มทำงาน
+    12	
+    13	1. **อ่าน code จริงก่อนแก้** — ตัวอย่างในแชต, roadmap และ wiki เป็น *design intent*
+    14	   ไม่ใช่หลักฐานว่ามี implementation อยู่แล้ว ให้ reuse ของเดิม ห้ามสร้างซ้ำ
+    15	2. **code คือ source of truth** — ถ้า wiki/design doc ขัดกับ code ให้ code ชนะ
+    16	   แล้วแจ้งว่า doc ล้าสมัย (อย่าแก้ code เงียบ ๆ ให้ตรง doc)
+    17	3. **ทำทีละ phase** — เจอ dependency ที่ไม่คาดคิด ให้รายงานก่อนขยาย scope
+    18	   ห้าม implement phase ถัดไปเอง
+    19	4. **ห้ามเดา API** — VContainer / MessagePipe / UniTask / Luban ใช้ pattern ที่มีใน repo เท่านั้น
+    20	5. ถ้าข้อมูลใน context ไม่พอ ให้ตอบ `need_files` block แล้วหยุด (ดู §7)
+    21	
+    22	---
+    23	
+    24	## 1. Repo facts ที่ต้องรู้
+    25	
+    26	| เรื่อง | ค่า |
+    27	|---|---|
+    28	| Repo | `Memphis004/Cultivation-Together` |
+    29	| Unity project | `UnityProject/` (Unity 6, URP 2D) — เปิด folder นี้ใน Unity Hub |
+    30	| Runtime asmdef | `Xianxia.Sect.Runtime` (ไฟล์เดียว คลุม `Assets/Scripts/**`) |
+    31	| Test asmdef | `Xianxia.Sect.Tests.EditMode` |
+    32	| Bridge | `McpBridge/` — .NET 8 console app (`net8.0`), MCP server ผ่าน stdio |
+    33	| Transport | Unity = TCP **server** `127.0.0.1:3215`, bridge = client |
+    34	| ภาษา | **C# 8** เท่านั้น |
+    35	| Serialization | MessagePack (`[Key(N)]`) |
+    36	| Data | Luban (`DataTables/`) → `Assets/Scripts/Data/Gen/` → `Resources/DataTables/*.json` |
+    37	| Scenes | `Assets/Scenes/SectScene.unity` คือ gameplay scene ที่อยู่ใน build settings |
+    38	| จำนวน test ปัจจุบัน | EditMode 618 tests (2026-10-11) |
+    39	
+    40	**Boot order:** Unity ก่อน แล้วค่อยรัน bridge
+    41	
+    42	---
+    43	
+    44	## 2. กฎเหล็ก (violate แล้วพัง)
+    45	
+    46	### 2.1 ภาษาและ schema
+    47	- C# 8 — **ห้าม** `record`, `init`, `global using`, target-typed `new`
+    48	- MessagePack `[Key(N)]` และ enum value **append-only** — ห้ามแก้เลข/ค่าที่มีอยู่
+    49	  key ใหม่ให้ดูจาก code ปัจจุบันแล้วต่อท้าย
+    50	
+    51	### 2.2 Shared contracts (3 สำเนา)
+    52	- canonical = `Shared/*.cs` — **แก้ที่นี่เท่านั้น**
+    53	- แล้วรัน `./sync-shared.sh` (คัดลอกเข้า `UnityProject/Assets/Scripts/Shared/`
+    54	  และ `McpBridge/Shared/`)
+    55	- **ห้ามแก้สำเนาใน `UnityProject/` หรือ `McpBridge/` ตรง ๆ** — จะถูกทับตอน sync
+    56	
+    57	### 2.3 Gameplay state
+    58	- Unity เป็นเจ้าของ live state ทั้งหมด — mutation บน main thread เท่านั้น
+    59	- background thread ทำงานได้เฉพาะกับ **detached data** (เช่น file I/O)
+    60	- **ห้าม enumerate live mutable state จาก worker thread**
+    61	- resource ทุกตัวแก้ผ่าน **`AdjustAndNotify()`** ใน `SectStateProvider` เท่านั้น
+    62	
+    63	### 2.4 เวลา
+    64	- gameplay progression ใช้ **`TimeSystem.SimulationDelta`** เท่านั้น
+    65	- **ห้าม** อ่าน `Time.deltaTime` ใน gameplay code
+    66	- **ห้าม** set `Time.timeScale`
+    67	- pause มี reason ชัดเจน (`User`, `PendingDecision`) — ใช้ `Pause/Resume(reason)` และ
+    68	  `ResumeByPlayer`; **ห้ามเรียก `SetPaused` ในโค้ดใหม่**
+    69	- real-time clock (UTC cooldown, viewer inactivity 600s) แยกจาก sim time
+    70	- **ห้ามคูณ game speed ซ้ำ**
+    71	
+    72	### 2.5 Threading / IPC
+    73	- handler ที่มาจาก TCP (`MessagePipe.Interprocess`) รันบน **background thread**
+    74	  → `await UniTask.SwitchToMainThread()` ก่อน mutate state / publish in-memory / แตะ UI
+    75	- **ห้ามใช้ in-process pub/sub แทนการเรียกข้าม process** — ถ้า UI ต้องทำสิ่งเดียวกับ bridge
+    76	  ให้เรียก shared entry point ตรง ๆ (ตัวอย่าง: `DecisionExecutor`)
+    77	- **ห้าม register message ฝั่ง visual/building/task บน interprocess broker** — เป็น in-memory เท่านั้น
+    78	- request-response ทุกคู่ต้อง register **ทั้ง** `RegisterTcpRemoteRequestHandler`
+    79	  **และ** `RegisterAsyncRequestHandler` (ดู `Core/Installers/InterprocessInstaller.cs`)
+    80	- **bridge ใช้ `IDistributedSubscriber` ไม่ได้** — TCP transport นี้ `StartReceiver()`
+    81	  (bind listen socket) ทุกกรณี ไม่สนใจ `HostAsServer` → port ชนกับ hub
+    82	  use **request-response** แทน (connect out เท่านั้น)
+    83	
+    84	### 2.6 DI
+    85	- registration ใหม่อยู่ installer ที่ถูกชั้น: `Assets/Scripts/Core/Installers/*`
+    86	  (`Gameplay` / `UI` / `Building` / `Visual` / `Interprocess`)
+    87	- ผูกกับฉาก → `Scenes/SectScene/SectSceneLifetimeScope.cs`
+    88	- **ห้ามยัดกลับ `GameLifetimeScope.Configure()`**
+    89	- **ห้าม reflection / `FindObjectOfType` หา service** — constructor injection เท่านั้น
+    90	  (UI panel resolve ผ่าน enum→Type mapping)
+    91	- แก้ DI registration หรือ constructor ของ registered type → **ต้องพิสูจน์ด้วยการ build
+    92	  container จริง** (EditMode test หรือ Play Mode boot smoke) — ห้ามมี public constructor
+    93	  ซ้อนบน registered type (VContainer เลือกตัวที่ param เยอะสุด) ให้ pin ผ่าน factory
+    94	
+    95	### 2.7 UI
+    96	- panel ใหม่เดินตาม **generator pattern**: Editor generator → regenerate prefab →
+    97	  `UIPresenterKind` **ต่อท้ายเท่านั้น** → catalog entry → ฟอนต์ไทย TMP + palette กลาง
+    98	- **ห้าม hand-edit prefab YAML**
+    99	- UI ที่พึ่ง game state ต้อง derive จาก **authoritative state** (`TimeSystem`,
+   100	  `SectStateProvider`) ไม่ใช่จาก message อย่างเดียว — subscription/start order
+   101	  ห้ามทำให้ข้อมูลหาย
+   102	- dispose subscription และ cancel async ของ session เก่าให้ถูกต้อง
+   103	
+   104	### 2.8 อย่าแตะ
+   105	- **อย่าฟื้น outfit / `TryApplyOutfit`** — decision อยู่ใน
+   106	  `LLMWiki/wiki/sources/avatar-appearance.md` §1
+   107	- **อย่าแก้ไฟล์ใน `Assets/Scripts/Data/Gen/`** — regenerate จาก `DataTables/` แทน
+   108	- **อย่าแก้ `Tools/Luban/*.dll`** — vendored binary
+   109	- Spyke/Spine example assets ของ Esoteric ห้ามตกค้างใน build จริง
+   110	
+   111	---
+   112	
+   113	## 3. Generated / build output — ห้าม commit
+   114	
+   115	`.gitignore` กันไว้แล้ว แต่ถ้าเจอ tracked อยู่ให้ `git rm --cached`:
+   116	
+   117	```
+   118	UnityProject/Logs/          UnityProject/Temp/          UnityProject/obj/
+   119	UnityProject/UserSettings/  UnityProject/Library/       UnityProject/Builds/
+   120	UnityProject/*.csproj       UnityProject/*.sln
+   121	McpBridge/bin/              McpBridge/obj/
+   122	```
+   123	
+   124	`McpBridge/McpBridge.csproj` **เป็นไฟล์จริง ต้อง commit**
+   125	
+   126	---
+   127	
+   128	## 4. MCP tools ที่ bridge เปิดอยู่
+   129	
+   130	`McpBridge/Program.cs` — read/write แยก type ชัดเจน
+   131	
+   132	**`SectQueryTools` (read-only เท่านั้น)**
+   133	| tool | อ่านอะไร |
+   134	|---|---|
+   135	| `get_sect_state` | disciples, wallets, stockpile |
+   136	| `await_next_world_event` | block จนกว่าจะมี event ที่ต้องตัดสิน (คืน `InstanceId` ด้วย) |
+   137	| `get_ownership_log` | log การเปลี่ยนเจ้าของ (ไม่ log rejection/no-op) |
+   138	| `get_task_change_log` | log การเปลี่ยน task (ไม่ log rejection/no-op) |
+   139	| `get_task_protection` | viewer protection state ต่อ disciple |
+   140	
+   141	**`SectActionTools` (write)**
+   142	| tool | ทำอะไร |
+   143	|---|---|
+   144	| `execute_decision` | ส่ง decision (ระบุ `instanceId` เมื่อ event id เดียวกัน pending ซ้อนกัน) |
+   145	| `purchase_item` | ให้ disciple ซื้อของจาก stockpile |
+   146	| `assign_task` | assign task — ส่งเป็น `SECT_MASTER` เสมอ (AI GM ไม่มี viewer bypass) |
+   147	
+   148	**ห้ามเพิ่ม tool ฝั่ง write ที่แตะ ownership** — มี guard test สแกน `Program.cs`
+   149	ห้ามมี `TrySetDiscipleOwner`; ownership assignment เป็น local dev-harness operation เท่านั้น
+   150	
+   151	---
+   152	
+   153	## 5. Verify ก่อนบอกว่าเสร็จ
+   154	
+   155	```bash
+   156	# contracts
+   157	./sync-shared.sh                       # แล้วเช็คว่า 3 สำเนาตรงกัน
+   158	
+   159	# data
+   160	cd DataTables && ./gen.sh
+   161	
+   162	# bridge
+   163	cd McpBridge && dotnet build           # ต้อง 0 error
+   164	
+   165	# Unity: EditMode tests ทั้งหมด (ผ่าน Test Runner หรือ Unity MCP run_tests)
+   166	```
+   167	
+   168	- **รัน test จริงแล้วรายงานผลจริง** — ห้ามอ้างว่า Unity compile/test ผ่านถ้าไม่ได้รัน
+   169	- แก้ test ให้ผ่านไม่ได้ แปลว่ายังไม่เสร็จ — **ห้าม weaken assertion / skip / swallow error**
+   170	  เพื่อให้ผ่าน ถ้าจำเป็นจริง ๆ ต้องอธิบายเหตุผลและ verify behavior นั้น
+   171	- เพิ่ม regression test ที่ **fail กับโค้ดก่อนแก้** (พิสูจน์ว่า test มี discriminating power)
+   172	- ถ้า filter output ผ่าน pipeline ให้เก็บ exit status ของคำสั่งที่ทดสอบไว้ (เช่น `set -o pipefail`)
+   173	
+   174	---
+   175	
+   176	## 6. Report format ตอนปิดงาน
+   177	
+   178	1. ไฟล์ที่เปลี่ยน
+   179	2. behavior ที่เปลี่ยน
+   180	3. command/test ที่รัน + ผลจริง
+   181	4. ขั้นตอนที่คนต้อง verify เอง
+   182	5. ยังค้างอะไร / ข้อจำกัด
+   183	6. อัปเดต `LLMWiki/wiki/index.md` + `LLMWiki/wiki/log.md`
+   184	   (entry ใหม่ขึ้นต้นด้วย `## [YYYY-MM-DD]` — `build-context.sh` ดึงเฉพาะบรรทัดนี้)
+   185	7. รัน `./build-context.sh`
+   186	8. **แล้วหยุด** — อย่าเริ่ม phase ถัดไปเอง
+   187	
+   188	---
+   189	
+   190	## 7. ถ้าข้อมูลไม่พอ
+   191	
+   192	ตอบเป็น JSON block นี้แล้วหยุด อย่าเดา:
+   193	
+   194	```need_files
+   195	{
+   196	  "paths": ["path/to/file.cs"],
+   197	  "reason": "เหตุผลที่ต้องอ่านไฟล์นี้"
+   198	}
+   199	```
+   200	
+   201	เวลา อธิบาย code ให้อ้าง path + line range จาก context pack เช่น
+   202	`Shared/GameMessages.cs:45-60`
+````
 
 ### sync-shared.sh (751 bytes)
 ````
@@ -3514,7 +3988,7 @@
     96	
     97	## Maintenance
     98	
-    99	- Last index update: 2026-09-25
+    99	- Last index update: 2026-10-11
    100	- Total source pages: 11 (+ 9 code snippets)
    101	- Total concept pages: 14
    102	- Total entity pages: 7
@@ -4147,15 +4621,11 @@
    171	  remember they're tracked
 ````
 
-### Missing (ไม่พบใน working tree)
-- project_summary.md
-- AGENTS.md
-
 ## File Tree (filtered by .aiignore)
 
 ### Files per directory (depth ≤ 5)
 ```
-    8  .
+   10  .
     1  .agents
     1  .agents/skills/animation-create
     1  .agents/skills/animation-get-data
@@ -4358,7 +4828,7 @@
     1  Tools/Luban/Templates/typescript-json
     1  Tools/Luban/Templates/typescript-protobuf
    14  Tools/art
-    3  UnityProject
+    1  UnityProject
     1  UnityProject/.claude/skills/animation-create
     1  UnityProject/.claude/skills/animation-get-data
     1  UnityProject/.claude/skills/animation-modify
@@ -4542,7 +5012,7 @@
     1  UnityProject/Assets/Spine/Runtime
    42  UnityProject/Assets/Spine/Runtime/spine-csharp
   116  UnityProject/Assets/Spine/Runtime/spine-unity
-   49  UnityProject/Assets/Tests/EditMode
+   50  UnityProject/Assets/Tests/EditMode
     2  UnityProject/Assets/TextMesh Pro/Fonts
     3  UnityProject/Assets/TextMesh Pro/Resources
     4  UnityProject/Assets/TextMesh Pro/Resources/Fonts & Materials
@@ -4552,8 +5022,6 @@
     3  UnityProject/Assets/TextMesh Pro/Sprites
     2  UnityProject/Packages
    26  UnityProject/ProjectSettings
-    3  UnityProject/UserSettings
-    1  UnityProject/UserSettings/Layouts
     3  art
    10  art/disciple_list
     7  art/disciple_list/contact
@@ -4789,6 +5257,7 @@
   .opencode/skills/portrait-edit-prompt/assets/recipe.example.json
   .zcode/AGENT.md
   .zcode/config.json
+  AGENTS.md
   Common-Rules.md
   DataTables/Data/EventChoiceDef.csv
   DataTables/Data/EventDef.csv
@@ -5446,15 +5915,12 @@
   UnityProject/Assets/Spine/Runtime/spine-unity/Mesh Generation/SpineMesh.cs
   UnityProject/Assets/Spine/Runtime/spine-unity/Modules/TK2D/SpriteCollectionAttachmentLoader.cs
   UnityProject/Assets/Spine/Runtime/spine-unity/Shaders/Sprite/README.md
-  UnityProject/Assets/Spine/Runtime/spine-unity/SkeletonDataModifierAssets/BlendModeMaterials/BlendModeMaterialsAsset.cs
-  ... [198 more files truncated — ปรับ TREE_MAX_LINES หรือ .aiignore]
+  ... [201 more files truncated — ปรับ TREE_MAX_LINES หรือ .aiignore]
 ```
 
 ## Recent Wiki Log (last 15 entries, each cut to 400 chars)
 
 ```
-## [2026-10-02] new-feature | Tools/art/bake_land_mask.py + Scripts/Building/{PlaceableLandMask.cs,BuildingGrid.cs} + Systems/BuildingSystem.cs + Visual/Scene/GridOverlayRenderer.cs + Tests/EditMode/{PlaceableLandMaskTests,BuildingGridTests}.cs | Grid placement เฉพาะส่วนที่เป็นพื้นดินจริงของเกาะ (แทนโซน 4 สี่เ�
-## [2026-10-02] update | Tools/art/bake_land_mask.py + Scripts/Building/PlaceableLandMask.cs + Tests/EditMode/PlaceableLandMaskTests.cs | เกณฑ์ที่สองของการ bake land mask: "ผืนที่วางได้ต้องรับ footprint ใหญ่สุดของเกมได้" — ผู้ใช้กากบาท 4 จุดบน preview รอ�
 ## [2026-10-02] update | Scripts/UI/Views/BottomMenuView.cs + Prefabs/UI/BottomMenuPrefab.prefab | ขยับแถบเมนูล่าง (ปุ่ม สร้าง/ศิษย์/คลัง) ออกจากขอบจอตามฟีดแบ็ก: เดิม bar วางที่ y=0 แล้วปุ่ม 96x95 ลอยอยู่สูงจากขอบล่า�
 ## [2026-10-02] new-tool | Assets/Editor/LandMaskPainterWindow.cs + Assets/Editor/LandMaskBuilder.cs | เครื่องมือ Unity Editor สำหรับ mask พื้นที่วางได้ (Xianxia > Land Mask Painter) ไว้ใช้ตอนเปลี่ยนภาพภูเขา/เกาะลอยฟ้าใหม่: หน้าต่างวาดภาพ
 ## [2026-10-04] new-feature | Shared/GameMessages.cs (+2 mirrors) + Scripts/Systems/SectStateProvider.cs + Core/TimeSystem.cs + Core/AssignTaskHandler.cs + Core/Installers/InterprocessInstaller.cs + McpBridge/Program.cs | Task System v2 Phase A–C: [Key(9)] OwnerType/[Key(10)] OwnerId + AssignTaskRequest/Response/DiscipleTaskChangedMessage; ISectStateProvider.TryAssignTask (disciple→permission:
@@ -5468,5 +5934,7 @@
 ## [2026-10-09] new-feature | Scripts/Core/TimeSystem.cs + Scripts/Systems/SectStateProvider.cs + Scripts/Core/Installers/GameplayInstaller.cs + Scripts/UI/Presenters/TaskAssignmentPresenter.cs + Tests/EditMode/{HybridPermissionTests(new),AssignTaskTests,TaskAssignmentPresenterTests,DiscipleListPresenterTests}.cs | P5B Hybrid Permissions + authoritative queries (ไม่ต่อ Twitch, ไม�
 ## [2026-10-09] new-feature | Shared/GameMessages.cs (+2 mirrors) + Scripts/Core/TaskObservability.cs + Scripts/Core/ViewerMembershipPersistence.cs + Scripts/Core/Installers/{GameplayInstaller,InterprocessInstaller}.cs + Scripts/Core/TimeSystem.cs + Scripts/Systems/SectStateProvider.cs + Scripts/UI/{Views/TaskAssignmentView,Presenters/TaskAssignmentPresenter}.cs + McpBridge/Program.cs + Tests/Edit
 ## [2026-10-09] update | Shared/MockSectData.cs (+2 mirrors) + Tests/EditMode/{MockStartStateTests,BuildingPlacementTests,BuildingMenuPresenterTests,AssignTaskTests,TaskRequirementTests,HybridPermissionTests,TaskObservabilityTests,OwnershipHarnessTests,TaskAssignmentPresenterTests}.cs + LLMWiki/wiki/log.md | Start state = no buildings at all: ลบ herb_plot b001 ที่ (-11,-8) ออกจ�
+## [2026-10-11] bugfix | Scripts/UI/Core/UIPanelHandle.cs + Scripts/UI/Core/UIService.cs + Scripts/UI/Systems/WorldEventUISystem.cs + Tests/EditMode/EventPopupLiteTests.cs | P13B popup-restore crash: session boundary destroy session UI โดยไม่ผ่าน UIService.Close → cached UIPanelHandle ยังชี้ไปที่ instance ที่ตายแล้ว; View ถูก ty
+## [2026-10-11] update | .gitignore + project_summary.md (new) + AGENTS.md (new) + .ai/context-pack.md | housekeeping: (1) untrack generated output — git rm --cached UnityProject/{Logs,UserSettings,Temp} + McpBridge/{bin,obj} + UnityProject/{MessagePipe.Interprocess,Xianxia.Sect.Runtime}.csproj (97 ไฟล์; ไฟล์ยังอยู่บน disk) เพราะถูก commit คร
 ```
 
