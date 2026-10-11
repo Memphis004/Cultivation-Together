@@ -8,6 +8,9 @@ Logs/
 UserSettings/
 Assets/TextMesh Pro/
 
+# MCP bridge build output (dotnet build / dotnet run) — Common-Rules.md §15
+[Bb]in/
+
 # Visual Studio / Rider cache
 .vs/
 .idea/
