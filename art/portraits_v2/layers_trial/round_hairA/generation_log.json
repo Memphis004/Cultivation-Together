@@ -1,0 +1,29 @@
+{
+  "round": "hairA",
+  "group": "layers",
+  "approved_images": 3,
+  "generation_requests_submitted": 3,
+  "jobs": [
+    {
+      "seed": 540601,
+      "workflow": "art\\portraits_v2\\layers_trial\\round_hairA\\workflows\\seed540601.json",
+      "status": "completed",
+      "prompt_id": "1c77b9fe-9bd0-475e-8edf-6729c360386f",
+      "raw": "C:\\UnityProjects\\Cultivation-Together\\art\\portraits_v2\\layers_trial\\round_hairA\\raw\\540601\\1c77b9fe_000.png"
+    },
+    {
+      "seed": 540602,
+      "workflow": "art\\portraits_v2\\layers_trial\\round_hairA\\workflows\\seed540602.json",
+      "status": "completed",
+      "prompt_id": "9121ea8d-ecfa-4ad3-934c-84ed641f6d64",
+      "raw": "C:\\UnityProjects\\Cultivation-Together\\art\\portraits_v2\\layers_trial\\round_hairA\\raw\\540602\\9121ea8d_000.png"
+    },
+    {
+      "seed": 540603,
+      "workflow": "art\\portraits_v2\\layers_trial\\round_hairA\\workflows\\seed540603.json",
+      "status": "completed",
+      "prompt_id": "dba61ed9-e819-4dc7-85b3-efaa38444b7b",
+      "raw": "C:\\UnityProjects\\Cultivation-Together\\art\\portraits_v2\\layers_trial\\round_hairA\\raw\\540603\\dba61ed9_000.png"
+    }
+  ]
+}

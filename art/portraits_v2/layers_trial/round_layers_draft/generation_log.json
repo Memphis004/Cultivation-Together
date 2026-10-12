@@ -1,0 +1,22 @@
+{
+  "round": "layersdraft",
+  "group": "layers",
+  "approved_images": 2,
+  "generation_requests_submitted": 2,
+  "jobs": [
+    {
+      "seed": 540702,
+      "workflow": "art\\portraits_v2\\layers_trial\\round_layers_draft\\workflows\\seed540702.json",
+      "status": "completed",
+      "prompt_id": "5730ff0e-65ce-4fb1-b891-db043dda174c",
+      "raw": "C:\\UnityProjects\\Cultivation-Together\\art\\portraits_v2\\layers_trial\\round_layers_draft\\raw\\540702\\5730ff0e_000.png"
+    },
+    {
+      "seed": 540703,
+      "workflow": "art\\portraits_v2\\layers_trial\\round_layers_draft\\workflows\\seed540703.json",
+      "status": "completed",
+      "prompt_id": "3c176dcd-f214-4611-a51f-8275b3c3f6a9",
+      "raw": "C:\\UnityProjects\\Cultivation-Together\\art\\portraits_v2\\layers_trial\\round_layers_draft\\raw\\540703\\3c176dcd_000.png"
+    }
+  ]
+}

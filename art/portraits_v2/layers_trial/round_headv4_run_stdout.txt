@@ -1,0 +1,7 @@
+comfy input=C:\Users\memph\AppData\Local\Comfy-Desktop\ComfyUI-Shared\input output=C:\Users\memph\AppData\Local\Comfy-Desktop\ComfyUI-Shared\output
+seed 540101: valid=True errors=0 warnings=0 spends=False image3_linked=False
+seed 540102: valid=True errors=0 warnings=0 spends=False image3_linked=False
+seed 540103: valid=True errors=0 warnings=0 spends=False image3_linked=False
+completed 540101 C:\UnityProjects\Cultivation-Together\art\portraits_v2\layers_trial\round_headv4\raw\540101\38576085_000.png
+completed 540102 C:\UnityProjects\Cultivation-Together\art\portraits_v2\layers_trial\round_headv4\raw\540102\18ed70f9_000.png
+completed 540103 C:\UnityProjects\Cultivation-Together\art\portraits_v2\layers_trial\round_headv4\raw\540103\3886fab4_000.png

@@ -1,0 +1,130 @@
+{
+  "1": {
+    "class_type": "UNETLoader",
+    "inputs": {
+      "unet_name": "qwen_image_2.1_int8_convrot.safetensors",
+      "weight_dtype": "default"
+    }
+  },
+  "2": {
+    "class_type": "CLIPLoader",
+    "inputs": {
+      "clip_name": "qwen3vl_8b_int8_convrot.safetensors",
+      "type": "qwen_image",
+      "device": "default"
+    }
+  },
+  "3": {
+    "class_type": "VAELoader",
+    "inputs": {
+      "vae_name": "qwen_image_2.1_vae_bf16.safetensors"
+    }
+  },
+  "4": {
+    "class_type": "LoadImage",
+    "inputs": {
+      "image": "lt_base_norm.png"
+    }
+  },
+  "5": {
+    "class_type": "LoadImage",
+    "inputs": {
+      "image": "lt_anchor_1cf13e0c_000.png"
+    }
+  },
+  "6": {
+    "class_type": "TextEncodeQwenImage21",
+    "inputs": {
+      "clip": [
+        "2",
+        0
+      ],
+      "vae": [
+        "3",
+        0
+      ],
+      "resolution": 0,
+      "images.image_1": [
+        "4",
+        0
+      ],
+      "images.image_2": [
+        "5",
+        0
+      ],
+      "prompt": "Edit image 1. Keep her head, face and neck in image 1 exactly as shown: the same shape, the same position, the same size and the same ink-brush painting medium.\nFill every other area of the image with the same flat solid magenta #FF00FF background.\nThe forehead, hairline, ears and neck are fully painted and visible, as one whole head.\nOnly one character. No text, no logo, no watermark.",
+      "negative_prompt": "copied reference character, copied costume or pose, multiple characters, full-length figure, knees, shins, feet, scenery, floor, ground, shadows, gradient background, ink splashes outside the character, text, letters, numbers, logos, watermark, signature, frame, UI",
+      "images.image_3": [
+        "11",
+        0
+      ]
+    }
+  },
+  "7": {
+    "class_type": "QwenImage21Cache",
+    "inputs": {
+      "model": [
+        "1",
+        0
+      ],
+      "device": "auto",
+      "dtype": "default"
+    }
+  },
+  "8": {
+    "class_type": "KSampler",
+    "inputs": {
+      "model": [
+        "7",
+        0
+      ],
+      "positive": [
+        "6",
+        0
+      ],
+      "negative": [
+        "6",
+        1
+      ],
+      "latent_image": [
+        "6",
+        2
+      ],
+      "seed": 540101,
+      "steps": 25,
+      "cfg": 1,
+      "sampler_name": "euler",
+      "scheduler": "simple",
+      "denoise": 1
+    }
+  },
+  "9": {
+    "class_type": "VAEDecode",
+    "inputs": {
+      "samples": [
+        "8",
+        0
+      ],
+      "vae": [
+        "3",
+        0
+      ]
+    }
+  },
+  "10": {
+    "class_type": "SaveImage",
+    "inputs": {
+      "images": [
+        "9",
+        0
+      ],
+      "filename_prefix": "layers_trial_head_seed540101"
+    }
+  },
+  "11": {
+    "class_type": "LoadImage",
+    "inputs": {
+      "image": "portrait_style_ref-2.png"
+    }
+  }
+}

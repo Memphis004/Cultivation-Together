@@ -1,0 +1,165 @@
+{
+  "base": {
+    "file": "base_norm.png",
+    "chin_y_base_detector": 611,
+    "chin_y_norm_measurements_json": 607.87,
+    "chin_base_diff_vs_measurements_px": 3.13,
+    "chin_base_within_5px_of_measurements": true,
+    "face_width_eye_base_detector": 139,
+    "face_width_eye_norm_measurements_json": 129.15,
+    "foreground_px_base": 518816,
+    "below_chin_px_base": 473480,
+    "dark_frac_head_box_base": 0.296
+  },
+  "boxes": {
+    "face": [
+      430,
+      500,
+      600,
+      610
+    ],
+    "head": [
+      360,
+      360,
+      660,
+      620
+    ],
+    "drift_range_px": 40,
+    "chin_x": [
+      510,
+      551
+    ],
+    "chin_search": [
+      600,
+      660
+    ],
+    "fg_distance": 60
+  },
+  "tolerances": {
+    "drift_px": 5,
+    "chin_px": 5,
+    "face_width_pct": 3.0
+  },
+  "results": [
+    {
+      "seed": 540101,
+      "raw": "art/portraits_v2/layers_trial/raw/540101/81ed1a71_000.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "alpha_top_left_corner": 255,
+      "alpha_top_right_corner": 255,
+      "near_magenta_visible_px_lt60": 1053618,
+      "keyed_png": "art/portraits_v2/layers_trial/layers/head_seed540101.png",
+      "keyed_size": [
+        1024,
+        1536
+      ],
+      "keyed_mode": "RGBA",
+      "drift_face_box": {
+        "dx": 0,
+        "dy": 0,
+        "ncc": 0.9798
+      },
+      "chin_y_out": 611,
+      "chin_y_base": 611,
+      "face_width_eye_out": 138,
+      "face_width_eye_base": 139,
+      "face_width_delta_pct": -0.72,
+      "foreground_px": 519245,
+      "foreground_ratio": 1.0008,
+      "below_chin_px": 473908,
+      "mismatch_fraction_face_box_diff48": 0.0195,
+      "dark_frac_head_box_out": 0.2975,
+      "dark_frac_head_box_base": 0.296,
+      "phase0_checks": {
+        "drift_le_5px": true,
+        "chin_within_5px_of_base": true,
+        "face_width_within_3pct": true
+      },
+      "phase0_verdict": "PASS"
+    },
+    {
+      "seed": 540102,
+      "raw": "art/portraits_v2/layers_trial/raw/540102/2dc3a32c_000.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "alpha_top_left_corner": 255,
+      "alpha_top_right_corner": 255,
+      "near_magenta_visible_px_lt60": 1052184,
+      "keyed_png": "art/portraits_v2/layers_trial/layers/head_seed540102.png",
+      "keyed_size": [
+        1024,
+        1536
+      ],
+      "keyed_mode": "RGBA",
+      "drift_face_box": {
+        "dx": -1,
+        "dy": 0,
+        "ncc": 0.9654
+      },
+      "chin_y_out": 612,
+      "chin_y_base": 611,
+      "face_width_eye_out": 138,
+      "face_width_eye_base": 139,
+      "face_width_delta_pct": -0.72,
+      "foreground_px": 520680,
+      "foreground_ratio": 1.0036,
+      "below_chin_px": 475234,
+      "mismatch_fraction_face_box_diff48": 0.0941,
+      "dark_frac_head_box_out": 0.2956,
+      "dark_frac_head_box_base": 0.296,
+      "phase0_checks": {
+        "drift_le_5px": true,
+        "chin_within_5px_of_base": true,
+        "face_width_within_3pct": true
+      },
+      "phase0_verdict": "PASS"
+    },
+    {
+      "seed": 540103,
+      "raw": "art/portraits_v2/layers_trial/raw/540103/e5f78f23_000.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "alpha_top_left_corner": 255,
+      "alpha_top_right_corner": 255,
+      "near_magenta_visible_px_lt60": 1051304,
+      "keyed_png": "art/portraits_v2/layers_trial/layers/head_seed540103.png",
+      "keyed_size": [
+        1024,
+        1536
+      ],
+      "keyed_mode": "RGBA",
+      "drift_face_box": {
+        "dx": 0,
+        "dy": 0,
+        "ncc": 0.9889
+      },
+      "chin_y_out": 611,
+      "chin_y_base": 611,
+      "face_width_eye_out": 139,
+      "face_width_eye_base": 139,
+      "face_width_delta_pct": 0.0,
+      "foreground_px": 521558,
+      "foreground_ratio": 1.0053,
+      "below_chin_px": 476060,
+      "mismatch_fraction_face_box_diff48": 0.0057,
+      "dark_frac_head_box_out": 0.2985,
+      "dark_frac_head_box_base": 0.296,
+      "phase0_checks": {
+        "drift_le_5px": true,
+        "chin_within_5px_of_base": true,
+        "face_width_within_3pct": true
+      },
+      "phase0_verdict": "PASS"
+    }
+  ]
+}

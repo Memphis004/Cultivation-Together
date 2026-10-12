@@ -1,0 +1,15 @@
+{
+  "round": "head_v6",
+  "group": "layers",
+  "approved_images": 1,
+  "generation_requests_submitted": 1,
+  "jobs": [
+    {
+      "seed": 540703,
+      "workflow": "art\\portraits_v2\\layers_trial\\round_head_v6\\workflows\\seed540703.json",
+      "status": "completed",
+      "prompt_id": "30927b51-5ea0-4cf8-b958-ed533d3cbe4d",
+      "raw": "C:\\UnityProjects\\Cultivation-Together\\art\\portraits_v2\\layers_trial\\round_head_v6\\raw\\540703\\30927b51_000.png"
+    }
+  ]
+}

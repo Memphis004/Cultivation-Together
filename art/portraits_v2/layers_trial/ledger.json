@@ -1,0 +1,295 @@
+{
+  "rounds": [
+    {
+      "round": "phase0",
+      "log": "layers_trial/generation_log.json",
+      "submits": 3,
+      "approved": 3,
+      "approved_source": "quota_planned (no approved_images field)",
+      "note": "log field generation_requests_submitted_before_submit=2 is unexplained"
+    },
+    {
+      "round": "headv2",
+      "log": "layers_trial/round_headv2/generation_log.json",
+      "submits": 3,
+      "approved": 3,
+      "approved_source": "approved_images"
+    },
+    {
+      "round": "headv3",
+      "log": "layers_trial/round_headv3/generation_log.json",
+      "submits": 3,
+      "approved": 3,
+      "approved_source": "approved_images"
+    },
+    {
+      "round": "headv4",
+      "log": "layers_trial/round_headv4/generation_log.json (+ generation_log-round_headv4.json, same 3 jobs, counted once)",
+      "submits": 3,
+      "approved": 3,
+      "approved_source": "approved_images"
+    },
+    {
+      "round": "hairA",
+      "log": "layers_trial/round_hairA/generation_log.json",
+      "submits": 3,
+      "approved": 3,
+      "approved_source": "approved_images"
+    }
+  ],
+  "total_submits": 17,
+  "total_approved": 17,
+  "checkpoint": "hairA (images 13-15)",
+  "round_hairA_measurement": {
+    "script": "Tools/art/layers_trial_measure.py --round-dir round_hairA --seeds 540601 540602 540603",
+    "base_chin_y": 611,
+    "base_face_width_eye": 139,
+    "results": [
+      {
+        "seed": 540601,
+        "drift_dx_dy": [
+          2,
+          0
+        ],
+        "chin_y_out": 609,
+        "face_width_eye_out": 136,
+        "face_width_delta_pct": -2.16,
+        "near_magenta_visible_px_whole_raw": 1127862
+      },
+      {
+        "seed": 540602,
+        "drift_dx_dy": [
+          4,
+          -13
+        ],
+        "chin_y_out": 601,
+        "face_width_eye_out": 126,
+        "face_width_delta_pct": -9.35,
+        "near_magenta_visible_px_whole_raw": 1122060
+      },
+      {
+        "seed": 540603,
+        "drift_dx_dy": [
+          -2,
+          -25
+        ],
+        "chin_y_out": null,
+        "face_width_eye_out": 116,
+        "face_width_delta_pct": -16.55,
+        "near_magenta_visible_px_whole_raw": 1104513
+      }
+    ],
+    "edge_fringe_px_head_shoulder_band": {
+      "540601": 0,
+      "540602": 0,
+      "540603": 0
+    }
+  },
+  "selected_seed_base_bald": 540602,
+  "selected_seed_note": "user selected seed 540602; saved base_bald.png from round_hairA raw (RGB, magenta canvas)",
+  "base_bald": {
+    "path": "layers_trial/base_bald.png",
+    "source": "layers_trial/round_hairA/raw/540602/9121ea8d_000.png",
+    "size": [
+      1024,
+      1536
+    ],
+    "mode": "RGB",
+    "sha256": "8d3ef1bc0c24cac37981d9fc34802a839b402dfa3d5cca0939f74cf3c35c7c15"
+  },
+  "base_bald_keyed": {
+    "path": "layers_trial/base_bald_keyed.png",
+    "status": "created",
+    "derived_from": "layers_trial/base_bald.png",
+    "derived_from_sha256": "8d3ef1bc0c24cac37981d9fc34802a839b402dfa3d5cca0939f74cf3c35c7c15",
+    "method": "separate key step: portrait_postprocess.chroma_key(LOW=60,HIGH=160) on #FF00FF; background (d<60) set to exact (255,0,255), subject kept, feathered edge blended. neutralize_canvas NOT used.",
+    "size": [
+      1024,
+      1536
+    ],
+    "mode": "RGB",
+    "sha256": "e6e90001dac147c22c1f2c61f31fd91bb96caddaaac9394bf276e67fc9838ba5",
+    "corners_after": {
+      "TL": [
+        255,
+        0,
+        255
+      ],
+      "TR": [
+        255,
+        0,
+        255
+      ],
+      "BL": [
+        255,
+        0,
+        255
+      ],
+      "BR": [
+        255,
+        0,
+        255
+      ]
+    },
+    "exact_magenta_fraction": 0.7134,
+    "pixels_changed": 1124520,
+    "verified": "file reopened and hash recorded; not measured by measure script; not verified by eye"
+  },
+  "round_layersdraft": {
+    "log": "layers_trial/round_layers_draft/generation_log.json",
+    "submits": 2,
+    "approved": 2,
+    "approved_source": "user approved 2 images (body 540702, head 540703)",
+    "results": [
+      {
+        "seed": 540702,
+        "raw": "C:\\UnityProjects\\Cultivation-Together\\art\\portraits_v2\\layers_trial\\round_layers_draft\\raw\\540702\\5730ff0e_000.png",
+        "size": [
+          1024,
+          1536
+        ],
+        "mode": "RGBA",
+        "corners_TL_TR_BL_BR": [
+          [
+            239,
+            12,
+            220
+          ],
+          [
+            230,
+            19,
+            225
+          ],
+          [
+            221,
+            21,
+            229
+          ],
+          [
+            236,
+            16,
+            227
+          ]
+        ],
+        "exact_magenta_frac": 0.0,
+        "near_magenta_lt60_frac": 0.7317
+      },
+      {
+        "seed": 540703,
+        "raw": "C:\\UnityProjects\\Cultivation-Together\\art\\portraits_v2\\layers_trial\\round_layers_draft\\raw\\540703\\3c176dcd_000.png",
+        "size": [
+          1024,
+          1536
+        ],
+        "mode": "RGBA",
+        "corners_TL_TR_BL_BR": [
+          [
+            240,
+            13,
+            219
+          ],
+          [
+            230,
+            23,
+            232
+          ],
+          [
+            212,
+            26,
+            239
+          ],
+          [
+            235,
+            15,
+            234
+          ]
+        ],
+        "exact_magenta_frac": 0.0,
+        "near_magenta_lt60_frac": 0.9228
+      }
+    ],
+    "note": "raw only; not keyed, not measured by layers_trial_measure.py, not verified by eye"
+  },
+  "round_layersdraft_keyed": {
+    "body": {
+      "file": "art/portraits_v2/layers_trial/round_layers_draft/keyed/body_540702_keyed.png",
+      "derived_from": "C:/UnityProjects/Cultivation-Together/art/portraits_v2/layers_trial/round_layers_draft/raw/540702/5730ff0e_000.png",
+      "derived_from_sha256": "74e22c37590152de776e02722c0cd199795cfc0fa7dc9b067587dff688d013f1",
+      "sha256": "daefa4cba09b9f80d6a5dca79223c50bcd18b68526b61bad29b3dfcd802cc3f7",
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGB",
+      "corners_TL_TR_BL_BR": [
+        [
+          255,
+          0,
+          255
+        ],
+        [
+          255,
+          0,
+          255
+        ],
+        [
+          255,
+          0,
+          255
+        ],
+        [
+          255,
+          0,
+          255
+        ]
+      ],
+      "exact_magenta_frac": 0.7317,
+      "subject_opaque_px": 420077,
+      "feather_px_between_60_160": 1963,
+      "method": "portrait_postprocess.chroma_key LOW=60 HIGH=160 on #FF00FF; background snapped to exact (255,0,255); neutralize_canvas not used"
+    },
+    "head": {
+      "file": "art/portraits_v2/layers_trial/round_layers_draft/keyed/head_540703_keyed.png",
+      "derived_from": "C:/UnityProjects/Cultivation-Together/art/portraits_v2/layers_trial/round_layers_draft/raw/540703/3c176dcd_000.png",
+      "derived_from_sha256": "9b6395ba33e945eb7df72eded242d028cd26dd8a9e1563fe1c24455611b2cb27",
+      "sha256": "d14bfce951c8940f9d642852e56bd6761e0e2b2f400e95a1bab2a2d63c4642ca",
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGB",
+      "corners_TL_TR_BL_BR": [
+        [
+          255,
+          0,
+          255
+        ],
+        [
+          255,
+          0,
+          255
+        ],
+        [
+          255,
+          0,
+          255
+        ],
+        [
+          255,
+          0,
+          255
+        ]
+      ],
+      "exact_magenta_frac": 0.9239,
+      "subject_opaque_px": 66748,
+      "feather_px_between_60_160": 54696,
+      "method": "portrait_postprocess.chroma_key LOW=60 HIGH=160 on #FF00FF; background snapped to exact (255,0,255); neutralize_canvas not used"
+    }
+  },
+  "backup_avatar_parts_json": {
+    "source": "UnityProject/Assets/Resources/Data/avatar_parts.json",
+    "backup": "layers_trial/backup/avatar_parts.json",
+    "sha256": "c7f33da5787a813e7d1d18923d14aa79f1e3d29664523c2413bccd1f085b6bdc",
+    "note": "copy only; no edits to the source JSON"
+  }
+}

@@ -1,0 +1,25 @@
+==============================================================================
+trial_head  profile=female  seed=540101  base=base_norm.png  ref=None
+Edit image 1. Redraw her head outline, hair mass and hair flow from image 1 at exactly the same size and the same position: the same head shape and the same hairline and the same ink-brush painting medium.
+Fill every other area of the image with the same flat solid magenta #FF00FF background.
+The forehead, hairline, ears and neck are fully painted and visible, as one whole head.
+Focus only on the hair mass, the structural head shape and the hair flow on a clean background, with minimal face details.
+Every pixel below the neck is flat solid magenta #FF00FF: the body, shoulders, clothing, dress and sleeves are left as magenta.
+Only one character. No text, no logo, no watermark.
+==============================================================================
+trial_head  profile=female  seed=540102  base=base_norm.png  ref=None
+Edit image 1. Redraw her head outline, hair mass and hair flow from image 1 at exactly the same size and the same position: the same head shape and the same hairline and the same ink-brush painting medium.
+Fill every other area of the image with the same flat solid magenta #FF00FF background.
+The forehead, hairline, ears and neck are fully painted and visible, as one whole head.
+Focus only on the hair mass, the structural head shape and the hair flow on a clean background, with minimal face details.
+Every pixel below the neck is flat solid magenta #FF00FF: the body, shoulders, clothing, dress and sleeves are left as magenta.
+Only one character. No text, no logo, no watermark.
+==============================================================================
+trial_head  profile=female  seed=540103  base=base_norm.png  ref=None
+Edit image 1. Redraw her head outline, hair mass and hair flow from image 1 at exactly the same size and the same position: the same head shape and the same hairline and the same ink-brush painting medium.
+Fill every other area of the image with the same flat solid magenta #FF00FF background.
+The forehead, hairline, ears and neck are fully painted and visible, as one whole head.
+Focus only on the hair mass, the structural head shape and the hair flow on a clean background, with minimal face details.
+Every pixel below the neck is flat solid magenta #FF00FF: the body, shoulders, clothing, dress and sleeves are left as magenta.
+Only one character. No text, no logo, no watermark.
+wrote art/portraits_v2/layers_trial/prompts_v3.json

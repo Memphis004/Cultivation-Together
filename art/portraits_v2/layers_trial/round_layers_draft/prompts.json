@@ -1,0 +1,24 @@
+[
+  {
+    "id": "layers_draft",
+    "profile": "female",
+    "seed": 540702,
+    "base": "base_bald_keyed.png",
+    "isolate": "body",
+    "prompt": "Edit image 1. Keep her body and outfit from the neck down to the mid-thigh crop in image 1 exactly as shown: the same shape, the same position, the same size and the same ink-brush painting medium.\nFill every other area of the image with the same flat solid magenta #FF00FF background.\nThe body and outfit are painted as one whole solid shape that continues underneath the place where her hair and head are.\nOnly one character. No text, no logo, no watermark.",
+    "lint": [
+      "INFO isolate: experimental. Check that the part keeps the same position and size as image 1 with photocraft_layers.py --reference <approved portrait>; occluded areas are invented by the model."
+    ]
+  },
+  {
+    "id": "layers_draft",
+    "profile": "female",
+    "seed": 540703,
+    "base": "base_bald_keyed.png",
+    "isolate": "head",
+    "prompt": "Edit image 1. Redraw the structural head shape, face, ears and neck of her character from image 1 at exactly the same size and the same position, maintaining the exact base position: the same head shape and the same hairline and the same ink-brush painting medium.\nFill every other area of the image with the same flat solid magenta #FF00FF background.\nDraw the face, ears and neck in soft, simple flat tones with minimal fine details to maintain the facial structure.\nExact dark jet-black hair colour as in image 1, a high contrast hair mass.\nEvery pixel below the neck alignment is flat solid magenta #FF00FF: clothing and torso elements are left as magenta.\nOnly one character. No text, no logo, no watermark.",
+    "lint": [
+      "INFO isolate: experimental. Check that the part keeps the same position and size as image 1 with photocraft_layers.py --reference <approved portrait>; occluded areas are invented by the model."
+    ]
+  }
+]

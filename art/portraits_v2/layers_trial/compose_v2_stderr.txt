@@ -1,0 +1,3 @@
+  INFO isolate: experimental. Check that the part keeps the same position and size as image 1 with photocraft_layers.py --reference <approved portrait>; occluded areas are invented by the model.
+  INFO isolate: experimental. Check that the part keeps the same position and size as image 1 with photocraft_layers.py --reference <approved portrait>; occluded areas are invented by the model.
+  INFO isolate: experimental. Check that the part keeps the same position and size as image 1 with photocraft_layers.py --reference <approved portrait>; occluded areas are invented by the model.

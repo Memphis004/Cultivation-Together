@@ -1,0 +1,62 @@
+{
+  "src_size": [
+    1024,
+    1536
+  ],
+  "src_mode": "RGBA",
+  "src_near_magenta_frac_lt60": 0.6329,
+  "src_bbox_fg_y_x": null,
+  "method": {
+    "hair_top_src": 77.0,
+    "chin_src": 300.0,
+    "face_cx_src": 530.0,
+    "measure_note": "visual estimate from 25px labelled grid at 2x; +-5 px; hairpin/flowers excluded from hair_top",
+    "head_height_src": 223.0,
+    "scale": 1.076233,
+    "paste_offset_px": [
+      -58,
+      285
+    ],
+    "target_head_center": [
+      512.0,
+      488.0
+    ],
+    "target_head_height": 240.0,
+    "compose": "keyed alpha -> composite on pure #FF00FF at src res -> Lanczos -> paste on pure magenta canvas; no color_bleed"
+  },
+  "norm_size": [
+    1024,
+    1536
+  ],
+  "norm_mode_saved": "RGB (canvas is opaque magenta; keyed in Phase 0 step 5)",
+  "norm_head_center_px": [
+    512.4,
+    487.87
+  ],
+  "norm_head_height_px": 240.0,
+  "norm_chin_y_px": 607.87,
+  "norm_face_cx_px": 512.4,
+  "norm_fg_bbox_y": [
+    367,
+    1535
+  ],
+  "norm_fg_bbox_x": [
+    84,
+    793
+  ],
+  "frame_bottom_src_y_px": 1162.3,
+  "src_fg_bbox_y": [
+    76,
+    1446
+  ],
+  "tolerance_px": 5,
+  "src_fg_bbox_x": [
+    132,
+    790
+  ],
+  "src_face_width_at_eye_level_px": 120,
+  "src_eye_level_y": 230,
+  "norm_face_width_at_eye_level_px": 129.15,
+  "face_width_method": "visual estimate: left cheek x~467, right cheek x~587 at eye y~230 (+-5px)",
+  "norm_frame_bottom_note": "canvas bottom = src y 1162 (~3.9 head heights below chin). Source robe/hem continues to y 1446 and is cut. Not the mid-thigh crop the brief assumed."
+}

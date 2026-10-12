@@ -126,8 +126,12 @@
       "complete": "The body and outfit are painted as one whole solid shape that continues underneath the place where {poss} hair and head are."
     },
     "head": {
-      "part": "{poss} head, face and neck",
-      "complete": "The forehead, hairline, ears and neck are fully painted and visible, as one whole head."
+      "part": "the structural head shape, face, ears and neck of {poss} character",
+      "lead": "Redraw {part} from image 1 at exactly the same size and the same position, maintaining the exact base position:",
+      "keep": "the same head shape and the same hairline",
+      "focus": "Draw the face, ears and neck in soft, simple flat tones with minimal fine details to maintain the facial structure.",
+      "hair": "Exact dark jet-black hair colour as in image 1, a high contrast hair mass.",
+      "exclude": "Every pixel below the neck alignment is flat solid magenta #FF00FF: clothing and torso elements are left as magenta."
     },
     "hair_front": {
       "part": "only the hair that falls in front of {poss} face and shoulders, such as the fringe and front locks",

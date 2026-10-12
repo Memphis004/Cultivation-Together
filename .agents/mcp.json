@@ -2,12 +2,23 @@
   "mcpServers": {
     "unity-cli": {
       "command": "unity",
-      "args": ["mcp"]
+      "args": [
+        "mcp"
+      ]
     },
     "comfy-mcp": {
       "type": "stdio",
       "command": "comfy-mcp",
       "args": []
+    },
+    "photocraft": {
+      "command": "photocraft-cli",
+      "args": [
+        "mcp",
+        "--allow-path",
+        "C:/Users/Memphis/Pictures"
+      ],
+      "env": {}
     }
   }
 }

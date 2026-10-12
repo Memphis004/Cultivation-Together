@@ -1,0 +1,35 @@
+[
+  {
+    "id": "trial_head",
+    "profile": "female",
+    "isolate": "head",
+    "seed": 540101,
+    "base": "base_norm.png",
+    "prompt": "Edit image 1. Redraw her head outline, hair mass and hair flow from image 1 at exactly the same size and the same position: the same head shape and the same hairline and the same ink-brush painting medium.\nFill every other area of the image with the same flat solid magenta #FF00FF background.\nThe forehead, hairline, ears and neck are fully painted and visible, as one whole head.\nFocus only on the hair mass, the structural head shape and the hair flow on a clean background, with minimal face details.\nEvery pixel below the neck is flat solid magenta #FF00FF: the body, shoulders, clothing, dress and sleeves are left as magenta.\nOnly one character. No text, no logo, no watermark.",
+    "lint": [
+      "INFO isolate: experimental. Check that the part keeps the same position and size as image 1 with photocraft_layers.py --reference <approved portrait>; occluded areas are invented by the model."
+    ]
+  },
+  {
+    "id": "trial_head",
+    "profile": "female",
+    "isolate": "head",
+    "seed": 540102,
+    "base": "base_norm.png",
+    "prompt": "Edit image 1. Redraw her head outline, hair mass and hair flow from image 1 at exactly the same size and the same position: the same head shape and the same hairline and the same ink-brush painting medium.\nFill every other area of the image with the same flat solid magenta #FF00FF background.\nThe forehead, hairline, ears and neck are fully painted and visible, as one whole head.\nFocus only on the hair mass, the structural head shape and the hair flow on a clean background, with minimal face details.\nEvery pixel below the neck is flat solid magenta #FF00FF: the body, shoulders, clothing, dress and sleeves are left as magenta.\nOnly one character. No text, no logo, no watermark.",
+    "lint": [
+      "INFO isolate: experimental. Check that the part keeps the same position and size as image 1 with photocraft_layers.py --reference <approved portrait>; occluded areas are invented by the model."
+    ]
+  },
+  {
+    "id": "trial_head",
+    "profile": "female",
+    "isolate": "head",
+    "seed": 540103,
+    "base": "base_norm.png",
+    "prompt": "Edit image 1. Redraw her head outline, hair mass and hair flow from image 1 at exactly the same size and the same position: the same head shape and the same hairline and the same ink-brush painting medium.\nFill every other area of the image with the same flat solid magenta #FF00FF background.\nThe forehead, hairline, ears and neck are fully painted and visible, as one whole head.\nFocus only on the hair mass, the structural head shape and the hair flow on a clean background, with minimal face details.\nEvery pixel below the neck is flat solid magenta #FF00FF: the body, shoulders, clothing, dress and sleeves are left as magenta.\nOnly one character. No text, no logo, no watermark.",
+    "lint": [
+      "INFO isolate: experimental. Check that the part keeps the same position and size as image 1 with photocraft_layers.py --reference <approved portrait>; occluded areas are invented by the model."
+    ]
+  }
+]

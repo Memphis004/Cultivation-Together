@@ -1,0 +1,22 @@
+==============================================================================
+trial_head  profile=female  seed=540101  base=base_norm.png  ref=None
+Edit image 1. Redraw her face, neck and the hair that frames the face from image 1 as a larger close-up: the same face shape, the same expression and the same position and the same ink-brush painting medium.
+Fill every other area of the image with the same flat solid magenta #FF00FF background.
+The forehead, hairline, ears and neck are fully painted and visible, as one whole head.
+Every pixel below the neck is flat solid magenta #FF00FF: the body, shoulders, clothing, dress and sleeves are left as magenta.
+Only one character. No text, no logo, no watermark.
+==============================================================================
+trial_head  profile=female  seed=540102  base=base_norm.png  ref=None
+Edit image 1. Redraw her face, neck and the hair that frames the face from image 1 as a larger close-up: the same face shape, the same expression and the same position and the same ink-brush painting medium.
+Fill every other area of the image with the same flat solid magenta #FF00FF background.
+The forehead, hairline, ears and neck are fully painted and visible, as one whole head.
+Every pixel below the neck is flat solid magenta #FF00FF: the body, shoulders, clothing, dress and sleeves are left as magenta.
+Only one character. No text, no logo, no watermark.
+==============================================================================
+trial_head  profile=female  seed=540103  base=base_norm.png  ref=None
+Edit image 1. Redraw her face, neck and the hair that frames the face from image 1 as a larger close-up: the same face shape, the same expression and the same position and the same ink-brush painting medium.
+Fill every other area of the image with the same flat solid magenta #FF00FF background.
+The forehead, hairline, ears and neck are fully painted and visible, as one whole head.
+Every pixel below the neck is flat solid magenta #FF00FF: the body, shoulders, clothing, dress and sleeves are left as magenta.
+Only one character. No text, no logo, no watermark.
+wrote art/portraits_v2/layers_trial/prompts_v2.json

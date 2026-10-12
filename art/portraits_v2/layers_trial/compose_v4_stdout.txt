@@ -1,0 +1,25 @@
+==============================================================================
+trial_head  profile=female  seed=540101  base=base_norm.png  ref=None
+Edit image 1. Redraw the structural head shape and hair flow of her character from image 1 at exactly the same size and the same position, maintaining the exact base position: the same head shape and the same hairline and the same ink-brush painting medium.
+Fill every other area of the image with the same flat solid magenta #FF00FF background.
+Draw the face, ears and neck in soft, simple flat tones with minimal fine details to maintain the facial structure.
+Exact dark jet-black hair colour as in image 1, a high contrast hair mass.
+Every pixel below the neck alignment is flat solid magenta #FF00FF: clothing and torso elements are left as magenta.
+Only one character. No text, no logo, no watermark.
+==============================================================================
+trial_head  profile=female  seed=540102  base=base_norm.png  ref=None
+Edit image 1. Redraw the structural head shape and hair flow of her character from image 1 at exactly the same size and the same position, maintaining the exact base position: the same head shape and the same hairline and the same ink-brush painting medium.
+Fill every other area of the image with the same flat solid magenta #FF00FF background.
+Draw the face, ears and neck in soft, simple flat tones with minimal fine details to maintain the facial structure.
+Exact dark jet-black hair colour as in image 1, a high contrast hair mass.
+Every pixel below the neck alignment is flat solid magenta #FF00FF: clothing and torso elements are left as magenta.
+Only one character. No text, no logo, no watermark.
+==============================================================================
+trial_head  profile=female  seed=540103  base=base_norm.png  ref=None
+Edit image 1. Redraw the structural head shape and hair flow of her character from image 1 at exactly the same size and the same position, maintaining the exact base position: the same head shape and the same hairline and the same ink-brush painting medium.
+Fill every other area of the image with the same flat solid magenta #FF00FF background.
+Draw the face, ears and neck in soft, simple flat tones with minimal fine details to maintain the facial structure.
+Exact dark jet-black hair colour as in image 1, a high contrast hair mass.
+Every pixel below the neck alignment is flat solid magenta #FF00FF: clothing and torso elements are left as magenta.
+Only one character. No text, no logo, no watermark.
+wrote art/portraits_v2/layers_trial/prompts_v4.json

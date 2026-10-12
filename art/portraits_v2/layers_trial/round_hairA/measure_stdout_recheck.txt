@@ -1,0 +1,165 @@
+{
+  "base": {
+    "file": "base_norm.png",
+    "chin_y_base_detector": 611,
+    "chin_y_norm_measurements_json": 607.87,
+    "chin_base_diff_vs_measurements_px": 3.13,
+    "chin_base_within_5px_of_measurements": true,
+    "face_width_eye_base_detector": 139,
+    "face_width_eye_norm_measurements_json": 129.15,
+    "foreground_px_base": 518816,
+    "below_chin_px_base": 473480,
+    "dark_frac_head_box_base": 0.296
+  },
+  "boxes": {
+    "face": [
+      430,
+      500,
+      600,
+      610
+    ],
+    "head": [
+      360,
+      360,
+      660,
+      620
+    ],
+    "drift_range_px": 40,
+    "chin_x": [
+      510,
+      551
+    ],
+    "chin_search": [
+      600,
+      660
+    ],
+    "fg_distance": 60
+  },
+  "tolerances": {
+    "drift_px": 5,
+    "chin_px": 5,
+    "face_width_pct": 3.0
+  },
+  "results": [
+    {
+      "seed": 540601,
+      "raw": "art/portraits_v2/layers_trial/round_hairA/raw/540601/1c77b9fe_000.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "alpha_top_left_corner": 255,
+      "alpha_top_right_corner": 255,
+      "near_magenta_visible_px_lt60": 1127862,
+      "keyed_png": "art/portraits_v2/layers_trial/round_hairA/layers/head_seed540601.png",
+      "keyed_size": [
+        1024,
+        1536
+      ],
+      "keyed_mode": "RGBA",
+      "drift_face_box": {
+        "dx": 2,
+        "dy": 0,
+        "ncc": 0.6797
+      },
+      "chin_y_out": 609,
+      "chin_y_base": 611,
+      "face_width_eye_out": 136,
+      "face_width_eye_base": 139,
+      "face_width_delta_pct": -2.16,
+      "foreground_px": 445001,
+      "foreground_ratio": 0.8577,
+      "below_chin_px": 420672,
+      "mismatch_fraction_face_box_diff48": 0.3188,
+      "dark_frac_head_box_out": 0.0053,
+      "dark_frac_head_box_base": 0.296,
+      "phase0_checks": {
+        "drift_le_5px": true,
+        "chin_within_5px_of_base": true,
+        "face_width_within_3pct": true
+      },
+      "phase0_verdict": "PASS"
+    },
+    {
+      "seed": 540602,
+      "raw": "art/portraits_v2/layers_trial/round_hairA/raw/540602/9121ea8d_000.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "alpha_top_left_corner": 255,
+      "alpha_top_right_corner": 255,
+      "near_magenta_visible_px_lt60": 1122060,
+      "keyed_png": "art/portraits_v2/layers_trial/round_hairA/layers/head_seed540602.png",
+      "keyed_size": [
+        1024,
+        1536
+      ],
+      "keyed_mode": "RGBA",
+      "drift_face_box": {
+        "dx": 4,
+        "dy": -13,
+        "ncc": 0.6364
+      },
+      "chin_y_out": 601,
+      "chin_y_base": 611,
+      "face_width_eye_out": 126,
+      "face_width_eye_base": 139,
+      "face_width_delta_pct": -9.35,
+      "foreground_px": 450804,
+      "foreground_ratio": 0.8689,
+      "below_chin_px": 423786,
+      "mismatch_fraction_face_box_diff48": 0.3871,
+      "dark_frac_head_box_out": 0.0103,
+      "dark_frac_head_box_base": 0.296,
+      "phase0_checks": {
+        "drift_le_5px": false,
+        "chin_within_5px_of_base": false,
+        "face_width_within_3pct": false
+      },
+      "phase0_verdict": "FAIL"
+    },
+    {
+      "seed": 540603,
+      "raw": "art/portraits_v2/layers_trial/round_hairA/raw/540603/dba61ed9_000.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "alpha_top_left_corner": 255,
+      "alpha_top_right_corner": 255,
+      "near_magenta_visible_px_lt60": 1104513,
+      "keyed_png": "art/portraits_v2/layers_trial/round_hairA/layers/head_seed540603.png",
+      "keyed_size": [
+        1024,
+        1536
+      ],
+      "keyed_mode": "RGBA",
+      "drift_face_box": {
+        "dx": -2,
+        "dy": -25,
+        "ncc": 0.7117
+      },
+      "chin_y_out": null,
+      "chin_y_base": 611,
+      "face_width_eye_out": 116,
+      "face_width_eye_base": 139,
+      "face_width_delta_pct": -16.55,
+      "foreground_px": 468351,
+      "foreground_ratio": 0.9027,
+      "below_chin_px": null,
+      "mismatch_fraction_face_box_diff48": 0.453,
+      "dark_frac_head_box_out": 0.0305,
+      "dark_frac_head_box_base": 0.296,
+      "phase0_checks": {
+        "drift_le_5px": false,
+        "chin_within_5px_of_base": null,
+        "face_width_within_3pct": false
+      },
+      "phase0_verdict": "FAIL"
+    }
+  ]
+}

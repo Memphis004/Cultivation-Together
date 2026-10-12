@@ -1,0 +1,120 @@
+{
+  "1": {
+    "class_type": "UNETLoader",
+    "inputs": {
+      "unet_name": "qwen_image_2.1_int8_convrot.safetensors",
+      "weight_dtype": "default"
+    }
+  },
+  "2": {
+    "class_type": "CLIPLoader",
+    "inputs": {
+      "clip_name": "qwen3vl_8b_int8_convrot.safetensors",
+      "type": "qwen_image",
+      "device": "default"
+    }
+  },
+  "3": {
+    "class_type": "VAELoader",
+    "inputs": {
+      "vae_name": "qwen_image_2.1_vae_bf16.safetensors"
+    }
+  },
+  "4": {
+    "class_type": "LoadImage",
+    "inputs": {
+      "image": "portrait_layers_hairA_540601_base.png"
+    }
+  },
+  "5": {
+    "class_type": "LoadImage",
+    "inputs": {
+      "image": "1cf13e0c_000.png"
+    }
+  },
+  "6": {
+    "class_type": "TextEncodeQwenImage21",
+    "inputs": {
+      "clip": [
+        "2",
+        0
+      ],
+      "vae": [
+        "3",
+        0
+      ],
+      "resolution": 0,
+      "images.image_1": [
+        "4",
+        0
+      ],
+      "images.image_2": [
+        "5",
+        0
+      ],
+      "prompt": "Edit image 1. Keep the woman in image 1 exactly as she is: the same body proportions and curves, the same standing pose and hand position, the same face, the same outfit, the same mid-thigh crop, the same ink-brush painting medium, and the same flat solid magenta #FF00FF background everywhere outside the figure.\nChange ONLY her hair and accessory.\nHer hair is now completely shaved, with a smooth bare scalp and a clean smooth forehead and hairline. The hair is painted in the same black ink-wash and dry-brush style as image 1, with a clean outline against the flat magenta background.\nShe now wears small plain silver ear studs. The ornaments are painted in the same ink-wash style as image 1 with crisp clean edges.\nOnly one character. No text, no logo, no watermark.",
+      "negative_prompt": "copied reference character, copied costume or pose, multiple characters, full-length figure, knees, shins, feet, scenery, floor, ground, shadows, gradient background, ink splashes outside the character, text, letters, numbers, logos, watermark, signature, frame, UI"
+    }
+  },
+  "7": {
+    "class_type": "QwenImage21Cache",
+    "inputs": {
+      "model": [
+        "1",
+        0
+      ],
+      "device": "auto",
+      "dtype": "default"
+    }
+  },
+  "8": {
+    "class_type": "KSampler",
+    "inputs": {
+      "model": [
+        "7",
+        0
+      ],
+      "positive": [
+        "6",
+        0
+      ],
+      "negative": [
+        "6",
+        1
+      ],
+      "latent_image": [
+        "6",
+        2
+      ],
+      "seed": 540601,
+      "steps": 25,
+      "cfg": 1,
+      "sampler_name": "euler",
+      "scheduler": "simple",
+      "denoise": 1
+    }
+  },
+  "9": {
+    "class_type": "VAEDecode",
+    "inputs": {
+      "samples": [
+        "8",
+        0
+      ],
+      "vae": [
+        "3",
+        0
+      ]
+    }
+  },
+  "10": {
+    "class_type": "SaveImage",
+    "inputs": {
+      "images": [
+        "9",
+        0
+      ],
+      "filename_prefix": "portrait_layers_hairA_seed540601"
+    }
+  }
+}

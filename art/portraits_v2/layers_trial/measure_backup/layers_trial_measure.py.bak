@@ -1,0 +1,141 @@
+#!/usr/bin/env python3
+"""Measure layers_trial outputs against base_norm.png (deterministic, numbers only).
+
+For each raw output: size/mode, near-magenta visible px, alpha at top corners, keyed RGBA
+(keyed_rgba + neutralize_canvas, no geometry), drift (dx,dy) via cross-correlation of the
+luminance of a face box against base_norm within +-40px, chin y, eye-level face width,
+mismatch fraction in face box (diff>48), dark-pixel fraction in the upper head box.
+"""
+import argparse
+import json
+import pathlib
+import sys
+
+import numpy as np
+from PIL import Image
+
+ROOT = pathlib.Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
+import portrait_postprocess as pp  # noqa: E402
+
+LT = ROOT / "art" / "portraits_v2" / "layers_trial"
+BASE = LT / "base_norm.png"
+
+# Reference boxes on the 1024x1536 normalised canvas (from measurements.json geometry).
+FACE_BOX = (430, 500, 600, 610)   # brows -> chin, x range around face
+HEAD_BOX = (360, 360, 660, 620)   # hair top -> chin, used for dark-pixel fraction
+DRIFT_R = 40
+EYE_Y = 533
+
+
+def lum(rgb):
+    return 0.299 * rgb[..., 0] + 0.587 * rgb[..., 1] + 0.114 * rgb[..., 2]
+
+
+def shift_crop(arr, x0, y0, x1, y1, dx, dy):
+    return arr[y0 + dy:y1 + dy, x0 + dx:x1 + dx]
+
+
+def best_drift(ref, out, box):
+    x0, y0, x1, y1 = box
+    best = (-1e9, 0, 0)
+    ref_c = ref[y0:y1, x0:x1]
+    rc = ref_c - ref_c.mean()
+    for dy in range(-DRIFT_R, DRIFT_R + 1):
+        for dx in range(-DRIFT_R, DRIFT_R + 1):
+            oc = shift_crop(out, x0, y0, x1, y1, dx, dy)
+            if oc.shape != ref_c.shape:
+                continue
+            oc2 = oc - oc.mean()
+            den = np.sqrt((rc * rc).sum() * (oc2 * oc2).sum())
+            if den == 0:
+                continue
+            score = float((rc * oc2).sum() / den)
+            if score > best[0]:
+                best = (score, dx, dy)
+    return {"dx": best[1], "dy": best[2], "ncc": round(best[0], 4)}
+
+
+def chin_y(rgb):
+    """Lowest skin-coloured row in the chin band (estimate, +-5px)."""
+    x0, x1, y0, y1 = 470, 560, 560, 660
+    band = rgb[y0:y1, x0:x1]
+    r, g, b = band[..., 0], band[..., 1], band[..., 2]
+    skin = (r > 150) & (g > 130) & (b > 110) & (np.abs(r - g) < 60)
+    rows = np.where(skin.sum(1) > 6)[0]
+    return int(y0 + rows.max()) if rows.size else None
+
+
+def face_width_at_eye(rgb):
+    row = rgb[EYE_Y]
+    r, g, b = row[..., 0], row[..., 1], row[..., 2]
+    skin = (r > 150) & (g > 130) & (b > 110) & (np.abs(r - g) < 60)
+    xs = np.where(skin[380:700])[0] + 380
+    if xs.size == 0:
+        return None
+    return int(xs.max() - xs.min())
+
+
+def measure(raw_path, seed, out_root):
+    im = Image.open(raw_path)
+    res = {"seed": seed, "raw": str(raw_path.relative_to(ROOT)).replace("\\", "/"),
+           "size": list(im.size), "mode": im.mode}
+    a = np.array(im.convert("RGBA")).astype(np.float64)
+    rgb, al = a[..., :3], a[..., 3]
+    d = np.sqrt(((rgb - pp.KEY) ** 2).sum(axis=2))
+    res["alpha_top_left_corner"] = int(al[0, 0])
+    res["alpha_top_right_corner"] = int(al[0, -1])
+    res["near_magenta_visible_px_lt60"] = int(((d < 60) & (al > 0)).sum())
+
+    keyed = pp.neutralize_canvas(pp.keyed_rgba(raw_path))
+    keyed_path = out_root / "layers" / f"head_seed{seed}.png"
+    keyed_path.parent.mkdir(exist_ok=True)
+    keyed.save(keyed_path)
+    res["keyed_png"] = str(keyed_path.relative_to(ROOT)).replace("\\", "/")
+    res["keyed_size"] = list(keyed.size)
+    res["keyed_mode"] = keyed.mode
+
+    out_rgb = np.array(Image.open(BASE).convert("RGB")).astype(np.float64)
+    ref_lum, out_lum = lum(out_rgb), lum(rgb)
+    res["drift_face_box"] = best_drift(ref_lum, out_lum, FACE_BOX)
+    res["chin_y_out_detector_UNRELIABLE"] = chin_y(rgb)
+    res["chin_y_base_detector_UNRELIABLE"] = chin_y(out_rgb)
+    res["face_width_eye_out"] = face_width_at_eye(rgb)
+    res["face_width_eye_base"] = face_width_at_eye(out_rgb)
+    if res["face_width_eye_out"] and res["face_width_eye_base"]:
+        res["face_width_delta_pct"] = round(
+            100.0 * (res["face_width_eye_out"] - res["face_width_eye_base"]) / res["face_width_eye_base"], 2)
+    x0, y0, x1, y1 = FACE_BOX
+    diff = np.abs(ref_lum[y0:y1, x0:x1] - out_lum[y0:y1, x0:x1])
+    res["mismatch_fraction_face_box_diff48"] = round(float((diff > 48).mean()), 4)
+    x0, y0, x1, y1 = HEAD_BOX
+    res["dark_frac_head_box_out"] = round(float((out_lum[y0:y1, x0:x1] < 50).mean()), 4)
+    res["dark_frac_head_box_base"] = round(float((ref_lum[y0:y1, x0:x1] < 50).mean()), 4)
+    return res
+
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--seeds", nargs="+", type=int, default=[540101, 540102, 540103])
+    ap.add_argument("--round-dir", default=str(LT), help="folder with generation_log.json; outputs go here")
+    args = ap.parse_args()
+    out_root = pathlib.Path(args.round_dir).resolve()
+    log = json.loads((out_root / "generation_log.json").read_text(encoding="utf-8"))
+    raw_by_seed = {j["seed"]: pathlib.Path(j["raw"]) for j in log["jobs"] if j.get("status") == "completed"}
+    base_geo = json.loads((LT / "measurements.json").read_text(encoding="utf-8"))
+    results = []
+    for s in args.seeds:
+        results.append(measure(raw_by_seed[s], s, out_root))
+    out = {"base": {"file": "base_norm.png", "chin_y": base_geo["norm_chin_y_px"],
+                    "head_center": base_geo["norm_head_center_px"],
+                    "head_height": base_geo["norm_head_height_px"],
+                    "face_width_eye": base_geo.get("norm_face_width_at_eye_level_px"),
+                    "chin_y_measured_by_script": chin_y(np.array(Image.open(BASE).convert("RGB")).astype(np.float64))},
+           "boxes": {"face": FACE_BOX, "head": HEAD_BOX, "drift_range_px": DRIFT_R},
+           "results": results}
+    (out_root / "measure_results.json").write_text(json.dumps(out, indent=2), encoding="utf-8")
+    print(json.dumps(out, indent=2))
+
+
+if __name__ == "__main__":
+    main()

@@ -1,0 +1,36 @@
+{
+  "phase": "0",
+  "purpose": "layers_trial head isolate, 3 seeds, no approval beyond Phase 0",
+  "template": "art/portraits_v2/workflows/d001_seed430101.json (female baseline, read-only)",
+  "node4_base": "lt_base_norm.png <- base_norm.png (replaces magenta canvas)",
+  "node5_image2_style_anchor": "anchor/1cf13e0c_000.png (template value, kept)",
+  "node11_image3": "STILL WIRED to encoder (images.image_3 <- node 11, template ref portrait_style_ref-2.png); composed prompt does not mention image 3 -> possible contamination, reported not removed",
+  "quota_planned": 3,
+  "generation_requests_submitted": 3,
+  "jobs": [
+    {
+      "seed": 540101,
+      "workflow": "art/portraits_v2/layers_trial/workflows/head_seed540101.json",
+      "status": "completed",
+      "prompt_id": "81ed1a71-1cf9-411d-9fbf-225eaa1c8faf",
+      "raw": "C:\\UnityProjects\\Cultivation-Together\\art\\portraits_v2\\layers_trial\\raw\\540101\\81ed1a71_000.png"
+    },
+    {
+      "seed": 540102,
+      "workflow": "art/portraits_v2/layers_trial/workflows/head_seed540102.json",
+      "status": "completed",
+      "prompt_id": "2dc3a32c-13c5-4ced-a74d-81c80bf855d6",
+      "raw": "C:\\UnityProjects\\Cultivation-Together\\art\\portraits_v2\\layers_trial\\raw\\540102\\2dc3a32c_000.png"
+    },
+    {
+      "seed": 540103,
+      "workflow": "art/portraits_v2/layers_trial/workflows/head_seed540103.json",
+      "status": "completed",
+      "prompt_id": "e5f78f23-b719-4477-a44c-326ab2b0ee0f",
+      "raw": "C:\\UnityProjects\\Cultivation-Together\\art\\portraits_v2\\layers_trial\\raw\\540103\\e5f78f23_000.png"
+    }
+  ],
+  "spends_credits": false,
+  "generation_requests_submitted_before_submit": 2,
+  "images_completed": 3
+}

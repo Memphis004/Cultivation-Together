@@ -1,0 +1,32 @@
+[
+  {
+    "id": "trial_hairA",
+    "profile": "female",
+    "seed": 540601,
+    "base": "base_norm.png",
+    "hair": "completely shaved, with a smooth bare scalp and a clean smooth forehead and hairline",
+    "accessory": "small plain silver ear studs",
+    "prompt": "Edit image 1. Keep the woman in image 1 exactly as she is: the same body proportions and curves, the same standing pose and hand position, the same face, the same outfit, the same mid-thigh crop, the same ink-brush painting medium, and the same flat solid magenta #FF00FF background everywhere outside the figure.\nChange ONLY her hair and accessory.\nHer hair is now completely shaved, with a smooth bare scalp and a clean smooth forehead and hairline. The hair is painted in the same black ink-wash and dry-brush style as image 1, with a clean outline against the flat magenta background.\nShe now wears small plain silver ear studs. The ornaments are painted in the same ink-wash style as image 1 with crisp clean edges.\nOnly one character. No text, no logo, no watermark.",
+    "lint": []
+  },
+  {
+    "id": "trial_hairA",
+    "profile": "female",
+    "seed": 540602,
+    "base": "base_norm.png",
+    "hair": "completely shaved, with a smooth bare scalp and a clean smooth forehead and hairline",
+    "accessory": "small plain silver ear studs",
+    "prompt": "Edit image 1. Keep the woman in image 1 exactly as she is: the same body proportions and curves, the same standing pose and hand position, the same face, the same outfit, the same mid-thigh crop, the same ink-brush painting medium, and the same flat solid magenta #FF00FF background everywhere outside the figure.\nChange ONLY her hair and accessory.\nHer hair is now completely shaved, with a smooth bare scalp and a clean smooth forehead and hairline. The hair is painted in the same black ink-wash and dry-brush style as image 1, with a clean outline against the flat magenta background.\nShe now wears small plain silver ear studs. The ornaments are painted in the same ink-wash style as image 1 with crisp clean edges.\nOnly one character. No text, no logo, no watermark.",
+    "lint": []
+  },
+  {
+    "id": "trial_hairA",
+    "profile": "female",
+    "seed": 540603,
+    "base": "base_norm.png",
+    "hair": "completely shaved, with a smooth bare scalp and a clean smooth forehead and hairline",
+    "accessory": "small plain silver ear studs",
+    "prompt": "Edit image 1. Keep the woman in image 1 exactly as she is: the same body proportions and curves, the same standing pose and hand position, the same face, the same outfit, the same mid-thigh crop, the same ink-brush painting medium, and the same flat solid magenta #FF00FF background everywhere outside the figure.\nChange ONLY her hair and accessory.\nHer hair is now completely shaved, with a smooth bare scalp and a clean smooth forehead and hairline. The hair is painted in the same black ink-wash and dry-brush style as image 1, with a clean outline against the flat magenta background.\nShe now wears small plain silver ear studs. The ornaments are painted in the same ink-wash style as image 1 with crisp clean edges.\nOnly one character. No text, no logo, no watermark.",
+    "lint": []
+  }
+]

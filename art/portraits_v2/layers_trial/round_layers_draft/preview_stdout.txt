@@ -1,0 +1,4 @@
+comfy input=C:\Users\memph\AppData\Local\Comfy-Desktop\ComfyUI-Shared\input output=C:\Users\memph\AppData\Local\Comfy-Desktop\ComfyUI-Shared\output
+seed 540702: valid=True errors=0 warnings=0 spends=False image3_linked=False
+seed 540703: valid=True errors=0 warnings=0 spends=False image3_linked=False
+preview: nothing submitted. report -> art\portraits_v2\layers_trial\round_layers_draft\preview_report.json

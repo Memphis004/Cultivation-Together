@@ -1,0 +1,15 @@
+{
+  "round": "head_with_hair",
+  "group": "layers",
+  "approved_images": 1,
+  "generation_requests_submitted": 1,
+  "jobs": [
+    {
+      "seed": 540703,
+      "workflow": "art\\portraits_v2\\layers_trial\\round_head_with_hair\\workflows\\seed540703.json",
+      "status": "completed",
+      "prompt_id": "9bf5676d-63b5-4d89-8308-aa5af99be9f7",
+      "raw": "C:\\UnityProjects\\Cultivation-Together\\art\\portraits_v2\\layers_trial\\round_head_with_hair\\raw\\540703\\9bf5676d_000.png"
+    }
+  ]
+}

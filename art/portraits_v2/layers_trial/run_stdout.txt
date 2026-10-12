@@ -1,0 +1,4 @@
+input dir: C:\Users\memph\AppData\Local\Comfy-Desktop\ComfyUI-Shared\input | output dir: C:\Users\memph\AppData\Local\Comfy-Desktop\ComfyUI-Shared\output
+completed 540101 C:\UnityProjects\Cultivation-Together\art\portraits_v2\layers_trial\raw\540101\81ed1a71_000.png
+completed 540102 C:\UnityProjects\Cultivation-Together\art\portraits_v2\layers_trial\raw\540102\2dc3a32c_000.png
+completed 540103 C:\UnityProjects\Cultivation-Together\art\portraits_v2\layers_trial\raw\540103\e5f78f23_000.png

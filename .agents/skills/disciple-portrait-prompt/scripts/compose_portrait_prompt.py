@@ -152,11 +152,17 @@ def compose_isolate(item, profile, pf):
                          "then isolate from its approved image")
     spec = ISOLATE[slot]
     part = spec['part'].format(poss=pf['poss'])
-    lines = [f"Edit image 1. Keep {part} in image 1 exactly as shown: the same shape, the same position, "
-             "the same size and the same ink-brush painting medium.",
+    lead = spec.get('lead', 'Keep {part} in image 1 exactly as shown:').replace('{part}', part)
+    lines = [f"Edit image 1. {lead} " + spec.get('keep', 'the same shape, the same position, the same size') + " and the same ink-brush painting medium.",
              'Fill every other area of the image with the same flat solid magenta #FF00FF background.']
     if spec.get('complete'):
         lines.append(spec['complete'].format(poss=pf['poss']))
+    if spec.get('focus'):
+        lines.append(spec['focus'].format(poss=pf['poss']))
+    if spec.get('hair'):
+        lines.append(spec['hair'].format(poss=pf['poss']))
+    if spec.get('exclude'):
+        lines.append(spec['exclude'].format(poss=pf['poss']))
     lines.append('Only one character. No text, no logo, no watermark.')
     prompt = '\n'.join(lines)
     problems = ['INFO isolate: experimental. Check that the part keeps the same position and size as image 1 with '

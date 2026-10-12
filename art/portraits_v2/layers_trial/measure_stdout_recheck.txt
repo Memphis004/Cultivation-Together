@@ -1,0 +1,123 @@
+{
+  "base": {
+    "file": "base_norm.png",
+    "chin_y": 607.87,
+    "head_center": [
+      512.4,
+      487.87
+    ],
+    "head_height": 240.0,
+    "face_width_eye": 129.15,
+    "chin_y_measured_by_script": 659
+  },
+  "boxes": {
+    "face": [
+      430,
+      500,
+      600,
+      610
+    ],
+    "head": [
+      360,
+      360,
+      660,
+      620
+    ],
+    "drift_range_px": 40
+  },
+  "results": [
+    {
+      "seed": 540101,
+      "raw": "art/portraits_v2/layers_trial/raw/540101/81ed1a71_000.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "alpha_top_left_corner": 255,
+      "alpha_top_right_corner": 255,
+      "near_magenta_visible_px_lt60": 1053618,
+      "keyed_png": "art/portraits_v2/layers_trial/layers/head_seed540101.png",
+      "keyed_size": [
+        1024,
+        1536
+      ],
+      "keyed_mode": "RGBA",
+      "drift_face_box": {
+        "dx": 0,
+        "dy": 0,
+        "ncc": 0.9798
+      },
+      "chin_y_out_detector_UNRELIABLE": 659,
+      "chin_y_base_detector_UNRELIABLE": 659,
+      "face_width_eye_out": 138,
+      "face_width_eye_base": 139,
+      "face_width_delta_pct": -0.72,
+      "mismatch_fraction_face_box_diff48": 0.0195,
+      "dark_frac_head_box_out": 0.2975,
+      "dark_frac_head_box_base": 0.296
+    },
+    {
+      "seed": 540102,
+      "raw": "art/portraits_v2/layers_trial/raw/540102/2dc3a32c_000.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "alpha_top_left_corner": 255,
+      "alpha_top_right_corner": 255,
+      "near_magenta_visible_px_lt60": 1052184,
+      "keyed_png": "art/portraits_v2/layers_trial/layers/head_seed540102.png",
+      "keyed_size": [
+        1024,
+        1536
+      ],
+      "keyed_mode": "RGBA",
+      "drift_face_box": {
+        "dx": -1,
+        "dy": 0,
+        "ncc": 0.9654
+      },
+      "chin_y_out_detector_UNRELIABLE": 659,
+      "chin_y_base_detector_UNRELIABLE": 659,
+      "face_width_eye_out": 138,
+      "face_width_eye_base": 139,
+      "face_width_delta_pct": -0.72,
+      "mismatch_fraction_face_box_diff48": 0.0941,
+      "dark_frac_head_box_out": 0.2956,
+      "dark_frac_head_box_base": 0.296
+    },
+    {
+      "seed": 540103,
+      "raw": "art/portraits_v2/layers_trial/raw/540103/e5f78f23_000.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "alpha_top_left_corner": 255,
+      "alpha_top_right_corner": 255,
+      "near_magenta_visible_px_lt60": 1051304,
+      "keyed_png": "art/portraits_v2/layers_trial/layers/head_seed540103.png",
+      "keyed_size": [
+        1024,
+        1536
+      ],
+      "keyed_mode": "RGBA",
+      "drift_face_box": {
+        "dx": 0,
+        "dy": 0,
+        "ncc": 0.9889
+      },
+      "chin_y_out_detector_UNRELIABLE": 659,
+      "chin_y_base_detector_UNRELIABLE": 659,
+      "face_width_eye_out": 139,
+      "face_width_eye_base": 139,
+      "face_width_delta_pct": 0.0,
+      "mismatch_fraction_face_box_diff48": 0.0057,
+      "dark_frac_head_box_out": 0.2985,
+      "dark_frac_head_box_base": 0.296
+    }
+  ]
+}

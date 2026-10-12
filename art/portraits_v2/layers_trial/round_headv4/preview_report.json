@@ -1,0 +1,65 @@
+[
+  {
+    "seed": 540101,
+    "workflow": "art\\portraits_v2\\layers_trial\\round_headv4\\workflows\\seed540101.json",
+    "validate": {
+      "workflow": "art\\portraits_v2\\layers_trial\\round_headv4\\workflows\\seed540101.json",
+      "valid": true,
+      "error_count": 0,
+      "warning_count": 0,
+      "errors": [],
+      "warnings": [],
+      "partner_nodes": [],
+      "spends_credits": false,
+      "object_info_source": {
+        "mode": "local",
+        "host": "127.0.0.1",
+        "port": 8188
+      }
+    },
+    "cleared": true,
+    "image3_linked": false
+  },
+  {
+    "seed": 540102,
+    "workflow": "art\\portraits_v2\\layers_trial\\round_headv4\\workflows\\seed540102.json",
+    "validate": {
+      "workflow": "art\\portraits_v2\\layers_trial\\round_headv4\\workflows\\seed540102.json",
+      "valid": true,
+      "error_count": 0,
+      "warning_count": 0,
+      "errors": [],
+      "warnings": [],
+      "partner_nodes": [],
+      "spends_credits": false,
+      "object_info_source": {
+        "mode": "local",
+        "host": "127.0.0.1",
+        "port": 8188
+      }
+    },
+    "cleared": true,
+    "image3_linked": false
+  },
+  {
+    "seed": 540103,
+    "workflow": "art\\portraits_v2\\layers_trial\\round_headv4\\workflows\\seed540103.json",
+    "validate": {
+      "workflow": "art\\portraits_v2\\layers_trial\\round_headv4\\workflows\\seed540103.json",
+      "valid": true,
+      "error_count": 0,
+      "warning_count": 0,
+      "errors": [],
+      "warnings": [],
+      "partner_nodes": [],
+      "spends_credits": false,
+      "object_info_source": {
+        "mode": "local",
+        "host": "127.0.0.1",
+        "port": 8188
+      }
+    },
+    "cleared": true,
+    "image3_linked": false
+  }
+]

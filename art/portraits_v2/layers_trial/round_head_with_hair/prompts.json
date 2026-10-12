@@ -1,0 +1,13 @@
+[
+  {
+    "id": "head_female_trial",
+    "profile": "female",
+    "isolate": "head",
+    "seed": 540703,
+    "base": "base_norm.png",
+    "prompt": "Edit image 1. Redraw the structural head shape, face, ears and neck of her character from image 1 at exactly the same size and the same position, maintaining the exact base position: the same head shape and the same hairline and the same ink-brush painting medium.\nFill every other area of the image with the same flat solid magenta #FF00FF background.\nDraw the face, ears and neck in soft, simple flat tones with minimal fine details to maintain the facial structure.\nExact dark jet-black hair colour as in image 1, a high contrast hair mass.\nEvery pixel below the neck alignment is flat solid magenta #FF00FF: clothing and torso elements are left as magenta.\nOnly one character. No text, no logo, no watermark.",
+    "lint": [
+      "INFO isolate: experimental. Check that the part keeps the same position and size as image 1 with photocraft_layers.py --reference <approved portrait>; occluded areas are invented by the model."
+    ]
+  }
+]

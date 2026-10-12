@@ -1,0 +1,22 @@
+==============================================================================
+trial_hairA  profile=female  seed=540601  base=base_norm.png  ref=None
+Edit image 1. Keep the woman in image 1 exactly as she is: the same body proportions and curves, the same standing pose and hand position, the same face, the same outfit, the same mid-thigh crop, the same ink-brush painting medium, and the same flat solid magenta #FF00FF background everywhere outside the figure.
+Change ONLY her hair and accessory.
+Her hair is now completely shaved, with a smooth bare scalp and a clean smooth forehead and hairline. The hair is painted in the same black ink-wash and dry-brush style as image 1, with a clean outline against the flat magenta background.
+She now wears small plain silver ear studs. The ornaments are painted in the same ink-wash style as image 1 with crisp clean edges.
+Only one character. No text, no logo, no watermark.
+==============================================================================
+trial_hairA  profile=female  seed=540602  base=base_norm.png  ref=None
+Edit image 1. Keep the woman in image 1 exactly as she is: the same body proportions and curves, the same standing pose and hand position, the same face, the same outfit, the same mid-thigh crop, the same ink-brush painting medium, and the same flat solid magenta #FF00FF background everywhere outside the figure.
+Change ONLY her hair and accessory.
+Her hair is now completely shaved, with a smooth bare scalp and a clean smooth forehead and hairline. The hair is painted in the same black ink-wash and dry-brush style as image 1, with a clean outline against the flat magenta background.
+She now wears small plain silver ear studs. The ornaments are painted in the same ink-wash style as image 1 with crisp clean edges.
+Only one character. No text, no logo, no watermark.
+==============================================================================
+trial_hairA  profile=female  seed=540603  base=base_norm.png  ref=None
+Edit image 1. Keep the woman in image 1 exactly as she is: the same body proportions and curves, the same standing pose and hand position, the same face, the same outfit, the same mid-thigh crop, the same ink-brush painting medium, and the same flat solid magenta #FF00FF background everywhere outside the figure.
+Change ONLY her hair and accessory.
+Her hair is now completely shaved, with a smooth bare scalp and a clean smooth forehead and hairline. The hair is painted in the same black ink-wash and dry-brush style as image 1, with a clean outline against the flat magenta background.
+She now wears small plain silver ear studs. The ornaments are painted in the same ink-wash style as image 1 with crisp clean edges.
+Only one character. No text, no logo, no watermark.
+wrote art/portraits_v2/layers_trial/round_hairA/prompts.json

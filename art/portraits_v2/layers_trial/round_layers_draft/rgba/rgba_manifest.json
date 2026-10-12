@@ -1,0 +1,41 @@
+{
+  "body_robe_female_trial": {
+    "file": "art/portraits_v2/layers_trial/round_layers_draft/rgba/body_robe_female_trial.png",
+    "sha256": "e810a5aebc785ee389fab38cb4217e16b09fc48692d4790177e5a6131cd8f262",
+    "size": [
+      1024,
+      1536
+    ],
+    "mode": "RGBA",
+    "corner_alpha_TL_TR_BL_BR": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "solid_near_magenta_px": 0,
+    "alpha_coverage": 0.2683,
+    "source": "C:/UnityProjects/Cultivation-Together/art/portraits_v2/layers_trial/round_layers_draft/raw/540702/5730ff0e_000.png",
+    "source_sha256": "74e22c37590152de776e02722c0cd199795cfc0fa7dc9b067587dff688d013f1"
+  },
+  "head_female_trial": {
+    "file": "art/portraits_v2/layers_trial/round_layers_draft/rgba/head_female_trial.png",
+    "sha256": "65a779ff7be64c0580e9fc81c51b7388d9e2f470781631c4f55904046b64bfb7",
+    "size": [
+      1024,
+      1536
+    ],
+    "mode": "RGBA",
+    "corner_alpha_TL_TR_BL_BR": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "solid_near_magenta_px": 0,
+    "alpha_coverage": 0.0614,
+    "source": "art/portraits_v2/layers_trial/round_head_with_hair/raw/540703\\9bf5676d_000.png",
+    "source_sha256": "7ecf108b3ed128b00589dabfad0b18eed057dc06fa113d4a26072b6b26e2ab86",
+    "regenerated_from": "base_norm.png, isolate=head, seed 540703"
+  }
+}

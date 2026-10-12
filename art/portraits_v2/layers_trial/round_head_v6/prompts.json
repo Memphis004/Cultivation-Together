@@ -1,0 +1,9 @@
+[
+  {
+    "id": "head_female_trial",
+    "profile": "female",
+    "seed": 540703,
+    "base": "base_norm.png",
+    "prompt": "Edit image 1. Keep only her head: the face with clearly visible eyes, eyebrows, nose and lips, the ears, the neck, and the full jet-black hair including the long hair falling behind her shoulders. Remove the entire robe, shoulders and torso: paint every pixel below the neck as flat solid magenta #FF00FF. Fill the background with flat solid magenta #FF00FF. Keep the same size and the same position as image 1. Only one character. No text, no logo, no watermark."
+  }
+]
