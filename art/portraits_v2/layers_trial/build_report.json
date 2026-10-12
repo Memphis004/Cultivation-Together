@@ -1,0 +1,75 @@
+{
+  "seed": 540602,
+  "source_raw": "C:\\UnityProjects\\Cultivation-Together\\art\\portraits_v2\\layers_trial\\round_hairA\\raw\\540602\\9121ea8d_000.png",
+  "source_sha256": "820bd3a389476fd5e124cfef0c1f90862510b427db886d61ffdbb0d2882367c5",
+  "transform": {
+    "scale": 0.939317697900178,
+    "tx": -0.0004669614743895523,
+    "ty": 14.578205662850284,
+    "rot_deg": -0.0011760858919407703,
+    "loss": 2956.4567486844917
+  },
+  "G1": {
+    "ncc": 0.9427,
+    "phase": {
+      "dx": 1.238,
+      "dy": 0.227,
+      "response": 0.08
+    },
+    "scale": 0.9393,
+    "chin": 609,
+    "face_width_eye": 136,
+    "checks": {
+      "ncc>=0.80": true,
+      "phase_corr<=2px": true,
+      "scale_in_range": true,
+      "chinB_near_611": true,
+      "face_width_139_pct4": true
+    },
+    "pass": true
+  },
+  "warnings": [
+    "G2 above threshold"
+  ],
+  "G2": {
+    "dark_frac_scalp": 0.0917,
+    "pass": false
+  },
+  "head": {
+    "size_mode": true,
+    "corners_zero": true,
+    "near_magenta_visible": 0,
+    "pass_basic": true
+  },
+  "body": {
+    "size_mode": true,
+    "corners_zero": true,
+    "near_magenta_visible": 0,
+    "pass_basic": true
+  },
+  "hair": {
+    "size_mode": true,
+    "corners_zero": true,
+    "near_magenta_visible": 0,
+    "pass_basic": true
+  },
+  "G3": {
+    "alpha_in_keepout": 0,
+    "hair_components": 0,
+    "detect_chin": 609,
+    "y_cut": 629,
+    "pass_keepout": true
+  },
+  "G5": {
+    "y_cut": 629,
+    "pass": false
+  },
+  "sha256_final": {
+    "head": "78a6a59af403e4c7c1f49e9f2997d67e16a2b192b870e7c0dfe9b413511cefb1",
+    "body": "466f4cb31eed38df2f9757d64c5e6ee5735153430e1faad939bd51518a05d082",
+    "hair": "1b71e5be3a7a07393013a0ce577367b920cbb757a2bafce916c67f976339708f"
+  },
+  "notes": [
+    "layer alpha ranges: head rows<=y_cut, body rows>=y_cut-25, hair head band; QA regenerated at 03:57"
+  ]
+}
